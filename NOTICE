@@ -1,0 +1,10 @@
+SparkInkling
+Copyright 2026 the SparkInkling contributors
+Licensed under AGPL-3.0-only (LICENSE).
+
+The Atlas engine will be fetched at build time from Atlas-Inf/atlas
+(AGPL-3.0-only).
+
+Inkling 2 Mini is by Thinking Machines Lab, Inc., licensed under Apache-2.0;
+its weights are downloaded at install time and are not part of this
+repository.
