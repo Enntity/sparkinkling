@@ -7,20 +7,17 @@ with the settings the vLLM baseline on the same Spark was measured with.
 
 ## Results
 
-From [`results/2026-11-21-release-0.2.0`](../results/2026-11-21-release-0.2.0/RESULT.md),
-the 0.2.0 image (`fca1a84f41cf`), default profile and drafter; medians over all
-repetitions; vLLM on the same Spark on 2026-11-20. 0.1.0's are in
-[`results/2026-11-21-release-0.1.0`](../results/2026-11-21-release-0.1.0/RESULT.md).
+From [`results/2026-11-21-release-0.3.0`](../results/2026-11-21-release-0.3.0/RESULT.md),
+the 0.3.0 image (`75c0c6f7962f`), default profile and drafter; medians over all
+repetitions; vLLM on the same Spark on 2026-11-20. Earlier releases' results are
+in [`results/`](../results/).
 
 | Mode | C1 code decode | C1 prose decode | C2 aggregate | C4 aggregate | C8 aggregate | 32K prefill | 8K prefill | Gates |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Strict | 50.0 | 22.8 | 44.1 | 72.2 | 105.3 | 3,271 | 3,463 | 6/6 |
-| Spark | 60.9 | 25.7 | 63.1 | 90.0 | 115.5 | 3,128 | 3,363 | 5/6 |
+| Strict | 48.8 | 33.2 | 48.0 | 80.5 | 117.2 | 3,326 | 3,533 | 6/6 |
+| Spark | 66.9 | 50.5 | 68.8 | 102.2 | 135.0 | 3,339 | 3,546 | 6/6 |
 | vLLM | 35.1 | 35.6 | 54.0 | 86.6 | 122.4 | 2,722 | | 6/6 |
 | vLLM + DSpark | 69.8 | 31.2 | 60.9 | 94.7 | 144.0 | 2,723 | | 6/6 |
-
-Spark's missing gate is a code run that reasoned past the 4,096-token
-allowance ([the result](../results/2026-11-21-release-0.2.0/RESULT.md)).
 
 ## Protocol
 

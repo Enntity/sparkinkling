@@ -74,7 +74,9 @@ order:
   recurrent Markov head corrects the drafts, its latent folded into the
   vocabulary head at load. The target verifies every draft, so the drafts
   change speed and not the text (in development an NVFP4 and a BF16 drafter
-  gave byte-identical greedy text). A verify runs the target over 8 rows at
+  gave byte-identical greedy text). The image speculates only while drafts
+  pay (`ATLAS_DFLASH_ADAPTIVE=1`: under two accepted a step over twelve steps,
+  a sequence decodes plainly until a re-probe 256 tokens later). A verify runs the target over 8 rows at
   once, and those kernels round differently from single-row decode, so
   greedy text with and without speculation can part at a near tie.
 

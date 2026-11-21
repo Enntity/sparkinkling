@@ -1,0 +1,101 @@
+decode/code: 2 runs
+  1: 64.7 tok/s, TTFT 0.325s, 3957 tokens
+  2: 69.1 tok/s, TTFT 0.249s, 3113 tokens
+decode/prose: 2 runs
+  1: 50.5 tok/s, TTFT 0.241s, 1119 tokens
+  2: 50.5 tok/s, TTFT 0.240s, 1350 tokens
+decode/structured: 2 runs
+  1: 97.3 tok/s, TTFT 0.238s, 1039 tokens
+  2: 94.9 tok/s, TTFT 0.239s, 1024 tokens
+prefill/8192: 2 cold/immediate-replay pairs
+  1: cold 3540.0 tok/s (2.314s), warm 3536.9 tok/s (2.316s)
+  2: cold 3551.9 tok/s (2.306s), warm 3520.7 tok/s (2.327s)
+prefill/32768: 2 cold/immediate-replay pairs
+  1: cold 3338.1 tok/s (9.816s), warm 3337.8 tok/s (9.817s)
+  2: cold 3339.6 tok/s (9.812s), warm 3336.9 tok/s (9.820s)
+concurrency/1: 2 rounds of code
+  1: aggregate 50.3 tok/s, median stream 52.7 tok/s
+  2: aggregate 49.7 tok/s, median stream 52.0 tok/s
+concurrency/2: 2 rounds of code
+  1: aggregate 69.6 tok/s, median stream 36.8 tok/s
+  2: aggregate 67.9 tok/s, median stream 36.4 tok/s
+concurrency/4: 2 rounds of code
+  1: aggregate 97.2 tok/s, median stream 26.4 tok/s
+  2: aggregate 107.2 tok/s, median stream 29.1 tok/s
+concurrency/8: 2 rounds of code
+  1: aggregate 129.8 tok/s, median stream 18.0 tok/s
+  2: aggregate 140.3 tok/s, median stream 19.6 tok/s
+result: /home/enntitysparkadmin/inkling2/rig/img-spark-code.json
+card: /home/enntitysparkadmin/inkling2/rig/img-spark-code.card.txt
+
+╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                                             │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                                   │
+│  ●  6/6 BASIC OUTPUT GATES PASSED                                                        │
+├─ SYSTEM ─────────────────────────────────────────────────────────────────────────────────┤
+│  MODEL      inkling-2-mini-atlas                                                         │
+│  APPLIANCE  1x NVIDIA DGX Spark (GB10, 128 GB)                                           │
+│  RUN        reasoning=low  •  protocol=1.1.0                                             │
+│  SOURCE     git:40fabcaf6e96  •  clean                                                   │
+├─ REAL OUTPUT ────────────────────────────────────────────────────────────────────────────┤
+│  WORKLOAD       DECODE EST.      LAST OUTPUT          RANGE          BASIC GATE          │
+│  CODE              66.9 tok/s      53.4s last     64.7–69.1     ✓ 2/2                    │
+│  PROSE             50.5 tok/s      24.7s last     50.5–50.5     ✓ 2/2                    │
+│  STRUCTURED*       96.1 tok/s      11.0s last     94.9–97.3     ✓ 2/2                    │
+│  * predictable-output ceiling; not a proxy for agent speed                               │
+├─ CONTEXT ────────────────────────────────────────────────────────────────────────────────┤
+│  32K PREFILL   cold 3,339 tok/s  •  immediate replay 3,337 tok/s                         │
+├─ CAPPED CONCURRENT GENERATION ───────────────────────────────────────────────────────────┤
+│  SHORT CODE • END-TO-END • 256-TOKEN CAP PER AGENT                                       │
+│  AGGREGATE   C1 50.0  •  C2 68.8  •  C4 102.2  •  C8 135.0 tok/s                         │
+│  C8 OUTPUT STATE   normal stop 0/16  •  visible 0/16  •  reasoning may be included       │
+├─ RECEIPT ────────────────────────────────────────────────────────────────────────────────┤
+│  JSON       sha256:f4e985abd766dc3b…                                                     │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                                       │
+│  github.com/alexellis/rigmark                                                            │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
+decode/code: 2 runs
+  1: 63.5 tok/s, TTFT 0.267s, 3272 tokens
+  2: 68.9 tok/s, TTFT 0.244s, 3113 tokens
+decode/prose: 2 runs
+  1: 50.1 tok/s, TTFT 0.243s, 1119 tokens
+  2: 50.1 tok/s, TTFT 0.244s, 1350 tokens
+decode/structured: 2 runs
+  1: 96.9 tok/s, TTFT 0.241s, 1039 tokens
+  2: 94.3 tok/s, TTFT 0.244s, 1024 tokens
+concurrency/1: 2 rounds of prose
+  1: aggregate 50.9 tok/s, median stream 53.3 tok/s
+  2: aggregate 50.2 tok/s, median stream 52.5 tok/s
+concurrency/4: 2 rounds of prose
+  1: aggregate 97.8 tok/s, median stream 26.5 tok/s
+  2: aggregate 97.7 tok/s, median stream 26.5 tok/s
+concurrency/8: 2 rounds of prose
+  1: aggregate 128.0 tok/s, median stream 17.7 tok/s
+  2: aggregate 127.8 tok/s, median stream 17.6 tok/s
+result: /home/enntitysparkadmin/inkling2/rig/img-spark-prose.json
+card: /home/enntitysparkadmin/inkling2/rig/img-spark-prose.card.txt
+
+╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                                             │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                                   │
+│  ●  6/6 BASIC OUTPUT GATES PASSED                                                        │
+├─ SYSTEM ─────────────────────────────────────────────────────────────────────────────────┤
+│  MODEL      inkling-2-mini-atlas                                                         │
+│  APPLIANCE  1x NVIDIA DGX Spark (GB10, 128 GB)                                           │
+│  RUN        reasoning=low  •  protocol=1.1.0                                             │
+│  SOURCE     git:40fabcaf6e96  •  clean                                                   │
+├─ REAL OUTPUT ────────────────────────────────────────────────────────────────────────────┤
+│  WORKLOAD       DECODE EST.      LAST OUTPUT          RANGE          BASIC GATE          │
+│  CODE              66.2 tok/s      48.6s last     63.5–68.9     ✓ 2/2                    │
+│  PROSE             50.1 tok/s      24.9s last     50.1–50.1     ✓ 2/2                    │
+│  STRUCTURED*       95.6 tok/s      11.0s last     94.3–96.9     ✓ 2/2                    │
+│  * predictable-output ceiling; not a proxy for agent speed                               │
+├─ CAPPED CONCURRENT GENERATION ───────────────────────────────────────────────────────────┤
+│  SHORT PROSE • END-TO-END • 256-TOKEN CAP PER AGENT                                      │
+│  AGGREGATE   C1 50.5  •  C4 97.7  •  C8 127.9 tok/s                                      │
+│  C8 OUTPUT STATE   normal stop 0/16  •  visible 12/16  •  reasoning may be included      │
+├─ RECEIPT ────────────────────────────────────────────────────────────────────────────────┤
+│  JSON       sha256:48322e00a603473f…                                                     │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                                       │
+│  github.com/alexellis/rigmark                                                            │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯

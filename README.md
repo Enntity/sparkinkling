@@ -5,18 +5,19 @@
 
 # SparkInkling
 
-**SparkInkling 0.2.0.** Run `./start.sh --version` for this checkout, or
+**SparkInkling 0.3.0.** Run `./start.sh --version` for this checkout, or
 `./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
 engine with an OpenAI-compatible API, reasoning and tool calls.
 
-0.2.0 prefills a 32K-token prompt in 10 s, 1.2x vLLM, by running the
-checkpoint's experts at its declared low-precision numerics on the
-block-scaled tensor cores. Both modes, the checkpoint's own DSpark drafter, and
-measured results with their receipts are under [`results/`](results/); vLLM
-still leads most decode cells, see [Performance](#performance).
+0.3.0: Spark is ahead of vLLM's own Inkling 2 Mini image in every measured
+cell (1.9x on code, 1.4x on prose, 1.2x on 32K prefill), and Strict, the
+checkpoint as shipped, is ahead on code, structured output, prefill and one
+request and within 4-11% of it on prose and two to eight requests. See
+[Performance](#performance); every result has its receipts under
+[`results/`](results/).
 
 ## The model
 
@@ -43,26 +44,24 @@ detail](docs/MODES.md).
 
 ## Performance
 
-Measured on the 0.2.0 image with RigMark (reasoning low, temperature 0), one
+Measured on the 0.3.0 image with RigMark (reasoning low, temperature 0), one
 Spark, the default profile and drafter, against vLLM's own Inkling 2 Mini image
-on the same Spark: [the result, with every receipt](results/2026-11-21-release-0.2.0/RESULT.md).
+on the same Spark: [the result, with every receipt](results/2026-11-21-release-0.3.0/RESULT.md).
 
 | | Strict | Spark | vLLM | vLLM + DSpark |
 |---|---:|---:|---:|---:|
-| 32K cold prefill, tok/s | **3,271** | **3,128** | 2,722 | 2,723 |
-| Code decode, tok/s | 50.0 | 60.9 | 35.1 | 69.8 |
-| Prose decode | 22.8 | 25.7 | 35.6 | 31.2 |
-| Structured decode | 79.5 | 87.3 | 35.6 | 104.3 |
-| Short code, C1 / C2 / C4 / C8 aggregate | 32.0 / 44.1 / 72.2 / 105.3 | 35.8 / 63.1 / 90.0 / 115.5 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
-| Basic output gates | 6/6 | 5/6 | 6/6 | 6/6 |
+| Code decode, tok/s | 48.8 | **66.9** | 35.1 | 69.8 |
+| Prose decode | 33.2 | **50.5** | 35.6 | 31.2 |
+| Structured decode | 86.3 | **96.1** | 35.6 | 104.3 |
+| 32K cold prefill, tok/s | **3,326** | **3,339** | 2,722 | 2,723 |
+| Short code, C1 / C2 / C4 / C8 aggregate | 35.5 / 48.0 / 80.5 / 117.2 | **50.0 / 68.8 / 102.2 / 135.0** | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
+| Basic output gates | 6/6 | 6/6 | 6/6 | 6/6 |
 
-Prefill leads vLLM in both modes (0.1.0: 1,455 tok/s at 32K in Strict). Code
-and structured output decode faster than vLLM without speculation; vLLM with
-its DSpark drafter is still faster on every decode workload. Prose is the
-drafter's weak case (few drafts are accepted there): `DRAFTER=none` decodes it
-at about 30 tok/s in Strict. Spark's missing gate is one code answer that
-reasoned past RigMark's 4,096-token allowance. The vLLM receipts were measured
-the day before.
+Spark leads vLLM without speculation everywhere and vLLM with its drafter on
+prose, prefill and one to four requests; vLLM's drafter is ahead on code,
+structured output and eight requests. Strict reads the checkpoint's BF16
+attention weights as shipped, about twice the bytes a Spark token reads. The
+vLLM receipts were measured the day before.
 
 ## Quick start
 
@@ -138,8 +137,10 @@ Both modes run the checkpoint's bundled DSpark drafter by default
 (`DRAFTER=dspark`): it proposes seven tokens a step and the mode's own weights
 verify them, so it changes speed, not the model. It speculates while one
 request is live; from two requests the engine decodes plainly, which delivers
-more there. It pays on code and structured output and costs on prose (few
-drafts are accepted there); `DRAFTER=none` turns it off.
+more there. And only while it pays: a request whose drafts average under two
+accepted a step decodes plainly and re-probes 256 tokens later, so code and
+structured output speculate and prose mostly does not. `DRAFTER=none` turns
+it off.
 
 ## Other ways to run it
 
