@@ -1,10 +1,10 @@
 {
   "schema": "sparkinkling.atlas-engine-source/v1",
-  "note": "Enntity/atlas inkling2/mini-20261121: the Inkling 2 Mini (model type inkling2_loop) serving series, 28 commits on Atlas-Inf main 269b533bc (Merge #332). It parses the checkpoint as 48 unrolled layer visits, checks its layout at load, and adds the inkling-2-mini kernel target: decode attention with relative bias and per-token sinks, short convolutions, block attention residuals, loop message gates, NVFP4 and MXFP8 stacked-expert MoE decode and grouped-GEMM prefill, tensor-core prefill attention, CUDA-graph single-sequence decode, the Spark NVFP4 overlay (attention projections, the experts of layers 20-23, lm_head) and decode batches that read each expert once. No DSpark drafter and no vision tower yet. Not proposed upstream yet; re-pinned before the first release.",
+  "note": "Enntity/atlas inkling2/mini-20261121: the Inkling 2 Mini (model type inkling2_loop) serving series, 35 commits on Atlas-Inf main 269b533bc (Merge #332). It parses the checkpoint as 48 unrolled layer visits, checks its layout at load, and adds the inkling-2-mini kernel target: decode attention with relative bias and per-token sinks, short convolutions with verify rollback, block attention residuals, loop message gates, NVFP4 and MXFP8 stacked-expert MoE decode and tensor-core prefill, tensor-core prefill attention, CUDA-graph single- and multi-sequence decode, the Spark NVFP4 overlay (attention projections, the experts of layers 20-23, lm_head), and the checkpoint's DSpark drafter on the DFlash head. Prefix caching is refused (conv states are not snapshotted); no vision tower. Proposed upstream to Atlas-Inf.",
   "repository": "https://github.com/Enntity/atlas.git",
   "branch": "inkling2/mini-20261121",
-  "commit": "fb1bc1f18fb761d7dbae30bf635002b55502d06c",
-  "tree": "2f26babf03e60493c191ebc5c4152ed7179c5a68",
+  "commit": "035de221452f4d7e20c0bee26f2cc70a89a9028e",
+  "tree": "fba070e43a6f52643b67d81149fac7c8f8807daa",
   "kernel_target": "inkling-2-mini",
   "model_type": "inkling2_loop",
   "license": "AGPL-3.0-only"

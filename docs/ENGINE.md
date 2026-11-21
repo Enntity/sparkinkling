@@ -4,12 +4,11 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`fb1bc1f18` (tree `2f26babf`), for the kernel target `inkling-2-mini`
+`035de2214` (tree `fba070e4`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
-file. The pin will move before the first release; it moves only in
-`install/atlas-source.json` and on this page.
+file. The pin moves only in `install/atlas-source.json` and on this page.
 
 ## What the branch adds
 

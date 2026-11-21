@@ -21,9 +21,9 @@
   },
   "overlay": {
     "repository": "Enntity/Inkling-2-Mini-Spark-NVFP4",
-    "revision": "TODO",
+    "revision": "e9df93dceea2fbf0927caf178104e868452a6292",
     "files": {
-      "spark-nvfp4.safetensors": "TODO"
+      "spark-nvfp4.safetensors": "974daf0c7df61201e43f6e6550e677277206f9c0c5b7d0787078262cd578f570"
     },
     "serve": "spark-nvfp4.safetensors",
     "tensors": 459,
@@ -35,6 +35,6 @@
     "base_model": "thinkingmachines/Inkling-2-Mini",
     "license": "apache-2.0",
     "format": "ModelOpt NVFP4 (E2M1 codes, an E4M3 scale per 16 inputs, an F32 weight_scale_2 per tensor or expert) under the transformers module names: the attention q, k, v, output-gate, output and relative-bias projections of all 24 layers, the vocabulary head, and the routed experts of layers 20-23.",
-    "why": "Spark mode only: calibrated NVFP4 copies of the BF16 projections and the MXFP8 experts, about half the bytes a token reads. Not yet published or qualified; revision and sha256 are filled in when the repository is created."
+    "why": "Spark mode only: calibrated NVFP4 copies (GPTQ, wide scale search) of the BF16 projections and the MXFP8 experts, about half the bytes a token reads. KL to the checkpoint as shipped 0.0081 [0.0075, 0.0088] on 224 held-out documents (97.0% top-1); receipts in the overlay repository."
   }
 }
