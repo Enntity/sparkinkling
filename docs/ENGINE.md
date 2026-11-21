@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`f5acf5a71` (tree `aced2ff0`), for the kernel target `inkling-2-mini`
+`db19431be` (tree `73af1491`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -54,10 +54,16 @@ order:
   prompts during development; that check is not a qualification.
 - **Spark mode.** A model directory whose index also maps the Spark overlay
   (ModelOpt NVFP4 under `model.language_model.*` and `lm_head.*`) serves those
-  tensors in place of the checkpoint's: attention projections through the
-  W4A16 GEMV and GEMM, the experts of layers 20-23 as NVFP4 with a per-expert
-  global scale, and the vocabulary head through Atlas's prepacked NVFP4 head.
-  Without an overlay nothing changes. See [MODES](MODES.md).
+  tensors in place of the checkpoint's for decode and verify rows: attention
+  projections through the W4A16 GEMVs, the experts of layers 20-23 as NVFP4
+  with a per-expert global scale, and the vocabulary head through Atlas's
+  prepacked NVFP4 head. Prefill rows (16 or more at once) read the
+  checkpoint's own tensors in both modes, so Spark prefills exactly as Strict
+  does; both sets are in the model directory anyway. Without an overlay
+  nothing changes. See [MODES](MODES.md).
+- **Launch overlap.** `ATLAS_INKLING2_PDL=1` (set by the profile) launches the
+  target's kernels with programmatic dependent launch, so each one's launch
+  overlaps its predecessor's tail.
 - **Batching and speculation.** Multi-sequence decode runs from CUDA graphs
   (each visit's conv-state table is refreshed before replay; padding rows
   share one state). Verify rows journal each visit's conv state and inputs so

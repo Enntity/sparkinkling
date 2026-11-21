@@ -21,8 +21,12 @@ DRAFTERS = ('dspark', 'none')
 DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 # Speculate with one live request only: the drafter proposes one sequence at
 # a time, and from two requests plain batched decode delivers more (GB10,
-# 2026-11-21: C2 43 vs 32 tok/s).
-DSPARK_ENV = {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0'}
+# 2026-11-21: C2 43 vs 32 tok/s). And only while it pays: a sequence whose
+# drafts average under two accepted a step over 12 steps decodes plainly until
+# a re-probe 256 tokens later (the engine's adaptive suspend; prose accepts
+# about 0.8 a step, where a seven-draft verify costs about 2.6 plain steps:
+# Strict prose 22.7 -> 29.4 tok/s, code 51.9 -> 48.3, GB10, 2026-11-21).
+DSPARK_ENV = {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE': '1'}
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
 MULTI_RANK_FLAGS = ('--world-size', '--tp-size', '--ep-size', '--rank', '--master-addr', '--master-port')

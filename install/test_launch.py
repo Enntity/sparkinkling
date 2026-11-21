@@ -80,8 +80,15 @@ class Launch(unittest.TestCase):
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
         self.assertEqual(flag(argv, '--num-drafts'), '7')
         self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
+
+    def test_pdl_in_every_mode(self):
+        for drafter in ('dspark', 'none'):
+            for mode in ('strict', 'spark'):
+                _, env = launch(SPARKINKLING_DRAFTER=drafter, SPARKINKLING_MODE=mode)
+                self.assertEqual(env['ATLAS_INKLING2_PDL'], '1', (drafter, mode))
 
     def test_no_drafter(self):
         argv, env = launch(SPARKINKLING_DRAFTER='none')
@@ -89,6 +96,7 @@ class Launch(unittest.TestCase):
         for spec_flag in serve.SPECULATION_FLAGS:
             self.assertIsNone(flag(argv, spec_flag), spec_flag)
         self.assertNotIn('ATLAS_DFLASH_BATCH_DEPTH', env)
+        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE', env)
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_DRAFTER='eagle')
 

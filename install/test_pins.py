@@ -63,7 +63,7 @@ class Pins(unittest.TestCase):
                 self.assertRegex(digest, r'^[0-9a-f]{64}$')
 
     def test_release_and_image_tag(self):
-        self.assertEqual(pin('release.json')['version'], '0.2.0')
+        self.assertEqual(pin('release.json')['version'], '0.3.0')
         tag = subprocess.run([str(HERE/'build.sh'), '--tag'], capture_output=True, text=True,
                              env={**os.environ, 'SPARKINKLING_IMAGE_REPO': 'ghcr.io/enntity/atlas-sparkinkling'})
         if tag.returncode == 0:  # needs a git checkout
