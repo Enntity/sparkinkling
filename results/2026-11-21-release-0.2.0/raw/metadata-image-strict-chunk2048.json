@@ -1,0 +1,15 @@
+{
+ "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+ "topology": "TP1, single Spark",
+ "negotiated_link_speed": "not applicable",
+ "model": "thinkingmachines/Inkling-2-Mini",
+ "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+ "quantisation": "TML modelopt as shipped: NVFP4 experts L0-19, MXFP8 experts L20-23, BF16 rest; prefill quantizes the checkpoint experts' inputs as its hf_quant_config.json requires (NVFP4 / MXFP8 rows, W4A4 / W8A8)",
+ "kv_cache_dtype": "auto (bf16)",
+ "serving_engine": "SparkInkling 0.2.0 (Atlas, Enntity/atlas inkling2/mini-20261121 @ f5acf5a71)",
+ "serving_image": "ghcr.io/enntity/atlas-sparkinkling:fca1a84f41cf (local build of that tag)",
+ "drafter": "DSpark (bundled mtp.safetensors), 7 draft tokens, greedy drafts; speculation with one live request, plain batched decode from two (ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0)",
+ "context_limit": 131072,
+ "scheduler": "SparkInkling default profile: max-num-seqs 8, gpu-memory-utilization 0.80, prefill chunks 2048 (custom profile: the default with --max-prefill-tokens=2048), CUDA graphs",
+ "competing_traffic": "none (sq27-test stopped)"
+}

@@ -5,16 +5,18 @@
 
 # SparkInkling
 
-**SparkInkling 0.1.0.** Run `./start.sh --version` for this checkout, or
+**SparkInkling 0.2.0.** Run `./start.sh --version` for this checkout, or
 `./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
 engine with an OpenAI-compatible API, reasoning and tool calls.
 
-0.1.0 is the first release: both modes, the checkpoint's own DSpark drafter,
-and a measured result with its receipts under [`results/`](results/). It is
-not yet faster than vLLM in most cells; see [Performance](#performance).
+0.2.0 prefills a 32K-token prompt in 10 s, 1.2x vLLM, by running the
+checkpoint's experts at its declared low-precision numerics on the
+block-scaled tensor cores. Both modes, the checkpoint's own DSpark drafter, and
+measured results with their receipts are under [`results/`](results/); vLLM
+still leads most decode cells, see [Performance](#performance).
 
 ## The model
 
@@ -41,23 +43,26 @@ detail](docs/MODES.md).
 
 ## Performance
 
-Measured on the 0.1.0 image with RigMark (reasoning low, temperature 0), one
+Measured on the 0.2.0 image with RigMark (reasoning low, temperature 0), one
 Spark, the default profile and drafter, against vLLM's own Inkling 2 Mini image
-on the same Spark: [the result, with every receipt](results/2026-11-21-release-0.1.0/RESULT.md).
+on the same Spark: [the result, with every receipt](results/2026-11-21-release-0.2.0/RESULT.md).
 
 | | Strict | Spark | vLLM | vLLM + DSpark |
 |---|---:|---:|---:|---:|
-| Code decode, tok/s | 52.0 | 57.7 | 35.1 | 69.8 |
-| Prose decode | 22.2 | 25.9 | 35.6 | 31.2 |
-| Structured decode | 79.2 | 86.2 | 35.6 | 104.3 |
-| 32K cold prefill, tok/s | 1,455 | 1,418 | 2,722 | 2,723 |
-| Short code, C1 / C2 / C4 / C8 aggregate | 31.7 / 44.4 / 71.4 / 108.7 | 42.4 / 60.3 / 86.3 / 117.9 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
+| 32K cold prefill, tok/s | **3,271** | **3,128** | 2,722 | 2,723 |
+| Code decode, tok/s | 50.0 | 60.9 | 35.1 | 69.8 |
+| Prose decode | 22.8 | 25.7 | 35.6 | 31.2 |
+| Structured decode | 79.5 | 87.3 | 35.6 | 104.3 |
+| Short code, C1 / C2 / C4 / C8 aggregate | 32.0 / 44.1 / 72.2 / 105.3 | 35.8 / 63.1 / 90.0 / 115.5 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
+| Basic output gates | 6/6 | 5/6 | 6/6 | 6/6 |
 
-Code and structured output decode faster than vLLM without speculation; vLLM
-with its DSpark drafter is still faster on every decode workload, and on
-prefill. Prose is the drafter's weak case (few drafts are accepted there):
-`DRAFTER=none` decodes it at about 30 tok/s in Strict. The vLLM receipts were
-measured the day before.
+Prefill leads vLLM in both modes (0.1.0: 1,455 tok/s at 32K in Strict). Code
+and structured output decode faster than vLLM without speculation; vLLM with
+its DSpark drafter is still faster on every decode workload. Prose is the
+drafter's weak case (few drafts are accepted there): `DRAFTER=none` decodes it
+at about 30 tok/s in Strict. Spark's missing gate is one code answer that
+reasoned past RigMark's 4,096-token allowance. The vLLM receipts were measured
+the day before.
 
 ## Quick start
 

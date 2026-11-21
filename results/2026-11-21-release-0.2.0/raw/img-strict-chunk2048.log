@@ -1,0 +1,37 @@
+decode/code: 1 runs
+  1: 53.0 tok/s, TTFT 0.364s, 3414 tokens
+decode/prose: 1 runs
+  1: 23.3 tok/s, TTFT 0.263s, 1182 tokens
+decode/structured: 1 runs
+  1: 79.5 tok/s, TTFT 0.260s, 1028 tokens
+prefill/8192: 2 cold/immediate-replay pairs
+  1: cold 3131.1 tok/s (2.616s), warm 3126.0 tok/s (2.621s)
+  2: cold 3107.9 tok/s (2.636s), warm 3134.0 tok/s (2.614s)
+prefill/32768: 2 cold/immediate-replay pairs
+  1: cold 2895.5 tok/s (11.317s), warm 2899.4 tok/s (11.302s)
+  2: cold 2895.4 tok/s (11.317s), warm 2894.1 tok/s (11.322s)
+result: /home/enntitysparkadmin/inkling2/rig/img-strict-chunk2048.json
+card: /home/enntitysparkadmin/inkling2/rig/img-strict-chunk2048.card.txt
+
+╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                                             │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                                   │
+│  ●  3/3 BASIC OUTPUT GATES PASSED                                                        │
+├─ SYSTEM ─────────────────────────────────────────────────────────────────────────────────┤
+│  MODEL      inkling-2-mini-atlas                                                         │
+│  APPLIANCE  1x NVIDIA DGX Spark (GB10, 128 GB)                                           │
+│  RUN        reasoning=low  •  protocol=1.1.0                                             │
+│  SOURCE     git:40fabcaf6e96  •  clean                                                   │
+├─ REAL OUTPUT ────────────────────────────────────────────────────────────────────────────┤
+│  WORKLOAD       DECODE EST.      LAST OUTPUT          RANGE          BASIC GATE          │
+│  CODE              53.0 tok/s      64.8s last     53.0–53.0     ✓ 1/1                    │
+│  PROSE             23.3 tok/s      51.0s last     23.3–23.3     ✓ 1/1                    │
+│  STRUCTURED*       79.5 tok/s      13.2s last     79.5–79.5     ✓ 1/1                    │
+│  * predictable-output ceiling; not a proxy for agent speed                               │
+├─ CONTEXT ────────────────────────────────────────────────────────────────────────────────┤
+│  32K PREFILL   cold 2,895 tok/s  •  immediate replay 2,897 tok/s                         │
+├─ RECEIPT ────────────────────────────────────────────────────────────────────────────────┤
+│  JSON       sha256:b200d9e538f970a9…                                                     │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                                       │
+│  github.com/alexellis/rigmark                                                            │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯

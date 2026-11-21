@@ -1,0 +1,24 @@
+{
+ "schema": "sparkinkling.atlas-install-profile/v1",
+ "model": "inkling-2-mini",
+ "status": "development",
+ "note": "Inkling 2 Mini on one DGX Spark (TP=1), engine install/atlas-source.json. BF16 KV, 8 concurrent requests of up to 131,072 tokens each, at utilization 0.80, prefill chunks of 4,096 tokens (32K-token prefill 9.5 s against 10.5 s at 2,048; a longer chunk also holds other requests' decode steps longer). The launcher adds the DSpark drafter (DRAFTER).",
+ "environment": {
+  "CUDA_CACHE_PATH": "/atlas-cuda-cache",
+  "LD_LIBRARY_PATH": "/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64",
+  "PATH": "/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+  "RUST_LOG": "info"
+ },
+ "server_argv": [
+  "serve",
+  "--model-from-path=${model}",
+  "--kernel-target=inkling-2-mini",
+  "--gpu-memory-utilization=0.80",
+  "--kv-cache-dtype=bf16",
+  "--max-num-seqs=8",
+  "--max-batch-size=8",
+  "--max-seq-len=131072",
+  "--max-prefill-tokens=2048",
+  "--no-tui"
+ ]
+}
