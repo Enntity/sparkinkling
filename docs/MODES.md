@@ -44,13 +44,19 @@ pin, and `MODE=spark` is refused until they are filled in.
 
 ## Speculative decoding
 
-The checkpoint bundles a DSpark draft model (`mtp.safetensors`). The pinned
-engine does not run DSpark yet, so both modes decode without a drafter today
-(`DRAFTER=none`, the only value accepted). When the engine supports it,
-`DRAFTER=dspark` will select it with target verification in both modes, and a
-missing or incompatible draft model will be a startup error. Strict does not
-mean serial execution: request-level serial decode stays available for
-comparisons.
+The checkpoint bundles a DSpark draft model (`mtp.safetensors`), and both
+modes run it by default (`DRAFTER=dspark`). `./start.sh` assembles the
+drafter's directory next to the checkpoint, `<checkpoint>+dspark`
+([`install/dspark_drafter.py`](../install/dspark_drafter.py)): the
+checkpoint's `mtp.safetensors`, checked against its pinned sha256 and linked
+as `model.safetensors`, beside a `config.json` that is the checkpoint's
+`mtp_config` plus the tokenizer's vocabulary size. The engine verifies every
+draft against the mode's own weights, so the drafter changes speed and not
+the model. It drafts while one request is live; from two requests the engine
+decodes plainly, which delivers more there. `DRAFTER=none` turns it off.
+
+DSpark pays on predictable text (code, structured output) and costs on
+prose, where few drafts are accepted; see the results for both.
 
 ## Before Spark ships
 

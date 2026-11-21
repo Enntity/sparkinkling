@@ -13,8 +13,9 @@ file. The pin will move before the first release; it moves only in
 
 ## What the branch adds
 
-`inkling2/mini-20261121` is 28 commits on Atlas-Inf `main` `269b533bc` (the
-merge of #332). None of it is proposed upstream yet. In order:
+`inkling2/mini-20261121` is the Inkling 2 Mini series on Atlas-Inf `main`
+`269b533bc` (the merge of #332), proposed upstream as one pull request. In
+order:
 
 - **Loading.** The config parses as 48 unrolled layer visits (24 physical
   layers; the core 6-17 run three times with shared weights), and the
@@ -48,12 +49,29 @@ merge of #332). None of it is proposed upstream yet. In order:
   W4A16 GEMV and GEMM, the experts of layers 20-23 as NVFP4 with a per-expert
   global scale, and the vocabulary head through Atlas's prepacked NVFP4 head.
   Without an overlay nothing changes. See [MODES](MODES.md).
+- **Batching and speculation.** Multi-sequence decode runs from CUDA graphs
+  (each visit's conv-state table is refreshed before replay; padding rows
+  share one state). Verify rows journal each visit's conv state and inputs so
+  rejected drafts roll back exactly. The checkpoint's DSpark drafter runs as a
+  variant of Atlas's DFlash head: each draft layer mixes four target taps
+  (the inputs of visits 5, 23 and 41 and the final-norm output) with its own
+  weights, the block is the anchor's embedding plus mask rows, and a
+  recurrent Markov head corrects the drafts, its latent folded into the
+  vocabulary head at load. The target verifies every draft, so the drafts
+  change speed and not the text (in development an NVFP4 and a BF16 drafter
+  gave byte-identical greedy text). A verify runs the target over 8 rows at
+  once, and those kernels round differently from single-row decode, so
+  greedy text with and without speculation can part at a near tie.
 
 ## What it does not do yet
 
-- **DSpark.** The checkpoint's bundled DSpark draft model is not loaded;
-  verify rows wait for it. `DRAFTER=dspark` is refused until a pinned engine
-  supports it.
+- **Prefix caching.** A cached prefix would resume without the short-conv
+  states, so the engine refuses `--enable-prefix-caching` for Inkling 2 until
+  those states are snapshotted with the KV blocks. Every request prefills its
+  whole prompt.
+- **Batched DSpark.** The drafter proposes for one sequence at a time, so
+  SparkInkling speculates only while one request is live and decodes plainly
+  from two (`ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0`, set by the image).
 - **Images.** The target has no vision tower. Inkling 2 Mini takes image
   input; SparkInkling serves text only.
 - **Known gaps** recorded on the branch: `usage.reasoning_tokens` reads 0, and

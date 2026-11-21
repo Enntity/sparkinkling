@@ -13,9 +13,16 @@ PORT = 8895
 SERVED_MODEL_NAME = 'inkling-2-mini-atlas'
 MODES = ('strict', 'spark')
 OVERLAY_FILE = 'spark-nvfp4.safetensors'
-# SPARKINKLING_DRAFTER. 'dspark' (the checkpoint's bundled mtp.safetensors)
-# joins this list when the pinned engine runs the DSpark drafter.
-DRAFTERS = ('none',)
+# SPARKINKLING_DRAFTER: 'dspark' runs the checkpoint's bundled drafter
+# (mtp.safetensors, assembled by install/dspark_drafter.py at DRAFTER_PATH);
+# 'none' decodes without speculation.
+DRAFTERS = ('dspark', 'none')
+# The drafter's block is 8: seven drafts a step.
+DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
+# Speculate with one live request only: the drafter proposes one sequence at
+# a time, and from two requests plain batched decode delivers more (GB10,
+# 2026-11-21: C2 43 vs 32 tok/s).
+DSPARK_ENV = {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0'}
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
 MULTI_RANK_FLAGS = ('--world-size', '--tp-size', '--ep-size', '--rank', '--master-addr', '--master-port')
@@ -83,16 +90,21 @@ def launch(environ, profile):
     mode = environ.get('SPARKINKLING_MODE', 'strict')
     if mode not in MODES:
         raise ValueError('SPARKINKLING_MODE must be strict or spark')
-    drafter = environ.get('SPARKINKLING_DRAFTER', 'none')
+    drafter = environ.get('SPARKINKLING_DRAFTER', 'dspark')
     if drafter not in DRAFTERS:
-        raise ValueError(f'SPARKINKLING_DRAFTER must be one of {", ".join(DRAFTERS)}; '
-                         'dspark waits for the engine to run the DSpark drafter')
+        raise ValueError(f'SPARKINKLING_DRAFTER must be one of {", ".join(DRAFTERS)}')
     model = environ.get('MODEL_PATH', '')
     if not Path(model).is_absolute() or any(c in model for c in '\r\n\0'):
         raise ValueError('MODEL_PATH must be an absolute path')
     env = _engine_env(environ, profile)
     env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter)
     args = _memory_share(environ, [str(a).replace('${model}', model) for a in args])
+    if drafter == 'dspark':
+        draft = environ.get('DRAFTER_PATH', '')
+        if not Path(draft).is_absolute() or any(c in draft for c in '\r\n\0'):
+            raise ValueError('DRAFTER_PATH must be an absolute path')
+        args += [*DSPARK_ARGS, f'--draft-model={draft}']
+        env.update(DSPARK_ENV)
     name = environ.get('SERVED_MODEL_NAME', SERVED_MODEL_NAME)
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._/-]{0,127}', name):
         raise ValueError('Invalid SERVED_MODEL_NAME')

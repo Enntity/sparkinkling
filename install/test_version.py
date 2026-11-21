@@ -70,7 +70,7 @@ class VersionQueries(unittest.TestCase):
         cases = [({'GPU_MEMORY_UTILIZATION': '0.95'}, 'GPU_MEMORY_UTILIZATION'),
                  ({'MODE': 'fast'}, 'strict or spark'),
                  ({'DRAFTER': 'eagle'}, 'DRAFTER'),
-                 ({'DRAFTER': 'dspark'}, 'DSpark'),
+                 ({'DRAFTER': 'eagle'}, 'DRAFTER must be none or dspark'),
                  ({'PROFILE': 'nonesuch'}, 'PROFILE'),
                  ({'TOOL_GUARD': 'maybe'}, 'TOOL_GUARD')]
         if pin['overlay']['revision'] == 'TODO':

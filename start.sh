@@ -11,7 +11,7 @@
 #
 # Settings (environment or .env): MODEL_ROOT (default ~/models/sparkinkling),
 # MODE (strict, the default, or spark), PROFILE (default, or a JSON file of your
-# own), DRAFTER (none; dspark once the engine supports it),
+# own), DRAFTER (dspark, the default: the checkpoint's own drafter; or none),
 # GPU_MEMORY_UTILIZATION (0.50-0.90), IMAGE, PULL=0 (always build), TOOL_GUARD*.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -24,7 +24,7 @@ if [[ ${1:-} == --mode ]]; then
 fi
 MODEL_ROOT=${MODEL_ROOT:-$HOME/models/sparkinkling}
 PROFILE=${PROFILE:-default}
-DRAFTER=${DRAFTER:-none}
+DRAFTER=${DRAFTER:-dspark}
 NAME=atlas-sparkinkling
 API=http://127.0.0.1:8895
 
@@ -41,7 +41,6 @@ if [[ ${1:-up} == up || ${1:-} == download ]]; then
   fi
   [[ -f $PROFILE || -f install/profiles/$PROFILE.json ]] || { echo "PROFILE: no $PROFILE or install/profiles/$PROFILE.json" >&2; exit 2; }
   [[ $DRAFTER =~ ^(none|dspark)$ ]] || { echo 'DRAFTER must be none or dspark' >&2; exit 2; }
-  [[ $DRAFTER == none ]] || { echo 'DRAFTER=dspark waits for the engine to run the DSpark drafter; use DRAFTER=none' >&2; exit 2; }
   [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||
     { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.90' >&2; exit 2; }
   SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-on}" SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \
@@ -55,6 +54,9 @@ weights=$MODEL_ROOT/${OVERLAY_REPO/\//--}
 # Spark mode's model directory: the checkpoint's files linked, the overlay
 # mapped in (install/spark_overlay.py). It sits next to $checkpoint.
 spark_model=$checkpoint+spark-nvfp4
+# The DSpark drafter's directory: mtp.safetensors linked beside its config
+# (install/dspark_drafter.py), next to $checkpoint too.
+drafter=$checkpoint+dspark
 
 # The image for this checkout is pulled from ghcr.io/enntity/atlas-sparkinkling
 # (its tag is the install/ tree); if that tag is not published, it is built
@@ -75,6 +77,9 @@ download() {
     hf_download "$CHECKPOINT_REPO" "$CHECKPOINT_REVISION" "$checkpoint"
     python3 install/check_files.py install/checkpoint.json "$checkpoint"
     echo "$CHECKPOINT_REVISION" > "$checkpoint/.sparkinkling-revision"
+  fi
+  if [[ $DRAFTER == dspark ]]; then
+    python3 install/dspark_drafter.py install/checkpoint.json "$checkpoint" "$drafter"
   fi
   [[ $MODE == spark ]] || return 0
   if [[ $(cat "$weights/.sparkinkling-revision" 2>/dev/null) != "$OVERLAY_REVISION" ]]; then
@@ -107,6 +112,9 @@ serve() {
     mounts+=(--mount "type=bind,src=$weights,dst=$weights,readonly"
              --mount "type=bind,src=$spark_model,dst=$spark_model,readonly")
   fi
+  if [[ $DRAFTER == dspark ]]; then
+    mounts+=(--mount "type=bind,src=$drafter,dst=$drafter,readonly")
+  fi
   if [[ -f $profile ]]; then
     profile_mount=(--mount "type=bind,src=$(realpath "$profile"),dst=/opt/atlas/profiles/custom.json,readonly")
     profile=custom
@@ -120,7 +128,7 @@ serve() {
     --shm-size 16g --memory 114g --gpus all --security-opt no-new-privileges=true --stop-timeout 60 \
     "${mounts[@]}" --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
     ${profile_mount[@]+"${profile_mount[@]}"} \
-    -e MODEL_PATH="$model" -e SPARKINKLING_MODE="$MODE" -e SPARKINKLING_DRAFTER="$DRAFTER" \
+    -e MODEL_PATH="$model" -e SPARKINKLING_MODE="$MODE" -e SPARKINKLING_DRAFTER="$DRAFTER" -e DRAFTER_PATH="$drafter" \
     -e SPARKINKLING_PROFILE="$profile" -e SERVED_MODEL_NAME="$SERVED" \
     -e SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-on}" -e SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \
     -e SPARKINKLING_TOOL_GUARD_ALLOW_HOSTS="${TOOL_GUARD_ALLOW_HOSTS:-}" -e SPARKINKLING_TOOL_GUARD_DENY_HOSTS="${TOOL_GUARD_DENY_HOSTS:-}" \

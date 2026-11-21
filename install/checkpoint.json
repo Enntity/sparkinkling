@@ -17,7 +17,7 @@
   "draft": {
     "file": "mtp.safetensors",
     "method": "DSpark",
-    "status": "downloaded with the checkpoint, not loaded: the pinned engine has no DSpark drafter yet (DRAFTER=none)"
+    "status": "loaded by default (DRAFTER=dspark): install/dspark_drafter.py links it beside its mtp_config as the engine's DFlash drafter directory"
   },
   "overlay": {
     "repository": "Enntity/Inkling-2-Mini-Spark-NVFP4",

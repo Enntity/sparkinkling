@@ -96,10 +96,14 @@ class Docs(unittest.TestCase):
                 self.assertNotRegex(text(doc), r'\d\s*tok/s')
                 self.assertIn('not measured yet', text(doc).lower())
 
-    def test_dspark_is_not_claimed(self):
+    def test_dspark_is_the_documented_default(self):
+        pin = json.loads((ROOT/'install'/'checkpoint.json').read_text())
+        self.assertEqual(pin['draft']['file'], 'mtp.safetensors')
+        self.assertIn('mtp.safetensors', pin['files'])
         for doc in ('README.md', 'docs/MODES.md'):
             with self.subTest(doc=doc):
-                self.assertRegex(text(doc), r'\b(no|not)\b[^.]*\bDSpark\b[^.]*\byet\b|\bDSpark\b[^.]*\b(no|not)\b[^.]*\byet\b')
+                self.assertIn('DRAFTER=dspark', text(doc))
+                self.assertIn('DRAFTER=none', text(doc))
 
 
 class Privacy(unittest.TestCase):

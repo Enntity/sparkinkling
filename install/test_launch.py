@@ -27,8 +27,11 @@ def flag(argv, name):
     return hits[0] if len(hits) == 1 else None
 
 
+DRAFTER = CHECKPOINT + '+dspark'
+
+
 def launch(**env):
-    return serve.launch({'MODEL_PATH': CHECKPOINT, **env}, profile())
+    return serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER, **env}, profile())
 
 
 class Launch(unittest.TestCase):
@@ -69,14 +72,25 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_MODE='fast')
 
-    def test_no_drafter_until_the_engine_runs_dspark(self):
+    def test_dspark_by_default_speculating_alone(self):
         argv, env = launch()
+        self.assertEqual(env['SPARKINKLING_DRAFTER'], 'dspark')
+        self.assertIn('--dflash', argv)
+        self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
+        self.assertEqual(flag(argv, '--dflash-gamma'), '8')
+        self.assertEqual(flag(argv, '--num-drafts'), '7')
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        with self.assertRaises(ValueError):
+            launch(DRAFTER_PATH='relative/dir')
+
+    def test_no_drafter(self):
+        argv, env = launch(SPARKINKLING_DRAFTER='none')
         self.assertEqual(env['SPARKINKLING_DRAFTER'], 'none')
         for spec_flag in serve.SPECULATION_FLAGS:
             self.assertIsNone(flag(argv, spec_flag), spec_flag)
-        self.assertNotIn('--speculative', argv)
-        with self.assertRaisesRegex(ValueError, 'dspark'):
-            launch(SPARKINKLING_DRAFTER='dspark')
+        self.assertNotIn('ATLAS_DFLASH_BATCH_DEPTH', env)
+        with self.assertRaises(ValueError):
+            launch(SPARKINKLING_DRAFTER='eagle')
 
     def test_a_profile_cannot_speculate_go_multi_rank_or_change_target(self):
         for extra in (['--dflash'], ['--draft-model=/m/mtp.safetensors'], ['--world-size=2'], ['--tp-size=2'],
@@ -163,7 +177,7 @@ class StartScript(unittest.TestCase):
         return result, (root/'calls').read_text() if (root/'calls').exists() else '', checkpoint.resolve()
 
     def test_strict_serves_the_checkpoint_read_only_with_a_memory_cap(self):
-        result, calls, checkpoint = self.run_up()
+        result, calls, checkpoint = self.run_up(DRAFTER='none')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('smoke: 17*23 = 391', result.stdout)
         run = next(line for line in calls.splitlines() if line.startswith('docker run '))
@@ -177,9 +191,17 @@ class StartScript(unittest.TestCase):
         self.assertNotIn('SPARKINKLING_GPU_MEMORY_UTILIZATION', run)
 
     def test_the_utilization_override_reaches_the_container(self):
-        result, calls, _ = self.run_up(GPU_MEMORY_UTILIZATION='0.60')
+        result, calls, _ = self.run_up(GPU_MEMORY_UTILIZATION='0.60', DRAFTER='none')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('-e SPARKINKLING_GPU_MEMORY_UTILIZATION=0.60', calls)
+
+    def test_start_mounts_the_assembled_drafter(self):
+        start = (ROOT/'start.sh').read_text()
+        self.assertIn('DRAFTER=${DRAFTER:-dspark}', start)
+        self.assertIn('drafter=$checkpoint+dspark', start)
+        self.assertIn('python3 install/dspark_drafter.py install/checkpoint.json "$checkpoint" "$drafter"', start)
+        self.assertIn('--mount "type=bind,src=$drafter,dst=$drafter,readonly"', start)
+        self.assertIn('-e DRAFTER_PATH="$drafter"', start)
 
     def test_start_serves_the_assembled_overlay_in_spark_mode(self):
         start = (ROOT/'start.sh').read_text()
