@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+.claude/
+
+# Never commit weights, compiled GPU artifacts or credentials.
+*.safetensors
+*.bin
+*.so
+*.key
+*.pem

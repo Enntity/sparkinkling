@@ -1,0 +1,40 @@
+{
+  "schema": "sparkinkling.checkpoint/v1",
+  "repository": "thinkingmachines/Inkling-2-Mini",
+  "revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+  "size_gib": 18.8,
+  "model_type": "inkling2_loop",
+  "format": "One shard: routed experts NVFP4 in layers 0-19 and MXFP8 in layers 20-23; attention projections, router, loop controllers, embeddings and lm_head BF16. mtp.safetensors is the bundled DSpark draft model.",
+  "files": {
+    "model-00001-of-00001.safetensors": "65e60f51aa1284d4fb022584908c315270334d991828bb774af60584523539d1",
+    "mtp.safetensors": "7c3b651317f01f73bcf4e1dceba66ef8b7e1a1eac6bc171e882e690a4b10a1d2",
+    "tokenizer.json": "7f332727f9a3f093dd452a39cc978e6757627e5dad1b0673aa4e75174f236dd6",
+    "tiktoken/tokenizer.model": "f170372dd655728909228220d77cf6b8104a59f38a91262a7d2c4027906ec0d8"
+  },
+  "why": "Thinking Machines' own release, served as shipped in Strict mode. The sha256 values are Hugging Face's LFS object ids at this revision; the small JSON and template files are fetched at the same revision and not hashed here.",
+  "served_model_name": "inkling-2-mini-atlas",
+  "license": "apache-2.0",
+  "draft": {
+    "file": "mtp.safetensors",
+    "method": "DSpark",
+    "status": "downloaded with the checkpoint, not loaded: the pinned engine has no DSpark drafter yet (DRAFTER=none)"
+  },
+  "overlay": {
+    "repository": "Enntity/Inkling-2-Mini-Spark-NVFP4",
+    "revision": "TODO",
+    "files": {
+      "spark-nvfp4.safetensors": "TODO"
+    },
+    "serve": "spark-nvfp4.safetensors",
+    "tensors": 459,
+    "prefixes": [
+      "model.language_model.",
+      "lm_head."
+    ],
+    "size_gb": 2.9,
+    "base_model": "thinkingmachines/Inkling-2-Mini",
+    "license": "apache-2.0",
+    "format": "ModelOpt NVFP4 (E2M1 codes, an E4M3 scale per 16 inputs, an F32 weight_scale_2 per tensor or expert) under the transformers module names: the attention q, k, v, output-gate, output and relative-bias projections of all 24 layers, the vocabulary head, and the routed experts of layers 20-23.",
+    "why": "Spark mode only: calibrated NVFP4 copies of the BF16 projections and the MXFP8 experts, about half the bytes a token reads. Not yet published or qualified; revision and sha256 are filled in when the repository is created."
+  }
+}
