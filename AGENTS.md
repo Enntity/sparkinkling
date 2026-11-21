@@ -24,3 +24,5 @@ claim.
   "bit-exact" only for what was measured; never call a recipe lossless.
 - New files carry an SPDX header. Credit ideas and code taken from other
   projects (origin, license) in code and docs.
+- Before sending a change, run the checks in `.github/workflows/static.yml`
+  (listed in `CONTRIBUTING.md`).

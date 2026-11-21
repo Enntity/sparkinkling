@@ -1,0 +1,73 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+# The engine
+
+SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
+[Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
+the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
+`fb1bc1f18` (tree `2f26babf`), for the kernel target `inkling-2-mini`
+(`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
+`inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
+commit, refuses any other tree, and takes the kernel target from the same
+file. The pin will move before the first release; it moves only in
+`install/atlas-source.json` and on this page.
+
+## What the branch adds
+
+`inkling2/mini-20261121` is 28 commits on Atlas-Inf `main` `269b533bc` (the
+merge of #332). None of it is proposed upstream yet. In order:
+
+- **Loading.** The config parses as 48 unrolled layer visits (24 physical
+  layers; the core 6-17 run three times with shared weights), and the
+  checkpoint's layout is checked at load.
+- **Kernels.** Decode attention with a learned relative-position bias and
+  per-token sinks; static and dynamic short convolutions with FP32 state;
+  block attention residuals and loop message retrieval; per-head
+  clip/scale/norm epilogues and the loop message gates; routed-expert decode
+  read straight from the checkpoint's stacked NVFP4 and MXFP8 tensors. The
+  compiled base set is Laguna-S-2.1's (`kernel_source`); the
+  `inkling-2-mini` overlay adds the Inkling kernels and the logit softcap.
+- **Serving.** Several sequences per decode step; CUDA-graph single-sequence
+  decode; decode attention that splits a row's keys over the GPU; prefill
+  with the routed experts as grouped GEMMs, attention on tensor cores and the
+  NVFP4 experts on their own tensor-core GEMM; decode batches that read each
+  expert once.
+- **Chat.** Inkling writes a turn as message blocks of special tokens. The
+  server rewrites them before the chat paths see them: reasoning is returned
+  separately (reasoning parser `inkling2`) and each JSON tool block becomes an
+  OpenAI tool call (through the Hermes parser), the same streamed and
+  blocking, on `/v1/chat/completions`, `/v1/responses` and `/v1/messages`.
+  The model's own effort token in the prompt is the only thinking control: a
+  request's `reasoning_effort` (none, minimal, low, medium, high, xhigh) is
+  passed to the checkpoint's template, and an effort-silent request renders
+  the template's default. Rendered prompts were checked token-identical to
+  transformers for plain, system-plus-effort, tool-declaration and tool-history
+  prompts during development; that check is not a qualification.
+- **Spark mode.** A model directory whose index also maps the Spark overlay
+  (ModelOpt NVFP4 under `model.language_model.*` and `lm_head.*`) serves those
+  tensors in place of the checkpoint's: attention projections through the
+  W4A16 GEMV and GEMM, the experts of layers 20-23 as NVFP4 with a per-expert
+  global scale, and the vocabulary head through Atlas's prepacked NVFP4 head.
+  Without an overlay nothing changes. See [MODES](MODES.md).
+
+## What it does not do yet
+
+- **DSpark.** The checkpoint's bundled DSpark draft model is not loaded;
+  verify rows wait for it. `DRAFTER=dspark` is refused until a pinned engine
+  supports it.
+- **Images.** The target has no vision tower. Inkling 2 Mini takes image
+  input; SparkInkling serves text only.
+- **Known gaps** recorded on the branch: `usage.reasoning_tokens` reads 0, and
+  streamed `return_token_ids` carry the rewritten ids.
+
+## Build-time gates
+
+The image runs the engine's full CPU workspace tests and Clippy with the
+pinned Rust 1.93.1, as SparkQwen's does. The tests skipped by exact name in
+[`install/Dockerfile`](../install/Dockerfile) are SparkQwen's list for
+Atlas-Inf `main`; they have not been confirmed against this pin, which has not
+been built through this Dockerfile yet. GPU tests are not part of the build;
+the engine is qualified on the hardware separately.
+
+The [tool-call guard](https://github.com/Enntity/sparkqwen/blob/main/docs/TOOL-GUARD.md)
+is on by default, as in SparkQwen and SparkGLM. It runs after tool-call
+parsing; it has not yet been checked against Inkling's tool blocks.
