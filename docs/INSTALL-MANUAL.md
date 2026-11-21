@@ -8,7 +8,7 @@ on the one Spark that serves.
 |---|---|
 | Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `035de2214` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
 | Model | [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini) @ `ed40e7da625f594fc9c4990f5f66be24873c22d7` ([`install/checkpoint.json`](../install/checkpoint.json)) |
-| Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4), not published yet (revision and sha256 `TODO`) |
+| Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4) @ `e9df93dceea2fbf0927caf178104e868452a6292` |
 | Build dependencies | CUTLASS `cf064d2e`, NCCL 2.31.2, Rust 1.93.1, CUDA 13.0 |
 | Profile | [`install/profiles/default.json`](../install/profiles/default.json) |
 
@@ -30,8 +30,7 @@ IMAGE=$(install/build.sh)
 pinned engine commit, refuses any other tree, builds the `inkling-2-mini`
 kernel target and runs the engine's CPU tests and Clippy. A cold build
 downloads the CUDA base images and compiles every kernel; allow 30 to 60
-minutes. `ATLAS_BUILD_JOBS` (default 4) trades speed for memory. No image is
-published yet.
+minutes. `ATLAS_BUILD_JOBS` (default 4) trades speed for memory.
 
 ## 3. Download the pinned checkpoint
 
@@ -42,16 +41,25 @@ hf download thinkingmachines/Inkling-2-Mini --revision ed40e7da625f594fc9c4990f5
 python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/thinkingmachines--Inkling-2-Mini"
 ```
 
-About 20 GB, including the bundled DSpark draft model (`mtp.safetensors`),
-which the pinned engine does not load yet. `check_files.py` compares the
-weight and tokenizer files with the sha256 values in the pin.
+About 20 GB, including the bundled DSpark draft model (`mtp.safetensors`).
+`check_files.py` compares the weight and tokenizer files with the sha256
+values in the pin. Then the drafter's directory (skip with `DRAFTER=none`):
+
+```sh
+python3 install/dspark_drafter.py install/checkpoint.json \
+  "$MODEL_ROOT/thinkingmachines--Inkling-2-Mini" "$MODEL_ROOT/thinkingmachines--Inkling-2-Mini+dspark"
+```
+
+It links `mtp.safetensors` as `model.safetensors` beside a `config.json` that
+is the checkpoint's `mtp_config` plus the tokenizer vocabulary size, the
+layout the engine loads a drafter from.
 
 ## 4. Spark mode only: the overlay
 
-Skip this for Strict. Once the overlay is published and pinned:
+Skip this for Strict.
 
 ```sh
-hf download Enntity/Inkling-2-Mini-Spark-NVFP4 spark-nvfp4.safetensors --revision <pinned revision> \
+hf download Enntity/Inkling-2-Mini-Spark-NVFP4 spark-nvfp4.safetensors --revision e9df93dceea2fbf0927caf178104e868452a6292 \
   --local-dir "$MODEL_ROOT/Enntity--Inkling-2-Mini-Spark-NVFP4"
 python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/Enntity--Inkling-2-Mini-Spark-NVFP4" overlay
 python3 install/spark_overlay.py install/checkpoint.json \
@@ -74,9 +82,9 @@ ck=$MODEL_ROOT/thinkingmachines--Inkling-2-Mini
 mkdir -p ~/.cache/atlas-cuda
 docker run -d --name atlas-sparkinkling --network host --ipc host --shm-size 16g --memory 114g \
   --gpus all --security-opt no-new-privileges=true \
-  --mount "type=bind,src=$ck,dst=$ck,readonly" \
+  --mount "type=bind,src=$ck,dst=$ck,readonly" --mount "type=bind,src=$ck+dspark,dst=$ck+dspark,readonly" \
   --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
-  -e MODEL_PATH="$ck" -e SPARKINKLING_MODE=strict -e HF_HUB_OFFLINE=1 \
+  -e MODEL_PATH="$ck" -e SPARKINKLING_MODE=strict -e DRAFTER_PATH="$ck+dspark" -e HF_HUB_OFFLINE=1 \
   -e CUDA_CACHE_PATH=/atlas-cuda-cache "$IMAGE"
 until curl -sf http://127.0.0.1:8895/health; do sleep 10; done
 ```
@@ -92,8 +100,13 @@ The image's entry point turns those settings into one engine command:
 spark serve --model-from-path=<model dir> --kernel-target=inkling-2-mini \
   --gpu-memory-utilization=0.80 --kv-cache-dtype=bf16 --max-num-seqs=8 --max-batch-size=8 \
   --max-seq-len=131072 --max-prefill-tokens=2048 --no-tui \
+  --dflash --dflash-gamma=8 --num-drafts=7 --draft-model=<drafter dir> \
   --bind=127.0.0.1 --port=8895 --model-name=inkling-2-mini-atlas --tool-guard=on ...
 ```
+
+with `ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0` in its environment (speculate
+with one live request). `-e SPARKINKLING_DRAFTER=none` drops the four drafter
+flags.
 
 **Memory share.** `-e SPARKINKLING_GPU_MEMORY_UTILIZATION=0.70` (two decimals,
 0.50-0.90) overrides the profile's 0.80. GB10 memory is shared with the host;
@@ -104,7 +117,7 @@ hangs instead of killing a process.
 `/opt/atlas/profiles/`; to run your own, mount a JSON file at
 `/opt/atlas/profiles/custom.json` and name `custom`. A profile must keep one
 `--kernel-target=inkling-2-mini`, BF16 KV and one rank, and may not configure
-speculation.
+speculation (that is `SPARKINKLING_DRAFTER`).
 
 **Stopping.** `docker rm -f atlas-sparkinkling`.
 

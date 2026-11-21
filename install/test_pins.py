@@ -89,12 +89,15 @@ class Docs(unittest.TestCase):
                 self.assertIn(ckpt['revision'][:12], text(doc))
                 self.assertIn(ckpt['overlay']['repository'], text(doc))
 
-    def test_no_unmeasured_performance_claims(self):
-        # Until a result lands, the performance tables hold placeholders only.
+    def test_performance_claims_cite_a_result(self):
+        # Every performance table points at a results directory that exists.
         for doc in ('README.md', 'docs/BENCHMARKS.md'):
             with self.subTest(doc=doc):
-                self.assertNotRegex(text(doc), r'\d\s*tok/s')
-                self.assertIn('not measured yet', text(doc).lower())
+                cited = re.findall(r'results/(\d{4}-\d{2}-\d{2}-[\w.-]+)', text(doc))
+                self.assertTrue(cited, f'{doc} cites no result')
+                for name in cited:
+                    self.assertTrue((ROOT/'results'/name/'RESULT.md').is_file(), name)
+                    self.assertTrue((ROOT/'results'/name/'SHA256SUMS').is_file(), name)
 
     def test_dspark_is_the_documented_default(self):
         pin = json.loads((ROOT/'install'/'checkpoint.json').read_text())

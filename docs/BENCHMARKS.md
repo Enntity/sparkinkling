@@ -1,35 +1,33 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 # Benchmark method
 
-SparkInkling will use the measurement protocol SparkQwen and SparkGLM publish:
-[RigMark](https://github.com/alexellis/rigmark) by Alex Ellis (MIT) at commit
-`40fabcaf6e963ac27ab347f61d54a225dbd07419`, protocol 1.1.0. Nothing has been
-measured on a release candidate yet.
+SparkInkling uses [RigMark](https://github.com/alexellis/rigmark) by Alex Ellis
+(MIT) at commit `40fabcaf6e963ac27ab347f61d54a225dbd07419`, protocol 1.1.0,
+with the settings the vLLM baseline on the same Spark was measured with.
 
 ## Results
 
-Performance is not measured yet. This table is a placeholder; it is filled
-from a dated directory under [`results/`](../results/) with every repetition
-and raw receipt, never from development notes.
+From [`results/2026-11-21-release-0.1.0`](../results/2026-11-21-release-0.1.0/RESULT.md),
+the 0.1.0 image (`9ea2ff174e03`), default profile and drafter; medians over all
+repetitions; vLLM on the same Spark the day before.
 
-| Mode | C1 code decode | C1 prose decode | C2 aggregate | C4 aggregate | C8 aggregate | 32K prefill | TTFT |
+| Mode | C1 code decode | C1 prose decode | C2 aggregate | C4 aggregate | C8 aggregate | 32K prefill | 8K prefill |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Strict | — | — | — | — | — | — | — |
-| Spark | — | — | — | — | — | — | — |
-| vLLM (baseline) | — | — | — | — | — | — | — |
-
-The vLLM baseline is to be measured on the same Spark with RigMark, the
-same day, with its version and settings recorded beside it.
+| Strict | 52.0 | 22.2 | 44.4 | 71.4 | 108.7 | 1,455 | 1,639 |
+| Spark | 57.7 | 25.9 | 60.3 | 86.3 | 117.9 | 1,418 | 1,591 |
+| vLLM | 35.1 | 35.6 | 54.0 | 86.6 | 122.4 | 2,722 | |
+| vLLM + DSpark | 69.8 | 31.2 | 60.9 | 94.7 | 144.0 | 2,723 | |
 
 ## Protocol
 
-- Two complete runs per configuration, with all repetitions retained. Headline
-  figures come from the first complete run that passes the protocol's basic
-  output gates; no cells are selected from different runs.
-- Each run has three code, prose and structured-output repetitions, each with
-  a 4,096-token allowance; ten cold prefill requests, each immediately
-  replayed; and two short-code rounds at concurrency 1, 2, 4 and 8 with a
-  256-token allowance per request.
+- Two invocations per configuration: a code suite (decode, prefill, short-code
+  concurrency) and a prose suite (decode, short-prose concurrency), with every
+  repetition retained. The cards in the results are RigMark's own.
+- Each suite has two code, prose and structured-output decode repetitions,
+  each with a 4,096-token allowance; the code suite adds two cold prefill
+  requests at 8,192 and at 32,768 tokens, each immediately replayed, and two
+  short-code rounds at concurrency 1, 2, 4 and 8 with a 256-token allowance
+  per request; the prose suite two short-prose rounds at 1, 4 and 8.
 - Temperature 0, top-p 1, seed 20260905, explicit `reasoning_effort=low` on
   every chat request. Inkling always reasons a little, so decode includes
   reasoning tokens.
@@ -46,16 +44,16 @@ output gates check properties of these prompts, not broad model quality.
 ## Reproduction
 
 ```sh
-./rigmark run --base-url http://127.0.0.1:8895 --model inkling-2-mini-atlas \
-  --label sparkinkling-strict-round1 --comparison-id sparkinkling-ROUND1 \
-  --metadata metadata.json --runs 3 --decode-tokens 4096 \
-  --prefill-runs 10 --prefill-depths 32768 \
-  --concurrency 1,2,4,8 --concurrency-runs 2 \
-  --extra-body '{"reasoning_effort":"low"}' \
-  --output round1.json
+EB='{"chat_template_kwargs":{"reasoning_effort":"low"}}'
+./rigmark run --base-url http://127.0.0.1:8895 --model inkling-2-mini-atlas --metadata metadata.json \
+  --comparison-id inkling2-atlas --runs 2 --prefill-runs 2 --concurrency 1,2,4,8 --concurrency-runs 2 \
+  --extra-body "$EB" --label sparkinkling-strict-code --prefill-depths 8192,32768 --output strict-code.json
+./rigmark run --base-url http://127.0.0.1:8895 --model inkling-2-mini-atlas --metadata metadata.json \
+  --comparison-id inkling2-atlas --runs 2 --concurrency 1,4,8 --concurrency-runs 2 \
+  --extra-body "$EB" --label sparkinkling-strict-prose --concurrency-workload prose --skip-prefill \
+  --output strict-prose.json
 ```
 
-Use a second label, comparison ID and output path for the second run, so its
-cold prompts are not served from the first run's cached prefixes. Preserve
-every response, receipt and command under `results/<date>-<name>/raw/` with a
-`SHA256SUMS`.
+The engine refuses prefix caching for Inkling 2, so replays are cold too.
+Preserve every response, receipt and command under `results/<date>-<name>/raw/`
+with a `SHA256SUMS`.

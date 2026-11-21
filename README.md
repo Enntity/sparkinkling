@@ -1,20 +1,20 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <p align="center">
-  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. Strict mode serves the checkpoint as shipped (./start.sh --mode strict); Spark mode adds a calibrated NVFP4 overlay (./start.sh --mode spark). In development; no measured claims yet." width="100%">
+  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. Strict mode serves the checkpoint as shipped (./start.sh --mode strict); Spark mode adds a calibrated NVFP4 overlay (./start.sh --mode spark)." width="100%">
 </p>
 
 # SparkInkling
 
-**SparkInkling 0.1.0, in development.** Run `./start.sh --version` for this
-checkout, or `./start.sh status` for the version and image of a running server.
+**SparkInkling 0.1.0.** Run `./start.sh --version` for this checkout, or
+`./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
 engine with an OpenAI-compatible API, reasoning and tool calls.
 
-There is no release, published image or qualified result yet. The launcher,
-the engine pin and the checkpoint pin are here; the performance section below
-is a placeholder until a measured result lands under [`results/`](results/).
+0.1.0 is the first release: both modes, the checkpoint's own DSpark drafter,
+and a measured result with its receipts under [`results/`](results/). It is
+not yet faster than vLLM in most cells; see [Performance](#performance).
 
 ## The model
 
@@ -34,25 +34,30 @@ SparkInkling serves text only for now: the engine target has no vision tower.
 | Weights | The checkpoint as shipped: NVFP4 experts in layers 0-19, MXFP8 experts in 20-23, BF16 attention, router and vocabulary head | Strict plus a calibrated NVFP4 overlay for the attention projections, the vocabulary head and the experts of layers 20-23 |
 | Start | `./start.sh` (or `--mode strict`) | `./start.sh --mode spark` |
 | Extra download | none | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4), 2.9 GB |
-| Status | in development | in development; refused until the overlay is published and pinned |
+| Fidelity | the checkpoint's own numerics | KL 0.0081 to Strict's weights (97.0% top-1 agreement, 224 held-out documents) |
 
-Spark reads about half the bytes a token reads in Strict, and it changes the
-model's numerics, so it ships only after it is measured against a BF16
-reference and against Strict on the same image. [The modes in
+Spark reads about half the bytes a token reads in Strict. [The modes in
 detail](docs/MODES.md).
 
 ## Performance
 
-Not measured yet. The table is a placeholder for the first RigMark result
-([method](docs/BENCHMARKS.md)); every figure will link to its raw receipts.
+Measured on the 0.1.0 image with RigMark (reasoning low, temperature 0), one
+Spark, the default profile and drafter, against vLLM's own Inkling 2 Mini image
+on the same Spark: [the result, with every receipt](results/2026-11-21-release-0.1.0/RESULT.md).
 
-| Mode | C1 code decode | C1 prose decode | C2 / C4 / C8 aggregate | 32K prefill | TTFT |
-|---|---:|---:|---:|---:|---:|
-| Strict | — | — | — | — | — |
-| Spark | — | — | — | — | — |
-| vLLM | — | — | — | — | — |
+| | Strict | Spark | vLLM | vLLM + DSpark |
+|---|---:|---:|---:|---:|
+| Code decode, tok/s | 52.0 | 57.7 | 35.1 | 69.8 |
+| Prose decode | 22.2 | 25.9 | 35.6 | 31.2 |
+| Structured decode | 79.2 | 86.2 | 35.6 | 104.3 |
+| 32K cold prefill, tok/s | 1,455 | 1,418 | 2,722 | 2,723 |
+| Short code, C1 / C2 / C4 / C8 aggregate | 31.7 / 44.4 / 71.4 / 108.7 | 42.4 / 60.3 / 86.3 / 117.9 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
 
-The vLLM baseline is to be measured on the same Spark with RigMark.
+Code and structured output decode faster than vLLM without speculation; vLLM
+with its DSpark drafter is still faster on every decode workload, and on
+prefill. Prose is the drafter's weak case (few drafts are accepted there):
+`DRAFTER=none` decodes it at about 30 tok/s in Strict. The vLLM receipts were
+measured the day before.
 
 ## Quick start
 
@@ -67,8 +72,7 @@ cp .env.example .env      # optional: every setting has a default
 
 - One DGX Spark (GB10, 128 GB unified memory) with Docker and the NVIDIA
   runtime.
-- About 25 GB free for the checkpoint, plus 2.9 GB for Spark mode's overlay,
-  and room for the image build (no image is published yet).
+- About 25 GB free for the checkpoint, plus 2.9 GB for Spark mode's overlay.
 - The default profile takes 0.80 of GPU memory; leave the rest for the host
   and anything else it runs.
 
@@ -79,7 +83,7 @@ engine.
 
 1. **Image.** Pulls `ghcr.io/enntity/atlas-sparkinkling:<tag>`, where the tag
    is the git tree of [`install/`](install/), so the image always matches your
-   checkout. If that tag is not published (none is yet), it builds the image
+   checkout. If that tag is not published, it builds the image
    from source ([`install/build.sh`](install/build.sh): Atlas at the commit
    and tree pinned in [`install/atlas-source.json`](install/atlas-source.json),
    for the `inkling-2-mini` kernel target; 30-60 minutes cold).
@@ -87,10 +91,11 @@ engine.
    [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
    at revision `ed40e7da625f` (pinned in
    [`install/checkpoint.json`](install/checkpoint.json)) and checks its weight
-   and tokenizer files' sha256. In Spark mode it also downloads and checks
-   the overlay, then assembles the Spark model directory next to the
-   checkpoint ([`install/spark_overlay.py`](install/spark_overlay.py)). It
-   uses `hf` when installed and a throwaway container otherwise.
+   and tokenizer files' sha256, then assembles the DSpark drafter's directory
+   next to it ([`install/dspark_drafter.py`](install/dspark_drafter.py)). In
+   Spark mode it also downloads and checks the overlay, then assembles the
+   Spark model directory ([`install/spark_overlay.py`](install/spark_overlay.py)).
+   It uses `hf` when installed and a throwaway container otherwise.
 3. **Serve.** Starts the container, waits for health, then answers one
    smoke-test question.
 
@@ -113,20 +118,23 @@ Reasoning comes back separately from the answer. `reasoning_effort` (`none`,
 template; without it the template's default applies. The model always thinks
 a little, so leave room in `max_tokens`. Tool calls (OpenAI `tools`, streaming
 included) are returned as OpenAI tool calls. The tool-call guard SparkQwen and
-SparkGLM ship is on by default (`TOOL_GUARD` in `.env`); it has not yet been
-checked against Inkling's tool format.
+SparkGLM ship is on by default (`TOOL_GUARD` in `.env`).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
 (the one shipped profile, `default`: 8 concurrent requests of up to 131,072
-tokens, not yet sized or qualified, or a JSON file of your own),
-`GPU_MEMORY_UTILIZATION` (0.50-0.90), `MODEL_ROOT`, `PULL=0`.
+tokens at 0.80 of GPU memory, or a JSON file of your own), `DRAFTER`,
+`GPU_MEMORY_UTILIZATION` (0.50-0.90), `MODEL_ROOT`, `PULL=0`. At 0.80 the KV
+pool holds about 404K tokens (three full-length requests); more wait for
+blocks rather than fail.
 
 ## Speculative decoding
 
-The checkpoint's bundled DSpark draft model is downloaded with it but not
-used yet: the pinned engine has no DSpark drafter. `DRAFTER=none` is the only
-accepted value until a pinned engine runs it; `DRAFTER=dspark` is reserved
-for that.
+Both modes run the checkpoint's bundled DSpark drafter by default
+(`DRAFTER=dspark`): it proposes seven tokens a step and the mode's own weights
+verify them, so it changes speed, not the model. It speculates while one
+request is live; from two requests the engine decodes plainly, which delivers
+more there. It pays on code and structured output and costs on prose (few
+drafts are accepted there); `DRAFTER=none` turns it off.
 
 ## Other ways to run it
 
@@ -138,15 +146,15 @@ for that.
 SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121`,
 the Inkling 2 Mini serving series on Atlas-Inf `main`, pinned by commit and
-tree in [`install/atlas-source.json`](install/atlas-source.json). The pin will
-move before the first release, and the series goes upstream to Atlas-Inf.
+tree in [`install/atlas-source.json`](install/atlas-source.json), and proposed
+upstream as [Atlas-Inf/atlas#401](https://github.com/Atlas-Inf/atlas/pull/401).
 What the branch adds and what it does not do yet:
 [docs/ENGINE.md](docs/ENGINE.md).
 
 ## Credits
 
 Inkling 2 Mini and its DSpark draft model are by Thinking Machines Lab
-(Apache-2.0). Measurement will use [RigMark](https://github.com/alexellis/rigmark)
+(Apache-2.0). Measurement uses [RigMark](https://github.com/alexellis/rigmark)
 by Alex Ellis (MIT). The launcher and install directory are adapted from
 [SparkQwen](https://github.com/Enntity/sparkqwen) and
 [SparkGLM](https://github.com/Enntity/sparkglm).

@@ -56,9 +56,7 @@ RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg 
 # Full native CPU suite. GPU tests remain ignored here and are qualified on
 # the hardware separately. Keep failures fatal; never ship a partial gate.
 # The skips are SparkQwen's, for tests that fail or flake on Atlas-Inf main
-# itself, by exact name and nothing else. They have not been confirmed against
-# this pin, which has not been built through this file yet: confirm or trim
-# them at the first build.
+# itself, by exact name and nothing else (the 0.1.0 build passed with them).
 #   #233 ffmpeg decode (frame count and timestamps with a real ffmpeg): 5
 #   #198/#199 fast_weights CSF deferral and U32 staging tests: 2
 #   closure attestation in a single-target build: 1 (Atlas-Inf #250)

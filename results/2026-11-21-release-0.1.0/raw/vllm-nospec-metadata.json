@@ -1,0 +1,15 @@
+{
+ "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+ "topology": "TP1, single Spark",
+ "negotiated_link_speed": "not applicable",
+ "model": "thinkingmachines/Inkling-2-Mini",
+ "model_revision": "HF main as of 2026-11-21",
+ "quantisation": "TML modelopt: NVFP4 experts L0-19, MXFP8 experts L20-23, BF16 rest",
+ "kv_cache_dtype": "auto (bf16)",
+ "serving_engine": "vLLM inkling-2-mini image",
+ "serving_image": "vllm/vllm-openai:inkling-2-mini@sha256:c2dc759f5984",
+ "drafter": "none",
+ "context_limit": 262144,
+ "scheduler": "vLLM defaults, gpu-memory-utilization 0.75",
+ "competing_traffic": "none (sq27-test stopped)"
+}

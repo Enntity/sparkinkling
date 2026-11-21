@@ -79,12 +79,12 @@ order:
 ## Build-time gates
 
 The image runs the engine's full CPU workspace tests and Clippy with the
-pinned Rust 1.93.1, as SparkQwen's does. The tests skipped by exact name in
-[`install/Dockerfile`](../install/Dockerfile) are SparkQwen's list for
-Atlas-Inf `main`; they have not been confirmed against this pin, which has not
-been built through this Dockerfile yet. GPU tests are not part of the build;
-the engine is qualified on the hardware separately.
+pinned Rust 1.93.1, as SparkQwen's does: 8,747 tests passed in the 0.1.0
+build, with the exact-name skips listed in
+[`install/Dockerfile`](../install/Dockerfile) (SparkQwen's list for Atlas-Inf
+`main`). GPU tests are not part of the build; the engine is qualified on the
+hardware separately.
 
 The [tool-call guard](https://github.com/Enntity/sparkqwen/blob/main/docs/TOOL-GUARD.md)
 is on by default, as in SparkQwen and SparkGLM. It runs after tool-call
-parsing; it has not yet been checked against Inkling's tool blocks.
+parsing; the 0.1.0 task probe's tool calls passed through it in both modes.

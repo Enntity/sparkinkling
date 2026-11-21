@@ -13,5 +13,5 @@ To add a result, record the image tag (`./start.sh status`), the mode, the
 profile, the opt-ins, and every repetition you ran, including slow ones.
 Measure the baseline on the same Spark, and put its receipts in `raw/` too.
 
-`pending-first-rigmark/` is a placeholder for the first measured result. It
-holds no measurements; replace it with a dated directory.
+- [`2026-11-21-release-0.1.0`](2026-11-21-release-0.1.0/RESULT.md): the 0.1.0
+  image, Strict and Spark with DSpark, against vLLM on the same Spark.
