@@ -21,4 +21,5 @@ MXFP8 experts and BF16 everything else, plus a bundled DSpark draft model.
 
 SparkInkling will serve the checkpoint in two modes, described in
 [docs/MODES.md](docs/MODES.md): **Strict**, the checkpoint's own weight formats,
-and **Spark**, with calibrated NVFP4 copies of the BF16 projections.
+and **Spark**, with calibrated NVFP4 copies of the BF16 projections and of the
+MXFP8 experts.
