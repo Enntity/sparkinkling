@@ -1,15 +1,21 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 # SparkInkling 0.1.0: Strict and Spark on one Spark (2026-11-21)
 
-The release image, `ghcr.io/enntity/atlas-sparkinkling:9ea2ff174e03` (Atlas
-`Enntity/atlas` `inkling2/mini-20261121` at `035de2214`, the `inkling-2-mini`
-kernel target), served through `./start.sh` with the default profile (8
+The 0.1.0 image, measured as `ghcr.io/enntity/atlas-sparkinkling:9ea2ff174e03`
+(Atlas `Enntity/atlas` `inkling2/mini-20261121` at `035de2214`, the
+`inkling-2-mini` kernel target), served through `./start.sh` with the default profile (8
 sequences, 131,072 tokens, 0.80 of GPU memory, BF16 KV) and the default
 drafter (DSpark, seven drafts, speculating with one live request), measured
 with [RigMark](https://github.com/alexellis/rigmark) `40fabcaf6e96`, protocol
 1.1.0, on one DGX Spark with nothing else serving. Weights:
 `thinkingmachines/Inkling-2-Mini` @ `ed40e7da625f`; Spark adds
 `Enntity/Inkling-2-Mini-Spark-NVFP4` @ `e9df93dc`.
+
+The release tag, `0c92af6b2169`, is the same build after this result's docs
+changed a test and a comment under `install/` (the tag is that directory's
+tree): every runtime file, the engine binary, `/opt/atlas` and the templates,
+hashes the same in both (`find ... | xargs sha256sum | sha256sum` =
+`6179e48af9a9…`).
 
 The image build ran the engine's whole CPU workspace suite (8,747 tests
 passed, the skips listed in `install/Dockerfile`) and Clippy. `./start.sh`
