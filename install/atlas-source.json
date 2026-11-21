@@ -1,10 +1,10 @@
 {
   "schema": "sparkinkling.atlas-engine-source/v1",
-  "note": "Enntity/atlas inkling2/mini-20261121: the Inkling 2 Mini (model type inkling2_loop) serving series, 35 commits on Atlas-Inf main 269b533bc (Merge #332). It parses the checkpoint as 48 unrolled layer visits, checks its layout at load, and adds the inkling-2-mini kernel target: decode attention with relative bias and per-token sinks, short convolutions with verify rollback, block attention residuals, loop message gates, NVFP4 and MXFP8 stacked-expert MoE decode and tensor-core prefill, tensor-core prefill attention, CUDA-graph single- and multi-sequence decode, the Spark NVFP4 overlay (attention projections, the experts of layers 20-23, lm_head), and the checkpoint's DSpark drafter on the DFlash head. Prefix caching is refused (conv states are not snapshotted); no vision tower. Proposed upstream to Atlas-Inf.",
+  "note": "Enntity/atlas inkling2/mini-20261121: the Inkling 2 Mini (model type inkling2_loop) serving series, 36 commits on Atlas-Inf main 269b533bc (Merge #332). It parses the checkpoint as 48 unrolled layer visits, checks its layout at load, and adds the inkling-2-mini kernel target: decode attention with relative bias and per-token sinks, short convolutions with verify rollback, block attention residuals, loop message gates, NVFP4 and MXFP8 stacked-expert MoE decode, prefill experts at the checkpoint's declared numerics (W4A4 / W8A8 on the block-scaled tensor cores), GQA flash prefill attention, CUDA-graph single- and multi-sequence decode, the Spark NVFP4 overlay (attention projections, the experts of layers 20-23, lm_head), and the checkpoint's DSpark drafter on the DFlash head. Prefix caching is refused (conv states are not snapshotted); no vision tower. Proposed upstream to Atlas-Inf.",
   "repository": "https://github.com/Enntity/atlas.git",
   "branch": "inkling2/mini-20261121",
-  "commit": "035de221452f4d7e20c0bee26f2cc70a89a9028e",
-  "tree": "fba070e43a6f52643b67d81149fac7c8f8807daa",
+  "commit": "f5acf5a710d56740f114f510912716e862f72c05",
+  "tree": "aced2ff02267112e4dfd8d5ecef3395b08f2e58b",
   "kernel_target": "inkling-2-mini",
   "model_type": "inkling2_loop",
   "license": "AGPL-3.0-only"

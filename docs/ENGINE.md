@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`035de2214` (tree `fba070e4`), for the kernel target `inkling-2-mini`
+`f5acf5a71` (tree `aced2ff0`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -28,9 +28,19 @@ order:
   `inkling-2-mini` overlay adds the Inkling kernels and the logit softcap.
 - **Serving.** Several sequences per decode step; CUDA-graph single-sequence
   decode; decode attention that splits a row's keys over the GPU; prefill
-  with the routed experts as grouped GEMMs, attention on tensor cores and the
-  NVFP4 experts on their own tensor-core GEMM; decode batches that read each
-  expert once.
+  with the routed experts as grouped GEMMs at the checkpoint's declared
+  numerics (below), GQA flash attention that computes the relative-position
+  bias where it adds it, and the loop message gates and block residuals fused
+  per row tile; decode batches that read each expert once.
+- **Expert numerics in prefill.** The checkpoint's `hf_quant_config.json`
+  requires its experts' inputs quantized: NVFP4 rows for the NVFP4 experts of
+  layers 0-19 (a per-row scale amax / 1536 and, per 16 values, the E4M3 block
+  scale that takes the block's maximum to 6 or to 4, whichever reconstructs it
+  with the smaller absolute error) and MXFP8 rows for the MXFP8 experts of
+  layers 20-23. Prefill runs them that way, as vLLM's Inkling 2 kernels do, on
+  the block-scaled tensor cores (W4A4 `kind::mxf4nvf4`, W8A8
+  `kind::mxf8f6f4`) against the experts as stored. The Spark overlay's experts
+  take BF16 inputs.
 - **Chat.** Inkling writes a turn as message blocks of special tokens. The
   server rewrites them before the chat paths see them: reasoning is returned
   separately (reasoning parser `inkling2`) and each JSON tool block becomes an
@@ -71,6 +81,9 @@ order:
 - **Batched DSpark.** The drafter proposes for one sequence at a time, so
   SparkInkling speculates only while one request is live and decodes plainly
   from two (`ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0`, set by the image).
+- **Expert input quantization in decode.** Decode and verify rows (fewer than
+  16 at once) still give the experts BF16 inputs, so a token's experts see the
+  checkpoint's declared numerics in prefill and BF16 inputs in decode.
 - **Images.** The target has no vision tower. Inkling 2 Mini takes image
   input; SparkInkling serves text only.
 - **Known gaps** recorded on the branch: `usage.reasoning_tokens` reads 0, and

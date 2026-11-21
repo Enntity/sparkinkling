@@ -47,7 +47,7 @@ class Launch(unittest.TestCase):
     def test_the_development_serving_flags(self):
         argv, _ = launch()
         self.assertEqual(flag(argv, '--kv-cache-dtype'), 'bf16')
-        self.assertEqual(flag(argv, '--max-prefill-tokens'), '2048')
+        self.assertEqual(flag(argv, '--max-prefill-tokens'), '4096')
         self.assertEqual(flag(argv, '--gpu-memory-utilization'), '0.80')
         self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'))
         self.assertIn('--no-tui', argv)

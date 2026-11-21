@@ -6,7 +6,7 @@ on the one Spark that serves.
 
 | Component | Pin |
 |---|---|
-| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `035de2214` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
+| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `f5acf5a71` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
 | Model | [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini) @ `ed40e7da625f594fc9c4990f5f66be24873c22d7` ([`install/checkpoint.json`](../install/checkpoint.json)) |
 | Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4) @ `e9df93dceea2fbf0927caf178104e868452a6292` |
 | Build dependencies | CUTLASS `cf064d2e`, NCCL 2.31.2, Rust 1.93.1, CUDA 13.0 |
@@ -99,7 +99,7 @@ The image's entry point turns those settings into one engine command:
 ```sh
 spark serve --model-from-path=<model dir> --kernel-target=inkling-2-mini \
   --gpu-memory-utilization=0.80 --kv-cache-dtype=bf16 --max-num-seqs=8 --max-batch-size=8 \
-  --max-seq-len=131072 --max-prefill-tokens=2048 --no-tui \
+  --max-seq-len=131072 --max-prefill-tokens=4096 --no-tui \
   --dflash --dflash-gamma=8 --num-drafts=7 --draft-model=<drafter dir> \
   --bind=127.0.0.1 --port=8895 --model-name=inkling-2-mini-atlas --tool-guard=on ...
 ```
