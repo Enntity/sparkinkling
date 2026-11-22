@@ -1,0 +1,84 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inkling 2 Mini reasoning loops: before and after budget forcing</title>
+<style>
+  .viz-root {
+    color-scheme: dark;
+    --surface-1: #1a1a19;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8f8e85;
+    --grid: #3a3a37;
+    --series-correct: #3987e5;  /* categorical slot 1 */
+    --series-loop: #d95926;     /* categorical slot 2 */
+    --neutral: #6b6a64;         /* wrong answer: neutral, not a series hue */
+  }
+  html, body { margin: 0; background: #1a1a19; }
+  .viz-root {
+    width: 1600px; height: 900px; box-sizing: border-box; padding: 56px 80px 40px;
+    background: var(--surface-1); color: var(--text-primary);
+    font-family: -apple-system, "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+    display: flex; flex-direction: column;
+  }
+  .kicker { font-size: 24px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  h1 { font-size: 58px; line-height: 1.1; margin: 14px 0 0; font-weight: 700; }
+  .sub { font-size: 26px; color: var(--text-secondary); margin-top: 16px; line-height: 1.4; max-width: 1380px; }
+  .heroes { display: flex; gap: 96px; margin: 36px 0 30px; }
+  .hero .num { font-size: 88px; font-weight: 700; line-height: 1; }
+  .hero .num .arrow { color: var(--text-muted); font-weight: 400; margin: 0 12px; }
+  .hero .lbl { font-size: 24px; color: var(--text-secondary); margin-top: 10px; }
+  .rows { display: flex; flex-direction: column; gap: 28px; }
+  .row { display: grid; grid-template-columns: 260px 1fr; align-items: center; gap: 24px; }
+  .row .name { font-size: 26px; color: var(--text-primary); text-align: right; }
+  .row .name small { display: block; font-size: 19px; color: var(--text-muted); }
+  .bar { display: flex; height: 64px; gap: 2px; }
+  .seg { display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; color: #fff; }
+  .seg:first-child { border-radius: 4px 0 0 4px; }
+  .seg:last-child { border-radius: 0 4px 4px 0; }
+  .correct { background: var(--series-correct); }
+  .wrong { background: var(--neutral); }
+  .loop { background: var(--series-loop); }
+  .legend { display: flex; gap: 36px; margin: 26px 0 0 284px; font-size: 22px; color: var(--text-secondary); }
+  .legend span::before { content: ""; display: inline-block; width: 18px; height: 18px; border-radius: 3px; margin-right: 10px; vertical-align: -2px; background: var(--c); }
+  .foot { margin-top: auto; padding-top: 22px; font-size: 18px; color: var(--text-muted); line-height: 1.45; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="kicker">Inkling 2 Mini · reasoning loops</div>
+  <h1>When it gets stuck re-checking, the engine now makes it answer.</h1>
+  <div class="sub">The 30 of 150 MMLU-Pro questions where Inkling 2 Mini, at high reasoning effort and temperature 0, was still reasoning at 8,192 tokens. Rerun with a 32,768-token limit: same questions, weights and reasoning effort.</div>
+  <div class="heroes">
+    <div class="hero"><div class="num">5<span class="arrow">→</span>18</div><div class="lbl">answered correctly</div></div>
+    <div class="hero"><div class="num">22<span class="arrow">→</span>1</div><div class="lbl">still reasoning at 32K tokens</div></div>
+  </div>
+  <div class="rows">
+    <div class="row">
+      <div class="name">Before<small>no budget</small></div>
+      <div class="bar">
+        <div class="seg correct" style="flex:5">5</div>
+        <div class="seg wrong" style="flex:3">3</div>
+        <div class="seg loop" style="flex:22">22 never answered</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="name">After<small>budget forcing</small></div>
+      <div class="bar">
+        <div class="seg correct" style="flex:18">18 correct</div>
+        <div class="seg wrong" style="flex:11">11</div>
+        <div class="seg loop" style="flex:1"></div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">
+    <span style="--c: var(--series-correct)">Correct</span>
+    <span style="--c: var(--neutral)">Wrong answer</span>
+    <span style="--c: var(--series-loop)">Still reasoning at the limit (no answer)</span>
+  </div>
+  <div class="foot">Atlas engine, SparkInkling (Spark weights, DSpark drafter) on one NVIDIA DGX Spark. Budget forcing closes the reasoning block at its effort's budget (16K tokens at high) on a sentence boundary; the model then writes its answer. It closed 19 of the 22 runaways; 11 of those then answered correctly. 3 more finished on their own this run; 1 correct answer became wrong. vLLM's own Inkling image left 21 of the same 30 unanswered at 8,192 tokens. Receipts: github.com/Enntity/sparkinkling/tree/main/results/2026-11-22-reasoning-loops</div>
+</div>
+</body>
+</html>
