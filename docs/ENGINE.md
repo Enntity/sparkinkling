@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`e6a8a0420` (tree `928ca1e2`), for the kernel target `inkling-2-mini`
+`fed29ccdc` (tree `f3954637`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -73,6 +73,12 @@ order:
   tier (`ATLAS_KV_NVME_DIR`) evicted KV blocks are restored from disk only
   up to such a snapshot, as for the SSM models: KV alone cannot resume a
   sequence whose conv state is gone.
+- **Budget forcing.** The scheduler tracks the reasoning block by Inkling's
+  markers and closes it with `<|end_message|>` at a sentence boundary once
+  it passes its effort's budget (minimal 2K, low 4K, medium 8K, high 16K,
+  xhigh 32K reasoning tokens) or its loop watchdog fires; the model then
+  writes its answer. Inkling loops in its reasoning at high effort (its
+  model card says so); DSpark keeps speculating inside the block.
 - **Launch overlap.** The target's kernels always launch with programmatic
   dependent launch, so each one's launch overlaps its predecessor's tail
   (bit-identical; every listed kernel waits for its predecessor first).

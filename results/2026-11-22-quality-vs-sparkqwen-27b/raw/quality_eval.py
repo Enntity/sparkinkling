@@ -5,7 +5,7 @@
   quality_eval.py --base URL --model ID --suite gsm8k|mmlu|humaneval --out FILE.jsonl
                   [--conc 8] [--max-tokens 8192] [--extra JSON] [--only 3,7,...]
 
-Temperature 0, each model's default thinking (no reasoning arguments unless
+Temperature 0 unless --temperature, each model's default thinking (no reasoning arguments unless
 --extra adds them). Answers are parsed from the final content only, never the
 reasoning. GSM8K: the number after the last "Answer:". MMLU-Pro: the letter
 after the last "Answer:". HumanEval: the last ```python block, written out for
@@ -16,9 +16,9 @@ import argparse, concurrent.futures as cf, json, os, re, sys, time, urllib.reque
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
-def chat(base, model, prompt, max_tokens, extra, key):
+def chat(base, model, prompt, max_tokens, extra, key, temperature=0.0):
     body = {"model": model, "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0, "max_tokens": max_tokens, "stream": False, **extra}
+            "temperature": temperature, "max_tokens": max_tokens, "stream": False, **extra}
     headers = {"Content-Type": "application/json"}
     if key:
         headers["Authorization"] = "Bearer " + key
@@ -92,6 +92,7 @@ def main():
     ap.add_argument("--suite", required=True, choices=SUITES); ap.add_argument("--out", required=True)
     ap.add_argument("--conc", type=int, default=8); ap.add_argument("--max-tokens", type=int, default=8192)
     ap.add_argument("--extra", default="{}"); ap.add_argument("--key-env", default="")
+    ap.add_argument("--temperature", type=float, default=0.0)
     ap.add_argument("--only", default="", help="comma-separated item indices (a rerun of some items)")
     a = ap.parse_args()
     items_fn, score = SUITES[a.suite]
@@ -104,7 +105,7 @@ def main():
     def one(item):
         i, prompt, gold = item
         try:
-            r = chat(a.base, a.model, prompt, a.max_tokens, extra, key)
+            r = chat(a.base, a.model, prompt, a.max_tokens, extra, key, a.temperature)
         except Exception as e:  # recorded as a miss
             return {"i": i, "ok": False, "error": str(e)[:200]}
         ok, got = score(r["content"], gold)
@@ -118,7 +119,7 @@ def main():
         summary = {"summary": True, "suite": a.suite, "model": a.model, "n": n, "correct": ok,
                    "errors": sum(1 for r in rows if "error" in r), "length_cut": sum(1 for r in rows if r.get("finish") == "length"),
                    "mean_completion_tokens": round(sum(r.get("completion_tokens") or 0 for r in rows) / max(1, n)),
-                   "wall_seconds": round(time.time() - t), "extra": extra}
+                   "wall_seconds": round(time.time() - t), "extra": extra, "temperature": a.temperature, "max_tokens": a.max_tokens}
         f.write(json.dumps(summary) + "\n")
     print(json.dumps(summary))
 
