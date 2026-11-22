@@ -2,12 +2,11 @@
  "schema": "sparkinkling.atlas-install-profile/v1",
  "model": "inkling-2-mini",
  "status": "development",
- "note": "Inkling 2 Mini on one DGX Spark (TP=1), engine install/atlas-source.json. BF16 KV (about 192 KiB a token: the paged cache holds all 48 layer visits, the sliding-window ones included), prefill chunks of 4,096 tokens (on the 0.2.0 image a 32K-token prompt took 10.0 s against 11.3 s at 2,048; a longer chunk also holds other requests' decode steps longer), programmatic dependent launch for the engine's Inkling kernels, prefix caching (each visit's short-conv state, about 4.8 MB a sequence, rides the cache's snapshots in host memory; their readback through a page-locked stage). Requests may run an hour (--request-timeout=3600); a tool-calling request may generate up to 32,768 tokens (--tool-max-tokens: the model reasons before it calls). The launcher adds the DSpark drafter (DRAFTER) and, with PREFIX_CACHE_DIR, the disk tier for evicted KV. Saver: the smallest footprint that still serves 131,072-token requests and eight concurrent ones: utilization 0.50 (a KV pool of about 213K tokens), 64 prefix-cache snapshots.",
+ "note": "Inkling 2 Mini on one DGX Spark (TP=1), engine install/atlas-source.json. BF16 KV (about 192 KiB a token: the paged cache holds all 48 layer visits, the sliding-window ones included), prefill chunks of 4,096 tokens (on the 0.2.0 image a 32K-token prompt took 10.0 s against 11.3 s at 2,048; a longer chunk also holds other requests' decode steps longer), programmatic dependent launch for the engine's Inkling kernels (always on in the pinned engine), prefix caching (each visit's short-conv state, about 4.8 MB a sequence, rides the cache's snapshots in host memory; their readback through a page-locked stage). Requests may run an hour (--request-timeout=3600); a tool-calling request may generate up to 32,768 tokens (--tool-max-tokens: the model reasons before it calls). The launcher adds the DSpark drafter (DRAFTER) and, with PREFIX_CACHE_DIR, the disk tier for evicted KV. Saver: the smallest footprint that still serves 131,072-token requests and eight concurrent ones: utilization 0.50 (a KV pool of about 213K tokens), 64 prefix-cache snapshots.",
  "environment": {
   "CUDA_CACHE_PATH": "/atlas-cuda-cache",
   "LD_LIBRARY_PATH": "/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64",
   "PATH": "/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-  "ATLAS_INKLING2_PDL": "1",
   "ATLAS_QWEN4EXP_AUX_PINNED": "1",
   "RUST_LOG": "info"
  },

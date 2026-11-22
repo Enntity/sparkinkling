@@ -63,7 +63,6 @@ class Launch(unittest.TestCase):
                 self.assertEqual(argv.count(want), 1, (name, want))
             self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'), name)
             self.assertGreater(int(flag(argv, '--ssm-cache-slots')), 16, name)
-            self.assertEqual(env['ATLAS_INKLING2_PDL'], '1', name)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
 
     def test_serves_loopback_8895_under_its_own_name_with_the_guard(self):
@@ -127,12 +126,6 @@ class Launch(unittest.TestCase):
         for bad in ('8', '101', '4x', '48.5'):
             with self.assertRaises(ValueError):
                 launch(SPARKINKLING_PREFIX_CACHE_GB=bad)
-
-    def test_pdl_in_every_mode(self):
-        for drafter in ('dspark', 'none'):
-            for mode in ('strict', 'spark'):
-                _, env = launch(SPARKINKLING_DRAFTER=drafter, SPARKINKLING_MODE=mode)
-                self.assertEqual(env['ATLAS_INKLING2_PDL'], '1', (drafter, mode))
 
     def test_no_drafter(self):
         argv, env = launch(SPARKINKLING_DRAFTER='none')

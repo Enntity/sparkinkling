@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`c4db7a368` (tree `f2ff739f`), for the kernel target `inkling-2-mini`
+`e6a8a0420` (tree `928ca1e2`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -73,9 +73,9 @@ order:
   tier (`ATLAS_KV_NVME_DIR`) evicted KV blocks are restored from disk only
   up to such a snapshot, as for the SSM models: KV alone cannot resume a
   sequence whose conv state is gone.
-- **Launch overlap.** `ATLAS_INKLING2_PDL=1` (set by the profile) launches the
-  target's kernels with programmatic dependent launch, so each one's launch
-  overlaps its predecessor's tail.
+- **Launch overlap.** The target's kernels always launch with programmatic
+  dependent launch, so each one's launch overlaps its predecessor's tail
+  (bit-identical; every listed kernel waits for its predecessor first).
 - **Batching and speculation.** Multi-sequence decode runs from CUDA graphs,
   its BF16 projections (and a verify's) of up to 8 rows on the batched GEMV,
   each row computed as the one-row GEMV computes it
