@@ -1,10 +1,10 @@
 {
   "schema": "sparkinkling.atlas-engine-source/v1",
-  "note": "Enntity/atlas inkling2/mini-20261121: the Inkling 2 Mini (model type inkling2_loop) serving series, 41 commits on Atlas-Inf main 269b533bc (Merge #332). It parses the checkpoint as 48 unrolled layer visits, checks its layout at load, and adds the inkling-2-mini kernel target: decode attention with relative bias and per-token sinks, short convolutions with verify rollback, block attention residuals, loop message gates, NVFP4 and MXFP8 stacked-expert MoE decode, prefill experts at the checkpoint's declared numerics (W4A4 / W8A8 on the block-scaled tensor cores), GQA flash prefill attention, CUDA-graph single- and multi-sequence decode, the Spark NVFP4 overlay for decode and verify (attention projections, the experts of layers 20-23, lm_head; prefill reads the checkpoint's own tensors in both modes), programmatic dependent launch for the target's kernels, and the checkpoint's DSpark drafter on the DFlash head. Prefix caching carries each visit's short-conv state on the cache's snapshots, and the disk tier restores evicted KV only up to one; no vision tower. Proposed upstream to Atlas-Inf.",
+  "note": "Enntity/atlas inkling2/mini-20261121: the Inkling 2 Mini (model type inkling2_loop) serving series, 42 commits on Atlas-Inf main 269b533bc (Merge #332). It parses the checkpoint as 48 unrolled layer visits, checks its layout at load, and adds the inkling-2-mini kernel target: decode attention with relative bias and per-token sinks, short convolutions with verify rollback, block attention residuals, loop message gates, NVFP4 and MXFP8 stacked-expert MoE decode, prefill experts at the checkpoint's declared numerics (W4A4 / W8A8 on the block-scaled tensor cores), GQA flash prefill attention, CUDA-graph single- and multi-sequence decode, the Spark NVFP4 overlay for decode and verify (attention projections, the experts of layers 20-23, lm_head; prefill reads the checkpoint's own tensors in both modes), programmatic dependent launch for the target's kernels, and the checkpoint's DSpark drafter on the DFlash head. Prefix caching carries each visit's short-conv state on the cache's snapshots, and the disk tier restores evicted KV only up to one; no vision tower. Proposed upstream to Atlas-Inf.",
   "repository": "https://github.com/Enntity/atlas.git",
   "branch": "inkling2/mini-20261121",
-  "commit": "786d2664d16a65583e68178ac23333903bd4f52f",
-  "tree": "005319424477f83ffb0d77f1020416f5190d4a27",
+  "commit": "9c910e27dedba64b88288a540362254bd862567e",
+  "tree": "ab54a19074536a6da5abf1504794bed3dc1a2a69",
   "kernel_target": "inkling-2-mini",
   "model_type": "inkling2_loop",
   "license": "AGPL-3.0-only"
