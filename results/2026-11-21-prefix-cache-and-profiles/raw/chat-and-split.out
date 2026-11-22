@@ -1,0 +1,25 @@
+# Console output of raw/pc_chat.py (N words, seed N) and raw/pc_check.py, development
+# builds on one Spark, Strict, no drafter, --enable-prefix-caching --ssm-cache-slots=128.
+
+== engine 9c910e27d, tail split on every prompt (split)
+words 300 turn1 0.50s turn2 0.26s
+words 1500 turn1 0.72s turn2 0.29s
+words 6000 turn1 2.18s turn2 0.30s
+Marconi intermediate hit: restored from checkpoint at token 368 (skipping 368 tokens, replaying 42 SSM tokens to reach 410)
+Marconi intermediate hit: restored from checkpoint at token 1808 (skipping 1808 tokens, replaying 45 SSM tokens to reach 1853)
+Marconi intermediate hit: restored from checkpoint at token 7184 (skipping 7184 tokens, replaying 46 SSM tokens to reach 7230)
+
+== engine 9c910e27d, ATLAS_NO_TAIL_SPLIT=1 (nosplit)
+words 300 turn1 0.39s turn2 0.28s
+words 1500 turn1 0.62s turn2 0.62s
+words 6000 turn1 2.08s turn2 0.99s
+Prefix cache hit: 384 tokens (24 blocks) but no SSM snapshot — recomputing all KV
+Prefix cache hit: 1824 tokens (114 blocks) but no SSM snapshot — recomputing all KV
+Marconi intermediate hit: restored from checkpoint at token 4104 (skipping 4104 tokens, replaying 3126 SSM tokens to reach 7230)
+
+== engine 680714d2b, no split below 512 tokens (min512)
+words 300 turn1 0.42s turn2 0.28s
+words 1500 turn1 0.72s turn2 0.28s
+words 6000 turn1 2.18s turn2 0.29s
+pc_check: cold TTFT 2.12s warm TTFT 0.11s identical=True
+pc_check: extended TTFT 0.29s
