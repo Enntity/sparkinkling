@@ -1,0 +1,14 @@
+== off
+ld: KV cache: 121.7 GB total × 30% util = 36.5 GB budget; 20.1 GB pre-KV + 0.5 GB reserve → 15.9 GB for KV → 5436 blocks × 16 tok/block = 86976 max KV tokens
+A cold 5.82s, A after B-D 5.82s, identical=True
+== disk
+ld::kv_nvme: NVMe spill tiers: reserving 387.8 MiB of host memory out of the KV budget (staging + on-disk index at a full ATLAS_KV_NVME_GB + 0.0 MiB SSM tier arena/staging)
+ld: KV cache: 121.7 GB total × 30% util = 36.5 GB budget; 19.9 GB pre-KV + 0.9 GB reserve → 15.7 GB for KV → 5373 blocks × 16 tok/block = 85968 max KV tokens
+ld::kv_nvme: prefix cache NVMe spill tier ON (rank 0): /dump/nvme/kv (ATLAS_KV_NVME_DIR, O_DIRECT, unlinked), 3149824 B/block record (196864 B/token: latent + pooled index, no raw tails), budget 16.0 G
+A cold 5.82s, A after B-D 0.90s, identical=True
+ld::kv_nvme: NVMe spill tiers: reserving 387.8 MiB of host memory out of the KV budget (staging + on-disk index at a full ATLAS_KV_NVME_GB + 0.0 MiB SSM tier arena/staging)
+ld::kv_nvme: prefix cache NVMe spill tier ON (rank 0): /dump/nvme/kv (ATLAS_KV_NVME_DIR, O_DIRECT, unlinked), 3149824 B/block record (196864 B/token: latent + pooled index, no raw tails), budget 16.0 G
+me: NVMe prefix restore: 1237/1237 blocks (19792 tokens after 0 resident) in 402.9 ms; tier 2035/5454 slots, 3274 spills, 1237 restores, 0 failures; evict 0.0 ms + read 371.3 ms (10494 MB/s); spill pat
+_impl::prefill_b::prefix_lookup: Marconi intermediate hit: restored from checkpoint at token 19776 (skipping 19776 tokens, replaying 21 SSM tokens to reach 19797; 16 of those are the anchor->match gap 
+
+[exited with code 0]

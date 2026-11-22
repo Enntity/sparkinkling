@@ -1,0 +1,11 @@
+== saver up in 38s
+ld: KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 21.4 GB pre-KV + 0.5 GB reserve → 38.9 GB for KV → 13292 blocks × 16 tok/block = 212672 max KV tokens
+C8 stops 8/8 3074 tok in 35.2s = 87.4 tok/s
+Mem:             121          66          41           0          14          55
+== max up in 42s
+ld: KV cache: 121.7 GB total × 88% util = 107.1 GB budget; 21.2 GB pre-KV + 0.5 GB reserve → 85.4 GB for KV → 29136 blocks × 16 tok/block = 466176 max KV tokens
+C32 stops 32/32 12563 tok in 84.9s = 148.0 tok/s
+prompt_tokens 182100 81.8s found '7391-KESTREL'
+Mem:             121         113           7           0           2           8
+
+[exited with code 0]

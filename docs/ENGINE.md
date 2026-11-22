@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`9c910e27d` (tree `ab54a190`), for the kernel target `inkling-2-mini`
+`680714d2b` (tree `4fc1d3bf`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -66,7 +66,10 @@ order:
   snapshots as each layer's aux blob (`ModelConfig::aux_prefix_state`): saved
   at the prompt's tail and interval checkpoints during prefill, copied back on
   a hit before the rest of the prompt prefills. A replayed or extended prompt
-  resumes from the deepest checkpoint at or below its match. With a disk
+  resumes from the deepest checkpoint at or below its match. A prompt under
+  512 tokens runs its last chunk as one pass: the split's extra pass still
+  reads nearly every expert (about 0.1 s), more than recomputing so short a
+  prompt costs (`ModelConfig::tail_split_min_tokens`). With a disk
   tier (`ATLAS_KV_NVME_DIR`) evicted KV blocks are restored from disk only
   up to such a snapshot, as for the SSM models: KV alone cannot resume a
   sequence whose conv state is gone.

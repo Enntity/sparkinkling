@@ -142,7 +142,8 @@ hour-long requests and up to 32,768 generated tokens a tool-calling request
 for blocks rather than fail. `saver` is the smallest footprint that still
 serves eight full-length requests. In a check on 2026-11-21, `max` ran 32
 concurrent short code requests to a normal stop and recalled a code hidden a
-third of the way into a 182,100-token prompt (82 s for the prompt). A JSON file
+third of the way into a 182,100-token prompt (82 s for the prompt;
+[receipts](results/2026-11-21-prefix-cache-and-profiles/RESULT.md)). A JSON file
 of your own works too (`PROFILE=/path/to/profile.json`, same schema as
 [`install/profiles/`](install/profiles/)).
 
@@ -175,7 +176,8 @@ without that much space free, and mounts it into the container. KV takes
 held to 5,373 blocks, ~20K-token conversations pushed out by five others), a
 returning conversation's time to first token went from 5.82 s to 0.90 s: the
 engine read its 1,237 blocks back in 403 ms and resumed from the snapshot at
-token 19,776, and the answer was identical to a run with the tier off.
+token 19,776, and the answer was identical to a run with the tier off
+([receipts](results/2026-11-21-prefix-cache-and-profiles/RESULT.md)).
 The engine takes the tier's staging buffers and on-disk index out of the KV
 pool (388 MiB at 16 GiB). The state snapshots a restore starts from stay in
 host memory: a conversation
