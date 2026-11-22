@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`fed29ccdc` (tree `f3954637`), for the kernel target `inkling-2-mini`
+`d1b138e67` (tree `11b675a1`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -79,6 +79,11 @@ order:
   xhigh 32K reasoning tokens) or its loop watchdog fires; the model then
   writes its answer. Inkling loops in its reasoning at high effort (its
   model card says so); DSpark keeps speculating inside the block.
+- **Streamed tool calls.** Once a tool block reads `{"name":NAME,"args":`,
+  the engine opens the call and passes its argument tokens through as they
+  arrive, so `function.arguments` streams. With the tool guard on (the
+  default), a call's arguments still arrive whole, after the guard passes
+  the finished call.
 - **Launch overlap.** The target's kernels always launch with programmatic
   dependent launch, so each one's launch overlaps its predecessor's tail
   (bit-identical; every listed kernel waits for its predecessor first).
