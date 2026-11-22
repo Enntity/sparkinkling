@@ -124,8 +124,11 @@ curl -s http://127.0.0.1:8895/v1/chat/completions -H 'Content-Type: application/
 
 Reasoning comes back separately from the answer. `reasoning_effort` (`none`,
 `minimal`, `low`, `medium`, `high`, `xhigh`) is passed to the model's own
-template; without it the template's default applies. The model always thinks
-a little, so leave room in `max_tokens`. Tool calls (OpenAI `tools`, streaming
+template; a request that names none reasons at `low`. The template's own
+default, `high`, often reasons in loops at temperature 0 (the model card warns
+of it): on 150 MMLU-Pro questions with an 8,192-token cap, `high` scored 107
+with 30 answers cut off, `medium` 120 with 8 and `low` 125 with 2. The model
+always thinks a little, even at `none`, so leave room in `max_tokens`. Tool calls (OpenAI `tools`, streaming
 included) are returned as OpenAI tool calls. The tool-call guard SparkQwen and
 SparkGLM ship is on by default (`TOOL_GUARD` in `.env`).
 

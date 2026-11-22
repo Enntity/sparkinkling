@@ -64,6 +64,8 @@ class Launch(unittest.TestCase):
             self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'), name)
             self.assertGreater(int(flag(argv, '--ssm-cache-slots')), 16, name)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
+            # a request that names no effort reasons at low, not the template's high
+            self.assertEqual(json.loads(flag(argv, '--default-chat-template-kwargs')), {'reasoning_effort': 'low'}, name)
 
     def test_serves_loopback_8895_under_its_own_name_with_the_guard(self):
         argv, _ = launch()
