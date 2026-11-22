@@ -125,11 +125,63 @@ included) are returned as OpenAI tool calls. The tool-call guard SparkQwen and
 SparkGLM ship is on by default (`TOOL_GUARD` in `.env`).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
-(the one shipped profile, `default`: 8 concurrent requests of up to 131,072
-tokens at 0.80 of GPU memory, or a JSON file of your own), `DRAFTER`,
-`GPU_MEMORY_UTILIZATION` (0.50-0.90), `MODEL_ROOT`, `PULL=0`. At 0.80 the KV
-pool holds about 404K tokens (three full-length requests); more wait for
-blocks rather than fail.
+(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90), `PREFIX_CACHE_DIR`
+and `PREFIX_CACHE_GB` (below), `MODEL_ROOT`, `PULL=0`.
+
+### Profiles
+
+| `PROFILE` | Requests | Tokens each | GPU memory | KV pool | Prefix-cache snapshots |
+|---|---:|---:|---:|---:|---:|
+| `default` | 8 | 131,072 | 0.80 | about 404K tokens | 128 |
+| `max` | 32 | 262,144 | 0.85 | about 446K tokens | 256 |
+| `saver` | 8 | 131,072 | 0.50 | about 213K tokens | 64 |
+
+All three keep BF16 KV, 4,096-token prefill chunks, prefix caching,
+hour-long requests and up to 32,768 generated tokens a tool-calling request
+(the model reasons before it calls). Requests the pool cannot hold yet wait
+for blocks rather than fail. `saver` is the smallest footprint that still
+serves eight full-length requests. In a check on 2026-11-21, `max` ran 32
+concurrent short code requests to a normal stop and recalled a code hidden a
+third of the way into a 182,100-token prompt (82 s for the prompt). A JSON file
+of your own works too (`PROFILE=/path/to/profile.json`, same schema as
+[`install/profiles/`](install/profiles/)).
+
+### Prefix caching
+
+A request that repeats an earlier prompt's beginning (a chat's next turn, a
+shared system prompt) skips prefilling what the cache still holds. Inkling's
+short convolutions carry state from token to token, so the cache saves each
+visit's state (about 4.8 MB a sequence, in host memory) every 4,096 tokens and
+at the end of each prompt, and a hit resumes from the deepest one it matches.
+On a 7.5K-token prompt the time to first token went from about 2.4 s cold to
+0.12 s warm, with byte-identical answers.
+
+### Prefix cache on disk
+
+When the KV pool fills, the prefix cache drops the conversations used least
+recently, and one that comes back is prefilled again from the start. With
+`PREFIX_CACHE_DIR` set, the engine writes the KV blocks it drops to that disk
+instead and reads them back when the conversation returns; the engine tier
+and settings are SparkQwen's and SparkGLM's.
+
+```sh
+PREFIX_CACHE_DIR=/srv/sparkinkling/prefix-cache
+PREFIX_CACHE_GB=48                            # GiB, 16-100 (default 48)
+```
+
+`start.sh` creates `<mode>/kv/` in the directory, refuses one on tmpfs or
+without that much space free, and mounts it into the container. KV takes
+192 KiB a token (all 48 layer visits), so 48 GiB holds about 262K tokens. In one check on 2026-11-21 (Strict, a pool
+held to 5,373 blocks, ~20K-token conversations pushed out by five others), a
+returning conversation's time to first token went from 5.82 s to 0.90 s: the
+engine read its 1,237 blocks back in 403 ms and resumed from the snapshot at
+token 19,776, and the answer was identical to a run with the tier off.
+The engine takes the tier's staging buffers and on-disk index out of the KV
+pool (388 MiB at 16 GiB). The state snapshots a restore starts from stay in
+host memory: a conversation
+comes back from disk while its snapshot is still among the profile's
+snapshots. Nothing is kept across a restart: the engine deletes its files as
+soon as it has them open, and clears a crash's leftovers when it starts.
 
 ## Speculative decoding
 

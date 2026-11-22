@@ -12,7 +12,9 @@
 # Settings (environment or .env): MODEL_ROOT (default ~/models/sparkinkling),
 # MODE (strict, the default, or spark), PROFILE (default, or a JSON file of your
 # own), DRAFTER (dspark, the default: the checkpoint's own drafter; or none),
-# GPU_MEMORY_UTILIZATION (0.50-0.90), IMAGE, PULL=0 (always build), TOOL_GUARD*.
+# GPU_MEMORY_UTILIZATION (0.50-0.90), PREFIX_CACHE_DIR and PREFIX_CACHE_GB (16-100,
+# default 48: keep evicted prefix-cache KV on this disk), IMAGE, PULL=0 (always
+# build), TOOL_GUARD*.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ ${1:-} == --version ]]; then exec python3 install/serve.py --version; fi
@@ -43,6 +45,13 @@ if [[ ${1:-up} == up || ${1:-} == download ]]; then
   [[ $DRAFTER =~ ^(none|dspark)$ ]] || { echo 'DRAFTER must be none or dspark' >&2; exit 2; }
   [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||
     { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.90' >&2; exit 2; }
+  if [[ -n ${PREFIX_CACHE_DIR:-} || -n ${PREFIX_CACHE_GB:-} ]]; then
+    PREFIX_CACHE_GB=${PREFIX_CACHE_GB:-48}
+    [[ ${PREFIX_CACHE_DIR:-} == /* && $PREFIX_CACHE_DIR != *,* ]] ||
+      { echo 'PREFIX_CACHE_DIR must be set to an absolute path without commas' >&2; exit 2; }
+    [[ $PREFIX_CACHE_GB =~ ^[1-9][0-9]{1,2}$ ]] && (( PREFIX_CACHE_GB >= 16 && PREFIX_CACHE_GB <= 100 )) ||
+      { echo 'PREFIX_CACHE_GB must be a whole number from 16 to 100' >&2; exit 2; }
+  fi
   SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-on}" SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \
   SPARKINKLING_TOOL_GUARD_ALLOW_HOSTS="${TOOL_GUARD_ALLOW_HOSTS:-}" SPARKINKLING_TOOL_GUARD_DENY_HOSTS="${TOOL_GUARD_DENY_HOSTS:-}" \
     python3 -c 'import os,sys; sys.path.insert(0,"install"); import serve; serve.tool_guard_args(os.environ, [])'
@@ -119,6 +128,22 @@ serve() {
     profile_mount=(--mount "type=bind,src=$(realpath "$profile"),dst=/opt/atlas/profiles/custom.json,readonly")
     profile=custom
   fi
+  # Evicted prefix-cache KV on this disk, one directory per mode. The engine
+  # unlinks its cache files while they are open and sweeps any a crash left
+  # behind, so nothing carries over a restart.
+  local pc_args=()
+  if [[ -n ${PREFIX_CACHE_DIR:-} ]]; then
+    mkdir -p "$PREFIX_CACHE_DIR/$MODE/kv"
+    local pc_dir free_kb
+    pc_dir=$(realpath "$PREFIX_CACHE_DIR")
+    case $(stat -f -c %T "$pc_dir" 2>/dev/null) in
+      tmpfs | ramfs | overlayfs) echo "PREFIX_CACHE_DIR $pc_dir is not on a disk" >&2; exit 2 ;;
+    esac
+    free_kb=$(df -Pk "$pc_dir" | awk 'NR == 2 {print $4}')
+    (( free_kb >= PREFIX_CACHE_GB * 1048576 )) ||
+      { echo "PREFIX_CACHE_DIR $pc_dir has $((free_kb / 1048576)) GiB free; PREFIX_CACHE_GB needs $PREFIX_CACHE_GB" >&2; exit 2; }
+    pc_args=(--mount "type=bind,src=$pc_dir,dst=/prefix-cache" -e SPARKINKLING_PREFIX_CACHE_GB="$PREFIX_CACHE_GB")
+  fi
   mkdir -p "$HOME/.cache/atlas-cuda"
   stop
   say "serving $CHECKPOINT_REPO on this Spark (mode $MODE, profile $PROFILE, drafter $DRAFTER)"
@@ -127,7 +152,7 @@ serve() {
   docker run -d --name "$NAME" --restart no --network host --ipc host \
     --shm-size 16g --memory 114g --gpus all --security-opt no-new-privileges=true --stop-timeout 60 \
     "${mounts[@]}" --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
-    ${profile_mount[@]+"${profile_mount[@]}"} \
+    ${profile_mount[@]+"${profile_mount[@]}"} ${pc_args[@]+"${pc_args[@]}"} \
     -e MODEL_PATH="$model" -e SPARKINKLING_MODE="$MODE" -e SPARKINKLING_DRAFTER="$DRAFTER" -e DRAFTER_PATH="$drafter" \
     -e SPARKINKLING_PROFILE="$profile" -e SERVED_MODEL_NAME="$SERVED" \
     -e SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-on}" -e SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \

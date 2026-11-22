@@ -52,6 +52,20 @@ class Launch(unittest.TestCase):
         self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'))
         self.assertIn('--no-tui', argv)
 
+    def test_every_shipped_profile_has_the_standard_flags(self):
+        names = sorted(p.stem for p in (HERE/'profiles').glob('*.json'))
+        self.assertEqual(names, ['default', 'max', 'saver'])
+        for name in names:
+            p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
+            argv, env = serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}, p)
+            for want in ('--kv-cache-dtype=bf16', '--max-prefill-tokens=4096', '--enable-prefix-caching',
+                         '--oom-guard-mb=4096', '--request-timeout=3600', '--tool-max-tokens=32768', '--no-tui'):
+                self.assertEqual(argv.count(want), 1, (name, want))
+            self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'), name)
+            self.assertGreater(int(flag(argv, '--ssm-cache-slots')), 16, name)
+            self.assertEqual(env['ATLAS_INKLING2_PDL'], '1', name)
+            self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
+
     def test_serves_loopback_8895_under_its_own_name_with_the_guard(self):
         argv, _ = launch()
         self.assertEqual(flag(argv, '--bind'), '127.0.0.1')
@@ -89,6 +103,23 @@ class Launch(unittest.TestCase):
             argv, env = launch(SPARKINKLING_MODE=mode)
             self.assertIn('--enable-prefix-caching', argv, mode)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', mode)
+
+    def test_disk_prefix_cache_is_off_unless_sized(self):
+        for gb in (None, '', '0'):
+            env = launch(**({} if gb is None else {'SPARKINKLING_PREFIX_CACHE_GB': gb}))[1]
+            self.assertFalse([k for k in env if k.startswith('ATLAS_KV_NVME')], gb)
+
+    def test_disk_prefix_cache_per_mode(self):
+        dirs = {}
+        for mode in ('strict', 'spark'):
+            env = launch(SPARKINKLING_MODE=mode, SPARKINKLING_PREFIX_CACHE_GB='48')[1]
+            self.assertEqual(env['ATLAS_KV_NVME_GB'], '48')
+            self.assertEqual(env['ATLAS_GLM_NVME_FAST'], '1')
+            dirs[mode] = env['ATLAS_KV_NVME_DIR']
+        self.assertEqual(dirs, {'strict': '/prefix-cache/strict/kv', 'spark': '/prefix-cache/spark/kv'})
+        for bad in ('8', '101', '4x', '48.5'):
+            with self.assertRaises(ValueError):
+                launch(SPARKINKLING_PREFIX_CACHE_GB=bad)
 
     def test_pdl_in_every_mode(self):
         for drafter in ('dspark', 'none'):

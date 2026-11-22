@@ -6,7 +6,7 @@ on the one Spark that serves.
 
 | Component | Pin |
 |---|---|
-| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `107acaa0b` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
+| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `786d2664d` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
 | Model | [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini) @ `ed40e7da625f594fc9c4990f5f66be24873c22d7` ([`install/checkpoint.json`](../install/checkpoint.json)) |
 | Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4) @ `e9df93dceea2fbf0927caf178104e868452a6292` |
 | Build dependencies | CUTLASS `cf064d2e`, NCCL 2.31.2, Rust 1.93.1, CUDA 13.0 |
@@ -97,9 +97,10 @@ match its mode.
 The image's entry point turns those settings into one engine command:
 
 ```sh
-spark serve --model-from-path=<model dir> --kernel-target=inkling-2-mini \
-  --gpu-memory-utilization=0.80 --kv-cache-dtype=bf16 --max-num-seqs=8 --max-batch-size=8 \
-  --max-seq-len=131072 --max-prefill-tokens=4096 --enable-prefix-caching --no-tui \
+spark serve --model-from-path=<model dir> --gpu-memory-utilization=0.80 \
+  --kernel-target=inkling-2-mini --kv-cache-dtype=bf16 --max-prefill-tokens=4096 \
+  --enable-prefix-caching --ssm-cache-slots=128 --oom-guard-mb=4096 --request-timeout=3600 \
+  --tool-max-tokens=32768 --max-num-seqs=8 --max-batch-size=8 --max-seq-len=131072 --no-tui \
   --dflash --dflash-gamma=8 --num-drafts=7 --draft-model=<drafter dir> \
   --bind=127.0.0.1 --port=8895 --model-name=inkling-2-mini-atlas --tool-guard=on ...
 ```
@@ -114,10 +115,15 @@ the container is capped at 114 GiB because a host that runs out of memory
 hangs instead of killing a process.
 
 **Profile.** `-e SPARKINKLING_PROFILE=<name>` picks a file in the image's
-`/opt/atlas/profiles/`; to run your own, mount a JSON file at
+`/opt/atlas/profiles/` (`default`, `max`, `saver`); to run your own, mount a JSON file at
 `/opt/atlas/profiles/custom.json` and name `custom`. A profile must keep one
 `--kernel-target=inkling-2-mini`, BF16 KV and one rank, and may not configure
 speculation (that is `SPARKINKLING_DRAFTER`).
+
+**Prefix cache on disk.** Mount a directory on a real disk at `/prefix-cache`
+(`--mount type=bind,src=/srv/sparkinkling/prefix-cache,dst=/prefix-cache`) and
+pass `-e SPARKINKLING_PREFIX_CACHE_GB=48` (16-100). The engine keeps evicted KV
+blocks in `/prefix-cache/<mode>/kv`; create that subdirectory first.
 
 **Stopping.** `docker rm -f atlas-sparkinkling`.
 

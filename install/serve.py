@@ -76,6 +76,19 @@ def _memory_share(environ, args):
     return [f'--gpu-memory-utilization={util}' if a.startswith('--gpu-memory-utilization=') else a for a in args]
 
 
+def disk_prefix_cache(gb, mode):
+    """Engine settings that keep the KV blocks the prefix cache evicts on the
+    Spark's disk, in the directory start.sh mounts at /prefix-cache, one
+    subdirectory per mode. Their conv-state snapshots stay in host memory (an
+    Inkling snapshot is about 5 MB). Empty or 0 leaves the tier off. The KV
+    tier and its settings are SparkQwen's and SparkGLM's."""
+    if gb in ('', '0'):
+        return {}
+    if not re.fullmatch(r'[1-9][0-9]{1,2}', gb) or not 16 <= int(gb) <= 100:
+        raise ValueError('SPARKINKLING_PREFIX_CACHE_GB must be a whole number from 16 to 100')
+    return {'ATLAS_KV_NVME_DIR': f'/prefix-cache/{mode}/kv', 'ATLAS_KV_NVME_GB': gb, 'ATLAS_GLM_NVME_FAST': '1'}
+
+
 def launch(environ, profile):
     """One engine process on one Spark: no ranks, no fabric."""
     args = list(profile['server_argv'])
@@ -102,6 +115,7 @@ def launch(environ, profile):
         raise ValueError('MODEL_PATH must be an absolute path')
     env = _engine_env(environ, profile)
     env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter)
+    env.update(disk_prefix_cache(environ.get('SPARKINKLING_PREFIX_CACHE_GB', ''), mode))
     args = _memory_share(environ, [str(a).replace('${model}', model) for a in args])
     if drafter == 'dspark':
         draft = environ.get('DRAFTER_PATH', '')
