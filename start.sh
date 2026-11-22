@@ -136,6 +136,8 @@ serve() {
     mkdir -p "$PREFIX_CACHE_DIR/$MODE/kv"
     local pc_dir free_kb
     pc_dir=$(realpath "$PREFIX_CACHE_DIR")
+    # the resolved path goes into a --mount field list
+    [[ $pc_dir != *[,\"]* ]] || { echo "PREFIX_CACHE_DIR resolves to $pc_dir: no commas or quotes" >&2; exit 2; }
     case $(stat -f -c %T "$pc_dir" 2>/dev/null) in
       tmpfs | ramfs | overlayfs) echo "PREFIX_CACHE_DIR $pc_dir is not on a disk" >&2; exit 2 ;;
     esac

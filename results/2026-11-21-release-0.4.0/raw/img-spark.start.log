@@ -1,0 +1,7 @@
+[1m== image ghcr.io/enntity/atlas-sparkinkling:646b6c9dafe6[0m
+dspark drafter: up to date /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini+dspark
+spark overlay: up to date /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini+spark-nvfp4
+[1m== serving thinkingmachines/Inkling-2-Mini on this Spark (mode spark, profile default, drafter dspark)[0m
+[1m== loading (the first start also compiles CUDA kernels)[0m
+smoke: 17*23 = 391
+[1m== ready: http://127.0.0.1:8895/v1 model inkling-2-mini-atlas[0m

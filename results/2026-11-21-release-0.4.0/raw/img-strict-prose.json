@@ -1,0 +1,943 @@
+{
+  "concurrency": {
+    "1": {
+      "aggregate_end_to_end_tokens_per_second": {
+        "maximum": 34.423,
+        "median": 33.808,
+        "minimum": 33.193,
+        "p90": 34.423
+      },
+      "per_stream_decode_tokens_per_second": {
+        "maximum": 35.506,
+        "median": 34.879,
+        "minimum": 34.251,
+        "p90": 35.506
+      },
+      "per_stream_ttft_seconds": {
+        "maximum": 0.264,
+        "median": 0.259,
+        "minimum": 0.253,
+        "p90": 0.264
+      },
+      "rounds": [
+        {
+          "aggregate_end_to_end_tokens_per_second": 34.423,
+          "completion_tokens": 256,
+          "round": 1,
+          "streams": [
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 7.181845,
+              "decode_tokens_per_second": 35.506,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already have better?\n\nRecommendation up front: do not commit to a large new hardware purchase yet. Spend the next two quarters instrumenting, scheduling, and right-sizing the systems we already own, while running a small, reversible pilot for the workloads that clearly cannot fit. If the pilot shows a durable gap, buy narrowly targeted capacity rather than a",
+              "output_characters": 430,
+              "output_sha256": "00ada89da29349e0d9263605db825772cdd964ccf652fc249a4d86cbbd002966",
+              "prompt_tokens": 131,
+              "reasoning_characters": 784,
+              "reasoning_sha256": "dc8fce1ec240ddd5e38e996a556134a5120894c88e4c13dc601e860128b759f3",
+              "response_tail_seconds": 0.001274,
+              "stream_done_marker": true,
+              "stream_sha256": "399926310538fe66f631df03f53f99796c74b9b51fc9e586f98f2213ec3295a7",
+              "time_to_first_visible_seconds": 4.881723,
+              "time_to_last_output_seconds": 7.435003,
+              "ttft_seconds": 0.253157,
+              "wall_seconds": 7.436277
+            }
+          ],
+          "wall_seconds": 7.436993
+        },
+        {
+          "aggregate_end_to_end_tokens_per_second": 33.193,
+          "completion_tokens": 256,
+          "round": 2,
+          "streams": [
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 7.445064,
+              "decode_tokens_per_second": 34.251,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nTo: platform, ML, and infrastructure leads\nFrom: engineering\nRe: whether to buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not approve a broad hardware expansion yet. Fund a utilisation and reliability program first,",
+              "output_characters": 335,
+              "output_sha256": "56336c5366c3b5c5b35a4a1aff2b5666bc7187ed957e465e093b9fa95af4c294",
+              "prompt_tokens": 132,
+              "reasoning_characters": 871,
+              "reasoning_sha256": "4071e45de9dd469070b4b93f1dc155d9b2e6fcb942ad22b2db0075c6daf9bdda",
+              "response_tail_seconds": 0.001769,
+              "stream_done_marker": true,
+              "stream_sha256": "1708c663f5c272810ff85db9924372923fd42d2814df1f5be53540466e7bb486",
+              "time_to_first_visible_seconds": 5.899987,
+              "time_to_last_output_seconds": 7.709467,
+              "ttft_seconds": 0.264403,
+              "wall_seconds": 7.711236
+            }
+          ],
+          "wall_seconds": 7.712449
+        }
+      ]
+    },
+    "4": {
+      "aggregate_end_to_end_tokens_per_second": {
+        "maximum": 83.585,
+        "median": 81.314,
+        "minimum": 79.044,
+        "p90": 83.585
+      },
+      "per_stream_decode_tokens_per_second": {
+        "maximum": 22.287,
+        "median": 21.723,
+        "minimum": 20.269,
+        "p90": 22.287
+      },
+      "per_stream_ttft_seconds": {
+        "maximum": 0.898,
+        "median": 0.805,
+        "minimum": 0.261,
+        "p90": 0.898
+      },
+      "rounds": [
+        {
+          "aggregate_end_to_end_tokens_per_second": 79.044,
+          "completion_tokens": 1024,
+          "round": 1,
+          "streams": [
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 12.580686,
+              "decode_tokens_per_second": 20.269,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership, platform, and product teams\nFrom: Infrastructure review\nRe: Buy more local AI hardware or improve",
+              "output_characters": 125,
+              "output_sha256": "5f7e2210c5e2a41c4eb1214594b444df821e9433fdc7205d7c812f3886de37c6",
+              "prompt_tokens": 128,
+              "reasoning_characters": 1020,
+              "reasoning_sha256": "abcb3f759b345980c0c5d8f9ebcfb67eceb3a9eb1a4cc1f07f6b119a055e24e8",
+              "response_tail_seconds": 0.00028,
+              "stream_done_marker": true,
+              "stream_sha256": "7cda729317b95b7e4b12e1ff457ed44963222f9b127ae59d0284634a25f146bc",
+              "time_to_first_visible_seconds": 11.611132,
+              "time_to_last_output_seconds": 12.841531,
+              "ttft_seconds": 0.260845,
+              "wall_seconds": 12.841811
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 12.051875,
+              "decode_tokens_per_second": 21.159,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already own better?\n\nRecommendation up front: do not approve a broad hardware expansion this cycle. Fund a utilisation and reliability program first, with a narrow, reversible exception for a small number of accelerators if the pilot proves a hard latency or capacity constraint. The decision should be made after four to six weeks of instrumentation, not from a hunch about demand.\n\nThe case for buying more hardware",
+              "output_characters": 487,
+              "output_sha256": "750e5e285f3950c69b50fea57397b9f3904832fe28aac1ec8533d69b92eadcfd",
+              "prompt_tokens": 126,
+              "reasoning_characters": 761,
+              "reasoning_sha256": "2a3d20b92a0b483b82574491bfd2d7fbb856741cd5968a04bf4e3f554f23cc9e",
+              "response_tail_seconds": 0.0005,
+              "stream_done_marker": true,
+              "stream_sha256": "0df33f39ad1d05a388db749a0c8a4740f0d132883ed41604b05f544bcbd4633f",
+              "time_to_first_visible_seconds": 8.011863,
+              "time_to_last_output_seconds": 12.950028,
+              "ttft_seconds": 0.898153,
+              "wall_seconds": 12.950529
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 12.051942,
+              "decode_tokens_per_second": 21.158,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already own better?\n\nRecommendation up front: do not commit to a broad hardware expansion this cycle. Fund a utilisation and reliability program first, with a narrow, reversible hardware pilot only where measurements show a hard ceiling. If the pilot confirms that existing capacity cannot meet latency or reliability targets, then buy; otherwise reinvest the savings into software, observability, and staffing.\n\nThe case for buying more hardware is understandable.",
+              "output_characters": 535,
+              "output_sha256": "4de77b1d3061dfaf3881eb8ec5eca9c17b92fd2408059aebdc1f68675ded88fd",
+              "prompt_tokens": 126,
+              "reasoning_characters": 728,
+              "reasoning_sha256": "0aa1fb285dc30945f5bc49d7380033a1476fd6509329f1ab9a700e0e65583dba",
+              "response_tail_seconds": 0.001337,
+              "stream_done_marker": true,
+              "stream_sha256": "500fcd500a2c76e6a5939af8e3b65ff78bc7ce713cd87b603a99d3d0694e85ee",
+              "time_to_first_visible_seconds": 7.698203,
+              "time_to_last_output_seconds": 12.949459,
+              "ttft_seconds": 0.897517,
+              "wall_seconds": 12.950796
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 12.05212,
+              "decode_tokens_per_second": 21.158,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership\nFrom: Platform and infrastructure working group\nRe: Buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not commit to a broad hardware expansion this cycle. Fund a focused utilisation programme first, with a small, reversible",
+              "output_characters": 294,
+              "output_sha256": "5b574f654425382c3560ea19ac50cff550a6dadfc2ab8d070cef557c00c68638",
+              "prompt_tokens": 125,
+              "reasoning_characters": 939,
+              "reasoning_sha256": "2ba7e5af94a551c5a36f6e8b4b757f1bcbdbb672f61c2da19c96c9d587224016",
+              "response_tail_seconds": 0.001713,
+              "stream_done_marker": true,
+              "stream_sha256": "1d91d07b1601398162f9c05645b37cef65222131e8afa73d85817a0e883930d8",
+              "time_to_first_visible_seconds": 10.052742,
+              "time_to_last_output_seconds": 12.950586,
+              "ttft_seconds": 0.898466,
+              "wall_seconds": 12.952299
+            }
+          ],
+          "wall_seconds": 12.954803
+        },
+        {
+          "aggregate_end_to_end_tokens_per_second": 83.585,
+          "completion_tokens": 1024,
+          "round": 2,
+          "streams": [
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 11.441471,
+              "decode_tokens_per_second": 22.287,
+              "finish_reason": "length",
+              "measured_sse_events": 254,
+              "output": "",
+              "output_characters": 0,
+              "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "prompt_tokens": 124,
+              "reasoning_characters": 1172,
+              "reasoning_sha256": "0e7fdba3a3fbba21a4f261a684615b7ac18a4407689aa584ec3bb1ad2b70cdd6",
+              "response_tail_seconds": 0.000327,
+              "stream_done_marker": true,
+              "stream_sha256": "0e7fdba3a3fbba21a4f261a684615b7ac18a4407689aa584ec3bb1ad2b70cdd6",
+              "time_to_first_visible_seconds": null,
+              "time_to_last_output_seconds": 12.246158,
+              "ttft_seconds": 0.804687,
+              "wall_seconds": 12.246484
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 11.441445,
+              "decode_tokens_per_second": 22.287,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership\nFrom: Platform and ML infrastructure\nRe: Buy more local AI hardware or improve utilisation of what we own\n\nRecommendation: do not commit to a",
+              "output_characters": 168,
+              "output_sha256": "8d7b84957e700e2b8ede4a9de9e36c6e453bc015b4e1df6224df90d2cef54658",
+              "prompt_tokens": 129,
+              "reasoning_characters": 986,
+              "reasoning_sha256": "f81078b8d7c69c7dc0fa594512bc3e526f3417b00eb72e66d0dad670f206681a",
+              "response_tail_seconds": 0.000952,
+              "stream_done_marker": true,
+              "stream_sha256": "7c2f24907964a6143166654742d38280de8117924a3721e090ec95f3a6418957",
+              "time_to_first_visible_seconds": 10.498443,
+              "time_to_last_output_seconds": 12.246541,
+              "ttft_seconds": 0.805096,
+              "wall_seconds": 12.247494
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 11.441448,
+              "decode_tokens_per_second": 22.287,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already have better?\n\nRecommendation up front: do not approve a broad hardware expansion yet. Fund a utilisation and reliability program first, with a narrowly scoped pilot for the workloads that are genuinely latency- or privacy-bound. Revisit purchase decisions after one quarter of measured evidence. This is not a claim that the current fleet is sufficient forever; it is a claim that the next dollar is better spent making existing capacity predict",
+              "output_characters": 523,
+              "output_sha256": "fcc14d679818844e40a4eb0dfcefb49ae7dd55d8ab954908929c8a831dc5f43f",
+              "prompt_tokens": 128,
+              "reasoning_characters": 729,
+              "reasoning_sha256": "68be524875fc6234d56b76447a3a2dfa8ba2dcb3f8c6e97b7a8df5dca75fd041",
+              "response_tail_seconds": 0.002301,
+              "stream_done_marker": true,
+              "stream_sha256": "1e119b219e7f8837d0c631aa54c4bdffca8b679a9881f3bcfe6702ddd2b4fa10",
+              "time_to_first_visible_seconds": 7.154855,
+              "time_to_last_output_seconds": 12.246504,
+              "ttft_seconds": 0.805056,
+              "wall_seconds": 12.248805
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 11.441435,
+              "decode_tokens_per_second": 22.287,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership\nFrom: Platform team\nRe: Buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not commit to a broad hardware expansion this cycle. Fund a focused utilisation programme first, with a small, reversible pilot for the workloads that are genuinely latency- or reliability-bound. Revisit capital purchases after two quarters of measured evidence. This is not a blanket rejection of new hardware; it is a sequencing decision.\n\nThe current",
+              "output_characters": 498,
+              "output_sha256": "fe38597f29eb5626e3394899f23d3bc054edeaca62c65010a87611a2c09fd182",
+              "prompt_tokens": 124,
+              "reasoning_characters": 707,
+              "reasoning_sha256": "4ce38d793dd1b2a73ca3b5fbc5bb9761ba653e0a5023b5c424294b8313d0cced",
+              "response_tail_seconds": 0.001666,
+              "stream_done_marker": true,
+              "stream_sha256": "638602e05076b5293e00f53cf1d8b4df89374ff8f81bb8085adea9168cafccf8",
+              "time_to_first_visible_seconds": 7.049028,
+              "time_to_last_output_seconds": 12.246597,
+              "ttft_seconds": 0.805162,
+              "wall_seconds": 12.248263
+            }
+          ],
+          "wall_seconds": 12.250976
+        }
+      ]
+    },
+    "8": {
+      "aggregate_end_to_end_tokens_per_second": {
+        "maximum": 115.503,
+        "median": 115.087,
+        "minimum": 114.671,
+        "p90": 115.503
+      },
+      "per_stream_decode_tokens_per_second": {
+        "maximum": 15.846,
+        "median": 15.802,
+        "minimum": 14.861,
+        "p90": 15.846
+      },
+      "per_stream_ttft_seconds": {
+        "maximum": 1.666,
+        "median": 1.628,
+        "minimum": 0.262,
+        "p90": 1.666
+      },
+      "rounds": [
+        {
+          "aggregate_end_to_end_tokens_per_second": 115.503,
+          "completion_tokens": 2048,
+          "round": 1,
+          "streams": [
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.092404,
+              "decode_tokens_per_second": 15.846,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nDecision needed: whether to purchase additional local AI hardware or first improve how the current fleet is used. Recommendation: do not commit to a large expansion",
+              "output_characters": 236,
+              "output_sha256": "2b6d02374c4a28e41bbb7f0719e11beccd994289eace58bc9788a3079f3b0ca8",
+              "prompt_tokens": 132,
+              "reasoning_characters": 1014,
+              "reasoning_sha256": "72addcb48e13695b543ccc0a444c044b67948ddee500a5c10409981a89a25b33",
+              "response_tail_seconds": 0.001651,
+              "stream_done_marker": true,
+              "stream_sha256": "6c9a463900e5d2afd1369937799e9bf747ecbd20f17b76add54f5c1f6847c1d8",
+              "time_to_first_visible_seconds": 15.007049,
+              "time_to_last_output_seconds": 17.670944,
+              "ttft_seconds": 1.578541,
+              "wall_seconds": 17.672596
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.094427,
+              "decode_tokens_per_second": 15.844,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership\nFrom: Platform team\nRe: Buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not commit a large hardware purchase yet. Spend the next two quarters instrumenting, scheduling, and right-sizing the systems we already own, while placing a small, reversible",
+              "output_characters": 320,
+              "output_sha256": "915986b2575397aab6a4333efa2fd0e9542a8da9a0467364a47d739510e68f13",
+              "prompt_tokens": 128,
+              "reasoning_characters": 866,
+              "reasoning_sha256": "c52c64b7417abca669a62e816d1efc8a571eb59ca0a3b297d147102418727950",
+              "response_tail_seconds": 0.003249,
+              "stream_done_marker": true,
+              "stream_sha256": "9a2a6ff61d12592cac1487d265fcd87ec0ad64f4ef3e5c5041c7ff7707ac0db3",
+              "time_to_first_visible_seconds": 13.189948,
+              "time_to_last_output_seconds": 17.723422,
+              "ttft_seconds": 1.628995,
+              "wall_seconds": 17.726672
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.093184,
+              "decode_tokens_per_second": 15.845,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nTo: platform, ML, infrastructure, and product leads\nFrom: engineering leadership\nRe: whether to buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not commit a large hardware purchase yet. Run a focused utilisation and latency programme over the next two quarters, instrument the workloads honestly, and only then buy targeted capacity for proven",
+              "output_characters": 461,
+              "output_sha256": "86ec7dd96cb430d381bba2ae4753836f1ede96c5d1da63da6b26696f9d49b830",
+              "prompt_tokens": 130,
+              "reasoning_characters": 790,
+              "reasoning_sha256": "031c7a648456139b21788be2a66cfd5a2906960805e2f1dae5d13711f56f71d4",
+              "response_tail_seconds": 0.004288,
+              "stream_done_marker": true,
+              "stream_sha256": "d5d7f988b636a155def640cde2fe184acd0d4ed979ba5fca79aa03be0d558f16",
+              "time_to_first_visible_seconds": 11.706782,
+              "time_to_last_output_seconds": 17.671791,
+              "ttft_seconds": 1.578607,
+              "wall_seconds": 17.676079
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.094389,
+              "decode_tokens_per_second": 15.844,
+              "finish_reason": "length",
+              "measured_sse_events": 254,
+              "output": "",
+              "output_characters": 0,
+              "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "prompt_tokens": 129,
+              "reasoning_characters": 1181,
+              "reasoning_sha256": "fe72de6a35f478efc78c6180a280d27cbd06253d0a91820b191f5aa7dcbf03b8",
+              "response_tail_seconds": 0.001719,
+              "stream_done_marker": true,
+              "stream_sha256": "fe72de6a35f478efc78c6180a280d27cbd06253d0a91820b191f5aa7dcbf03b8",
+              "time_to_first_visible_seconds": null,
+              "time_to_last_output_seconds": 17.722344,
+              "ttft_seconds": 1.627955,
+              "wall_seconds": 17.724063
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.092417,
+              "decode_tokens_per_second": 15.846,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nTo:",
+              "output_characters": 75,
+              "output_sha256": "baa4e1b8de4c3d980412c6f9e133350f43f4eac8dd7e67807e3479cb84583783",
+              "prompt_tokens": 127,
+              "reasoning_characters": 1111,
+              "reasoning_sha256": "38f8ebd6a3cfcaa1b32884baeb5418be3046c8363d6dcc3dbd1e7f7350748523",
+              "response_tail_seconds": 0.002216,
+              "stream_done_marker": true,
+              "stream_sha256": "7b860b655f3f1264d4e059c90d59bc4733e23cd3be51aa5852518b9298fa0fe4",
+              "time_to_first_visible_seconds": 16.879493,
+              "time_to_last_output_seconds": 17.671011,
+              "ttft_seconds": 1.578595,
+              "wall_seconds": 17.673228
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.092781,
+              "decode_tokens_per_second": 15.846,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already own better?\n\nRecommendation up front: do not commit to a large new hardware purchase yet. Spend the next two quarters improving utilisation, scheduling, observability, and workload placement on the systems we already own, while running a small, reversible pilot for the workloads that clearly",
+              "output_characters": 370,
+              "output_sha256": "8a87744e7d7a70b481280f3a1bc782c382494c4a2a81733cef7ef57798e44694",
+              "prompt_tokens": 128,
+              "reasoning_characters": 843,
+              "reasoning_sha256": "4f3a17524b81be5561b17c2e76e252919290e779a691d7e7065c2ff43d64031b",
+              "response_tail_seconds": 0.0008,
+              "stream_done_marker": true,
+              "stream_sha256": "5aef3f14f88f05f8fdfcd965d47aff92b99ea42bc016adc4731179a1cd089de5",
+              "time_to_first_visible_seconds": 12.758686,
+              "time_to_last_output_seconds": 17.670944,
+              "ttft_seconds": 1.578164,
+              "wall_seconds": 17.671745
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.092724,
+              "decode_tokens_per_second": 15.846,
+              "finish_reason": "length",
+              "measured_sse_events": 254,
+              "output": "",
+              "output_characters": 0,
+              "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "prompt_tokens": 131,
+              "reasoning_characters": 1169,
+              "reasoning_sha256": "ac434c5b56dd9bc96ea6ce66e723279a74a97f07881ee9d0608aa700d7b063f3",
+              "response_tail_seconds": 0.006237,
+              "stream_done_marker": true,
+              "stream_sha256": "ac434c5b56dd9bc96ea6ce66e723279a74a97f07881ee9d0608aa700d7b063f3",
+              "time_to_first_visible_seconds": null,
+              "time_to_last_output_seconds": 17.67078,
+              "ttft_seconds": 1.578056,
+              "wall_seconds": 17.677016
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.093415,
+              "decode_tokens_per_second": 15.845,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Memo: Buy more local AI hardware, or use what we already own better?\n\nTo: Platform and ML team\nFrom: Engineering leadership\nRe: Capacity decision for local inference and training workloads\n\nRecommendation up front: do not commit to a large new hardware purchase yet. Spend the next two quarters improving utilisation, scheduling, observability, and workload placement on the systems we already own. In parallel, run a bounded pilot for the specific workloads that are demonstrably",
+              "output_characters": 480,
+              "output_sha256": "2ba487cc48a916134b757cd0c04c8615bbebb492afd3e6aed9b302d347fda639",
+              "prompt_tokens": 131,
+              "reasoning_characters": 735,
+              "reasoning_sha256": "f5d7a795cd6a488d76bbd81168c76b107c17a7a8ad9e6f20185913a339c3daa6",
+              "response_tail_seconds": 0.000666,
+              "stream_done_marker": true,
+              "stream_sha256": "44fce13b81076812d555b688118e507ee1c38849ac55aeadcb8bd4618ac26e72",
+              "time_to_first_visible_seconds": 11.086501,
+              "time_to_last_output_seconds": 17.671678,
+              "ttft_seconds": 1.578263,
+              "wall_seconds": 17.672344
+            }
+          ],
+          "wall_seconds": 17.731131
+        },
+        {
+          "aggregate_end_to_end_tokens_per_second": 114.671,
+          "completion_tokens": 2048,
+          "round": 2,
+          "streams": [
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.18172,
+              "decode_tokens_per_second": 15.759,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership\nFrom: Platform team\nRe: Buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not commit to a large new hardware purchase yet. Spend the next two quarters improving utilisation, scheduling, observability, and workload placement on the systems we already own, while running a",
+              "output_characters": 341,
+              "output_sha256": "4714055e3139341fb82cf14cc5e85180866e6060272f86df779887b2de6bb630",
+              "prompt_tokens": 131,
+              "reasoning_characters": 866,
+              "reasoning_sha256": "76de6ac3c6044159a94832d8bb68fc0db6e1f949cd310acb131aac64652f6e0e",
+              "response_tail_seconds": 0.001783,
+              "stream_done_marker": true,
+              "stream_sha256": "ed53dcd686c6e29443eb745e04e363353197694294b042b987f5fae4b98c4dfd",
+              "time_to_first_visible_seconds": 13.218495,
+              "time_to_last_output_seconds": 17.846696,
+              "ttft_seconds": 1.664975,
+              "wall_seconds": 17.848479
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.180796,
+              "decode_tokens_per_second": 15.759,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware or improve utilisation of what we own\n\nTo: platform, ML, infrastructure, finance, product leads\nFrom: engineering leadership\nRe: local AI capacity decision\nDate: current planning cycle\n\nRecommendation up front: do not commit to a large new local hardware purchase this cycle. Fund a utilisation and reliability programme first, with a narrowly scoped hardware exception for proven",
+              "output_characters": 434,
+              "output_sha256": "5eddb37012e66f0ac6c198e775c8fc9b08f073edf7e36b28ee7f25699152fd70",
+              "prompt_tokens": 131,
+              "reasoning_characters": 801,
+              "reasoning_sha256": "d3b313ebaffed270b53ed0e83549f562e4bb4e590cbf56d8d8954a95104174d4",
+              "response_tail_seconds": 0.004898,
+              "stream_done_marker": true,
+              "stream_sha256": "6cef01271eb7bf42592ea3aeaf788c46368ed6bbc4b2b26ecdfce28f02fdf315",
+              "time_to_first_visible_seconds": 12.157438,
+              "time_to_last_output_seconds": 17.846191,
+              "ttft_seconds": 1.665395,
+              "wall_seconds": 17.851089
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 17.158489,
+              "decode_tokens_per_second": 14.861,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "To: Engineering leadership\nFrom: Platform and ML infrastructure\nRe: Buy more local AI hardware or improve utilisation of what we own\n\nRecommendation: do not commit to a broad hardware purchase yet. Fund",
+              "output_characters": 202,
+              "output_sha256": "447e4e66f87dbaddc5e758b1e8dd7c1838e3e07a87c7e8db3d34cf0b0bbea0b9",
+              "prompt_tokens": 127,
+              "reasoning_characters": 992,
+              "reasoning_sha256": "48b795dccc43e221653c898ac7e25169b872415ef7c8475bca14ab518cc78f9a",
+              "response_tail_seconds": 0.000846,
+              "stream_done_marker": true,
+              "stream_sha256": "6109bdad313542db526bdd0245006da51ec0e449d48d55ebb82124eb1380640c",
+              "time_to_first_visible_seconds": 14.69661,
+              "time_to_last_output_seconds": 17.420178,
+              "ttft_seconds": 0.261689,
+              "wall_seconds": 17.421024
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.181478,
+              "decode_tokens_per_second": 15.759,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already have better?\n\nRecommendation up front: do not commit to a large new hardware purchase yet. Spend the next",
+              "output_characters": 183,
+              "output_sha256": "7e46255f01c9fb9e2c2771723b1c9791b7fb4a47b952b0a91a64cc8ed067029c",
+              "prompt_tokens": 129,
+              "reasoning_characters": 1011,
+              "reasoning_sha256": "4e40d426c67f081b6f5405b70ca6532095996371d2d3d7f7ffb935b2a2d22bfd",
+              "response_tail_seconds": 0.009042,
+              "stream_done_marker": true,
+              "stream_sha256": "d7f8a16d9b42d3d4217ca77300e692e79e47ea1499cd6a5f725cab4959b0e628",
+              "time_to_first_visible_seconds": 15.334202,
+              "time_to_last_output_seconds": 17.847117,
+              "ttft_seconds": 1.665639,
+              "wall_seconds": 17.856159
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.180953,
+              "decode_tokens_per_second": 15.759,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus utilisation\n\nTo: platform and ML engineering leads\nFrom: infrastructure review\nRe: whether to buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not commit to a",
+              "output_characters": 255,
+              "output_sha256": "b66e017887bf94b863e204343ba39e7e6dd186973d86a784c97cebc384bb0da8",
+              "prompt_tokens": 130,
+              "reasoning_characters": 924,
+              "reasoning_sha256": "aaeb5bc30a2bec8e26eed51e662e39cb3c6a8ba0a2f90cb890f7401536bce130",
+              "response_tail_seconds": 0.006515,
+              "stream_done_marker": true,
+              "stream_sha256": "4652e4156941d68209d613847a870058801642eac845a9a1e6a2870e01c19b66",
+              "time_to_first_visible_seconds": 14.481166,
+              "time_to_last_output_seconds": 17.846522,
+              "ttft_seconds": 1.665569,
+              "wall_seconds": 17.853036
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.180257,
+              "decode_tokens_per_second": 15.76,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: buy more local AI hardware, or use what we already own better?\n\nRecommendation up front: do not commit to a broad hardware expansion this cycle. Fund a utilisation and reliability program first, with a narrow, reversible hardware option for proven bottlenecks. If telemetry shows sustained queueing, rising tail latency, or repeated failed jobs on the existing fleet",
+              "output_characters": 393,
+              "output_sha256": "587436a7c636e43832ffddd34a7a79fe70e0b6fc1438aa8515bad077127f576a",
+              "prompt_tokens": 133,
+              "reasoning_characters": 817,
+              "reasoning_sha256": "b645e63dabe7c9d2478aebd6482b6a474ae99553980efff911163b67b60a1afe",
+              "response_tail_seconds": 0.000842,
+              "stream_done_marker": true,
+              "stream_sha256": "42d0eacac7b3852ae4d7961df0c7ba9743934f0fdc42869a4a28a1f1ffd231f6",
+              "time_to_first_visible_seconds": 12.654325,
+              "time_to_last_output_seconds": 17.846207,
+              "ttft_seconds": 1.66595,
+              "wall_seconds": 17.847048
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.180683,
+              "decode_tokens_per_second": 15.76,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nTo: platform and product engineering leads\nFrom: infrastructure working group\nRe: whether to buy more local AI hardware or improve utilisation of what we own\n\nRecommendation up front: do not approve a broad hardware purchase yet. Fund a utilisation and reliability programme first, with a narrow, time-boxed exception for workloads that are proven to be latency- or capacity-bound.",
+              "output_characters": 453,
+              "output_sha256": "8330fb21e84e9a86e694c77c2e0650b391c094ab9c9c6f7c2ad3c95ca96518f0",
+              "prompt_tokens": 132,
+              "reasoning_characters": 782,
+              "reasoning_sha256": "5074d184a4fb098128fc3f9a788304dffc1d3023a16b47b9f7eec59d9ca6147c",
+              "response_tail_seconds": 0.002916,
+              "stream_done_marker": true,
+              "stream_sha256": "c9e56d54dfd4704d754b85765bcd4e6367cc5191926d6c7d742e420b965427d5",
+              "time_to_first_visible_seconds": 11.884355,
+              "time_to_last_output_seconds": 17.846595,
+              "ttft_seconds": 1.665912,
+              "wall_seconds": 17.849511
+            },
+            {
+              "completion_tokens": 256,
+              "decode_seconds": 16.18105,
+              "decode_tokens_per_second": 15.759,
+              "finish_reason": "length",
+              "measured_sse_events": 251,
+              "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nTo: platform, ML, and infrastructure leads\nFrom: engineering\nRe: whether to buy more",
+              "output_characters": 156,
+              "output_sha256": "4f367340fb1446fac8d4b964666ae008609c5d951b6546231544989444440f11",
+              "prompt_tokens": 126,
+              "reasoning_characters": 1007,
+              "reasoning_sha256": "d245bf39a204e29e3739d2f3275c15eba2d5e0e33f3c8580bf82b6e4950bd0b2",
+              "response_tail_seconds": 0.007572,
+              "stream_done_marker": true,
+              "stream_sha256": "2e6c88e60504af8ae9ca3a474fbff5d503a4e92f88169dd6b760ddbd6396584d",
+              "time_to_first_visible_seconds": 15.821419,
+              "time_to_last_output_seconds": 17.847345,
+              "ttft_seconds": 1.666295,
+              "wall_seconds": 17.854917
+            }
+          ],
+          "wall_seconds": 17.859752
+        }
+      ]
+    }
+  },
+  "decode": {
+    "code": {
+      "completion_gate": {
+        "passed": 2,
+        "total": 2
+      },
+      "decode_tokens_per_second": {
+        "maximum": 50.642,
+        "median": 48.379,
+        "minimum": 46.115,
+        "p90": 50.642
+      },
+      "runs": [
+        {
+          "completion_tokens": 3133,
+          "completion_validation": {
+            "valid": true
+          },
+          "decode_seconds": 67.917832,
+          "decode_tokens_per_second": 46.115,
+          "finish_reason": "stop",
+          "measured_sse_events": 3126,
+          "output": "ratelimit.go\n```go\npackage ratelimit\n\nimport (\n\t\"errors\"\n\t\"sync\"\n\t\"time\"\n)\n\n// Clock abstracts time so tests can control elapsed time.\ntype Clock interface {\n\tNow() time.Time\n}\n\ntype realClock struct{}\n\nfunc (realClock) Now() time.Time { return time.Now() }\n\n// TokenBucket is a concurrency-safe token bucket.\ntype TokenBucket struct {\n\tmu       sync.Mutex\n\tcapacity float64\n\ttokens   float64\n\trate     float64 // tokens per second\n\tlast     time.Time\n\tclock    Clock\n}\n\n// New creates a full bucket. capacity is the maximum number of tokens;\n// ratePerSecond is the sustained refill rate.\nfunc New(capacity int, ratePerSecond float64, clock Clock) (*TokenBucket, error) {\n\tif clock == nil {\n\t\treturn nil, errors.New(\"ratelimit: clock is required\")\n\t}\n\tif capacity <= 0 {\n\t\treturn nil, errors.New(\"ratelimit: capacity must be positive\")\n\t}\n\tif ratePerSecond <= 0 {\n\t\treturn nil, errors.New(\"ratelimit: rate must be positive\")\n\t}\n\tnow := clock.Now()\n\treturn &TokenBucket{\n\t\tcapacity: float64(capacity),\n\t\ttokens:   float64(capacity),\n\t\trate:     ratePerSecond,\n\t\tlast:     now,\n\t\tclock:    clock,\n\t}, nil\n}\n\n// NewReal returns a bucket using the system clock.\nfunc NewReal(capacity int, ratePerSecond float64) (*TokenBucket, error) {\n\treturn New(capacity, ratePerSecond, realClock{})\n}\n\nfunc (b *TokenBucket) refillLocked(now time.Time) {\n\telapsed := now.Sub(b.last).Seconds()\n\tif elapsed <= 0 {\n\t\treturn // ignore non-monotonic clocks\n\t}\n\tb.tokens += elapsed * b.rate\n\tif b.tokens > b.capacity {\n\t\tb.tokens = b.capacity\n\t}\n\tb.last = now\n}\n\n// AllowN reports whether n tokens are available and consumes them if so.\n// n <= 0 is always allowed. n larger than capacity is never allowed.\nfunc (b *TokenBucket) AllowN(n int) bool {\n\tif n <= 0 {\n\t\treturn true\n\t}\n\tb.mu.Lock()\n\tdefer b.mu.Unlock()\n\tb.refillLocked(b.clock.Now())\n\tif float64(n) > b.capacity {\n\t\treturn false\n\t}\n\tif b.tokens >= float64(n) {\n\t\tb.tokens -= float64(n)\n\t\treturn true\n\t}\n\treturn false\n}\n\n// Allow reports whether one token is available and consumes it if so.\nfunc (b *TokenBucket) Allow() bool { return b.AllowN(1) }\n\n// Remaining returns the current estimated token count.\nfunc (b *TokenBucket) Remaining() float64 {\n\tb.mu.Lock()\n\tdefer b.mu.Unlock()\n\tb.refillLocked(b.clock.Now())\n\treturn b.tokens\n}\n\n// Capacity returns the configured maximum token count.\nfunc (b *TokenBucket) Capacity() int { return int(b.capacity) }\n```\n\nratelimit_test.go\n```go\npackage ratelimit\n\nimport (\n\t\"sync\"\n\t\"testing\"\n\t\"time\"\n)\n\ntype fakeClock struct {\n\tmu  sync.Mutex\n\tnow time.Time\n}\n\nfunc newFakeClock() *fakeClock {\n\treturn &fakeClock{now: time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)}\n}\n\nfunc (c *fakeClock) Now() time.Time {\n\tc.mu.Lock()\n\tdefer c.mu.Unlock()\n\treturn c.now\n}\n\nfunc (c *fakeClock) Advance(d time.Duration) {\n\tc.mu.Lock()\n\tdefer c.mu.Unlock()\n\tc.now = c.now.Add(d)\n}\n\nfunc TestNewValidation(t *testing.T) {\n\tclk := newFakeClock()\n\ttests := []struct {\n\t\tname    string\n\t\tcap     int\n\t\trate    float64\n\t\tclock   Clock\n\t\twantErr bool\n\t}{\n\t\t{\"nil clock\", 10, 1, nil, true},\n\t\t{\"zero capacity\", 0, 1, clk, true},\n\t\t{\"negative capacity\", -1, 1, clk, true},\n\t\t{\"zero rate\", 10, 0, clk, true},\n\t\t{\"negative rate\", 10, -1, clk, true},\n\t\t{\"valid\", 10, 2, clk, false},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tb, err := New(tt.cap, tt.rate, tt.clock)\n\t\t\tif (err != nil) != tt.wantErr {\n\t\t\t\tt.Fatalf(\"err = %v, wantErr = %v\", err, tt.wantErr)\n\t\t\t}\n\t\t\tif !tt.wantErr && b == nil {\n\t\t\t\tt.Fatal(\"expected bucket\")\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestAllowN(t *testing.T) {\n\ttests := []struct {\n\t\tname   string\n\t\tcap    int\n\t\trate   float64\n\t\tadvance time.Duration\n\t\tn      int\n\t\twant   bool\n\t}{\n\t\t{\"zero n always allowed\", 5, 1, 0, 0, true},\n\t\t{\"negative n always allowed\", 5, 1, 0, -2, true},\n\t\t{\"over capacity never allowed\", 5, 1, 0, 6, false},\n\t\t{\"full bucket allows capacity\", 5, 1, 0, 5, true},\n\t\t{\"empty bucket denies\", 5, 1, 0, 5, true}, // consumed below\n\t\t{\"refill after advance\", 5, 10, time.Second, 5, true},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tclk := newFakeClock()\n\t\t\tb, err := New(tt.cap, tt.rate, clk)\n\t\t\tif err != nil {\n\t\t\t\tt.Fatal(err)\n\t\t\t}\n\t\t\tif tt.name == \"empty bucket denies\" {\n\t\t\t\tif !b.AllowN(tt.cap) {\n\t\t\t\t\tt.Fatal(\"setup consume failed\")\n\t\t\t\t}\n\t\t\t\tif b.AllowN(1) {\n\t\t\t\t\tt.Fatal(\"expected denial after drain\")\n\t\t\t\t}\n\t\t\t\treturn\n\t\t\t}\n\t\t\tclk.Advance(tt.advance)\n\t\t\tif got := b.AllowN(tt.n); got != tt.want {\n\t\t\t\tt.Fatalf(\"AllowN(%d) = %v, want %v\", tt.n, got, tt.want)\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestRefillCapsAtCapacity(t *testing.T) {\n\tclk := newFakeClock()\n\tb, err := New(2, 1, clk)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tclk.Advance(time.Hour)\n\tif got := b.Remaining(); got != 2 {\n\t\tt.Fatalf(\"Remaining() = %v, want 2\", got)\n\t}\n}\n\nfunc TestConcurrentAllow(t *testing.T) {\n\tclk := newFakeClock()\n\tb, err := New(100, 1000, clk)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tvar wg sync.WaitGroup\n\tallowed := 0\n\tvar mu sync.Mutex\n\tfor i := 0; i < 200; i++ {\n\t\twg.Add(1)\n\t\tgo func() {\n\t\t\tdefer wg.Done()\n\t\t\tif b.Allow() {\n\t\t\t\tmu.Lock()\n\t\t\t\tallowed++\n\t\t\t\tmu.Unlock()\n\t\t\t}\n\t\t}()\n\t}\n\twg.Wait()\n\tif allowed != 100 {\n\t\tt.Fatalf(\"allowed = %d, want 100\", allowed)\n\t}\n}\n```",
+          "output_characters": 5180,
+          "output_sha256": "2ed791037855a9def4bd43ba1e65348d1c06bb1bcec0912691fde06ecbaf7448",
+          "prompt_tokens": 138,
+          "reasoning_characters": 3397,
+          "reasoning_sha256": "797f8e1a659bde014281f49bb26aded39511a7502968f332b7ad176f1c1bca45",
+          "response_tail_seconds": 0.00355,
+          "run": 1,
+          "stream_done_marker": true,
+          "stream_sha256": "980b983431d2276f7f51a789f991e264c807836fa0af4aa5d18076d533a344fa",
+          "time_to_first_visible_seconds": 26.289117,
+          "time_to_last_output_seconds": 68.201055,
+          "ttft_seconds": 0.283223,
+          "wall_seconds": 68.204605
+        },
+        {
+          "completion_tokens": 3563,
+          "completion_validation": {
+            "valid": true
+          },
+          "decode_seconds": 70.337045,
+          "decode_tokens_per_second": 50.642,
+          "finish_reason": "stop",
+          "measured_sse_events": 3556,
+          "output": "```go\n// filename: tokenbucket.go\npackage ratelimit\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n\t\"sync\"\n\t\"time\"\n)\n\ntype Clock interface {\n\tNow() time.Time\n}\n\ntype realClock struct{}\n\nfunc (realClock) Now() time.Time { return time.Now() }\n\ntype TokenBucket struct {\n\tmu       sync.Mutex\n\tcapacity float64\n\trate     float64\n\ttokens   float64\n\tlast     time.Time\n\tclock    Clock\n}\n\nfunc NewTokenBucket(capacity int, ratePerSecond float64, clock Clock) (*TokenBucket, error) {\n\tif clock == nil {\n\t\treturn nil, errors.New(\"ratelimit: clock is required\")\n\t}\n\tif capacity <= 0 {\n\t\treturn nil, errors.New(\"ratelimit: capacity must be positive\")\n\t}\n\tif ratePerSecond <= 0 {\n\t\treturn nil, fmt.Errorf(\"ratelimit: rate must be positive, got %f\", ratePerSecond)\n\t}\n\tnow := clock.Now()\n\treturn &TokenBucket{\n\t\tcapacity: float64(capacity),\n\t\trate:     ratePerSecond,\n\t\ttokens:   float64(capacity),\n\t\tlast:     now,\n\t\tclock:    clock,\n\t}, nil\n}\n\nfunc NewTokenBucketReal(capacity int, ratePerSecond float64) (*TokenBucket, error) {\n\treturn NewTokenBucket(capacity, ratePerSecond, realClock{})\n}\n\nfunc (b *TokenBucket) Allow() bool {\n\treturn b.AllowN(1)\n}\n\nfunc (b *TokenBucket) AllowN(n int) bool {\n\tif n <= 0 {\n\t\treturn true\n\t}\n\tb.mu.Lock()\n\tdefer b.mu.Unlock()\n\tb.refillLocked()\n\tif float64(n) > b.capacity {\n\t\treturn false\n\t}\n\tif b.tokens >= float64(n) {\n\t\tb.tokens -= float64(n)\n\t\treturn true\n\t}\n\treturn false\n}\n\nfunc (b *TokenBucket) Tokens() float64 {\n\tb.mu.Lock()\n\tdefer b.mu.Unlock()\n\tb.refillLocked()\n\treturn b.tokens\n}\n\nfunc (b *TokenBucket) refillLocked() {\n\tnow := b.clock.Now()\n\telapsed := now.Sub(b.last).Seconds()\n\tif elapsed <= 0 {\n\t\treturn\n\t}\n\tb.tokens += elapsed * b.rate\n\tif b.tokens > b.capacity {\n\t\tb.tokens = b.capacity\n\t}\n\tb.last = now\n}\n```\n\n```go\n// filename: tokenbucket_test.go\npackage ratelimit\n\nimport (\n\t\"sync\"\n\t\"testing\"\n\t\"time\"\n)\n\ntype fakeClock struct {\n\tmu sync.Mutex\n\tt  time.Time\n}\n\nfunc newFakeClock(t time.Time) *fakeClock {\n\treturn &fakeClock{t: t}\n}\n\nfunc (c *fakeClock) Now() time.Time {\n\tc.mu.Lock()\n\tdefer c.mu.Unlock()\n\treturn c.t\n}\n\nfunc (c *fakeClock) Advance(d time.Duration) {\n\tc.mu.Lock()\n\tdefer c.mu.Unlock()\n\tc.t = c.t.Add(d)\n}\n\nfunc TestNewTokenBucketValidation(t *testing.T) {\n\tclock := newFakeClock(time.Unix(0, 0))\n\ttests := []struct {\n\t\tname     string\n\t\tcapacity int\n\t\trate     float64\n\t\tclock    Clock\n\t\twantErr  bool\n\t}{\n\t\t{\"nil clock\", 1, 1, nil, true},\n\t\t{\"zero capacity\", 0, 1, clock, true},\n\t\t{\"negative capacity\", -1, 1, clock, true},\n\t\t{\"zero rate\", 1, 0, clock, true},\n\t\t{\"negative rate\", 1, -1, clock, true},\n\t\t{\"valid\", 5, 2.5, clock, false},\n\t}\n\tfor _, tt := range tests {\n\t\tt.Run(tt.name, func(t *testing.T) {\n\t\t\tb, err := NewTokenBucket(tt.capacity, tt.rate, tt.clock)\n\t\t\tif (err != nil) != tt.wantErr {\n\t\t\t\tt.Fatalf(\"err = %v, wantErr = %v\", err, tt.wantErr)\n\t\t\t}\n\t\t\tif !tt.wantErr && b == nil {\n\t\t\t\tt.Fatal(\"expected bucket\")\n\t\t\t}\n\t\t})\n\t}\n}\n\nfunc TestAllowN(t *testing.T) {\n\tclock := newFakeClock(time.Unix(0, 0))\n\tb, err := NewTokenBucket(3, 1, clock)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tsteps := []struct {\n\t\tadvance time.Duration\n\t\tn       int\n\t\twant    bool\n\t}{\n\t\t{0, 3, true},\n\t\t{0, 1, false},\n\t\t{500 * time.Millisecond, 1, false},\n\t\t{500 * time.Millisecond, 1, true},\n\t\t{0, 3, false},\n\t\t{3 * time.Second, 3, true},\n\t\t{0, 1, false},\n\t}\n\tfor i, s := range steps {\n\t\tclock.Advance(s.advance)\n\t\tif got := b.AllowN(s.n); got != s.want {\n\t\t\tt.Fatalf(\"step %d: AllowN(%d) = %v, want %v\", i, s.n, got, s.want)\n\t\t}\n\t}\n}\n\nfunc TestAllowNNonPositive(t *testing.T) {\n\tclock := newFakeClock(time.Unix(0, 0))\n\tb, err := NewTokenBucket(1, 1, clock)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif !b.AllowN(0) || !b.AllowN(-5) {\n\t\tt.Fatal(\"non-positive n should be allowed\")\n\t}\n}\n\nfunc TestAllowNExceedsCapacity(t *testing.T) {\n\tclock := newFakeClock(time.Unix(0, 0))\n\tb, err := NewTokenBucket(2, 10, clock)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif b.AllowN(3) {\n\t\tt.Fatal(\"n greater than capacity should never be allowed\")\n\t}\n}\n\nfunc TestAllowNConcurrent(t *testing.T) {\n\tclock := newFakeClock(time.Unix(0, 0))\n\tb, err := NewTokenBucket(100, 1000, clock)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tvar wg sync.WaitGroup\n\tresults := make(chan bool, 200)\n\tfor i := 0; i < 200; i++ {\n\t\twg.Add(1)\n\t\tgo func() {\n\t\t\tdefer wg.Done()\n\t\t\tresults <- b.Allow()\n\t\t}()\n\t}\n\twg.Wait()\n\tclose(results)\n\tallowed := 0\n\tfor ok := range results {\n\t\tif ok {\n\t\t\tallowed++\n\t\t}\n\t}\n\tif allowed != 100 {\n\t\tt.Fatalf(\"allowed = %d, want 100\", allowed)\n\t}\n}\n```",
+          "output_characters": 4445,
+          "output_sha256": "b2688fa6dedf1084725dad35ee561e9e93dfee1d8a7ebeaa42e2e4b01b04989c",
+          "prompt_tokens": 139,
+          "reasoning_characters": 5153,
+          "reasoning_sha256": "47af941b519ca1766b7b07e79e1cb52ca157d82b810b6c70ec92ef943a40efe7",
+          "response_tail_seconds": 0.002009,
+          "run": 2,
+          "stream_done_marker": true,
+          "stream_sha256": "acfc640dd11ce72b623667ed1bb007a431c0888a2556ed556ca760a4beeda0f0",
+          "time_to_first_visible_seconds": 44.348673,
+          "time_to_last_output_seconds": 70.600737,
+          "ttft_seconds": 0.263691,
+          "wall_seconds": 70.602746
+        }
+      ],
+      "time_to_last_output_seconds": {
+        "maximum": 70.601,
+        "median": 69.401,
+        "minimum": 68.201,
+        "p90": 70.601
+      },
+      "ttft_seconds": {
+        "maximum": 0.283,
+        "median": 0.273,
+        "minimum": 0.264,
+        "p90": 0.283
+      },
+      "wall_seconds": {
+        "maximum": 70.603,
+        "median": 69.404,
+        "minimum": 68.205,
+        "p90": 70.603
+      }
+    },
+    "prose": {
+      "completion_gate": {
+        "passed": 2,
+        "total": 2
+      },
+      "decode_tokens_per_second": {
+        "maximum": 33.695,
+        "median": 33.51,
+        "minimum": 33.324,
+        "p90": 33.695
+      },
+      "runs": [
+        {
+          "completion_tokens": 1321,
+          "completion_validation": {
+            "valid": true
+          },
+          "decode_seconds": 39.175485,
+          "decode_tokens_per_second": 33.695,
+          "finish_reason": "stop",
+          "measured_sse_events": 1314,
+          "output": "Internal engineering memo: local AI hardware versus better utilisation\n\nTo: platform, ML, and infrastructure leads\nFrom: engineering leadership\nDate: current planning cycle\nRe: whether to buy more local AI hardware or improve utilisation of what we own\n\nThe decision is not simply \u201cbuy more\u201d or \u201cdo nothing.\u201d It is whether the next dollar should expand capacity or reduce waste. My recommendation is to improve utilisation first, instrument the workload honestly, and only then approve a bounded hardware purchase. Do not sign a large multi-year commitment yet. Buy enough to remove a proven bottleneck, keep cloud burst as a pressure valve, and revisit after two quarters of measured demand.\n\nThe cost case is easy to misread. Local hardware has a visible price tag, but the real cost includes power, cooling, rack space, maintenance, spare parts, staff time, and the opportunity cost of engineers spending weeks on provisioning instead of product work. A GPU that sits idle for most of the day is not cheap; it is expensive idle capacity. Conversely, a modest purchase can be justified if it removes a recurring queue, protects latency-sensitive workloads, or avoids repeated cloud overruns. The right question is not \u201cwhat does the machine cost?\u201d but \u201cwhat does the workload cost per useful inference, per second of latency, and per incident?\u201d\n\nLatency deserves separate treatment. Local deployment can reduce network dependence and keep sensitive data inside our boundary, which may matter for some workloads. But latency is not improved by owning more accelerators if requests are still serialised, batched poorly, or routed through a slow control plane. Interactive features need predictable tail latency, not just average throughput. Batch jobs need throughput and cost efficiency. These are different operating points. If our current bottleneck is scheduling, queueing, model loading, or data movement, more hardware will mostly add idle capacity. If the bottleneck is genuinely compute saturation during predictable peaks, then additional capacity becomes rational.\n\nReliability is another reason to be cautious. Local systems concentrate risk: a failed node, a cooling event, a driver regression, or a single rack can affect many services. That can be acceptable for internal batch workloads, but less acceptable for customer-facing paths unless we add redundancy, health checks, failover, and clear ownership. Cloud services offer elasticity and operational maturity, but they introduce network variance, vendor dependence, and variable spend. The best answer is often hybrid: local for predictable, sensitive, or latency-sensitive workloads; cloud for bursty, experimental, or low-confidence demand.\n\nOpportunity cost is the part teams underestimate. Every hour spent tuning utilisation, profiling memory use, improving batching, and cleaning up model serving is an hour not spent on features. That is a real cost, but it is also a learning investment. If we buy first and measure later, we may discover that the workload was misunderstood. If we measure first, we may find that a small set of changes\u2014better queueing, smaller models, caching, quantization, or tighter routing\u2014delivers most of the benefit. The memo should not pretend this is certain. Demand forecasts are uncertain, model sizes are moving quickly, and prices may shift. We should treat the plan as reversible.\n\nReversibility argues for staged action. Prefer leases or short-term commitments over large purchases. Keep cloud burst enabled. Design services so models can move between local and cloud without rewriting application logic. Avoid locking critical paths to one vendor or one rack. If we do buy, buy modular capacity that can be repurposed as workloads change, and avoid exotic configurations that only fit today\u2019s assumptions.\n\nConcretely, I recommend the following posture. First, instrument utilisation for four to six weeks: GPU time, memory, queue depth, p95 latency, failure rate, and cost per workload. Second, fix the obvious waste: idle models, oversized instances, poor batching, and duplicated pipelines. Third, run a small pilot for the highest-value workload, with a clear success threshold. Fourth, if the pilot shows sustained saturation and the cloud alternative is materially worse on latency or data control, approve a limited purchase sized to the proven gap, not the peak fantasy. Fifth, revisit after two quarters and cancel or renegotiate if utilisation remains low.\n\nThe uncertainty is real. We may be wrong about demand, and the market may change. But the cost of being wrong is asymmetric: buying too much hardware locks us into waste, while improving utilisation and buying later preserves options. The goal is not maximum local ownership. It is reliable, affordable AI capability with enough headroom to grow. Buy when the evidence is strong, keep the path reversible, and do not let a visible machine purchase substitute for understanding the workload.",
+          "output_characters": 4969,
+          "output_sha256": "688d37a0d7b36550f286c564d8cb47e608d42c7cd7a03a05cf2921907a161c08",
+          "prompt_tokens": 128,
+          "reasoning_characters": 1311,
+          "reasoning_sha256": "cd1712c97c42aad226841c35b55d5d66663afead697ff519f48640b6e5cd51be",
+          "response_tail_seconds": 0.061207,
+          "run": 1,
+          "stream_done_marker": true,
+          "stream_sha256": "dbfd63baed5db27f9c7ab0778984a9b4684a1376690aa288439c4f7800b88973",
+          "time_to_first_visible_seconds": 8.644814,
+          "time_to_last_output_seconds": 39.432096,
+          "ttft_seconds": 0.256611,
+          "wall_seconds": 39.493302
+        },
+        {
+          "completion_tokens": 1204,
+          "completion_validation": {
+            "valid": true
+          },
+          "decode_seconds": 36.100577,
+          "decode_tokens_per_second": 33.324,
+          "finish_reason": "stop",
+          "measured_sse_events": 1197,
+          "output": "To: Engineering leadership\nFrom: Platform and infrastructure working group\nRe: Local AI hardware: buy more or use what we have better\n\nRecommendation up front: do not commit a large new hardware purchase yet. Run a focused utilisation and reliability programme for the next two quarters, instrument the workloads, and only then approve a targeted expansion. If the evidence shows sustained queueing, poor batching, or repeated latency misses that cannot be fixed by scheduling, model routing, or capacity-aware serving, buy a smaller, reversible increment rather than a fleet-wide refresh.\n\nThe central question is not whether local AI is worth doing; it is whether the next dollar should buy silicon or should buy better behaviour from the silicon we already own. Local inference is attractive because it keeps data inside our boundary, reduces dependence on external endpoints, and can improve tail latency for sensitive workloads. But those benefits are easy to overstate. A GPU that sits at 18 percent utilisation for most of the day is not a capacity asset; it is a fixed cost with a noisy workload attached. The first-order fix is to understand what the hardware is actually doing: which services call it, how often, with what prompt sizes, batching patterns, concurrency, and failure modes, and whether the bottleneck is compute, memory bandwidth, networking, storage, or simply poor admission control.\n\nCost should be evaluated as total cost of ownership, not sticker price. New hardware carries purchase price, power, cooling, rack space, maintenance, driver and runtime upgrades, staff time, and the risk that the workload mix changes before the asset reaches useful life. Existing hardware carries a different cost: idle capacity, duplicated experiments, and the opportunity cost of engineers spending time on manual tuning instead of product work. If we buy before we understand the gap, we may pay twice: once for the machines and again for the inefficiency that remains.\n\nLatency deserves separate treatment from throughput. A batch job can tolerate queueing; a user-facing assistant cannot. We should separate offline evaluation, background summarisation, and interactive inference into different service classes with explicit latency budgets. Interactive traffic should be protected from batch bursts, and batch work should be allowed to fill spare capacity without starving interactive requests. This is where utilisation and latency can be reconciled: not by maximising average utilisation, but by matching each workload to the right queue, model size, and hardware class.\n\nReliability is the other reason to be cautious. Local systems fail in ways cloud services do not: driver mismatches, thermal throttling, memory pressure, degraded GPUs, and operator error during upgrades. More hardware increases the number of failure domains unless we also improve observability, health checks, rollback paths, and runbooks. A larger fleet without better operations can lower reliability even while raising nominal capacity. Conversely, better utilisation can reduce the number of active nodes, simplify the failure surface, and make incidents easier to diagnose.\n\nOpportunity cost is easy to miss. Every dollar spent on hardware is a dollar not spent on evaluation, data quality, model selection, observability, or product features. If the team is spending weeks waiting for local inference to become usable, the real bottleneck may be workflow design rather than silicon. Improving utilisation also creates option value: it tells us whether the workload is genuinely growing, whether demand is seasonal, and whether a smaller model or better routing can meet the same SLO.\n\nReversibility matters. Software changes, scheduling policies, and routing rules are cheap to undo. Hardware purchases are not. A staged approach preserves optionality: we can test whether a modest increase in capacity, or a change in serving architecture, closes the gap. If the gap persists, the purchase is better informed and more likely to be used. If it does not, we avoid stranded assets.\n\nUncertainty remains. We do not yet know whether demand will grow steadily, spike seasonally, or be dominated by a few high-value workloads. We also do not know how much of the current pain comes from model choice rather than hardware. The right response is not to pretend certainty, but to make the decision reversible and evidence-driven.\n\nProposed path: instrument for four to six weeks, classify workloads, set latency budgets, tune batching and admission control, and review utilisation weekly. If interactive p95 latency remains above target after those changes, or if sustained utilisation exceeds roughly 70 to 80 percent with queueing, approve a limited purchase. Otherwise, defer the purchase and revisit with the next planning cycle. This is not a hedge against action; it is a disciplined way to buy the right capacity at the right time.",
+          "output_characters": 4929,
+          "output_sha256": "e8dd1560df66a1c192350f7f40dfaec4a35a2a686f8f0f059fa1d17c593d193f",
+          "prompt_tokens": 129,
+          "reasoning_characters": 1006,
+          "reasoning_sha256": "b24fe7e67efcfd60ad1deec6dfc9ffa4068fc5368ad29ca7051e5bebf5504352",
+          "response_tail_seconds": 0.060332,
+          "run": 2,
+          "stream_done_marker": true,
+          "stream_sha256": "ab9be2b58571b45536329383607b4c300831ffc870aa4ee1e06f4d98ab7f04d7",
+          "time_to_first_visible_seconds": 6.46455,
+          "time_to_last_output_seconds": 36.352384,
+          "ttft_seconds": 0.251806,
+          "wall_seconds": 36.412715
+        }
+      ],
+      "time_to_last_output_seconds": {
+        "maximum": 39.432,
+        "median": 37.892,
+        "minimum": 36.352,
+        "p90": 39.432
+      },
+      "ttft_seconds": {
+        "maximum": 0.257,
+        "median": 0.254,
+        "minimum": 0.252,
+        "p90": 0.257
+      },
+      "wall_seconds": {
+        "maximum": 39.493,
+        "median": 37.953,
+        "minimum": 36.413,
+        "p90": 39.493
+      }
+    },
+    "structured": {
+      "completion_gate": {
+        "passed": 2,
+        "total": 2
+      },
+      "decode_tokens_per_second": {
+        "maximum": 87.159,
+        "median": 86.07,
+        "minimum": 84.981,
+        "p90": 87.159
+      },
+      "runs": [
+        {
+          "completion_tokens": 1028,
+          "completion_validation": {
+            "valid": true
+          },
+          "decode_seconds": 11.783094,
+          "decode_tokens_per_second": 87.159,
+          "finish_reason": "stop",
+          "measured_sse_events": 1021,
+          "output": "[{\"index\":1,\"square\":1},{\"index\":2,\"square\":4},{\"index\":3,\"square\":9},{\"index\":4,\"square\":16},{\"index\":5,\"square\":25},{\"index\":6,\"square\":36},{\"index\":7,\"square\":49},{\"index\":8,\"square\":64},{\"index\":9,\"square\":81},{\"index\":10,\"square\":100},{\"index\":11,\"square\":121},{\"index\":12,\"square\":144},{\"index\":13,\"square\":169},{\"index\":14,\"square\":196},{\"index\":15,\"square\":225},{\"index\":16,\"square\":256},{\"index\":17,\"square\":289},{\"index\":18,\"square\":324},{\"index\":19,\"square\":361},{\"index\":20,\"square\":400},{\"index\":21,\"square\":441},{\"index\":22,\"square\":484},{\"index\":23,\"square\":529},{\"index\":24,\"square\":576},{\"index\":25,\"square\":625},{\"index\":26,\"square\":676},{\"index\":27,\"square\":729},{\"index\":28,\"square\":784},{\"index\":29,\"square\":841},{\"index\":30,\"square\":900},{\"index\":31,\"square\":961},{\"index\":32,\"square\":1024},{\"index\":33,\"square\":1089},{\"index\":34,\"square\":1156},{\"index\":35,\"square\":1225},{\"index\":36,\"square\":1296},{\"index\":37,\"square\":1369},{\"index\":38,\"square\":1444},{\"index\":39,\"square\":1521},{\"index\":40,\"square\":1600},{\"index\":41,\"square\":1681},{\"index\":42,\"square\":1764},{\"index\":43,\"square\":1849},{\"index\":44,\"square\":1936},{\"index\":45,\"square\":2025},{\"index\":46,\"square\":2116},{\"index\":47,\"square\":2209},{\"index\":48,\"square\":2304},{\"index\":49,\"square\":2401},{\"index\":50,\"square\":2500}]",
+          "output_characters": 1299,
+          "output_sha256": "654a5359e59bad57071f454922f88d55d393a17d6eec293ae79ea185c3cd7453",
+          "prompt_tokens": 115,
+          "reasoning_characters": 686,
+          "reasoning_sha256": "6eccf2e322061ba97c00287d71de5efc62e42bb1a6d8fb77c0d53a7cecb26bac",
+          "response_tail_seconds": 0.000427,
+          "run": 1,
+          "stream_done_marker": true,
+          "stream_sha256": "f7c8c8fb36a7941d624d143dd4173136fcc848a39b5758c461aec1289a1d8070",
+          "time_to_first_visible_seconds": 4.627488,
+          "time_to_last_output_seconds": 12.033361,
+          "ttft_seconds": 0.250266,
+          "wall_seconds": 12.033788
+        },
+        {
+          "completion_tokens": 1021,
+          "completion_validation": {
+            "valid": true
+          },
+          "decode_seconds": 12.002746,
+          "decode_tokens_per_second": 84.981,
+          "finish_reason": "stop",
+          "measured_sse_events": 1014,
+          "output": "[{\"index\":1,\"square\":1},{\"index\":2,\"square\":4},{\"index\":3,\"square\":9},{\"index\":4,\"square\":16},{\"index\":5,\"square\":25},{\"index\":6,\"square\":36},{\"index\":7,\"square\":49},{\"index\":8,\"square\":64},{\"index\":9,\"square\":81},{\"index\":10,\"square\":100},{\"index\":11,\"square\":121},{\"index\":12,\"square\":144},{\"index\":13,\"square\":169},{\"index\":14,\"square\":196},{\"index\":15,\"square\":225},{\"index\":16,\"square\":256},{\"index\":17,\"square\":289},{\"index\":18,\"square\":324},{\"index\":19,\"square\":361},{\"index\":20,\"square\":400},{\"index\":21,\"square\":441},{\"index\":22,\"square\":484},{\"index\":23,\"square\":529},{\"index\":24,\"square\":576},{\"index\":25,\"square\":625},{\"index\":26,\"square\":676},{\"index\":27,\"square\":729},{\"index\":28,\"square\":784},{\"index\":29,\"square\":841},{\"index\":30,\"square\":900},{\"index\":31,\"square\":961},{\"index\":32,\"square\":1024},{\"index\":33,\"square\":1089},{\"index\":34,\"square\":1156},{\"index\":35,\"square\":1225},{\"index\":36,\"square\":1296},{\"index\":37,\"square\":1369},{\"index\":38,\"square\":1444},{\"index\":39,\"square\":1521},{\"index\":40,\"square\":1600},{\"index\":41,\"square\":1681},{\"index\":42,\"square\":1764},{\"index\":43,\"square\":1849},{\"index\":44,\"square\":1936},{\"index\":45,\"square\":2025},{\"index\":46,\"square\":2116},{\"index\":47,\"square\":2209},{\"index\":48,\"square\":2304},{\"index\":49,\"square\":2401},{\"index\":50,\"square\":2500}]",
+          "output_characters": 1299,
+          "output_sha256": "654a5359e59bad57071f454922f88d55d393a17d6eec293ae79ea185c3cd7453",
+          "prompt_tokens": 117,
+          "reasoning_characters": 667,
+          "reasoning_sha256": "d1b6811f2e775e5128542d9de7b4b1afb8e94be1f3b40bbdf525b1813e20cda4",
+          "response_tail_seconds": 0.000799,
+          "run": 2,
+          "stream_done_marker": true,
+          "stream_sha256": "f1681dc769827496cf0c1971d5bf37c92c15c4e5b70087c998aae604ad66bc20",
+          "time_to_first_visible_seconds": 4.634162,
+          "time_to_last_output_seconds": 12.258026,
+          "ttft_seconds": 0.255279,
+          "wall_seconds": 12.258825
+        }
+      ],
+      "time_to_last_output_seconds": {
+        "maximum": 12.258,
+        "median": 12.146,
+        "minimum": 12.033,
+        "p90": 12.258
+      },
+      "ttft_seconds": {
+        "maximum": 0.255,
+        "median": 0.253,
+        "minimum": 0.25,
+        "p90": 0.255
+      },
+      "wall_seconds": {
+        "maximum": 12.259,
+        "median": 12.146,
+        "minimum": 12.034,
+        "p90": 12.259
+      }
+    }
+  },
+  "protocol": {
+    "prompts_sha256": "0c3ac4015813af6a1b967659bd2289990fde895a5e43ae065b894d1e1f909ecb",
+    "prompts_version": "1.0.0",
+    "repository_dirty": false,
+    "repository_revision": "40fabcaf6e963ac27ab347f61d54a225dbd07419",
+    "repository_source": "git-worktree",
+    "repository_source_sha256": "71cf88ee30ff5e0c976ad5b1d8221af9115447a690039ac9aa020a85015fe300",
+    "version": "1.1.0"
+  },
+  "run": {
+    "appliance": {
+      "competing_traffic": "none (sq27-test stopped; a stale sglang benchmark from 11-04 stopped with the operator's approval)",
+      "context_limit": 131072,
+      "drafter": "DSpark (bundled mtp.safetensors), 7 draft tokens, greedy drafts; speculation with one live request (ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0) and only while drafts pay (ATLAS_DFLASH_ADAPTIVE=1: under 2 accepted a step over 12 steps decodes plainly until a re-probe 256 tokens later)",
+      "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+      "kv_cache_dtype": "auto (bf16)",
+      "model": "thinkingmachines/Inkling-2-Mini",
+      "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+      "negotiated_link_speed": "not applicable",
+      "quantisation": "TML modelopt as shipped: NVFP4 experts L0-19, MXFP8 experts L20-23, BF16 rest; prefill quantizes the checkpoint experts' inputs as its hf_quant_config.json requires (NVFP4 / MXFP8 rows, W4A4 / W8A8)",
+      "scheduler": "SparkInkling default profile: max-num-seqs 8, gpu-memory-utilization 0.80, prefill chunks 4096, CUDA graphs, programmatic dependent launch (ATLAS_INKLING2_PDL=1), prefix caching with conv-state snapshots (--enable-prefix-caching, --ssm-cache-slots=128, ATLAS_QWEN4EXP_AUX_PINNED=1), --request-timeout=3600, --tool-max-tokens=32768",
+      "serving_engine": "SparkInkling 0.4.0 (Atlas, Enntity/atlas inkling2/mini-20261121 @ f0f0a2c78)",
+      "serving_image": "ghcr.io/enntity/atlas-sparkinkling:646b6c9dafe6 (local build of that tag)",
+      "topology": "TP1, single Spark"
+    },
+    "comparison_id": "inkling2-atlas",
+    "finished_at": "2026-11-22T04:11:02.717313+00:00",
+    "label": "sparkinkling-strict-prose",
+    "model": "inkling-2-mini-atlas",
+    "platform": "Linux-7.0.0-1019-nvidia-aarch64-with-glibc2.39",
+    "python": "3.12.3",
+    "started_at": "2026-11-22T04:05:47.762451+00:00"
+  },
+  "schema": 1,
+  "settings": {
+    "concurrency": [
+      1,
+      4,
+      8
+    ],
+    "concurrency_runs": 2,
+    "concurrency_tokens": 256,
+    "concurrency_workload": "prose",
+    "decode_tokens": 4096,
+    "extra_body": {
+      "chat_template_kwargs": {
+        "reasoning_effort": "low"
+      }
+    },
+    "prefill_depths": [],
+    "prefill_runs": 3,
+    "runs": 2,
+    "seed": 20260905,
+    "staggered": [],
+    "staggered_arrival_tokens": 256,
+    "staggered_delay_seconds": 1.0,
+    "staggered_depth": 32768,
+    "staggered_incumbent_tokens": 1024,
+    "staggered_runs": 3,
+    "staggered_workload": "code",
+    "temperature": 0.0,
+    "top_p": 1.0
+  }
+}
