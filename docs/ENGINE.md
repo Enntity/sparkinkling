@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`d1b138e67` (tree `11b675a1`), for the kernel target `inkling-2-mini`
+`8ff871196` (tree `ea5dacb5`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -89,9 +89,11 @@ order:
   (bit-identical; every listed kernel waits for its predecessor first).
 - **Batching and speculation.** Multi-sequence decode runs from CUDA graphs,
   its BF16 projections (and a verify's) of up to 8 rows on the batched GEMV,
-  each row computed as the one-row GEMV computes it
-  (each visit's conv-state table is refreshed before replay; padding rows
-  share one state). Verify rows journal each visit's conv state and inputs so
+  each row computed as the one-row GEMV computes it (each visit's conv-state
+  table is refreshed before replay; padding rows share one state). With the
+  checkpoint's weights (Strict), a visit's input projections (q, k, v,
+  relative bias, gate, sinks, dynamic conv taps) run as one launch over a
+  per-visit table. Verify rows journal each visit's conv state and inputs so
   rejected drafts roll back exactly. The checkpoint's DSpark drafter runs as a
   variant of Atlas's DFlash head: each draft layer mixes four target taps
   (the inputs of visits 5, 23 and 41 and the final-norm output) with its own
