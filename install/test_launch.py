@@ -109,6 +109,13 @@ class Launch(unittest.TestCase):
             env = launch(**({} if gb is None else {'SPARKINKLING_PREFIX_CACHE_GB': gb}))[1]
             self.assertFalse([k for k in env if k.startswith('ATLAS_KV_NVME')], gb)
 
+    def test_disk_prefix_cache_needs_its_mount(self):
+        serve.check_prefix_cache_dir({})
+        with tempfile.TemporaryDirectory() as d:
+            serve.check_prefix_cache_dir({'ATLAS_KV_NVME_DIR': d})
+            with self.assertRaises(ValueError):
+                serve.check_prefix_cache_dir({'ATLAS_KV_NVME_DIR': os.path.join(d, 'strict', 'kv')})
+
     def test_disk_prefix_cache_per_mode(self):
         dirs = {}
         for mode in ('strict', 'spark'):

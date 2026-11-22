@@ -89,6 +89,15 @@ def disk_prefix_cache(gb, mode):
     return {'ATLAS_KV_NVME_DIR': f'/prefix-cache/{mode}/kv', 'ATLAS_KV_NVME_GB': gb, 'ATLAS_GLM_NVME_FAST': '1'}
 
 
+def check_prefix_cache_dir(env):
+    """The disk tier's directory must be a mount (start.sh makes it): without
+    one the engine would fill the container's own filesystem."""
+    path = env.get('ATLAS_KV_NVME_DIR', '')
+    if path and not os.path.isdir(path):
+        raise ValueError(f'{path} is missing: mount a directory on a disk at /prefix-cache '
+                         'with <mode>/kv inside (start.sh does), or leave SPARKINKLING_PREFIX_CACHE_GB unset')
+
+
 def launch(environ, profile):
     """One engine process on one Spark: no ranks, no fabric."""
     args = list(profile['server_argv'])
@@ -178,6 +187,7 @@ def main():
     profile = profile_path(os.environ, here)
     argv, env = launch(os.environ, json.loads(profile.read_text()))
     check_model_dir(env['MODEL_PATH'], env['SPARKINKLING_MODE'])
+    check_prefix_cache_dir(env)
     source = json.loads((here/'source-manifest.json').read_text())
     print(json.dumps({'event': 'atlas-recipe-start', **release_info(here), 'profile': profile.stem,
                       'mode': env['SPARKINKLING_MODE'], 'drafter': env['SPARKINKLING_DRAFTER'],
