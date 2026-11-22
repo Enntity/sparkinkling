@@ -55,6 +55,6 @@ EB='{"chat_template_kwargs":{"reasoning_effort":"low"}}'
   --output strict-prose.json
 ```
 
-The engine refuses prefix caching for Inkling 2, so replays are cold too.
+The default profile caches prefixes, so the immediate replay measures a prefix-cache hit (from 0.4.0; earlier releases replayed cold).
 Preserve every response, receipt and command under `results/<date>-<name>/raw/`
 with a `SHA256SUMS`.

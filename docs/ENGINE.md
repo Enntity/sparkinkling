@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`db19431be` (tree `73af1491`), for the kernel target `inkling-2-mini`
+`107acaa0b` (tree `b7ca5ac2`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -61,6 +61,12 @@ order:
   checkpoint's own tensors in both modes, so Spark prefills exactly as Strict
   does; both sets are in the model directory anyway. Without an overlay
   nothing changes. See [MODES](MODES.md).
+- **Prefix caching.** A visit's only per-sequence state besides its KV is its
+  short-conv state, so the radix prefix cache keeps it on Atlas's Marconi
+  snapshots as each layer's aux blob (`ModelConfig::aux_prefix_state`): saved
+  at the prompt's tail and interval checkpoints during prefill, copied back on
+  a hit before the rest of the prompt prefills. A replayed or extended prompt
+  resumes from the deepest checkpoint at or below its match.
 - **Launch overlap.** `ATLAS_INKLING2_PDL=1` (set by the profile) launches the
   target's kernels with programmatic dependent launch, so each one's launch
   overlaps its predecessor's tail.
@@ -82,10 +88,6 @@ order:
 
 ## What it does not do yet
 
-- **Prefix caching.** A cached prefix would resume without the short-conv
-  states, so the engine refuses `--enable-prefix-caching` for Inkling 2 until
-  those states are snapshotted with the KV blocks. Every request prefills its
-  whole prompt.
 - **Batched DSpark.** The drafter proposes for one sequence at a time, so
   SparkInkling speculates only while one request is live and decodes plainly
   from two (`ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0`, set by the image).

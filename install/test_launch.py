@@ -84,6 +84,12 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
 
+    def test_prefix_caching_with_pinned_snapshots(self):
+        for mode in ('strict', 'spark'):
+            argv, env = launch(SPARKINKLING_MODE=mode)
+            self.assertIn('--enable-prefix-caching', argv, mode)
+            self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', mode)
+
     def test_pdl_in_every_mode(self):
         for drafter in ('dspark', 'none'):
             for mode in ('strict', 'spark'):
