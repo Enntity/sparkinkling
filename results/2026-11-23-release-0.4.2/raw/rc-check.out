@@ -1,0 +1,52 @@
+== strict checkout: SparkInkling 0.4.2 running: version=0.4.2 image=sha256:a9ae1e375e74d0ffa3422817d851bf4751f21c496fc7346d6801e2f1891c1812 
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+low plain ('tool_calls', [{'id': 'call_000000000000000a', 'type': 'fun
+low stream ('tool_calls', [[{'index': 0, 'id': 'call_000000000000000b'
+thinking-off plain ('tool_calls', [{'id': 'call_000000000000000c', 'ty
+thinking-off stream ('tool_calls', [[{'index': 0, 'id': 'call_00000000
+reasoning_effort arg chunks 75 valid True {"text":"A small gray cat named Milo f
+chat_template_kwargs arg chunks 80 valid True {"text":"A small gray cat named Mi
+{"case": "forced benign low", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://example.com/\"}", "reasoning": "",
+{"case": "forced benign none", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://example.com/\"}", "reasoning": ""
+{"case": "required benign low", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://example.com/\"}", "reasoning": "
+{"case": "forced blocked low", "finish": "content_filter", "guard": "tool_call_guard", "arg_chunks": 31, "args": "{\"url\":\"http://169.254.169.254/la
+invoice.png -> [3.46s prompt=184] Invoice 48213 - Harbor Street Bakery
+3 x sourdough loaf    18.75
+12 x almond croissant 41.40
+Delivery to dock 7    6.00
+TOTAL DUE      66.15
+grid.png -> [2.95s prompt=820] A1 red, A2 green, A3 blue  
+B1 yellow, B2 blue, B3 red  
+C1 green, C2 yellow, C3 green
+shapes.png -> [1.96s prompt=41] A red square and a blue circle sit side by side above a black dashed horizontal line on a white background.
+turn 0 user-turn ttft 4.977 follow-up ttft 0.472
+turn 1 user-turn ttft 1.681 follow-up ttft 0.468
+turn 2 user-turn ttft 0.751 follow-up ttft 0.404
+turn 3 user-turn ttft 0.788 follow-up ttft 0.418
+errors: 0
+== spark checkout: SparkInkling 0.4.2 running: version=0.4.2 image=sha256:a9ae1e375e74d0ffa3422817d851bf4751f21c496fc7346d6801e2f1891c1812 
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+low plain ('tool_calls', [{'id': 'call_000000000000000a', 'type': 'fun
+low stream ('tool_calls', [[{'index': 0, 'id': 'call_000000000000000b'
+thinking-off plain ('tool_calls', [{'id': 'call_000000000000000c', 'ty
+thinking-off stream ('tool_calls', [[{'index': 0, 'id': 'call_00000000
+reasoning_effort arg chunks 63 valid True {"text":"A small orange cat named Milo
+chat_template_kwargs arg chunks 79 valid True {"text":"A small orange cat named 
+{"case": "forced benign low", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://example.com/\"}", "reasoning": "",
+{"case": "forced benign none", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://example.com/\"}", "reasoning": ""
+{"case": "required benign low", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://example.com/\"}", "reasoning": "
+{"case": "forced blocked low", "finish": "content_filter", "guard": "tool_call_guard", "arg_chunks": 31, "args": "{\"url\":\"http://169.254.169.254/la
+invoice.png -> [2.78s prompt=184] Invoice 48213 - Harbor Street Bakery
+3 x sourdough loaf    18.75
+12 x almond croissant 41.40
+Delivery to dock 7    6.00
+TOTAL DUE      66.15
+grid.png -> [3.29s prompt=820] A1: red, A2: green, A3: blue  
+B1: yellow, B2: blue, B3: red  
+C1: green, C2: yellow, C3: green
+shapes.png -> [1.74s prompt=41] A red square sits at the upper left and a blue circle at the upper right above a horizontal black dashed line on a white background.
+errors: 0
+SMOKE-DONE
+15:44:41Z
+
+[exited with code 0]

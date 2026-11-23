@@ -7,15 +7,15 @@ with the settings the vLLM baseline on the same Spark was measured with.
 
 ## Results
 
-From [`results/2026-11-23-release-0.4.1`](../results/2026-11-23-release-0.4.1/RESULT.md),
-the 0.4.1 image (`3f625e2d302e`), default profile and drafter; medians over all
+From [`results/2026-11-23-release-0.4.2`](../results/2026-11-23-release-0.4.2/RESULT.md),
+the 0.4.2 image (`b1e18bf91437`), default profile and drafter; medians over all
 repetitions; vLLM on the same Spark on 2026-11-20. Earlier releases' results are
 in [`results/`](../results/).
 
 | Mode | C1 code decode | C1 prose decode | C2 aggregate | C4 aggregate | C8 aggregate | 32K prefill | 8K prefill | Gates |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Strict | 54.2 | 35.0 | 53.4 | 84.5 | 121.0 | 3,283 | 3,355 | 6/6 |
-| Spark | 68.4 | 54.9 | 76.1 | 105.4 | 135.2 | 3,274 | 3,355 | 6/6 |
+| Strict | 65.2 | 35.3 | 63.1 | 85.0 | 120.7 | 3,274 | 3,345 | 6/6 |
+| Spark | 77.5 | 55.7 | 77.7 | 105.8 | 135.4 | 3,277 | 3,352 | 6/6 |
 | vLLM | 35.1 | 35.6 | 54.0 | 86.6 | 122.4 | 2,722 | | 6/6 |
 | vLLM + DSpark | 69.8 | 31.2 | 60.9 | 94.7 | 144.0 | 2,723 | | 6/6 |
 

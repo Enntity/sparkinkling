@@ -1,27 +1,30 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <p align="center">
-  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Strict (./start.sh) and Spark (--mode spark): code 54.2 and 68.4, prose 35.0 and 54.9, eight requests 121.0 and 135.2. 32K prefill 3,283 tok/s, 6 of 6 output gates. SparkInkling 0.4.1, RigMark 1.1.0, low effort." width="100%">
+  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Strict (./start.sh) and Spark (--mode spark): code 65.2 and 77.5, prose 35.3 and 55.7, eight requests 120.7 and 135.4. 32K prefill 3,277 tok/s, 6 of 6 output gates. SparkInkling 0.4.2, RigMark 1.1.0, low effort." width="100%">
 </p>
 
 # SparkInkling
 
-**SparkInkling 0.4.1.** Run `./start.sh --version` for this checkout, or
+**SparkInkling 0.4.2.** Run `./start.sh --version` for this checkout, or
 `./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
 engine with an OpenAI-compatible API, image input, reasoning and tool calls.
 
-0.4.1 adds image input, ends Inkling's reasoning loops (the engine closes a
-reasoning block that runs past its effort's budget or repeats itself, and a
-request that names no effort reasons at `low`), streams tool-call arguments
-while the tool guard still checks every call, and lets a client that rebuilds
-its last messages each turn resume from the prefix cache. Spark is ahead of
-vLLM's own Inkling 2 Mini image without speculation in every measured cell
-(1.95x on code, 1.54x on prose, 1.2x on 32K prefill), and Strict, the
-checkpoint as shipped, is ahead on code, structured output, prefill and one
-request and within 1-3% of it on prose and two to eight short-code requests.
-See [Performance](#performance); every result has its receipts under
+0.4.2 drafts faster and exactly: a verify stops where the drafter is unsure,
+Strict drafts for two requests at once, and greedy text with drafts matched
+text without them in our checks. Against 0.4.1, Strict code is 20% faster and
+structured output 16%, Spark code 13%. Tool calls now stream only for a
+request that asks (`stream_tool_arguments: true`); every other request's calls
+are held until the tool guard passes them. 0.4.1 added image input, an end to
+Inkling's reasoning loops and resuming a rebuilt conversation from the prefix
+cache. Spark is ahead of vLLM's own Inkling 2 Mini image with its DSpark
+drafter on code, prose, prefill and one to four requests and level on
+structured output, and Strict, the checkpoint as shipped, is ahead of vLLM
+without speculation on code, structured output, prefill and one or two
+requests and within 1-2% of it on prose and four to eight requests. See
+[Performance](#performance); every result has its receipts under
 [`results/`](results/).
 
 ## The model
@@ -49,27 +52,27 @@ detail](docs/MODES.md).
 
 ## Performance
 
-Measured on the 0.4.1 image with RigMark (reasoning low, temperature 0), one
+Measured on the 0.4.2 image with RigMark (reasoning low, temperature 0), one
 Spark, the default profile and drafter, against vLLM's own Inkling 2 Mini image
-on the same Spark: [the result, with every receipt](results/2026-11-23-release-0.4.1/RESULT.md).
+on the same Spark: [the result, with every receipt](results/2026-11-23-release-0.4.2/RESULT.md).
 
 | | Strict | Spark | vLLM | vLLM + DSpark |
 |---|---:|---:|---:|---:|
-| Code decode, tok/s | 54.2 | **68.4** | 35.1 | 69.8 |
-| Prose decode | 35.0 | **54.9** | 35.6 | 31.2 |
-| Structured decode | 79.9 | **95.3** | 35.6 | 104.3 |
-| 32K cold prefill, tok/s | **3,283** | **3,274** | 2,722 | 2,723 |
-| Short code, C1 / C2 / C4 / C8 aggregate | 36.8 / 53.4 / 84.5 / 121.0 | **51.6 / 76.1 / 105.4 / 135.2** | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
-| 32K prompt sent again, time to first token | 0.16 s | 0.15 s | | |
+| Code decode, tok/s | 65.2 | **77.5** | 35.1 | 69.8 |
+| Prose decode | 35.3 | **55.7** | 35.6 | 31.2 |
+| Structured decode | 92.6 | **103.6** | 35.6 | 104.3 |
+| 32K cold prefill, tok/s | **3,274** | **3,277** | 2,722 | 2,723 |
+| Short code, C1 / C2 / C4 / C8 aggregate | 41.3 / 63.1 / 85.0 / 120.7 | **53.9 / 77.7 / 105.8 / 135.4** | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
+| 32K prompt sent again, time to first token | 0.16 s | 0.16 s | | |
 | Basic output gates | 6/6 | 6/6 | 6/6 | 6/6 |
 
 Spark leads vLLM without speculation everywhere and vLLM with its drafter on
-prose, prefill and one to four requests; vLLM's drafter is ahead on code,
-structured output and eight requests. Strict reads the checkpoint's BF16
+code, prose, prefill and one to four requests, is level with it on structured
+output, and trails it at eight requests. Strict reads the checkpoint's BF16
 attention weights as shipped, about twice the bytes a Spark token reads.
-SparkInkling drafts only while one request is live
-([issue 1](https://github.com/Enntity/sparkinkling/issues/1)); vLLM's drafter
-also runs under load.
+SparkInkling drafts for one or two live requests and decodes plainly from
+three ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)); vLLM's
+drafter also runs under load.
 Prefix caching costs a cold prompt of 512 tokens or more one short extra pass
 (about 0.1 s: about 2% at 32K and 5-6% at 8K against 0.3.0), which is what lets the
 next turn resume. The vLLM receipts were measured the day before.
@@ -269,14 +272,15 @@ What SparkInkling does not do, and what its evidence does not cover, is in
 ## The engine
 
 SparkInkling builds Atlas from
-[`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121`,
-the Inkling 2 Mini serving series on Atlas-Inf `main`, pinned by commit and
-tree in [`install/atlas-source.json`](install/atlas-source.json). The first
-two parts are in Atlas upstream
+[`Enntity/atlas`](https://github.com/Enntity/atlas)
+`inkling2/concurrent-spec-20261123`, the Inkling 2 Mini serving series on
+Atlas-Inf `main`, pinned by commit and tree in
+[`install/atlas-source.json`](install/atlas-source.json). The first two parts
+are in Atlas upstream
 ([Atlas-Inf/atlas 401](https://github.com/Atlas-Inf/atlas/pull/401) and
 [404](https://github.com/Atlas-Inf/atlas/pull/404), merged 2026-11-23); the
-rest of 0.4.1's engine is proposed as
-[405](https://github.com/Atlas-Inf/atlas/pull/405).
+rest is proposed as [405](https://github.com/Atlas-Inf/atlas/pull/405) and
+[408](https://github.com/Atlas-Inf/atlas/pull/408).
 What the branch adds and what it does not do yet:
 [docs/ENGINE.md](docs/ENGINE.md).
 

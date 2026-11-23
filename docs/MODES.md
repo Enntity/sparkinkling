@@ -2,8 +2,8 @@
 # Strict and Spark
 
 This page records the contract the two modes are built to and how the
-launcher serves them. Their 0.4.1 measurements are in
-[`results/2026-11-23-release-0.4.1`](../results/2026-11-23-release-0.4.1/RESULT.md).
+launcher serves them. Their 0.4.2 measurements are in
+[`results/2026-11-23-release-0.4.2`](../results/2026-11-23-release-0.4.2/RESULT.md).
 
 Set `MODE=strict` (the default) or `MODE=spark` in `.env`, or run
 `./start.sh --mode spark`. The container takes `SPARKINKLING_MODE`.
@@ -67,8 +67,8 @@ prose, where few drafts are accepted; see the results for both.
 Strict is the default and serves the checkpoint's own numerics: its weights
 as shipped, and in prefill its experts' inputs quantized as its
 `hf_quant_config.json` declares (decode still gives the experts BF16 inputs).
-Spark decodes faster in every measured cell (up to 1.57x on prose) for a KL of
+Spark decodes faster in every measured cell (up to 1.58x on prose) for a KL of
 0.0081 to Strict's weights, prefills exactly as Strict does (both read the
-checkpoint's own tensors there), and both answered the 0.4.1 task probe (30
+checkpoint's own tensors there), and both answered the 0.4.2 task probe (30
 arithmetic problems, 10 tool calls) without a miss. Neither mode promises identical text
 to another engine or numerical reference.

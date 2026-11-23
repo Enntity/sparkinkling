@@ -128,9 +128,9 @@ class Card:
 
 
 PINK = (255, 70, 120)
-# SparkInkling 0.4.1, RigMark 1.1.0, low effort, medians, tok/s
-# (results/2026-11-23-release-0.4.1): label, Strict, Spark.
-SCORES = [("CODE", "54.2", "68.4"), ("PROSE", "35.0", "54.9"), ("8 REQUESTS", "121.0", "135.2")]
+# SparkInkling 0.4.2, RigMark 1.1.0, low effort, medians, tok/s
+# (results/2026-11-23-release-0.4.2): label, Strict, Spark.
+SCORES = [("CODE", "65.2", "77.5"), ("PROSE", "35.3", "55.7"), ("8 REQUESTS", "120.7", "135.4")]
 
 
 def scores(card, x0, y, k, ky):
@@ -159,8 +159,8 @@ def scores(card, x0, y, k, ky):
 
 LINES = (["Atlas engine", "images", "prefix caching"],
          ["Reasoning and tool calls", "tool-call guard on"],
-         ["32K prefill 3,283 tok/s", "6/6 output gates"])
-SOURCE = ["0.4.1 benchmarks", "RigMark 1.1.0", "low effort"]
+         ["32K prefill 3,277 tok/s", "6/6 output gates"])
+SOURCE = ["0.4.2 benchmarks", "RigMark 1.1.0", "low effort"]
 URL = "github.com/Enntity/sparkinkling"
 
 

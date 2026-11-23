@@ -1,0 +1,10 @@
+# 2026-11-23 15:45Z, the 0.4.2 image (b1e18bf91437) through ./start.sh, Strict, GPU_MEMORY_UTILIZATION=0.50, voice services resident:
+#   MODE=strict GPU_MEMORY_UTILIZATION=0.50 PULL=0 ./start.sh; python3 -I bench/forced_stream.py | cut -c1-120
+# The last two cases leave out stream_tool_arguments. Lines are cut at 120 characters as printed.
+{"case": "forced benign low", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://exam
+{"case": "forced benign none", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://exa
+{"case": "required benign low", "finish": "tool_calls", "guard": null, "arg_chunks": 15, "args": "{\"url\": \"https://ex
+{"case": "forced blocked low", "finish": "content_filter", "guard": "tool_call_guard", "arg_chunks": 31, "args": "{\"url
+{"case": "forced benign low, not asked", "finish": "tool_calls", "guard": null, "arg_chunks": 1, "args": "{\"url\": \"ht
+{"case": "forced blocked low, not asked", "finish": "content_filter", "guard": "tool_call_guard", "arg_chunks": 0, "args
+errors: 0

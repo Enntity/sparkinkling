@@ -8,8 +8,8 @@ JPEG export, below 1 MB.
 The cards name the product and carry a high-score table for its two modes,
 Strict (`./start.sh`) and Spark (`--mode spark`): code decode, prose decode
 and eight short-code requests in tok/s, with cold 32K prefill and the output
-gates below. The figures are SparkInkling 0.4.1's RigMark medians
-([`results/2026-11-23-release-0.4.1`](../../results/2026-11-23-release-0.4.1/RESULT.md));
+gates below. The figures are SparkInkling 0.4.2's RigMark medians
+([`results/2026-11-23-release-0.4.2`](../../results/2026-11-23-release-0.4.2/RESULT.md));
 `SCORES`, `LINES` and `SOURCE` in the script hold them, so a new release
 changes those and re-renders.
 

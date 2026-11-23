@@ -1,0 +1,15 @@
+{
+ "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+ "topology": "TP1, single Spark",
+ "negotiated_link_speed": "not applicable",
+ "model": "thinkingmachines/Inkling-2-Mini",
+ "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7 + Enntity/Inkling-2-Mini-Spark-NVFP4 @ e9df93dc",
+ "quantisation": "Spark: calibrated GPTQ NVFP4 attention, lm_head and L20-23 experts over the shipped checkpoint, for decode and verify rows; prefill reads the checkpoint's own tensors, its experts' inputs quantized as its hf_quant_config.json requires (NVFP4 / MXFP8 rows, W4A4 / W8A8)",
+ "kv_cache_dtype": "auto (bf16)",
+ "serving_engine": "SparkInkling 0.4.2 (Atlas, Enntity/atlas inkling2/concurrent-spec-20261123 @ d3318e087)",
+ "serving_image": "ghcr.io/enntity/atlas-sparkinkling:b1e18bf91437 (the release image)",
+ "drafter": "DSpark (bundled mtp.safetensors), greedy drafts: 7 draft tokens with one live request, plain decode from two (ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0); verifies stop where the drafter is unsure (ATLAS_DFLASH_CONF_WIDTH=1: the engine learns while serving how often each draft confidence is accepted), drafts go off for a sequence whose steps stop paying, for 32 tokens at first and doubling while re-probes fail (ATLAS_DFLASH_ADAPTIVE=1, threshold 2.5 (ATLAS_DFLASH_ADAPTIVE_MIN=2.5) accepted a block), in place of the engine throughput gate (ATLAS_MTP_GATE_FORCE=1)",
+ "context_limit": 131072,
+ "scheduler": "SparkInkling default profile: max-num-seqs 8, gpu-memory-utilization 0.80, prefill chunks 4096, CUDA graphs, programmatic dependent launch (ATLAS_INKLING2_PDL=1), prefix caching with conv-state snapshots (--enable-prefix-caching, --ssm-cache-slots=128, ATLAS_QWEN4EXP_AUX_PINNED=1) and branch checkpoints (ATLAS_GLM_PC_BRANCH=1, ATLAS_GLM_PC_BRANCH_MIN=512), --request-timeout=3600, --tool-max-tokens=32768",
+ "competing_traffic": "none (the voice engines suspended through LLooM for the window)"
+}

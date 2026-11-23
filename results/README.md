@@ -18,3 +18,7 @@ Measure the baseline on the same Spark, and put its receipts in `raw/` too.
 - [`2026-11-23-release-0.4.1`](2026-11-23-release-0.4.1/RESULT.md): the 0.4.1
   image (image input, budget forcing, streamed tool calls), both modes against
   0.4.0 and vLLM, with its functional check.
+- [`2026-11-23-release-0.4.2`](2026-11-23-release-0.4.2/RESULT.md): the 0.4.2
+  image (confidence-sized verifies, exact drafts, two-request drafting, tool
+  calls streamed only on request), both modes against 0.4.1 and vLLM, with its
+  functional check.

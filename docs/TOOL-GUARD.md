@@ -39,10 +39,11 @@ SparkInkling 0.4.1 streamed every request's calls under `stream`; a client
 that did not read the finish reason could run a call the guard had blocked.
 From 0.4.2 that needs the request to ask.
 
-In the 0.4.1 check a streamed call to a cloud metadata address sent its
-arguments in 31 chunks and then finished `content_filter` with
-`guard_stop: tool_call_guard`
-([result](../results/2026-11-23-release-0.4.1/RESULT.md)).
+In the 0.4.2 check a call to a cloud metadata address, asked for streamed,
+sent its arguments in 31 chunks and then finished `content_filter` with
+`guard_stop: tool_call_guard`; the same call not asked for streamed sent no
+arguments and finished the same way
+([result](../results/2026-11-23-release-0.4.2/RESULT.md)).
 
 ## Configure
 

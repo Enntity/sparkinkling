@@ -1,0 +1,988 @@
+{"event": "atlas-recipe-start", "product": "SparkInkling", "version": "0.4.2", "engine_commit": "d3318e087850d59a05788bc89da749181e1bb289", "engine_tree": "a53a4b2d4e9552a4e37fac8cf8ad730a4c7e2367", "profile": "default", "mode": "strict", "drafter": "dspark", "source": "https://github.com/Enntity/atlas.git@d3318e087850d59a05788bc89da749181e1bb289"}
+[2m2026-11-23T15:46:38.429288Z[0m [32m INFO[0m [2mspark::main_modules::serve[0m[2m:[0m Atlas Spark starting...
+[2m2026-11-23T15:46:38.429319Z[0m [32m INFO[0m [2mspark::main_modules::serve[0m[2m:[0m Licensed under AGPL-3.0-only — see /LICENSE in this container
+[2m2026-11-23T15:46:38.429439Z[0m [32m INFO[0m [2mspark::main_modules::serve_flags[0m[2m:[0m kernel flags: ssm_h_dtype=f32 gdn_fused_norm=false ssm_batched_recurrent=false exact_verify=false ssm_tail_midchunk=true mtp_gate=force ssm_rollback_mode=Snapshot prefill_varlen_batch=false
+[2m2026-11-23T15:46:38.429482Z[0m [32m INFO[0m [2mspark::model_resolver[0m[2m:[0m Model path: /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini (local directory)
+[2m2026-11-23T15:46:38.429487Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Port: 8895
+[2m2026-11-23T15:46:38.429490Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m SSM decode h-state dtype: f32 (full precision) (--ssm-h-dtype)
+[2m2026-11-23T15:46:38.429666Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Vision pixel budget: none declared — falling back to the 1280px long-side clamp
+[2m2026-11-23T15:46:38.429672Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Remote image fetching disabled (default); image_url parts carrying an http(s) URL are refused with a 400. Send base64 data: URIs, or pass --vision-allow-remote-images.
+[2m2026-11-23T15:46:38.429682Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Video decoding disabled (default). Animated GIF decodes in-process; every other container needs ffmpeg — pass --video-allow-ffmpeg to enable it.
+[2m2026-11-23T15:46:38.429684Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Quantization config: method="modelopt", algo="NVFP4", format="", 0 module(s) in ignore list
+[2m2026-11-23T15:46:38.429688Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Model config: 48 layers, 48 attention, 0 SSM, 128 experts, rope_theta=10000, head_dim=128, rotary_dim=0
+[2m2026-11-23T15:46:38.429722Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Selected kernel target: (sm_121, inkling-2-mini, nvfp4) (216 modules) — quant compat: kernel=nvfp4 model=nvfp4 OK
+[2m2026-11-23T15:46:38.429752Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::config[0m[2m:[0m DFlash γ=8 (source: cli)
+[2m2026-11-23T15:46:38.834365Z[0m [32m INFO[0m [2mspark_runtime::cuda_backend[0m[2m:[0m AtlasCudaBackend initialized on GPU 0 with 216 PTX modules
+[2m2026-11-23T15:46:38.850033Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight::gpu_init[0m[2m:[0m BF16 GEMM fallback installed (gemv<=8 / pipelined WMMA / scalar) for backends without cuBLASLt
+[2m2026-11-23T15:46:38.850105Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight::gpu_init[0m[2m:[0m GPU 0: 121.7 GB total, 116.3 GB free
+[2m2026-11-23T15:46:38.850120Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight[0m[2m:[0m Preflight reserve: inference=512 MB, buffer_arena=592 MB (pre-load free: 116.3 GB)
+[2m2026-11-23T15:46:38.850130Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m OOM watchdog started (threshold: 2 GB, interval: 2s)
+[2m2026-11-23T15:46:38.850134Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::kv_cache[0m[2m:[0m Prefill config: ssm_prefill_chunk=0, args.max_prefill_tokens=4096, prefill_budget=4096, max_batch_tokens=4104
+[2m2026-11-23T15:46:38.850137Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m OOM guard reserve: 4096 MB
+[2m2026-11-23T15:46:38.850794Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m Using fast weight loader (O_DIRECT + pipelined read/copy)
+[2m2026-11-23T15:46:38.854317Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-load pre-flight: 18.18 GB on-disk, 1.3x overhead = 23.64 GB peak, 116.28 GB free, 4.0 GB reserve (FP8: false)
+[2m2026-11-23T15:46:38.854521Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loading shard 1/1: model-00001-of-00001.safetensors (1244 tensors)
+[2m2026-11-23T15:46:42.460612Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m   Shard 1/1 done — GPU memory: 19.34 GB used, 96.94 GB free
+[2m2026-11-23T15:46:42.460673Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loaded 1244 weight tensors
+[2m2026-11-23T15:46:42.460761Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m Loaded 1244 weight tensors
+[2m2026-11-23T15:46:42.460765Z[0m [32m INFO[0m [2mspark_runtime::weights::prefix_detect[0m[2m:[0m Weight prefix: model.llm
+[2m2026-11-23T15:46:42.460794Z[0m [32m INFO[0m [2mspark_model::preflight[0m[2m:[0m Pre-flight: no dedicated LM head tensor; assuming tied embeddings.
+[2m2026-11-23T15:46:42.461113Z[0m [33m WARN[0m [2mspark_model::preflight[0m[2m:[0m Pre-flight: config.num_experts=128 but no expert tensors found locally. Normal under EP>1 when the local rank owns zero experts; otherwise check your checkpoint.
+[2m2026-11-23T15:46:42.461123Z[0m [32m INFO[0m [2mspark_model::preflight[0m[2m:[0m Pre-flight checks passed
+[2m2026-11-23T15:46:42.461127Z[0m [32m INFO[0m [2mspark_model::quant_format[0m[2m:[0m QuantFormat: modelopt (algo="NVFP4"), 0 ignored module(s)
+[2m2026-11-23T15:46:42.461136Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Quantization format: modelopt (base variant Standard), ignored globs = 0
+[2m2026-11-23T15:46:42.649513Z[0m [32m INFO[0m [2mspark_runtime::cublaslt[0m[2m:[0m cuBLASLt BF16 GEMM live (first matmul status 0 — real library answered; on HIP targets this is the hipBLASLt shim)
+[2m2026-11-23T15:46:42.649546Z[0m [32m INFO[0m [2mspark_runtime::cublaslt[0m[2m:[0m cuBLASLt pre-warmed (handle + workspace + kernel images)
+[2m2026-11-23T15:46:42.649665Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight::gpu_init[0m[2m:[0m Weights: 18.18 GB, estimated free: 98.1 GB, actual free: 96.9 GB (reserve: 512 MB)
+[2m2026-11-23T15:46:42.649672Z[0m [33m WARN[0m [2mspark::main_modules::serve_load[0m[2m:[0m dflash: --enable-prefix-caching has a community-reported correctness regression on SM12.x with DFlash; outputs may be wrong on multi-turn cache hits. Run a greedy diff-test against a non-DFlash baseline before relying on outputs.
+[2m2026-11-23T15:46:42.649675Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::build[0m[2m:[0m Prefix caching: ENABLED (radix tree)
+[2m2026-11-23T15:46:43.101995Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::config[0m[2m:[0m Capping vocab_size from 201024 to 200058 (tokenizer)
+[2m2026-11-23T15:46:43.125400Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m DFlash: resolving drafter '/home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini+dspark'
+[2m2026-11-23T15:46:43.125437Z[0m [32m INFO[0m [2mspark::model_resolver[0m[2m:[0m Model path: /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini+dspark (local directory)
+[2m2026-11-23T15:46:43.135843Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-load pre-flight: 0.59 GB on-disk, 1.3x overhead = 0.77 GB peak, 96.88 GB free, 0.0 GB reserve (FP8: false)
+[2m2026-11-23T15:46:43.135877Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loading shard 1/1: model.safetensors
+[2m2026-11-23T15:46:43.231399Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m   Shard 1/1 done — GPU memory: 1.07 GB used, 95.81 GB free
+[2m2026-11-23T15:46:43.231441Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loaded 54 weight tensors
+[2m2026-11-23T15:46:43.231457Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m DFlash drafter store: 54 tensors, 635795744 bytes
+[2m2026-11-23T15:46:43.231503Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m DFlash: target layer capture indices = [4, 22, 40, 47] (drafter target_layer_ids, used directly)
+[2m2026-11-23T15:46:43.234995Z[0m [32m INFO[0m [2mspark_model::weight_loader::inkling2[0m[2m:[0m Inkling2: 24 physical layers, 48 visits, block stack 4
+[2m2026-11-23T15:46:43.641263Z[0m [32m INFO[0m [2mspark_model::layers::inkling2::shared[0m[2m:[0m Inkling2 shared buffers: 1613.3 MB for 4104 rows, 8 sequences
+[2m2026-11-23T15:46:43.643270Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m Layer construction: 1.96 GB consumed (102.87 GB free -> 100.91 GB free) across 48 layers, 40.8 MB/layer average
+[2m2026-11-23T15:46:43.874109Z[0m [32m INFO[0m [2mspark_model::factory::lm_head_setup[0m[2m:[0m LM head kept as BF16 (skip NVFP4 quantization per model config)
+[2m2026-11-23T15:46:43.874204Z[0m [32m INFO[0m [2mspark_model::factory::m2_setup[0m[2m:[0m MoE transpose: 128 experts x 48 layers, costs hybrid 51.3 / full 25.6 / gate_up 17.1 GB, free 93.5 GB -> selected HYBRID (originals kept, decode unaffected)
+[2m2026-11-23T15:46:43.874208Z[0m [32m INFO[0m [2mspark_model::factory::m2_setup[0m[2m:[0m MoE transpose pass (hybrid layout): ATLAS_HYBRID_MOE_LAYOUT=1, dual-layout (cost 51.3 GB), free pre-pass 93.5 GB → RUNNING
+[2m2026-11-23T15:46:43.874227Z[0m [32m INFO[0m [2mspark_model::factory::m2_setup[0m[2m:[0m MoE transpose pass (hybrid layout): done, 93.5 GB free
+[2m2026-11-23T15:46:43.895239Z[0m [32m INFO[0m [2mspark_runtime::buffers[0m[2m:[0m Buffer arena: 4104 tokens × 593.6 MB total (attn_out=24.0MB, ssm_deint=24.0MB, kv_lora_rank=0)
+[2m2026-11-23T15:46:43.895280Z[0m [32m INFO[0m [2mspark_model::model::drafter_context[0m[2m:[0m MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+[2m2026-11-23T15:46:43.895285Z[0m [32m INFO[0m [2mspark_model::layers::ops::model_levers[0m[2m:[0m GDN deferred commit on (default; ATLAS_GDN_DEFERRED_COMMIT=0 opts out):                  wyN verify stores nothing; accepted prefix replayed from H0
+[2m2026-11-23T15:46:43.895294Z[0m [32m INFO[0m [2mspark_model::model::ssm_pool[0m[2m:[0m SSM verify H snapshots per slot: [7, 7, 7, 7, 7, 7, 7, 7, 7]
+[2m2026-11-23T15:46:43.895296Z[0m [32m INFO[0m [2mspark_model::model::ssm_pool[0m[2m:[0m SSM MTP pools (8 intermediates + checkpoints): 0 MB
+[2m2026-11-23T15:46:43.895298Z[0m [32m INFO[0m [2mspark_model::model::ssm_pool[0m[2m:[0m SSM state pool: 8 slots × 0 layers = 0 MB
+[2m2026-11-23T15:46:43.895366Z[0m [32m INFO[0m [2mspark_model::model::ssm_snapshot[0m[2m:[0m SSM snapshot pool: Marconi 128 slots (0 MB), decode-rollback 0 slots × 8 seqs (0 MB), 0 layers
+[2m2026-11-23T15:46:43.896891Z[0m [32m INFO[0m [2mspark_model::weight_loader::dflash_loader::inkling[0m[2m:[0m Inkling 2 DSpark: 3 layers, Markov rnn_hidden rank 256, taps Some([5, 23, 41, 48])
+[2m2026-11-23T15:46:43.896955Z[0m [32m INFO[0m [2mspark_model::weight_loader::dflash_loader[0m[2m:[0m DFlash/DSpark drafter loaded: 3 layers, hidden=2304, vocab=200058, γ=8, markov_rank=0, own_embed=false, causal=Some(false), swa=None/None, sinks=0/3, candidate_selector=false, target_layers=[5, 23, 41, 48]
+[2m2026-11-23T15:46:43.896976Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::first_append[0m[2m:[0m DFlash first context append: Legacy (ATLAS_DFLASH_FIRST_APPEND=legacy|none|own|zero)
+[2m2026-11-23T15:46:43.896981Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::warm_ctx[0m[2m:[0m DFlash warm context: Legacy (ATLAS_DFLASH_WARM_CTX=legacy|exact|seed|restore)
+[2m2026-11-23T15:46:43.896988Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash KV pool: 2056 blocks (257 per seq × batch 8)
+[2m2026-11-23T15:46:43.910870Z[0m [32m INFO[0m [2mspark_runtime::kv_cache::paged_impl[0m[2m:[0m KV cache: 2056 blocks × 3 layers = 0.4 GB total
+[2m2026-11-23T15:46:43.910963Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::small_m_gemm[0m[2m:[0m DFlash drafter small-M GEMM arm: batched GEMV (tensor-core tiers up to 64 rows when present)
+[2m2026-11-23T15:46:43.911175Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash ctx_window = 4096 (set ATLAS_DFLASH_CTX_WINDOW to override; drafter trained on full captured prefix — larger is better, scratch grows linearly)
+[2m2026-11-23T15:46:43.931166Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash propose lanes: 1 (extra scratch + streams)
+[2m2026-11-23T15:46:43.931179Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash RoPE = plain (no rope_scaling in drafter config), theta=1000000, 64 pairs
+[2m2026-11-23T15:46:43.932592Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash fused_kv_weight: 28311552 bytes (3 layers × 2 × kv_dim × h × bf16), layout [K0,V0,K1,V1,…] to match vLLM precompute_and_store_context_kv
+[2m2026-11-23T15:46:44.132219Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::inkling[0m[2m:[0m Inkling 2 DSpark: fold table [200058, 264] BF16 (105.6 MB) from the target head
+[2m2026-11-23T15:46:44.135690Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m BlockDiffusionDraftHead loaded: 3 layers, hidden=2304, intermediate=9216, GQA 24/8, head_dim=128, γ=8, vocab=200058, mask_token_id=0, causal=false, window=Some(4096), sinks=0, target_layers=[5, 23, 41, 48]
+[2m2026-11-23T15:46:44.135703Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash batched propose: authoritative Bxgamma for generic DFlash (default on; rollback ATLAS_DFLASH_BATCHED_PROPOSE=0; min 2, max 8)
+[2m2026-11-23T15:46:44.135788Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::nvfp4[0m[2m:[0m DFlash NVFP4: quantizing 3 layers × 7 GEMMs for w4a16_gemv_batch8
+[2m2026-11-23T15:46:44.135947Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=3072 k=2304 total=7077888 global_max=0.375000 scale2=0.00013951 grid1=1024
+[2m2026-11-23T15:46:44.136309Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=1024 k=2304 total=2359296 global_max=0.357422 scale2=0.00013297 grid1=1024
+[2m2026-11-23T15:46:44.136555Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=1024 k=2304 total=2359296 global_max=0.142578 scale2=0.00005304 grid1=1024
+[2m2026-11-23T15:46:44.136849Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=2304 k=3072 total=7077888 global_max=0.151367 scale2=0.00005631 grid1=1024
+[2m2026-11-23T15:46:44.137359Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=9216 k=2304 total=21233664 global_max=0.550781 scale2=0.00020490 grid1=1024
+[2m2026-11-23T15:46:44.147994Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::nvfp4[0m[2m:[0m DFlash NVFP4: ready (quant = Nvfp4Weights)
+[2m2026-11-23T15:46:44.148006Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::twins[0m[2m:[0m DFlash twins: NVFP4 tensor-core layers false, MXFP8 layers 0, head NVFP4 false / MXFP8 false, context NVFP4 false, conv None x 0, async context positions false, async uploads false
+[2m2026-11-23T15:46:44.148081Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m DFlash context accumulators reserved from the KV budget: 0.60 GB for 8 sequences
+[2m2026-11-23T15:46:44.148087Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_nvme[0m[2m:[0m NVMe spill tiers: reserving 387.8 MiB of host memory out of the KV budget (staging + on-disk index at a full ATLAS_KV_NVME_GB + 0.0 MiB SSM tier arena/staging)
+[2m2026-11-23T15:46:44.161338Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_budget[0m[2m:[0m KV budget self-relative (auto): baseline-free 116.3 GB − free-now 91.8 GB = Atlas-own 24.5 GB; co-tenants 5.4 GB excluded (set ATLAS_KV_EXTERNAL_RESERVE_GB to override)
+[2m2026-11-23T15:46:44.161346Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_budget[0m[2m:[0m KV own-footprint cross-check: free-memory measure 24.51 GB, tracked 23.13 GB (device 22.52 GB by driver accounting + host 0.61 GB) → 24.51 GB pre-KV
+[2m2026-11-23T15:46:44.161348Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m KV cache: 121.7 GB total × 80% util = 97.4 GB budget; 24.5 GB pre-KV + 1.4 GB reserve → 71.4 GB for KV → 24371 blocks × 16 tok/block = 389936 max KV tokens
+[2m2026-11-23T15:46:44.161356Z[0m [33m WARN[0m [2mspark_model::factory::build[0m[2m:[0m KV OVERCOMMIT: pool fits 2 seq(s) at full --max-seq-len=131072 but --max-batch-size=8 requested (8192 block(s)/seq, 24371 block(s) total). Paged KV allocates on demand; long-context bursts are back-pressured at the block allocator, not refused at boot.
+[2m2026-11-23T15:46:46.721054Z[0m [32m INFO[0m [2mspark_runtime::kv_cache::paged_impl[0m[2m:[0m KV cache: 24371 blocks × 48 layers = 71.4 GB total
+[2m2026-11-23T15:46:46.825302Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_nvme[0m[2m:[0m prefix cache NVMe spill tier ON (rank 0): /prefix-cache/strict/kv (ATLAS_KV_NVME_DIR, O_DIRECT, unlinked), 3149824 B/block record (196864 B/token: latent + pooled index, no raw tails), budget 16.0 GiB = 5454 blocks = 87264 tokens; fast I/O (ATLAS_GLM_NVME_FAST), restored records released (ATLAS_GLM_NVME_KEEP), 384.5 MiB pinned staging, up to 3.3 MiB host index
+[2m2026-11-23T15:46:46.826776Z[0m [32m INFO[0m [2mspark_model::model::drafter_context[0m[2m:[0m MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+[2m2026-11-23T15:46:46.826783Z[0m [32m INFO[0m [2mspark_model::layers::ops::model_levers[0m[2m:[0m GDN deferred commit on (default; ATLAS_GDN_DEFERRED_COMMIT=0 opts out):                  wyN verify stores nothing; accepted prefix replayed from H0
+[2m2026-11-23T15:46:46.827620Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m TransformerModel: 48 layers, vocab=200058, hidden=2304
+[2m2026-11-23T15:46:46.827634Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m Marconi intermediate checkpoints: every 256 blocks (4096 tokens at block_size=16)
+[2m2026-11-23T15:46:46.830314Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m Pinned metadata staging: 4131 KB
+[2m2026-11-23T15:46:46.831660Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m DFlash drafter installed as the active proposer
+[2m2026-11-23T15:46:46.859662Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::kernel_gate[0m[2m:[0m 
+┌─ Kernel load audit ─ 216 kernels embedded · set-hash 6e346df2d787 ─
+│ MODULE (operation)                 PTX-HASH       RESOLUTION           SHADOWED
+│ ────────────────────────────────────────────────────────────────────────────────────
+│ argmax                             0db62935f368   used                 N
+│ bf16_add                           9ccfff111c1c   -                    N
+│ causal_conv1d                      4c6ef9415ff9   -                    N
+│ dense_gemv_bf16_batch2             8e42d4734916   used                 N
+│ dense_gemv_bf16_batchm             4ac0d1a889d1   used                 N
+│ dense_gemv_fp8w_batch2             345343265bf0   used                 N
+│ dense_gemv_fp8w_batchm             613837fe1f2f   -                    N
+│ dequant_fp8_blockscaled_bf16       112ae266baa4   -                    N
+│ dequant_gguf_bf16                  f8d7ed4a7232   -                    N
+│ dequant_nvfp4_bf16                 34cc9dce8f28   -                    N
+│ dflash2_candidate_selector         9a25f3309182   used                 N
+│ dflash2_candidate_selector_k32     089d1a239dfd   -                    N
+│ dflash2_conv                       c2cad2c1626a   used                 N
+│ dflash_batch_anchor_add            6a6c6d5fa4cf   used                 N
+│ dflash_batch_markov                7abeae68eb04   used                 N
+│ dspine_bridge                      b060d23f1589   -                    N
+│ e2m1                               a9f7db7882e8   -                    N
+│ embed_from_argmax                  eed8441b052b   used                 N
+│ fp8_gemm_t_blockscaled             ccd83dc3175b   -                    N
+│ fused_k_norm_rope_cache            40945835fbe7   -                    N
+│ gated_delta_rule                   e69f490672bb   -                    N
+│ gated_delta_rule_fla               3b1f17d91259   -                    N
+│ gated_delta_rule_persistent        119c888ceaa1   -                    N
+│ gated_delta_rule_regresident       f1d7ac7ec2b9   -                    N
+│ gated_delta_rule_wy                2944fa406929   -                    N
+│ gated_delta_rule_wy2_resident      13434e14525a   -                    N
+│ gated_delta_rule_wy2_resident_f16  de9282606c87   -                    N
+│ gated_delta_rule_wy3               f39dfc5fc64c   -                    N
+│ gated_delta_rule_wy3_f16           6f86c5cdca50   -                    N
+│ gated_delta_rule_wy3_resident      2d735fa17437   -                    N
+│ gated_delta_rule_wy3_resident_f16  ca7279841d78   -                    N
+│ gated_delta_rule_wy4               696eacd7fc6f   -                    N
+│ gated_delta_rule_wy4_f16           6117982cee6e   -                    N
+│ gated_delta_rule_wy64_prefill      295277d38edf   -                    N
+│ gated_delta_rule_wy_f16            4e8093d34899   -                    N
+│ gated_delta_rule_wyn               6ff125d1bd34   -                    N
+│ gdn_verify_fused_conv_kn           6d34c1967f19   -                    N
+│ gdn_verify_fused_k2                364133e92759   -                    N
+│ gemm                               ef29bc79a026   used                 N
+│ gemm_splitk                        c3196ada403c   -                    N
+│ gemm_tc                            867449b3a6f2   -                    N
+│ gemv                               8a393e2aee68   used                 N
+│ gemv_fp8w                          cfe758bf0e7d   used                 N
+│ grammar_bitmask                    18765c10e57f   used                 N
+│ inferspark_decode                  d0c1c712396c   -                    N
+│ inferspark_prefill                 db71130b38b4   -                    N
+│ inferspark_prefill_h128            848531341467   used                 N
+│ inferspark_prefill_paged_512       dbb0dff6b267   -                    N
+│ inferspark_prefill_paged_batched   94187b042339   -                    N
+│ inferspark_prefill_paged_batched_sink 137b625e9111   -                    N
+│ inferspark_prefill_paged_batched_sink_h128 a7d74763391c   used                 N
+│ inferspark_prefill_paged_fp8_batched 939f59e0aa41   -                    N
+│ inferspark_prefill_paged_nvfp4_batched b79639415a34   -                    N
+│ inferspark_prefill_v47             30c1870d6711   -                    N
+│ inkling2_block_res                 7fdc74024791   used                 N
+│ inkling2_decode_attn               3f62d6ea28fc   used                 N
+│ inkling2_dspark                    6b3f5a4210f7   used                 N
+│ inkling2_flash_prefill             669fea3389d0   used                 N
+│ inkling2_head_ops                  88d9d7a17a62   used                 N
+│ inkling2_misc                      98d6d07c8073   used                 N
+│ inkling2_moe_decode                678b87a168c9   used                 N
+│ inkling2_moe_gemm                  68c178a418a2   used                 N
+│ inkling2_moe_prefill               754d98516fef   used                 N
+│ inkling2_prefill_attn              9d6b054737e5   used                 N
+│ inkling2_proj_gemv                 c1faf11c10b2   used                 N
+│ inkling2_router_gemv               c053fc69d624   used                 N
+│ inkling2_sconv                     08965bdcfe40   used                 N
+│ kv_cache                           671ff8649e90   -                    N
+│ logit_softcap                      ae0bc6241086   used                 N
+│ lora_bgmv                          4c745ed771b5   -                    N
+│ mamba2_ssd_chunk                   f0dbc0b4b3d0   -                    N
+│ mamba2_ssm                         26f1ce59a559   -                    N
+│ marlin_align                       c8912ab9c527   -                    N
+│ marlin_moe_nvfp4                   3db67bc8707a   -                    N
+│ marlin_nvfp4_gemm                  a4df867f66fe   -                    N
+│ marlin_pack_rows                   7899dad7530b   -                    N
+│ marlin_pack_slots                  71d8218c2315   -                    N
+│ marlin_repack                      a508acc54114   -                    N
+│ marlin_row_repeat                  02f547be5f66   -                    N
+│ marlin_scatter_slots               02a0b126a1cf   -                    N
+│ metadata_fill                      4cd48e0860e2   used                 N
+│ moe                                80c985554155   used                 N
+│ moe_bf16_grouped_gemm              b595ccb1a5b5   -                    N
+│ moe_decode_atomic_c4               6c6f857639b5   -                    N
+│ moe_expert_gemv                    4f92cfbebeb4   -                    N
+│ moe_expert_gemv_fused              7b91573b2a01   -                    N
+│ moe_expert_gemv_wide               0173a8c36628   -                    N
+│ moe_expert_gemv_wide_grouped       eee38ad35ec8   -                    N
+│ moe_expert_relu2_down_wide         5046c2f1283e   -                    N
+│ moe_fp8_grouped_gemm               182621af1065   -                    N
+│ moe_fused_batch2                   f3a3774dc1b1   -                    N
+│ moe_fused_batch3                   716fca88de04   -                    N
+│ moe_gate_topk                      05f3ddb5d210   -                    N
+│ moe_hash_route                     b236e1cd8b24   -                    N
+│ moe_lora_gather_bgmv               6ccfd9e689ee   -                    N
+│ moe_lora_grouped_down              fcdd26c27755   -                    N
+│ moe_prefill                        4c4540c33547   -                    N
+│ moe_relu2_down_shared_slot         d342c6ba5765   -                    N
+│ moe_relu2_fused                    f5b158ec76dc   -                    N
+│ moe_shared_expert_fused            41e715ee2e88   -                    N
+│ moe_shared_expert_fused_batch2_t   78ce432df9f5   -                    N
+│ moe_shared_expert_fused_batch3_t   7467a2b88c92   -                    N
+│ moe_shared_expert_fused_bf16       2c42d2c21279   -                    N
+│ moe_shared_expert_fused_bf16_batch2 511eaa0bcb51   -                    N
+│ moe_shared_expert_fused_fp8        45f5a488ad9f   -                    N
+│ moe_shared_expert_fused_fp8_batch2 3b964642816b   -                    N
+│ moe_shared_expert_fused_fp8_batch2_t cac7dc7940d5   -                    N
+│ moe_shared_expert_fused_fp8_batch3 2c01e7fabd07   -                    N
+│ moe_shared_expert_fused_fp8_batch3_t 39e92ce0bd1b   -                    N
+│ moe_shared_expert_fused_fp8_t      4cd0bf5221b4   -                    N
+│ moe_shared_expert_fused_t          46bb9fae4c7d   -                    N
+│ moe_silu_mul                       e2c5455edc95   used                 N
+│ moe_sorted                         30a15fee04f9   -                    N
+│ moe_topk                           1f7c99a781c4   -                    N
+│ moe_topk_sig                       78e5a50579e5   used                 N
+│ moe_topk_softmax_bias              e74c9eeebd56   -                    N
+│ moe_topk_sqrt                      946575af8c5f   -                    N
+│ moe_transpose_batched              5e6fa7328d64   -                    N
+│ moe_w4a16                          9163ecc47c39   -                    Y (1 dropped)
+│ moe_w8a8_grouped_gemm              672c54f91493   -                    N
+│ mxfp8_act_quant                    b3e05b776733   -                    N
+│ nemotron_moe_prefill               8603de61b1b2   -                    N
+│ nllb_encoder                       4e0cefdcb886   -                    N
+│ norm                               7c99bb87e77e   used                 N
+│ paged_decode                       d4c7abd60b73   used                 N
+│ paged_decode_attn_turbo2_128       a54257f08198   -                    N
+│ paged_decode_attn_turbo3           b1e6e11fe0d8   -                    N
+│ paged_decode_attn_turbo3_128       b1e6e11fe0d8   -                    N
+│ paged_decode_attn_turbo4           effd4f08eec2   -                    N
+│ paged_decode_attn_turbo4_128       effd4f08eec2   -                    N
+│ paged_decode_attn_turbo4_512       50334f364bcf   -                    N
+│ paged_decode_attn_turbo8           72395008e1db   -                    N
+│ paged_decode_attn_turbo8_128       8d806a75bd1c   -                    N
+│ paged_decode_attn_turbo8_512       141c9ebe7930   -                    N
+│ paged_decode_bf16k_turbo2v         7c83934696fc   -                    N
+│ paged_decode_bf16k_turbo2v_128     7c83934696fc   -                    N
+│ paged_decode_bf16k_turbo3v         a85c761cad47   -                    N
+│ paged_decode_bf16k_turbo3v_128     a85c761cad47   -                    N
+│ paged_decode_bf16k_turbo4v         99ef0985ddd2   -                    N
+│ paged_decode_bf16k_turbo4v_128     99ef0985ddd2   -                    N
+│ paged_decode_fp8                   fc2f2a76fc4b   -                    N
+│ paged_decode_fp8k_turbo2v          f59a4282349b   -                    N
+│ paged_decode_fp8k_turbo2v_128      f59a4282349b   -                    N
+│ paged_decode_fp8k_turbo3v          f638c88697b2   -                    N
+│ paged_decode_fp8k_turbo3v_128      f638c88697b2   -                    N
+│ paged_decode_fp8k_turbo4v          4f1ef311e532   -                    N
+│ paged_decode_fp8k_turbo4v_128      4f1ef311e532   -                    N
+│ paged_decode_nvfp4                 c1e3be0ab793   -                    N
+│ paged_decode_turbo2                a54257f08198   -                    N
+│ paged_decode_turbo3k_turbo8v       eaee50b401ea   -                    N
+│ paged_decode_turbo3k_turbo8v_128   eaee50b401ea   -                    N
+│ paged_decode_turbo4k_turbo3v       4419902b39e0   -                    N
+│ paged_decode_turbo4k_turbo3v_128   4419902b39e0   -                    N
+│ paged_decode_turbo4k_turbo8v       72c4e6036610   -                    N
+│ paged_decode_turbo4k_turbo8v_128   72c4e6036610   -                    N
+│ per_token_group_quant_fp8          a740d461be1c   -                    N
+│ prefill_fp8kv                      b4037f4b3c07   -                    N
+│ prefill_paged                      915863eb80f8   -                    N
+│ prefill_paged_bf16k_turbo2v        b89f89608294   -                    N
+│ prefill_paged_bf16k_turbo3v        6124bb6cb5ba   -                    N
+│ prefill_paged_bf16k_turbo4v        fff36a9ba70e   -                    N
+│ prefill_paged_fp8                  d2fd2d21e464   used                 N
+│ prefill_paged_fp8k_turbo2v         53f933d5b6ae   -                    N
+│ prefill_paged_fp8k_turbo3v         97166760273e   -                    N
+│ prefill_paged_fp8k_turbo4v         832378c10eac   -                    N
+│ prefill_paged_indirect             a3c854db221f   -                    N
+│ prefill_paged_indirect_sink        32b8be702204   -                    N
+│ prefill_paged_indirect_sink_h128   577188858259   used                 N
+│ prefill_paged_nvfp4                b3ba173d8ab7   -                    N
+│ prefill_paged_sink                 4bad5b7ae4c5   -                    N
+│ prefill_paged_sink_h128            7cba4c7e3164   used                 N
+│ prefill_paged_turbo2               c74ad830db0e   -                    N
+│ prefill_paged_turbo3               75252a13beb8   -                    N
+│ prefill_paged_turbo3k_turbo8v      7ec08da11940   -                    N
+│ prefill_paged_turbo4               87510e4d6321   -                    N
+│ prefill_paged_turbo4k_turbo3v      afd35b408934   -                    N
+│ prefill_paged_turbo4k_turbo8v      2e690623bb66   -                    N
+│ prefill_paged_turbo8               38abb13eb5ab   -                    N
+│ q2_0_gemv                          5d98978700ab   -                    N
+│ q2_0_gemv_vec                      85aa154a6585   -                    N
+│ quant_rowwise_fp8                  498cf54228f3   -                    N
+│ quantize_bf16_to_fp8_blockscaled   ba34cdbc80ef   -                    N
+│ quantize_nvfp4                     cc5186db26e6   used                 N
+│ qwen4exp_attn                      20475966c1c8   -                    N
+│ qwen4exp_hc                        d4220d100ec3   -                    N
+│ qwen4exp_ple                       ae0676f5ba1a   -                    N
+│ rank_split_join                    1c346cfaa158   -                    N
+│ rdma_oneshot                       c8862af91ab5   -                    N
+│ relu2                              0494c7397566   -                    N
+│ reshape_and_cache                  b780a1a5eb10   used                 N
+│ reshape_and_cache_turbo            510485da9044   -                    N
+│ residual_add                       2567cc0ef127   used                 N
+│ rms_norm_vanilla                   02523febe64b   used                 N
+│ rope                               d77ef54b9bd7   used                 N
+│ rope_mrope_interleaved             36e28e57ba15   -                    N
+│ ssm_h_dtype                        1857b474be8c   used                 N
+│ ssm_preprocess                     6057e33ef202   -                    N
+│ ssm_state_norm                     5acf60599b06   used                 N
+│ token_overlay                      98e387417c45   used                 N
+│ tq_plus_innerq_apply               28e95d86aea0   -                    N
+│ transpose_u8                       8aa091f067b1   -                    N
+│ vector_add                         aaeea326e703   -                    N
+│ vision_encoder                     241f2f93d59e   used                 N
+│ w4a16                              36d3573dec61   used                 Y (1 dropped)
+│ w4a16_fp8_ldmab                    ef00062efb9a   -                    N
+│ w4a16_gemv                         aa69eccbbd2d   used                 N
+│ w4a16_gemv_fused                   a7b45e1849e0   -                    N
+│ w8a16_gemm                         099b32ffb0e8   -                    N
+│ w8a16_gemm_pipelined               6877c736e13c   -                    N
+│ w8a16_gemm_t                       2d77c473cf82   -                    N
+│ w8a16_gemm_t_m128                  02ac98f727f2   -                    N
+│ w8a16_gemv                         8ba35552fc66   -                    N
+│ w8a16_gemv_batch4                  340977e6688b   -                    N
+│ w8a16_gemv_fused                   bd3342f79a99   -                    N
+│ wht_bf16                           e6a015d83736   -                    N
+│ widen_block_scale_f32              79165f4d8859   -                    N
+└─
+
+3 kernel(s) declared expected-absent in this target's MODEL.toml [expected_absent] (no action):
+    w4a16::fp8_gemm_t_row_scaled, w4a16::fp8_gemm_t_row_scaled_m16, w4a16::w4a16_gemm_t_p3
+
+[2m2026-11-23T15:46:46.861440Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m EOS token (from generation_config.json): 200006
+[2m2026-11-23T15:46:46.861800Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Default sampling: temperature=1, top_k=0, top_p=1, top_n_sigma=1, min_p=0
+[2m2026-11-23T15:46:47.278257Z[0m [32m INFO[0m [2mspark::tokenizer::jinja_helpers[0m[2m:[0m Loaded standalone chat_template.jinja (6866 chars)
+[2m2026-11-23T15:46:47.281437Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl::load[0m[2m:[0m Loaded tokenizer from /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini/tokenizer.json
+[2m2026-11-23T15:46:47.314693Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Reasoning parser: inkling2 (auto-detected from model_type 'inkling2_loop')
+[2m2026-11-23T15:46:47.316244Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Code-fence token: 68790 (``` — F2 fence guard active)
+[2m2026-11-23T15:46:47.402890Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Numeric-token mask: 1110/200058 ids classified as digit-runs (digit-normalized content-loop path active)
+[2m2026-11-23T15:46:47.491853Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Punctuation-token mask: 329/200058 ids classified as punctuation/whitespace (numeric-list loop exemption active)
+[2m2026-11-23T15:46:47.581764Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Boundary-token mask: 71/200058 ids end in a newline / sentence boundary (Phase-C rollback-to-boundary active)
+[2m2026-11-23T15:46:47.674236Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Mid-word token mask: 193320/200058 ids end in alphanumeric (mid-word </think> defer active during thinking)
+[2m2026-11-23T15:46:47.674247Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Thinking end token: 200010 (<|end_message|>)
+[2m2026-11-23T15:46:47.674678Z[0m [33m WARN[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Tool call start token unresolved for <tool_call> — require_tool_call / suppress / force-emit-after-think will be no-ops
+[2m2026-11-23T15:46:47.795277Z[0m [33m WARN[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Tool parameter markers unresolved for this tokenizer: parameter-value tracking and the envelope-stuck cap are off (--tool-max-tokens still applies)
+[2m2026-11-23T15:46:48.131224Z[0m [32m INFO[0m [2mspark::grammar::engine[0m[2m:[0m Grammar: detected tokenizer vocab_type=byte_level, add_prefix_space=false
+[2m2026-11-23T15:46:48.265909Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Grammar engine initialized (vocab_size=200058, vocab_type=auto-detected from tokenizer)
+[2m2026-11-23T15:46:48.268437Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m DFlash speculative decoding: ENABLED (γ=8, window=4096, drafter installed)
+[2m2026-11-23T15:46:48.268467Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Scheduling policy: FIFO
+[2m2026-11-23T15:46:48.270484Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Tool call parser: hermes (auto-detected from model_type 'inkling2_loop')
+[2m2026-11-23T15:46:48.270764Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Tool call parser: 'hermes' has registered XGrammar grammar — constrained decoding ENABLED for tool requests
+[2m2026-11-23T15:46:48.270767Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Response store: max_entries=10000, ttl=86400s, persist=memory-only
+[2m2026-11-23T15:46:48.271397Z[0m [33m WARN[0m [2mspark::scheduler[0m[2m:[0m --mtp-gate force: MTP throughput gate DISARMED (diagnostic; verify runs even where the gate would measure it net-negative)
+[2m2026-11-23T15:46:48.271419Z[0m [32m INFO[0m [2mspark::scheduler[0m[2m:[0m Scheduler started (batched mode, max_batch=8, mtp=true, ngram=false, num_drafts=7, policy=fifo, chunked_prefill=true, max_prefill_tokens=4096)
+[2m2026-11-23T15:46:48.271584Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m tool-call guard configured [3menabled[0m[2m=[0mtrue [3mstream[0m[2m=[0mtrue [3mmax_bytes[0m[2m=[0m1048576
+[2m2026-11-23T15:46:48.271608Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: max_thinking_budget=8192, thinking_default=true
+[2m2026-11-23T15:46:48.271611Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: MODEL sampling defaults enabled (non-thinking: temp=1, top_k=0, top_p=1; tools: temp=1, top_k=0, top_p=1)
+[2m2026-11-23T15:46:48.271614Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: F2 confidence early-stop DISABLED
+[2m2026-11-23T15:46:48.271615Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: watchdog rollback+re-steer DISABLED (legacy hard-stop)
+[2m2026-11-23T15:46:48.272832Z[0m [32m INFO[0m [2mspark::scheduler[0m[2m:[0m Swap space: 3 GB at /tmp/atlas-swap-1
+[2m2026-11-23T15:46:48.275944Z[0m [32m INFO[0m [2mspark::main_modules::serve_router[0m[2m:[0m API reachable only from this machine (loopback). To expose on the LAN pass --bind 0.0.0.0; combine with --require-auth and --auth-tokens-file for non-trusted networks.
+[2m2026-11-23T15:46:48.275993Z[0m [32m INFO[0m [2mspark::main_modules::serve_router[0m[2m:[0m Server live and ready at 127.0.0.1:8895 running inkling-2-mini-atlas
+[2m2026-11-23T15:46:48.425441Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=inkling-2-mini-atlas, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1024, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:48.426570Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (160 chars): "<|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is 17*23? Answer with the number.<|end_message|>"
+[2m2026-11-23T15:46:48.426799Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x77f4e83bb94eb638
+[2m2026-11-23T15:46:48.426817Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x77f4e83bb94eb638: 27 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:48.427258Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m sampling resolved (first request): temp=0.000 top_p=1.000 top_k=0 min_p=0.0000 top_n_sigma=0.0000 rep_pen=1.000 (core_preset=true)
+[2m2026-11-23T15:46:48.428926Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:48.429327Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 27 prompt tokens, chunk_size=27, max_tokens=1024
+[2m2026-11-23T15:46:48.740399Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 0 for 27 tokens (2 blocks) [chunk]
+[2m2026-11-23T15:46:48.800111Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:48.800130Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=27, remaining=1023
+[2m2026-11-23T15:46:48.800572Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:48.802217Z[0m [33m WARN[0m [2mspark_runtime::cuda_backend::host_staging[0m[2m:[0m copy_h2d_async was handed a PAGE-LOCKED source. That copy is genuinely asynchronous, so the promise that the caller may drop the buffer on return is now being paid for with a cuStreamSynchronize on every such call. If the source outlives the next sync, switch the call site to copy_h2d_async_retained; if it does not, this sync is what keeps it from being a use-after-free.
+[2m2026-11-23T15:46:48.841607Z[0m [33m WARN[0m [2mspark_model::model::glm_vocab_split[0m[2m:[0m GLM vocab-split verify head declined (no_comm, rows=8); min_tokens end-token ban inactive
+[2m2026-11-23T15:46:48.876736Z[0m [32m INFO[0m [2mspark_model::model::trait_impl[0m[2m:[0m DFlash UNIFIED_CTX ACTIVE: first commit_ctx rows=4 base_pos=27 ctx_len=32
+[2m2026-11-23T15:46:48.929228Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:48.929680Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:49.611657Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 40 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:49.670372Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 47 tokens (stop) 54.0 tok/s, TTFT=371.2ms, serial=0.00 mtp=1.00 p1=0.733 mean_na=2.133 tok_step=3.133 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.73,0.60,0.40,0.20,0.13,0.07,0.00
+[2m2026-11-23T15:46:49.765759Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:49.765862Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 53 boxes of 31 apples, and 504 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:49.766155Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xcc2dd18c0bf90df2
+[2m2026-11-23T15:46:49.766166Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xcc2dd18c0bf90df2: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:49.766452Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:49.766470Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:49.848247Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 1 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:49.916389Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:49.916399Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:49.916446Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:49.916928Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 2 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:49.917223Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 2 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:51.070985Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 67 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:51.138373Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 75 tokens (stop) 61.4 tok/s, TTFT=149.9ms, serial=0.00 mtp=1.00 p1=0.905 mean_na=2.619 tok_step=3.619 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.90,0.71,0.33,0.19,0.19,0.19,0.10
+[2m2026-11-23T15:46:51.140824Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:51.140910Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 95 boxes of 18 apples, and 174 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:51.141149Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xfdf086ed752ef31f
+[2m2026-11-23T15:46:51.141158Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xfdf086ed752ef31f: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:51.141437Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:51.141457Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:51.143167Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:51.221979Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 2 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:51.289292Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:51.289301Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:51.289343Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:51.289825Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 3 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:51.290102Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 3 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:52.487036Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 63 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:52.554714Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 71 tokens (stop) 56.1 tok/s, TTFT=147.8ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=2.273 tok_step=3.273 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.68,0.32,0.14,0.09,0.09,0.05
+[2m2026-11-23T15:46:52.556798Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:52.556893Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 80 boxes of 24 apples, and 474 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:52.557016Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x7e4602869f93d30e
+[2m2026-11-23T15:46:52.557026Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x7e4602869f93d30e: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:52.557282Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:52.557301Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:52.559016Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:52.637993Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 3 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:52.704128Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:52.704138Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:52.704183Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:52.704663Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 4 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:52.704947Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 4 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:53.532775Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 42 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:53.599996Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 50 tokens (stop) 55.8 tok/s, TTFT=146.8ms, serial=0.00 mtp=1.00 p1=1.000 mean_na=2.400 tok_step=3.400 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=1.00,0.80,0.40,0.07,0.07,0.07,0.00
+[2m2026-11-23T15:46:53.601149Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:53.601234Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 86 boxes of 19 apples, and 619 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:53.601351Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x10fb900dcab7e78f
+[2m2026-11-23T15:46:53.601359Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x10fb900dcab7e78f: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:53.601607Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:53.601622Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:53.603302Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:53.682513Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 4 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:53.747828Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:53.747836Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:53.747882Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:53.748360Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 5 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:53.748694Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 5 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:55.011493Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 82 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:55.074711Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 90 tokens (stop) 67.8 tok/s, TTFT=146.2ms, serial=0.00 mtp=1.00 p1=0.870 mean_na=2.957 tok_step=3.957 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.87,0.74,0.52,0.30,0.26,0.13,0.13
+[2m2026-11-23T15:46:55.076821Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:55.076913Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 39 boxes of 16 apples, and 188 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:55.077033Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x21c95579044d004c
+[2m2026-11-23T15:46:55.077041Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x21c95579044d004c: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:55.077283Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:55.077297Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:55.078992Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:55.157733Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 5 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:55.226886Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:55.226894Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:55.226938Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:55.227414Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 6 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:55.227702Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 6 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:56.375632Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 52 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:56.375658Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 59 tokens (stop) 51.4 tok/s, TTFT=149.6ms, serial=0.00 mtp=1.00 p1=0.800 mean_na=1.950 tok_step=2.950 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.80,0.45,0.30,0.20,0.10,0.10,0.00
+[2m2026-11-23T15:46:56.377402Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:56.377485Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 67 boxes of 65 apples, and 171 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:56.377704Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x496e8f355a588893
+[2m2026-11-23T15:46:56.377714Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x496e8f355a588893: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:56.377988Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:56.378005Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:56.379692Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:56.458578Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 6 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:56.532203Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:56.532212Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:56.532254Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:56.532747Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 7 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:56.533025Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 7 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:57.686241Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 63 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:57.751505Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 71 tokens (stop) 58.2 tok/s, TTFT=154.2ms, serial=0.00 mtp=1.00 p1=0.667 mean_na=2.381 tok_step=3.381 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.67,0.62,0.48,0.24,0.14,0.14,0.10
+[2m2026-11-23T15:46:57.753828Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:57.753914Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 42 boxes of 23 apples, and 664 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:57.754160Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x6d4f0fe550198ca7
+[2m2026-11-23T15:46:57.754170Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x6d4f0fe550198ca7: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:57.754414Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:57.754429Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:57.756145Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:57.835168Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 7 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:57.902891Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:57.902900Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:57.902942Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:57.903423Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 8 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:57.903721Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 8 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:46:59.066066Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 64 tokens (budget=Some(4096))
+[2m2026-11-23T15:46:59.122284Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 72 tokens (stop) 59.0 tok/s, TTFT=148.5ms, serial=0.00 mtp=1.00 p1=0.810 mean_na=2.476 tok_step=3.476 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.81,0.57,0.48,0.24,0.19,0.14,0.05
+[2m2026-11-23T15:46:59.125048Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:46:59.125148Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 66 boxes of 19 apples, and 946 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:46:59.125393Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x7c616c7b0d3979e5
+[2m2026-11-23T15:46:59.125401Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x7c616c7b0d3979e5: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:46:59.125662Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:46:59.125676Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:46:59.127394Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:46:59.206637Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 8 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:46:59.273632Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:46:59.273641Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:46:59.273684Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:46:59.274165Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 9 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:46:59.274461Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 9 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:00.782959Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 83 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:00.842913Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 91 tokens (stop) 58.0 tok/s, TTFT=148.0ms, serial=0.00 mtp=1.00 p1=0.808 mean_na=2.538 tok_step=3.538 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.81,0.69,0.46,0.27,0.15,0.08,0.08
+[2m2026-11-23T15:47:00.844678Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:00.844766Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 84 boxes of 27 apples, and 328 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:00.844882Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x604b61c1fa0d5b6c
+[2m2026-11-23T15:47:00.844890Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x604b61c1fa0d5b6c: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:00.845144Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:00.845159Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:00.846870Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:00.925862Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 9 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:00.992052Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:00.992063Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:00.992106Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:00.992585Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 10 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:00.992863Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 10 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:02.057387Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 67 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:02.124395Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 75 tokens (stop) 66.2 tok/s, TTFT=146.9ms, serial=0.00 mtp=1.00 p1=0.842 mean_na=3.000 tok_step=4.000 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.84,0.74,0.58,0.32,0.21,0.16,0.16
+[2m2026-11-23T15:47:02.126537Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:02.126635Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 92 boxes of 92 apples, and 696 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:02.126752Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x81eaf05d2f4a71be
+[2m2026-11-23T15:47:02.126761Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x81eaf05d2f4a71be: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:02.127054Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:02.127074Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:02.128741Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:02.209015Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 10 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:02.275286Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:02.275295Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:02.275340Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:02.275822Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 11 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:02.276115Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 11 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:03.673273Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 91 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:03.740273Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 99 tokens (stop) 67.6 tok/s, TTFT=148.2ms, serial=0.00 mtp=1.00 p1=0.920 mean_na=3.000 tok_step=4.000 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.92,0.76,0.56,0.40,0.32,0.04,0.00
+[2m2026-11-23T15:47:03.741725Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:03.741819Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 19 boxes of 85 apples, and 699 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:03.741938Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xd43036bbb2576174
+[2m2026-11-23T15:47:03.741947Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xd43036bbb2576174: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:03.742219Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:03.742234Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:03.743943Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:03.823186Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 11 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:03.891583Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:03.891592Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:03.891635Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:03.892116Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 12 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:03.892402Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 12 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:05.063157Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 67 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:05.124247Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 75 tokens (stop) 60.8 tok/s, TTFT=149.4ms, serial=0.00 mtp=1.00 p1=0.905 mean_na=2.619 tok_step=3.619 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.90,0.67,0.48,0.33,0.14,0.10,0.00
+[2m2026-11-23T15:47:05.125935Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:05.126029Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 62 boxes of 18 apples, and 326 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:05.126148Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xac1d79b22ef0cb91
+[2m2026-11-23T15:47:05.126156Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xac1d79b22ef0cb91: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:05.126422Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:05.126436Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:05.128170Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:05.207329Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 12 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:05.280143Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:05.280153Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:05.280200Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:05.280680Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 13 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:05.280994Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 13 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:06.342241Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 63 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:06.411229Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 71 tokens (stop) 62.8 tok/s, TTFT=153.7ms, serial=0.00 mtp=1.00 p1=0.947 mean_na=2.789 tok_step=3.789 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.95,0.63,0.47,0.26,0.16,0.16,0.16
+[2m2026-11-23T15:47:06.412847Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:06.412939Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 17 boxes of 83 apples, and 979 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:06.413066Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xe59f175aae5e59a7
+[2m2026-11-23T15:47:06.413076Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xe59f175aae5e59a7: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:06.413310Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:06.413326Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:06.415046Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:06.494298Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 13 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:06.561877Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:06.561885Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:06.561927Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:06.562417Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 14 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:06.562703Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 14 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:07.913871Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 76 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:07.972287Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 84 tokens (stop) 59.6 tok/s, TTFT=148.6ms, serial=0.00 mtp=1.00 p1=0.917 mean_na=2.542 tok_step=3.542 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.92,0.67,0.38,0.25,0.21,0.08,0.04
+[2m2026-11-23T15:47:07.974227Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:07.974320Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 29 boxes of 49 apples, and 529 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:07.974435Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xc807f48a8393e6c9
+[2m2026-11-23T15:47:07.974443Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xc807f48a8393e6c9: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:07.974693Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:07.974708Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:07.976392Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:08.055643Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 14 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:08.122378Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:08.122386Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:08.122427Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:08.122909Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 15 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:08.123188Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 15 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:09.361943Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 65 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:09.425510Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 73 tokens (stop) 56.0 tok/s, TTFT=147.7ms, serial=0.00 mtp=1.00 p1=0.864 mean_na=2.318 tok_step=3.318 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.86,0.55,0.41,0.18,0.14,0.14,0.05
+[2m2026-11-23T15:47:09.427804Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:09.427899Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 30 boxes of 81 apples, and 220 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:09.428014Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xbc8869ba0844bb11
+[2m2026-11-23T15:47:09.428022Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xbc8869ba0844bb11: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:09.428299Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:09.428316Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:09.430018Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:09.509030Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 15 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:09.574967Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:09.574977Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:09.575023Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:09.575506Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 16 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:09.575796Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 16 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:10.271480Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 42 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:10.340863Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 50 tokens (stop) 65.3 tok/s, TTFT=146.7ms, serial=0.00 mtp=1.00 p1=0.846 mean_na=2.846 tok_step=3.846 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.85,0.77,0.62,0.31,0.15,0.15,0.00
+[2m2026-11-23T15:47:10.342884Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:10.342978Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 85 boxes of 51 apples, and 673 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:10.343102Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xabcbbb05c33385a1
+[2m2026-11-23T15:47:10.343110Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xabcbbb05c33385a1: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:10.343294Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:10.343314Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:10.345008Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:10.423163Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 16 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:10.489507Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:10.489518Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:10.489562Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:10.490046Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 17 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:10.490359Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 17 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:11.904904Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 73 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:11.968269Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 81 tokens (stop) 54.8 tok/s, TTFT=146.2ms, serial=0.00 mtp=1.00 p1=0.846 mean_na=2.154 tok_step=3.154 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.85,0.62,0.38,0.19,0.12,0.00,0.00
+[2m2026-11-23T15:47:11.970248Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:11.970338Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 99 boxes of 35 apples, and 205 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:11.970458Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x2ecc3bb7606e8e18
+[2m2026-11-23T15:47:11.970465Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x2ecc3bb7606e8e18: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:11.970717Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:11.970731Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:11.972425Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:12.050599Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 17 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:12.117980Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:12.117989Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:12.118032Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:12.118513Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 18 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:12.118784Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 18 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:13.160899Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 59 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:13.230744Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 67 tokens (stop) 60.2 tok/s, TTFT=147.3ms, serial=0.00 mtp=1.00 p1=0.842 mean_na=2.579 tok_step=3.579 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.84,0.68,0.53,0.26,0.11,0.11,0.05
+[2m2026-11-23T15:47:13.232688Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:13.232782Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 86 boxes of 85 apples, and 754 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:13.232899Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xc211032242eb5e19
+[2m2026-11-23T15:47:13.232906Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xc211032242eb5e19: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:13.233156Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:13.233173Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:13.234882Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:13.314616Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 18 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:13.388563Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:13.388573Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:13.388616Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:13.389107Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 19 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:13.389389Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 19 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:14.549323Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 69 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:14.610437Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 77 tokens (stop) 63.0 tok/s, TTFT=155.4ms, serial=0.00 mtp=1.00 p1=0.857 mean_na=2.714 tok_step=3.714 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.86,0.62,0.52,0.24,0.19,0.14,0.14
+[2m2026-11-23T15:47:14.612273Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:14.612367Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 36 boxes of 59 apples, and 199 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:14.612584Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xf5fe31656626bbea
+[2m2026-11-23T15:47:14.612597Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xf5fe31656626bbea: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:14.612893Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:14.612907Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:14.614579Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:14.693409Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 19 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:14.759729Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:14.759739Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:14.759784Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:14.760264Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 20 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:14.760550Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 20 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:16.232925Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 79 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:16.293680Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 87 tokens (stop) 56.7 tok/s, TTFT=146.8ms, serial=0.00 mtp=1.00 p1=0.885 mean_na=2.385 tok_step=3.385 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.88,0.65,0.46,0.19,0.12,0.04,0.04
+[2m2026-11-23T15:47:16.295574Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:16.295666Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 82 boxes of 20 apples, and 677 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:16.295780Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xd2953fbfcd6e27b4
+[2m2026-11-23T15:47:16.295788Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xd2953fbfcd6e27b4: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:16.296016Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:16.296032Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:16.297718Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:16.375998Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 20 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:16.443037Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:16.443046Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:16.443090Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:16.443575Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 21 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:16.443881Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 21 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:17.701636Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 62 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:17.767725Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 70 tokens (stop) 52.8 tok/s, TTFT=147.0ms, serial=0.00 mtp=1.00 p1=0.773 mean_na=2.227 tok_step=3.227 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.77,0.55,0.36,0.23,0.18,0.09,0.05
+[2m2026-11-23T15:47:17.769265Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:17.769358Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 19 boxes of 91 apples, and 310 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:17.769475Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x25cea80581fd9017
+[2m2026-11-23T15:47:17.769483Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x25cea80581fd9017: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:17.769736Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:17.769752Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:17.771441Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:17.850516Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 21 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:17.916387Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:17.916395Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:17.916435Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:17.916917Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 22 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:17.917193Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 22 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:18.838505Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 51 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:18.893886Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 59 tokens (stop) 60.4 tok/s, TTFT=146.6ms, serial=0.00 mtp=1.00 p1=0.941 mean_na=2.471 tok_step=3.471 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.94,0.76,0.53,0.18,0.06,0.00,0.00
+[2m2026-11-23T15:47:18.895438Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:18.895537Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 75 boxes of 99 apples, and 644 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:18.895653Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x9de0a533f3d7791
+[2m2026-11-23T15:47:18.895661Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x9de0a533f3d7791: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:18.895894Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:18.895909Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:18.897622Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:18.976683Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 22 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:19.041759Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:19.041768Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:19.041811Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:19.042290Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 23 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:19.042577Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 23 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:19.914329Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 56 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:19.974478Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 64 tokens (stop) 68.6 tok/s, TTFT=145.9ms, serial=0.00 mtp=1.00 p1=0.938 mean_na=3.062 tok_step=4.062 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.94,0.88,0.56,0.38,0.19,0.06,0.06
+[2m2026-11-23T15:47:19.976334Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:19.976433Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 66 boxes of 52 apples, and 576 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:19.976550Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x2519558b80c39099
+[2m2026-11-23T15:47:19.976557Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x2519558b80c39099: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:19.976865Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:19.976880Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:19.978569Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:20.057668Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 23 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:20.123533Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:20.123542Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:20.123589Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:20.124072Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 24 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:20.124365Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 24 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:21.326403Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 67 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:21.394499Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 75 tokens (stop) 59.0 tok/s, TTFT=146.7ms, serial=0.00 mtp=1.00 p1=0.952 mean_na=2.619 tok_step=3.619 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.95,0.67,0.48,0.24,0.14,0.10,0.05
+[2m2026-11-23T15:47:21.395924Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:21.396017Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 86 boxes of 70 apples, and 470 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:21.396140Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x4d24455c147cc825
+[2m2026-11-23T15:47:21.396148Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x4d24455c147cc825: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:21.396399Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:21.396414Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:21.398095Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:21.476778Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 24 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:21.548951Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:21.548959Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:21.549003Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:21.549484Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 25 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:21.549772Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 25 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:22.491118Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 62 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:22.560787Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 70 tokens (stop) 69.2 tok/s, TTFT=152.5ms, serial=0.00 mtp=1.00 p1=0.882 mean_na=3.118 tok_step=4.118 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.88,0.88,0.71,0.35,0.18,0.12,0.00
+[2m2026-11-23T15:47:22.562972Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:22.563076Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 50 boxes of 43 apples, and 913 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:22.563286Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xe9891efd522a7f5b
+[2m2026-11-23T15:47:22.563297Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xe9891efd522a7f5b: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:22.563610Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:22.563623Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:22.565330Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:22.644283Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 25 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:22.711449Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:22.711458Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:22.711500Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:22.711981Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 26 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:22.712258Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 26 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:23.715854Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 48 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:23.779689Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 56 tokens (stop) 52.4 tok/s, TTFT=147.8ms, serial=0.00 mtp=1.00 p1=0.778 mean_na=2.167 tok_step=3.167 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.78,0.56,0.39,0.22,0.11,0.11,0.00
+[2m2026-11-23T15:47:23.781271Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:23.781366Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 35 boxes of 43 apples, and 183 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:23.781678Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xdfe7fdf04e759966
+[2m2026-11-23T15:47:23.781688Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xdfe7fdf04e759966: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:23.781931Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:23.781946Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:23.783661Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:23.862673Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 26 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:23.928393Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:23.928402Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:23.928444Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:23.928925Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 27 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:23.929204Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 27 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:25.007249Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 69 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:25.066711Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 77 tokens (stop) 67.6 tok/s, TTFT=146.5ms, serial=0.00 mtp=1.00 p1=0.947 mean_na=3.105 tok_step=4.105 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.95,0.74,0.58,0.32,0.21,0.21,0.11
+[2m2026-11-23T15:47:25.068736Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:25.068832Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 85 boxes of 50 apples, and 637 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:25.069140Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x388801babe630513
+[2m2026-11-23T15:47:25.069151Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x388801babe630513: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:25.069420Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:25.069439Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:25.071156Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:25.150208Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 27 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:25.215640Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:25.215650Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:25.215696Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:25.216176Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 28 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:25.216481Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 28 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:26.025796Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 42 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:26.092186Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 50 tokens (stop) 57.0 tok/s, TTFT=146.2ms, serial=0.00 mtp=1.00 p1=0.867 mean_na=2.400 tok_step=3.400 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.87,0.80,0.53,0.13,0.07,0.00,0.00
+[2m2026-11-23T15:47:26.093834Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:26.093928Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 75 boxes of 55 apples, and 846 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:26.094045Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x5de1447156903a60
+[2m2026-11-23T15:47:26.094051Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x5de1447156903a60: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:26.094312Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:26.094325Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:26.096041Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:26.175114Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 28 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:26.241193Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:26.241201Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:26.241244Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:26.241726Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 29 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:26.242038Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 29 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:27.664770Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 82 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:27.723374Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 90 tokens (stop) 60.7 tok/s, TTFT=146.9ms, serial=0.00 mtp=1.00 p1=0.840 mean_na=2.640 tok_step=3.640 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.84,0.68,0.48,0.32,0.16,0.12,0.04
+[2m2026-11-23T15:47:27.725103Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:27.725196Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 69 boxes of 48 apples, and 723 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:27.725429Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x5e5a43cbcb0ff01f
+[2m2026-11-23T15:47:27.725442Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x5e5a43cbcb0ff01f: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:27.725698Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:27.725712Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:27.727424Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:27.806553Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 29 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:27.875306Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:27.875315Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:27.875358Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:27.875846Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 30 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:27.876130Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 30 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:29.044615Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 65 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:29.104071Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 73 tokens (stop) 59.4 tok/s, TTFT=149.6ms, serial=0.00 mtp=1.00 p1=0.810 mean_na=2.524 tok_step=3.524 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.81,0.67,0.48,0.29,0.14,0.10,0.05
+[2m2026-11-23T15:47:29.105774Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:29.105866Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (245 chars): "fort level: 0.2<|end_message|><|message_user|><|content_text|>A crate holds 21 boxes of 27 apples, and 624 loose apples are added. How many apples in total? Answer with the number only.<|end_message|>"
+[2m2026-11-23T15:47:29.105985Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xc29eb4487da81918
+[2m2026-11-23T15:47:29.105992Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xc29eb4487da81918: 49 prompt tokens, tools=false (0 defined)
+[2m2026-11-23T15:47:29.106238Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:29.106253Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 49 prompt tokens, chunk_size=49, max_tokens=1536
+[2m2026-11-23T15:47:29.107983Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:29.186957Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 30 for 49 tokens (4 blocks) [chunk]
+[2m2026-11-23T15:47:29.259953Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:29.259961Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=49, remaining=1535
+[2m2026-11-23T15:47:29.260003Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:29.260493Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 31 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:29.260780Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 31 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:30.376371Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 68 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:30.439385Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 76 tokens (stop) 64.4 tok/s, TTFT=153.7ms, serial=0.00 mtp=1.00 p1=0.950 mean_na=2.850 tok_step=3.850 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.95,0.75,0.55,0.40,0.10,0.10,0.00
+[2m2026-11-23T15:47:30.442377Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:30.442746Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (653 chars): "\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the weather in Paris right now, in celsius?<|end_message|>"
+[2m2026-11-23T15:47:30.443101Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xf79c14d2c593bd2
+[2m2026-11-23T15:47:30.443111Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xf79c14d2c593bd2: 220 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:30.443117Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:30.443293Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:30.443308Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 220 prompt tokens, chunk_size=220, max_tokens=1536
+[2m2026-11-23T15:47:30.586388Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 31 for 220 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:30.655525Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:30.655536Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=220, remaining=1535
+[2m2026-11-23T15:47:30.655584Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:30.656090Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 32 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:30.656377Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 32 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:31.023885Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:31.389578Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 65 tokens (stop) 88.6 tok/s, TTFT=212.2ms, serial=0.00 mtp=1.00 p1=1.000 mean_na=4.909 tok_step=5.909 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=1.00,0.91,0.82,0.73,0.55,0.55,0.36
+[2m2026-11-23T15:47:31.390354Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_weather({"city":"Paris","unit":"celsius"})
+[2m2026-11-23T15:47:31.391485Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:31.391611Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (653 chars): "\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the weather in Tokyo right now, in celsius?<|end_message|>"
+[2m2026-11-23T15:47:31.391813Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x53f21e2df9af25cf
+[2m2026-11-23T15:47:31.391816Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x53f21e2df9af25cf: 220 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:31.391820Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:31.392415Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:31.392428Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 220 prompt tokens, chunk_size=220, max_tokens=1536
+[2m2026-11-23T15:47:31.394033Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:31.535517Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 32 for 220 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:31.603395Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:31.603405Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=220, remaining=1535
+[2m2026-11-23T15:47:31.603449Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:31.603959Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 33 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:31.604283Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 33 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:31.984834Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:32.334477Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 65 tokens (stop) 88.9 tok/s, TTFT=211.0ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=5.000 tok_step=6.000 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.91,0.91,0.73,0.55,0.55,0.45
+[2m2026-11-23T15:47:32.335546Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_weather({"city":"Tokyo","unit":"celsius"})
+[2m2026-11-23T15:47:32.336984Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:32.337113Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (652 chars): ":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the weather in Lima right now, in celsius?<|end_message|>"
+[2m2026-11-23T15:47:32.337297Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x14902ebe25e3bd2f
+[2m2026-11-23T15:47:32.337303Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x14902ebe25e3bd2f: 220 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:32.337308Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:32.337585Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:32.337602Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 220 prompt tokens, chunk_size=220, max_tokens=1536
+[2m2026-11-23T15:47:32.339348Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:32.479860Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 33 for 220 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:32.547576Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:32.547585Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=220, remaining=1535
+[2m2026-11-23T15:47:32.547630Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:32.548139Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 34 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:32.548441Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 34 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:33.078847Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:33.432969Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 65 tokens (stop) 73.4 tok/s, TTFT=210.0ms, serial=0.00 mtp=1.00 p1=0.846 mean_na=4.077 tok_step=5.077 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.85,0.77,0.69,0.62,0.38,0.38,0.38
+[2m2026-11-23T15:47:33.433726Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_weather({"city":"Lima","unit":"celsius"})
+[2m2026-11-23T15:47:33.434854Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:33.434983Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (652 chars): ":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the weather in Oslo right now, in celsius?<|end_message|>"
+[2m2026-11-23T15:47:33.435181Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xf08a921ce2685cac
+[2m2026-11-23T15:47:33.435187Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xf08a921ce2685cac: 220 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:33.435191Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:33.435467Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:33.435483Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 220 prompt tokens, chunk_size=220, max_tokens=1536
+[2m2026-11-23T15:47:33.437206Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:33.578318Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 34 for 220 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:33.647046Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:33.647054Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=220, remaining=1535
+[2m2026-11-23T15:47:33.647101Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:33.647612Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 35 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:33.647907Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 35 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:34.032476Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:34.383739Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 65 tokens (stop) 88.2 tok/s, TTFT=211.6ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=5.000 tok_step=6.000 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.91,0.91,0.73,0.55,0.55,0.45
+[2m2026-11-23T15:47:34.384466Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_weather({"city":"Oslo","unit":"celsius"})
+[2m2026-11-23T15:47:34.385664Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:34.385789Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (653 chars): "\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the weather in Cairo right now, in celsius?<|end_message|>"
+[2m2026-11-23T15:47:34.386097Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xf8b4ea369b273541
+[2m2026-11-23T15:47:34.386107Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xf8b4ea369b273541: 221 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:34.386112Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:34.386268Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:34.386284Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 221 prompt tokens, chunk_size=221, max_tokens=1536
+[2m2026-11-23T15:47:34.388010Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:34.528762Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 35 for 221 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:34.601901Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:34.601911Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=221, remaining=1535
+[2m2026-11-23T15:47:34.601956Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:34.602461Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 36 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:34.602766Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 36 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:34.991353Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 24 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:35.347872Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 66 tokens (stop) 88.5 tok/s, TTFT=215.6ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=5.091 tok_step=6.091 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.91,0.91,0.82,0.55,0.55,0.45
+[2m2026-11-23T15:47:35.348467Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_weather({"city":"Cairo","unit":"celsius"})
+[2m2026-11-23T15:47:35.349956Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:35.350088Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (642 chars): "t\"},\"type\":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the current share price of AAPL?<|end_message|>"
+[2m2026-11-23T15:47:35.350403Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x4f5f1ee52fd1feb3
+[2m2026-11-23T15:47:35.350413Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x4f5f1ee52fd1feb3: 217 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:35.350419Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:35.350671Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:35.350687Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 217 prompt tokens, chunk_size=217, max_tokens=1536
+[2m2026-11-23T15:47:35.352425Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:35.492697Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 36 for 217 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:35.569057Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:35.569069Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=217, remaining=1535
+[2m2026-11-23T15:47:35.569112Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:35.569628Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 37 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:35.569949Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 37 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:36.002606Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 24 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:36.366331Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 63 tokens (stop) 79.0 tok/s, TTFT=218.4ms, serial=0.00 mtp=1.00 p1=0.833 mean_na=4.250 tok_step=5.250 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.83,0.75,0.67,0.67,0.58,0.42,0.33
+[2m2026-11-23T15:47:36.367326Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_stock_price({"ticker":"AAPL"})
+[2m2026-11-23T15:47:36.368633Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:36.368758Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (642 chars): "t\"},\"type\":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the current share price of NVDA?<|end_message|>"
+[2m2026-11-23T15:47:36.368944Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xa2a7eb8de7151192
+[2m2026-11-23T15:47:36.368951Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xa2a7eb8de7151192: 217 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:36.368955Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:36.369229Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:36.369244Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 217 prompt tokens, chunk_size=217, max_tokens=1536
+[2m2026-11-23T15:47:36.370913Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:36.511427Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 37 for 217 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:36.579237Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:36.579247Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=217, remaining=1535
+[2m2026-11-23T15:47:36.579291Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:36.579800Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 38 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:36.580102Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 38 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:37.006321Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 24 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:37.372935Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 63 tokens (stop) 79.4 tok/s, TTFT=210.0ms, serial=0.00 mtp=1.00 p1=0.750 mean_na=4.250 tok_step=5.250 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.75,0.75,0.67,0.67,0.58,0.50,0.33
+[2m2026-11-23T15:47:37.373284Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_stock_price({"ticker":"NVDA"})
+[2m2026-11-23T15:47:37.374325Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:37.374448Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (642 chars): "t\"},\"type\":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the current share price of MSFT?<|end_message|>"
+[2m2026-11-23T15:47:37.374638Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x91175e29f4b3b9e0
+[2m2026-11-23T15:47:37.374644Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x91175e29f4b3b9e0: 217 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:37.374649Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:37.374901Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:37.374916Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 217 prompt tokens, chunk_size=217, max_tokens=1536
+[2m2026-11-23T15:47:37.376610Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:37.517135Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 38 for 217 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:37.584781Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:37.584790Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=217, remaining=1535
+[2m2026-11-23T15:47:37.584835Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:37.585344Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 39 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:37.585801Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 39 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:37.976458Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:38.321442Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 62 tokens (stop) 84.2 tok/s, TTFT=209.9ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=4.636 tok_step=5.636 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.73,0.73,0.73,0.55,0.55,0.45
+[2m2026-11-23T15:47:38.321739Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_stock_price({"ticker":"MSFT"})
+[2m2026-11-23T15:47:38.322711Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:38.322854Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (642 chars): "t\"},\"type\":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the current share price of TSLA?<|end_message|>"
+[2m2026-11-23T15:47:38.323153Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xbf62172c93dca606
+[2m2026-11-23T15:47:38.323163Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xbf62172c93dca606: 217 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:38.323168Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:38.323424Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:38.323440Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 217 prompt tokens, chunk_size=217, max_tokens=1536
+[2m2026-11-23T15:47:38.325138Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:38.464753Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 39 for 217 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:38.531816Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:38.531826Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=217, remaining=1535
+[2m2026-11-23T15:47:38.531873Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:38.532381Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 40 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:38.532679Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 40 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:38.923523Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:39.266173Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 62 tokens (stop) 84.4 tok/s, TTFT=208.4ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=4.727 tok_step=5.727 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.82,0.73,0.73,0.55,0.55,0.45
+[2m2026-11-23T15:47:39.266457Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_stock_price({"ticker":"TSLA"})
+[2m2026-11-23T15:47:39.267782Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=m, messages=1, tools=2, tools_active=true, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1536, freq_pen=None, rep_pen=None
+[2m2026-11-23T15:47:39.267909Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (642 chars): "t\"},\"type\":\"function\"}]<|end_message|><|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is the current share price of AMZN?<|end_message|>"
+[2m2026-11-23T15:47:39.268206Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0xe582c11886a65b96
+[2m2026-11-23T15:47:39.268216Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0xe582c11886a65b96: 217 prompt tokens, tools=true (2 defined)
+[2m2026-11-23T15:47:39.268222Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m MODEL.toml [behavior].disable_tool_grammar=true — tool-call grammar OFF
+[2m2026-11-23T15:47:39.268461Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-23T15:47:39.268479Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 217 prompt tokens, chunk_size=217, max_tokens=1536
+[2m2026-11-23T15:47:39.270146Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::prefix_lookup[0m[2m:[0m Prefix cache hit: 208 tokens (13 blocks) but no SSM snapshot — recomputing all KV
+[2m2026-11-23T15:47:39.413927Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 40 for 217 tokens (14 blocks) [chunk]
+[2m2026-11-23T15:47:39.481930Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-23T15:47:39.481942Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=217, remaining=1535
+[2m2026-11-23T15:47:39.481997Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-23T15:47:39.482509Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 41 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } warmup_count=2, target=2, slots=7)
+[2m2026-11-23T15:47:39.482889Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 41 }, block_table_ptr: 275895271026176, ctx_ptr: 275893129838592, markov_ptr: 275918389498880, lane: 0 } (7/7 subgraphs captured)
+[2m2026-11-23T15:47:39.874505Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 23 tokens (budget=Some(4096))
+[2m2026-11-23T15:47:40.227907Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 62 tokens (stop) 83.1 tok/s, TTFT=213.5ms, serial=0.00 mtp=1.00 p1=0.909 mean_na=4.636 tok_step=5.636 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.73,0.73,0.73,0.55,0.55,0.45
+[2m2026-11-23T15:47:40.228565Z[0m [32m INFO[0m [2mspark::api::chat_blocking_choice[0m[2m:[0m Tool call: get_stock_price({"ticker":"AMZN"})
