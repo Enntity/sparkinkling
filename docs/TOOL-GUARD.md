@@ -17,20 +17,27 @@ tool executor.
 
 ## What is different here
 
-Inkling reasons before it calls a tool and its calls can be long, so
-SparkInkling's default lets a call stream and checks it when it ends.
+Inkling reasons before it calls a tool and its calls can be long, so a client
+may ask for a call's arguments as they are written: the request body field
+`stream_tool_arguments: true` (an Atlas extension to `/v1/chat/completions`).
+Only a request that asks gets them; every other request's calls are held until
+they pass.
 
 | `TOOL_GUARD` | What a client sees |
 |---|---|
-| `stream` (default) | `function.arguments` streams as it is generated. The guard checks the call when it ends. A call it blocks, or one cut off before its end, finishes the response with `finish_reason: "content_filter"` and `guard_stop: "tool_call_guard"` instead of `tool_calls`. |
-| `on` | Each call is held until its complete arguments pass, as in SparkQwen and SparkGLM. A blocked call is never shown. |
+| `stream` (default) | A request with `stream_tool_arguments: true`: `function.arguments` streams as it is generated, and the guard checks the call when it ends. A call it blocks, or one cut off before its end, finishes the response with `finish_reason: "content_filter"` and `guard_stop: "tool_call_guard"` instead of `tool_calls`. Any other request: as under `on`. |
+| `on` | Each call is held until its complete arguments pass, as in SparkQwen and SparkGLM. A blocked call is never shown. `stream_tool_arguments` is ignored. |
 | `off` | No check. |
 
-**With `stream`, the client is part of the guard.** The blocked arguments have
-already been sent when the verdict arrives, so a client must not run any call
-from a response that finished `content_filter`. A client that executes tool
-calls as their arguments arrive, before the finish reason, gets no protection
-from this setting: use `on`.
+**A client that asks for streamed arguments is part of the guard.** The
+blocked arguments have already been sent when the verdict arrives, so it must
+not run any call from a response that finished `content_filter`, nor run a
+call before the response finishes. A client that cannot promise that should
+not send `stream_tool_arguments`.
+
+SparkInkling 0.4.1 streamed every request's calls under `stream`; a client
+that did not read the finish reason could run a call the guard had blocked.
+From 0.4.2 that needs the request to ask.
 
 In the 0.4.1 check a streamed call to a cloud metadata address sent its
 arguments in 31 chunks and then finished `content_filter` with

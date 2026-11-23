@@ -72,10 +72,12 @@ unless they say they come from a development build.
 
 ## Tools
 
-- **A blocked tool call ends the response with `content_filter`** after its
-  arguments have streamed (the default `TOOL_GUARD=stream`). A client must not
-  run a call from a response that finished that way. `TOOL_GUARD=on` holds
-  each call until it passes instead ([TOOL-GUARD](TOOL-GUARD.md)).
+- **A client that asks for streamed tool calls must read the finish reason.**
+  With `stream_tool_arguments: true` (and the default `TOOL_GUARD=stream`), a
+  call the guard blocks has already streamed when the response finishes
+  `content_filter`; it must not be run. Requests that do not ask get each call
+  held until it passes ([TOOL-GUARD](TOOL-GUARD.md)). SparkInkling 0.4.1
+  streamed every request's calls; 0.4.2 holds them unless asked.
 - **Streamed `return_token_ids` carry rewritten ids** for Inkling's message
   markers, not the model's raw tokens.
 

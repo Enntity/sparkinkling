@@ -153,11 +153,11 @@ of it): on 150 MMLU-Pro questions with an 8,192-token cap, `high` scored 107
 with 30 answers cut off, `medium` 120 with 8 and `low` 125 with 2. The model
 always thinks a little, even at `none`, so leave room in `max_tokens`. Tool calls (OpenAI `tools`, streaming
 included) are returned as OpenAI tool calls. The tool-call guard SparkQwen and
-SparkGLM ship is on by default (`TOOL_GUARD` in `.env`). Here it streams: a
-call's arguments arrive as they are written and the guard checks the call
-when it ends; a call it blocks finishes `content_filter`, not `tool_calls`.
-`TOOL_GUARD=on` holds each call until it passes, as SparkQwen and SparkGLM do.
-A client must not run a call from a response that finished `content_filter`
+SparkGLM ship is on by default (`TOOL_GUARD` in `.env`), and holds each call
+until its complete arguments pass. A request that sends
+`stream_tool_arguments: true` gets its calls' arguments as they are written
+instead; the guard then checks each call when it ends, and a call it blocks
+finishes `content_filter`, not `tool_calls`, which such a client must not run
 ([docs/TOOL-GUARD.md](docs/TOOL-GUARD.md)).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`

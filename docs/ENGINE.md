@@ -5,7 +5,7 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/concurrent-spec-20261123` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`76d866b15` (tree `c99c4334`), for the kernel target `inkling-2-mini`
+`d3318e087` (tree `a53a4b2d`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -109,12 +109,15 @@ The branch is the Inkling 2 Mini series, first written on Atlas-Inf `main`
   xhigh 32K reasoning tokens) or its loop watchdog fires; the model then
   writes its answer. Inkling loops in its reasoning at high effort (its
   model card says so); DSpark keeps speculating inside the block.
-- **Streamed tool calls.** Once a tool block reads `{"name":NAME,"args":`,
-  the engine opens the call and passes its argument tokens through as they
-  arrive, so `function.arguments` streams. The tool guard (`stream`, the
-  default) checks each call when it ends; a call it blocks ends the response
-  with `content_filter` instead of `tool_calls`, and must not be run.
-  `TOOL_GUARD=on` holds each call until it passes instead.
+- **Streamed tool calls, on request.** Once a tool block reads
+  `{"name":NAME,"args":`, the engine can open the call and pass its argument
+  tokens through as they arrive. Under the tool guard's `stream` setting (the
+  default) it does so only for a request that sends
+  `stream_tool_arguments: true`, and checks the call when it ends: a call it
+  blocks ends that response with `content_filter` instead of `tool_calls`, and
+  must not be run. Every other request's calls are held until they pass, as
+  under `TOOL_GUARD=on`, so a client that does not read the finish reason never
+  receives a blocked call.
 - **Launch overlap.** The target's kernels always launch with programmatic
   dependent launch, so each one's launch overlaps its predecessor's tail
   (bit-identical; every listed kernel waits for its predecessor first).

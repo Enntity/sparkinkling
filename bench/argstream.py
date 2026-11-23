@@ -4,7 +4,7 @@ import json, sys, urllib.request
 URL = "http://127.0.0.1:8895/v1/chat/completions"
 tools = [{"type": "function", "function": {"name": "Say", "description": "Speak text aloud to the user.", "parameters": {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]}}}]
 for extra in ({"reasoning_effort": "low"}, {"chat_template_kwargs": {"enable_thinking": False}}):
-    b = {"model": "m", "stream": True, "temperature": 0, "max_tokens": 600, "tools": tools, "tool_choice": "auto",
+    b = {"model": "m", "stream": True, "stream_tool_arguments": True, "temperature": 0, "max_tokens": 600, "tools": tools, "tool_choice": "auto",
          "messages": [{"role": "system", "content": "Always answer by calling Say."}, {"role": "user", "content": "Tell me a short story about a cat, three sentences."}], **extra}
     chunks, args = 0, ""
     for line in urllib.request.urlopen(urllib.request.Request(URL, json.dumps(b).encode(), {"Content-Type": "application/json"}), timeout=600):
