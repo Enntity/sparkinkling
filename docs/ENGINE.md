@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`887d17894` (tree `9d17cd50`), for the kernel target `inkling-2-mini`
+`f4684808c` (tree `b70413ac`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -69,7 +69,11 @@ order:
   resumes from the deepest checkpoint at or below its match. A prompt under
   512 tokens runs its last chunk as one pass: the split's extra pass still
   reads nearly every expert (about 0.1 s), more than recomputing so short a
-  prompt costs (`ModelConfig::tail_split_min_tokens`). With a disk
+  prompt costs (`ModelConfig::tail_split_min_tokens`). Where a prompt forks
+  from a cached one at least 512 tokens above its restore point, the prefill
+  also saves a checkpoint at the fork (`ATLAS_GLM_PC_BRANCH`, set by the
+  profiles), so a client that rebuilds its last few messages every turn
+  resumes there next turn instead of far below. With a disk
   tier (`ATLAS_KV_NVME_DIR`) evicted KV blocks are restored from disk only
   up to such a snapshot, as for the SSM models: KV alone cannot resume a
   sequence whose conv state is gone.

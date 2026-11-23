@@ -168,6 +168,14 @@ at the end of each prompt, and a hit resumes from the deepest one it matches.
 On a 7.5K-token prompt the time to first token went from about 2.4 s cold to
 0.12 s warm, with byte-identical answers.
 
+Some clients rebuild their last few messages every turn (a voice agent's
+context blocks after the history). Each such turn forks from the previous
+prompt before its end, so the cache also saves a state where a prompt forks
+from a cached one by 512 tokens or more, and the next turn resumes there. On a
+replay of a voice call (16-17K-token prompts, three rebuilt trailing messages)
+the time to first token of a new turn went from 1.3-1.7 s to 0.6-0.8 s (one
+run on a development build).
+
 ### Prefix cache on disk
 
 When the KV pool fills, the prefix cache drops the conversations used least
