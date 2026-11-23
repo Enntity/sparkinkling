@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <p align="center">
-  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. Strict mode serves the checkpoint as shipped (./start.sh --mode strict); Spark mode adds a calibrated NVFP4 overlay (./start.sh --mode spark)." width="100%">
+  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Strict (./start.sh) and Spark (--mode spark): code 54.2 and 68.4, prose 35.0 and 54.9, eight requests 121.0 and 135.2. 32K prefill 3,283 tok/s, 6 of 6 output gates. SparkInkling 0.4.1, RigMark 1.1.0, low effort." width="100%">
 </p>
 
 # SparkInkling
