@@ -157,6 +157,8 @@ SparkGLM ship is on by default (`TOOL_GUARD` in `.env`). Here it streams: a
 call's arguments arrive as they are written and the guard checks the call
 when it ends; a call it blocks finishes `content_filter`, not `tool_calls`.
 `TOOL_GUARD=on` holds each call until it passes, as SparkQwen and SparkGLM do.
+A client must not run a call from a response that finished `content_filter`
+([docs/TOOL-GUARD.md](docs/TOOL-GUARD.md)).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
 (below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90), `PREFIX_CACHE_DIR`
@@ -238,20 +240,33 @@ accepted a step decodes plainly and re-probes 256 tokens later, so code and
 structured output speculate and prose mostly does not. `DRAFTER=none` turns
 it off.
 
+## Reproduce our numbers
+
+Every figure above has its commands, unedited receipts and checksums under
+[`results/`](results/README.md). [docs/REPRODUCE.md](docs/REPRODUCE.md) is how
+to run the same RigMark suites and the functional check on your own Spark.
+What SparkInkling does not do, and what its evidence does not cover, is in
+[docs/LIMITATIONS.md](docs/LIMITATIONS.md).
+
 ## Other ways to run it
 
 **By hand:** every step of `./start.sh` as a separate command, in
 [docs/INSTALL-MANUAL.md](docs/INSTALL-MANUAL.md).
+
+**Versions:** how releases are numbered and identified, in
+[docs/VERSIONING.md](docs/VERSIONING.md).
 
 ## The engine
 
 SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121`,
 the Inkling 2 Mini serving series on Atlas-Inf `main`, pinned by commit and
-tree in [`install/atlas-source.json`](install/atlas-source.json), and proposed
-upstream as [Atlas-Inf/atlas#401](https://github.com/Atlas-Inf/atlas/pull/401),
-[#404](https://github.com/Atlas-Inf/atlas/pull/404) and
-[#405](https://github.com/Atlas-Inf/atlas/pull/405).
+tree in [`install/atlas-source.json`](install/atlas-source.json). The first
+part is in Atlas upstream
+([Atlas-Inf/atlas 401](https://github.com/Atlas-Inf/atlas/pull/401), merged
+2026-11-23); the rest is proposed as
+[404](https://github.com/Atlas-Inf/atlas/pull/404) and
+[405](https://github.com/Atlas-Inf/atlas/pull/405).
 What the branch adds and what it does not do yet:
 [docs/ENGINE.md](docs/ENGINE.md).
 
@@ -266,5 +281,5 @@ by Alex Ellis (MIT). The launcher and install directory are adapted from
 ## License
 
 AGPL-3.0-only ([LICENSE](LICENSE)); third-party components keep their own
-licenses ([NOTICE](NOTICE)). The model weights are not distributed here; check
+licenses ([NOTICE](NOTICE), [docs/LICENSING.md](docs/LICENSING.md)). The model weights are not distributed here; check
 the checkpoint's model card before downloading.

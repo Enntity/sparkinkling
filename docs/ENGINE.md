@@ -153,6 +153,6 @@ build, with the exact-name skips listed in
 `main`). GPU tests are not part of the build; the engine is qualified on the
 hardware separately.
 
-The [tool-call guard](https://github.com/Enntity/sparkqwen/blob/main/docs/TOOL-GUARD.md)
+The [tool-call guard](TOOL-GUARD.md)
 is on by default, as in SparkQwen and SparkGLM, here in its `stream` setting
 (a call streams and is checked when it ends). It runs after tool-call parsing; the 0.1.0 task probe's tool calls passed through it in both modes.
