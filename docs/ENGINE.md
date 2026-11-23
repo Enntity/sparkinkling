@@ -10,11 +10,17 @@ the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json)
 commit, refuses any other tree, and takes the kernel target from the same
 file. The pin moves only in `install/atlas-source.json` and on this page.
 
+The pin's branch name is where the series was developed. Since 2026-11-23
+that branch holds only the part under review upstream as the first pull
+request; the pinned commit is kept on
+`inkling2/images-and-serving-20261123` and under the tag `sparkinkling-0.4.1`.
+The build fetches by commit, so nothing changes for it.
+
 ## What the branch adds
 
 `inkling2/mini-20261121` is the Inkling 2 Mini series on Atlas-Inf `main`
-`269b533bc` (the merge of #332), proposed upstream as one pull request. In
-order:
+`269b533bc` (the merge of #332), proposed upstream as three stacked pull
+requests (Atlas-Inf/atlas 401, 404 and 405). In order:
 
 - **Loading.** The config parses as 48 unrolled layer visits (24 physical
   layers; the core 6-17 run three times with shared weights), and the
