@@ -15,3 +15,6 @@ Measure the baseline on the same Spark, and put its receipts in `raw/` too.
 
 - [`2026-11-21-release-0.1.0`](2026-11-21-release-0.1.0/RESULT.md): the 0.1.0
   image, Strict and Spark with DSpark, against vLLM on the same Spark.
+- [`2026-11-23-release-0.4.1`](2026-11-23-release-0.4.1/RESULT.md): the 0.4.1
+  image (image input, budget forcing, streamed tool calls), both modes against
+  0.4.0 and vLLM, with its functional check.

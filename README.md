@@ -5,21 +5,24 @@
 
 # SparkInkling
 
-**SparkInkling 0.4.0.** Run `./start.sh --version` for this checkout, or
+**SparkInkling 0.4.1.** Run `./start.sh --version` for this checkout, or
 `./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
-engine with an OpenAI-compatible API, reasoning and tool calls.
+engine with an OpenAI-compatible API, image input, reasoning and tool calls.
 
-0.4.0 adds prefix caching (a chat's next turn starts in about 0.3 s, and
-with `PREFIX_CACHE_DIR` evicted conversations come back from disk) and
-SparkQwen's three profiles. Spark is ahead of vLLM's own Inkling 2 Mini image
-in every measured cell (1.9x on code, 1.45x on prose, 1.2x on 32K prefill), and
-Strict, the checkpoint as shipped, is ahead on code, structured output,
-prefill and one request and within 2-10% of it on prose and two to eight
-requests. See [Performance](#performance); every result has its receipts
-under [`results/`](results/).
+0.4.1 adds image input, ends Inkling's reasoning loops (the engine closes a
+reasoning block that runs past its effort's budget or repeats itself, and a
+request that names no effort reasons at `low`), streams tool-call arguments
+while the tool guard still checks every call, and lets a client that rebuilds
+its last messages each turn resume from the prefix cache. Spark is ahead of
+vLLM's own Inkling 2 Mini image without speculation in every measured cell
+(1.95x on code, 1.54x on prose, 1.2x on 32K prefill), and Strict, the
+checkpoint as shipped, is ahead on code, structured output, prefill and one
+request and within 1-3% of it on prose and two to eight short-code requests.
+See [Performance](#performance); every result has its receipts under
+[`results/`](results/).
 
 ## The model
 
@@ -46,17 +49,17 @@ detail](docs/MODES.md).
 
 ## Performance
 
-Measured on the 0.4.0 image with RigMark (reasoning low, temperature 0), one
+Measured on the 0.4.1 image with RigMark (reasoning low, temperature 0), one
 Spark, the default profile and drafter, against vLLM's own Inkling 2 Mini image
-on the same Spark: [the result, with every receipt](results/2026-11-21-release-0.4.0/RESULT.md).
+on the same Spark: [the result, with every receipt](results/2026-11-23-release-0.4.1/RESULT.md).
 
 | | Strict | Spark | vLLM | vLLM + DSpark |
 |---|---:|---:|---:|---:|
-| Code decode, tok/s | 49.2 | **66.8** | 35.1 | 69.8 |
-| Prose decode | 33.6 | **51.6** | 35.6 | 31.2 |
-| Structured decode | 86.4 | **96.4** | 35.6 | 104.3 |
-| 32K cold prefill, tok/s | **3,277** | **3,275** | 2,722 | 2,723 |
-| Short code, C1 / C2 / C4 / C8 aggregate | 35.9 / 49.1 / 78.1 / 119.6 | **50.9 / 72.0 / 101.3 / 134.9** | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
+| Code decode, tok/s | 54.2 | **68.4** | 35.1 | 69.8 |
+| Prose decode | 35.0 | **54.9** | 35.6 | 31.2 |
+| Structured decode | 79.9 | **95.3** | 35.6 | 104.3 |
+| 32K cold prefill, tok/s | **3,283** | **3,274** | 2,722 | 2,723 |
+| Short code, C1 / C2 / C4 / C8 aggregate | 36.8 / 53.4 / 84.5 / 121.0 | **51.6 / 76.1 / 105.4 / 135.2** | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
 | 32K prompt sent again, time to first token | 0.16 s | 0.15 s | | |
 | Basic output gates | 6/6 | 6/6 | 6/6 | 6/6 |
 
@@ -64,6 +67,9 @@ Spark leads vLLM without speculation everywhere and vLLM with its drafter on
 prose, prefill and one to four requests; vLLM's drafter is ahead on code,
 structured output and eight requests. Strict reads the checkpoint's BF16
 attention weights as shipped, about twice the bytes a Spark token reads.
+SparkInkling drafts only while one request is live
+([issue 1](https://github.com/Enntity/sparkinkling/issues/1)); vLLM's drafter
+also runs under load.
 Prefix caching costs a cold prompt of 512 tokens or more one short extra pass
 (about 0.1 s: about 2% at 32K and 5-6% at 8K against 0.3.0), which is what lets the
 next turn resume. The vLLM receipts were measured the day before.
