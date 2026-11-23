@@ -1,29 +1,30 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 # Limitations
 
-What to know before relying on SparkInkling. Everything here is about version
-0.4.1 on one DGX Spark; the measurements are in
-[`results/2026-11-23-release-0.4.1`](../results/2026-11-23-release-0.4.1/RESULT.md).
+What to know before relying on SparkInkling, on one DGX Spark. This page
+describes the 0.4.2 candidate. It has no release run yet: figures here are
+0.4.1's ([`results/2026-11-23-release-0.4.1`](../results/2026-11-23-release-0.4.1/RESULT.md))
+unless they say they come from a development build.
 
 ## Speed
 
-- **Drafts help one request at a time.** The DSpark drafter runs only while a
-  single request is live; from two requests the engine decodes plainly, in a
-  batch. vLLM's Inkling 2 Mini image drafts for concurrent requests and is
-  ahead at eight short-code requests (144.0 against 135.2 tok/s in Spark,
-  121.0 in Strict)
+- **Drafts help one or two requests at a time.** Strict drafts for one or two
+  live requests and Spark for one; beyond that the engine decodes plainly, in
+  a batch. The drafter proposes one request at a time, so at three and four
+  requests one draft each gained on code and lost on prose, and at eight the
+  proposals alone would cost more than a plain step. vLLM's Inkling 2 Mini
+  image drafts for all concurrent requests in one pass and is ahead at eight
+  short-code requests
   ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
 - **Drafts do not help prose.** The target accepts about one draft in two on
   prose, and a verify step costs more than that returns, so the engine turns
-  drafts off there. Strict prose is level with vLLM without speculation
-  (0.98x); Spark's prose lead (1.54x) comes from its weights, not from drafts.
-- **Strict is behind vLLM with its drafter on code** (54.2 against 69.8 tok/s)
-  and on structured output (79.9 against 104.3). It is ahead of vLLM without a
-  drafter on both.
-- **Strict structured decode was uneven** in the release run (72.7 and 87.1
-  tok/s on the same prompt): the rule that turns drafts off held them off too
-  long in one run
-  ([issue 2](https://github.com/Enntity/sparkinkling/issues/2)).
+  drafts off there. Spark's prose lead over vLLM comes from its weights, not
+  from drafts.
+- **Strict trails vLLM with its drafter on code and structured output.**
+  0.4.1 read 54.2 against 69.8 tok/s on code and 79.9 against 104.3 on
+  structured output. The candidate read 66.4 and 93.7 on a development build
+  with other services on the Spark, which narrows the gap and does not close
+  it. Strict is ahead of vLLM without a drafter on both.
 - **One Spark.** The image refuses multi-rank flags. The measurements were
   taken with nothing else serving on the Spark; other GPU work on the same
   machine slows it.

@@ -232,13 +232,23 @@ soon as it has them open, and clears a crash's leftovers when it starts.
 ## Speculative decoding
 
 Both modes run the checkpoint's bundled DSpark drafter by default
-(`DRAFTER=dspark`): it proposes seven tokens a step and the mode's own weights
-verify them, so it changes speed, not the model. It speculates while one
-request is live; from two requests the engine decodes plainly, which delivers
-more there. And only while it pays: a request whose drafts average under two
-accepted a step decodes plainly and re-probes 256 tokens later, so code and
-structured output speculate and prose mostly does not. `DRAFTER=none` turns
-it off.
+(`DRAFTER=dspark`): it proposes up to seven tokens a step and the mode's own
+weights verify them, so it changes speed, not the model. Greedy text with the
+drafter on matched text with it off in our check
+([LIMITATIONS](docs/LIMITATIONS.md#fidelity)).
+
+- **A verify stops where the drafter is unsure.** The drafter reports how
+  confident it is in each draft, the engine learns while serving how often
+  drafts at each confidence are accepted, and a step verifies only as far as
+  the block is still likely right.
+- **Drafts go off where they do not pay.** A request whose drafts stop being
+  accepted decodes plainly for a short stretch (32 tokens at first, longer
+  while re-probes keep failing), so code and structured output draft and
+  prose mostly does not.
+- **Concurrent requests.** Strict drafts for one or two live requests and
+  decodes plainly, in a batch, from three; Spark drafts for one.
+
+`DRAFTER=none` turns the drafter off.
 
 ## Reproduce our numbers
 
