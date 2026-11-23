@@ -83,7 +83,8 @@ streamed tool calls (`raw/tooltest.py`, `raw/argstream.py`), forced tool
 choices and a guarded call (`raw/forced_stream.py`), three images
 (`raw/vis_chat.py` with the PNGs beside it) and a voice-agent turn pattern
 (`raw/voice_turns.py`). Each takes the server's port or uses 8895. Their
-output for the release is `raw/rc-check.out`.
+output for the release is `raw/rc-check.out`. The same drivers, with how to
+run each, are in [`bench/`](../bench/README.md).
 
 ## The vLLM columns
 
