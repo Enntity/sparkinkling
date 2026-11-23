@@ -23,8 +23,9 @@ DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 # whose drafts average under a threshold accepted a step over 12 steps decodes
 # plainly until a re-probe 256 tokens later (the engine's adaptive suspend).
 # What pays differs by mode, because a verify step costs about the same in
-# both and a plain step is a third shorter in Spark (GB10, 2026-11-23,
-# results/2026-11-23-release-0.4.2):
+# both and a plain step is a third shorter in Spark (GB10, 2026-11-23, a
+# development build with other services resident; the runs are in
+# Enntity/sparkinkling issues 1 and 2):
 # - Strict: seven drafts alone, two each for two requests (two code requests
 #   73 vs 54 tok/s, prose level), plain from three. Drafts pay from about half
 #   a token accepted a step, so the threshold is 0.7: at the engine's 2.0 a
