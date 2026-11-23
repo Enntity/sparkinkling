@@ -1,0 +1,51 @@
+name: Performance result or regression
+description: Report a reproducible Inkling 2 Mini performance finding on one DGX Spark
+title: "[perf] "
+labels: [performance, needs-evidence]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, private hostnames, or model paths. A number without identities and raw receipts is a lead, not a result.
+  - type: input
+    id: revision
+    attributes:
+      label: SparkInkling revision
+      description: Full 40-character commit SHA from a clean checkout.
+    validations:
+      required: true
+  - type: textarea
+    id: identities
+    attributes:
+      label: Exact identities
+      description: Image tag and mode (`./start.sh status`), checkpoint and overlay revisions, profile, drafter and opt-ins, CUDA/driver, and what else was running on the Spark.
+    validations:
+      required: true
+  - type: textarea
+    id: workload
+    attributes:
+      label: Workload contract
+      description: Concurrency, actual tokenizer counts, output tokens, reasoning effort, warmup, tools or images, and all non-default flags.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Paired result
+      description: Baseline/candidate order, every retained repetition, primary metric, protected metrics, and noise.
+    validations:
+      required: true
+  - type: textarea
+    id: correctness
+    attributes:
+      label: Correctness and limitations
+      description: Output/hash comparison, semantic checks, errors, known regressions, and what was not tested.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Raw evidence
+      description: Link to a result bundle or attach sanitized JSON/logs. Do not paste only the best sample.
+    validations:
+      required: true
