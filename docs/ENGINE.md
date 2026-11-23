@@ -22,7 +22,8 @@ drafter's confidence. The build fetches by commit.
 
 The branch is the Inkling 2 Mini series on Atlas-Inf `main` `269b533bc` (the
 merge of #332), proposed upstream as three stacked pull requests
-(Atlas-Inf/atlas 401, 404 and 405); the drafting commits follow them. In order:
+(Atlas-Inf/atlas 401, 404 and 405); the drafting commits follow them as a
+fourth, a draft (Atlas-Inf/atlas 408). In order:
 
 - **Loading.** The config parses as 48 unrolled layer visits (24 physical
   layers; the core 6-17 run three times with shared weights), and the
