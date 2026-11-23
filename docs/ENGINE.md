@@ -2,25 +2,27 @@
 # The engine
 
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
-[Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
+[Enntity/atlas](https://github.com/Enntity/atlas)
+`inkling2/concurrent-spec-20261123` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`6cf40a5a0` (tree `de033b9a`), for the kernel target `inkling-2-mini`
+`5e5d115b8` (tree `c8ea79ba`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
 file. The pin moves only in `install/atlas-source.json` and on this page.
 
-The pin's branch name is where the series was developed. Since 2026-11-23
-that branch holds only the part under review upstream as the first pull
-request; the pinned commit is kept on
-`inkling2/images-and-serving-20261123` and under the tag `sparkinkling-0.4.1`.
-The build fetches by commit, so nothing changes for it.
+The series is stacked for review upstream: `inkling2/mini-20261121` is the
+part in the first pull request, `inkling2/budget-forcing-20261122` and
+`inkling2/images-and-serving-20261123` (0.4.1's engine, also tagged
+`sparkinkling-0.4.1`) the next two, and the pinned branch adds the two
+commits for drafting with two live requests. The build fetches by commit.
 
 ## What the branch adds
 
-`inkling2/mini-20261121` is the Inkling 2 Mini series on Atlas-Inf `main`
-`269b533bc` (the merge of #332), proposed upstream as three stacked pull
-requests (Atlas-Inf/atlas 401, 404 and 405). In order:
+The branch is the Inkling 2 Mini series on Atlas-Inf `main` `269b533bc` (the
+merge of #332), proposed upstream as three stacked pull requests
+(Atlas-Inf/atlas 401, 404 and 405); the two-request drafting commits follow
+them. In order:
 
 - **Loading.** The config parses as 48 unrolled layer visits (24 physical
   layers; the core 6-17 run three times with shared weights), and the
@@ -127,16 +129,26 @@ requests (Atlas-Inf/atlas 401, 404 and 405). In order:
   vocabulary head at load. The target verifies every draft, so the drafts
   change speed and not the text (in development an NVFP4 and a BF16 drafter
   gave byte-identical greedy text). The image speculates only while drafts
-  pay (`ATLAS_DFLASH_ADAPTIVE=1`: under two accepted a step over twelve steps,
-  a sequence decodes plainly until a re-probe 256 tokens later). A verify runs the target over 8 rows at
+  pay (`ATLAS_DFLASH_ADAPTIVE=1`: under a threshold accepted a step over
+  twelve steps, a sequence decodes plainly until a re-probe 256 tokens later;
+  the threshold is the engine's 2.0 in Spark and 0.7 in Strict, where a plain
+  step is slower and drafts pay sooner). With two live requests (Strict) each
+  gets two drafts a step: the two proposes share one pass over the vocabulary
+  head, and a pair whose drafts stop paying decodes plain, batched, until the
+  re-probe. A verify runs the target over 8 rows at
   once, and those kernels round differently from single-row decode, so
   greedy text with and without speculation can part at a near tie.
 
 ## What it does not do yet
 
-- **Batched DSpark.** The drafter proposes for one sequence at a time, so
-  SparkInkling speculates only while one request is live and decodes plainly
-  from two (`ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0`, set by the image).
+- **Drafting for more requests.** Strict drafts for one or two live requests
+  and decodes plainly from three (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0`,
+  set by the image); Spark drafts for one (`1:7,1000000:0`). The drafter
+  proposes one sequence at a time, about 5 ms each, and a verify row costs
+  about as much as a decode row, so at four requests one draft each measured
+  level with plain decode, and in Spark two drafts each at two requests
+  gained on code and lost on prose
+  ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
 - **Expert input quantization in decode.** Decode and verify rows (fewer than
   16 at once) still give the experts BF16 inputs, so a token's experts see the
   checkpoint's declared numerics in prefill and BF16 inputs in decode.

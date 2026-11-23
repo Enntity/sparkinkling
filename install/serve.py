@@ -19,14 +19,25 @@ OVERLAY_FILE = 'spark-nvfp4.safetensors'
 DRAFTERS = ('dspark', 'none')
 # The drafter's block is 8: seven drafts a step.
 DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
-# Speculate with one live request only: the drafter proposes one sequence at
-# a time, and from two requests plain batched decode delivers more (GB10,
-# 2026-11-21: C2 43 vs 32 tok/s). And only while it pays: a sequence whose
-# drafts average under two accepted a step over 12 steps decodes plainly until
-# a re-probe 256 tokens later (the engine's adaptive suspend; prose accepts
-# about 0.8 a step, where a seven-draft verify costs about 2.6 plain steps:
-# Strict prose 22.7 -> 29.4 tok/s, code 51.9 -> 48.3, GB10, 2026-11-21).
-DSPARK_ENV = {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE': '1'}
+# Drafts by live requests (`n:drafts`), and only while they pay: a sequence
+# whose drafts average under a threshold accepted a step over 12 steps decodes
+# plainly until a re-probe 256 tokens later (the engine's adaptive suspend).
+# What pays differs by mode, because a verify step costs about the same in
+# both and a plain step is a third shorter in Spark (GB10, 2026-11-23,
+# results/2026-11-23-release-0.4.2):
+# - Strict: seven drafts alone, two each for two requests (two code requests
+#   73 vs 54 tok/s, prose level), plain from three. Drafts pay from about half
+#   a token accepted a step, so the threshold is 0.7: at the engine's 2.0 a
+#   reasoning block that accepts 1.9 a step lost its drafts on a coin flip
+#   (structured output 54-85 tok/s run to run, 87-89 at 0.7).
+# - Spark: seven drafts alone at the engine's threshold of 2.0 (0.7 cost prose
+#   4%), plain from two (two drafts each gained 13% on code and lost 5% on
+#   prose).
+DSPARK_ENV = {
+    'strict': {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:2,1000000:0', 'ATLAS_DFLASH_ADAPTIVE': '1',
+               'ATLAS_DFLASH_ADAPTIVE_MIN': '0.7'},
+    'spark': {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE': '1'},
+}
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
 MULTI_RANK_FLAGS = ('--world-size', '--tp-size', '--ep-size', '--rank', '--master-addr', '--master-port')
@@ -131,7 +142,7 @@ def launch(environ, profile):
         if not Path(draft).is_absolute() or any(c in draft for c in '\r\n\0'):
             raise ValueError('DRAFTER_PATH must be an absolute path')
         args += [*DSPARK_ARGS, f'--draft-model={draft}']
-        env.update(DSPARK_ENV)
+        env.update(DSPARK_ENV[mode])
     name = environ.get('SERVED_MODEL_NAME', SERVED_MODEL_NAME)
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._/-]{0,127}', name):
         raise ValueError('Invalid SERVED_MODEL_NAME')

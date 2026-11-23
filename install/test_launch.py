@@ -98,10 +98,18 @@ class Launch(unittest.TestCase):
         self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
         self.assertEqual(flag(argv, '--num-drafts'), '7')
-        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        # Strict: seven drafts alone, two each for two requests, drafts off under 0.7 accepted a step
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:2,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
+        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE_MIN'], '0.7')
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
+
+    def test_spark_speculates_alone_at_the_engine_threshold(self):
+        _, env = launch(SPARKINKLING_MODE='spark')
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
+        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
 
     def test_prefix_caching_with_pinned_snapshots(self):
         for mode in ('strict', 'spark'):
@@ -140,6 +148,7 @@ class Launch(unittest.TestCase):
             self.assertIsNone(flag(argv, spec_flag), spec_flag)
         self.assertNotIn('ATLAS_DFLASH_BATCH_DEPTH', env)
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE', env)
+        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_DRAFTER='eagle')
 
