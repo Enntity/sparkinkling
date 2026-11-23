@@ -98,18 +98,23 @@ class Launch(unittest.TestCase):
         self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
         self.assertEqual(flag(argv, '--num-drafts'), '7')
-        # Strict: seven drafts alone, two each for two requests, drafts off under 0.7 accepted a step
+        # Strict: seven drafts alone, two each for two requests; verifies sized by the drafter's
+        # confidence; drafts off per sequence at the engine's threshold, not by the throughput gate
         self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:2,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
-        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE_MIN'], '0.7')
+        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
+        self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
+        self.assertEqual(env['ATLAS_MTP_GATE_FORCE'], '1')
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
 
-    def test_spark_speculates_alone_at_the_engine_threshold(self):
+    def test_spark_speculates_alone_at_its_own_threshold(self):
         _, env = launch(SPARKINKLING_MODE='spark')
         self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
-        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
+        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE_MIN'], '2.5')
+        self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
+        self.assertEqual(env['ATLAS_MTP_GATE_FORCE'], '1')
 
     def test_prefix_caching_with_pinned_snapshots(self):
         for mode in ('strict', 'spark'):
@@ -149,6 +154,8 @@ class Launch(unittest.TestCase):
         self.assertNotIn('ATLAS_DFLASH_BATCH_DEPTH', env)
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE', env)
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
+        self.assertNotIn('ATLAS_DFLASH_CONF_WIDTH', env)
+        self.assertNotIn('ATLAS_MTP_GATE_FORCE', env)
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_DRAFTER='eagle')
 

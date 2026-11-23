@@ -5,7 +5,7 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/concurrent-spec-20261123` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`5e5d115b8` (tree `c8ea79ba`), for the kernel target `inkling-2-mini`
+`67acea8f5` (tree `f873be4d`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -14,15 +14,15 @@ file. The pin moves only in `install/atlas-source.json` and on this page.
 The series is stacked for review upstream: `inkling2/mini-20261121` is the
 part in the first pull request, `inkling2/budget-forcing-20261122` and
 `inkling2/images-and-serving-20261123` (0.4.1's engine, also tagged
-`sparkinkling-0.4.1`) the next two, and the pinned branch adds the two
-commits for drafting with two live requests. The build fetches by commit.
+`sparkinkling-0.4.1`) the next two, and the pinned branch adds four
+commits: drafting with two live requests, and verifies sized by the
+drafter's confidence. The build fetches by commit.
 
 ## What the branch adds
 
 The branch is the Inkling 2 Mini series on Atlas-Inf `main` `269b533bc` (the
 merge of #332), proposed upstream as three stacked pull requests
-(Atlas-Inf/atlas 401, 404 and 405); the two-request drafting commits follow
-them. In order:
+(Atlas-Inf/atlas 401, 404 and 405); the drafting commits follow them. In order:
 
 - **Loading.** The config parses as 48 unrolled layer visits (24 physical
   layers; the core 6-17 run three times with shared weights), and the
@@ -128,14 +128,20 @@ them. In order:
   recurrent Markov head corrects the drafts, its latent folded into the
   vocabulary head at load. The target verifies every draft, so the drafts
   change speed and not the text (in development an NVFP4 and a BF16 drafter
-  gave byte-identical greedy text). The image speculates only while drafts
-  pay (`ATLAS_DFLASH_ADAPTIVE=1`: under a threshold accepted a step over
-  twelve steps, a sequence decodes plainly until a re-probe 256 tokens later;
-  the threshold is the engine's 2.0 in Spark and 0.7 in Strict, where a plain
-  step is slower and drafts pay sooner). With two live requests (Strict) each
-  gets two drafts a step: the two proposes share one pass over the vocabulary
-  head, and a pair whose drafts stop paying decodes plain, batched, until the
-  re-probe. A verify runs the target over 8 rows at
+  gave byte-identical greedy text). A verify stops where the drafter is unsure
+  (`ATLAS_DFLASH_CONF_WIDTH=1`): the drafter reports the log-probability of
+  each draft, the engine learns while serving how often the target accepts a
+  draft at each confidence, and the step verifies only as far as the block is
+  still likely right, because every extra verify row reads about 1.7 GB of
+  expert weights (about 6 ms). Drafts go off for a sequence whose steps stop
+  paying (`ATLAS_DFLASH_ADAPTIVE=1`), for 32 tokens at first and doubling
+  while re-probes keep failing; the threshold is what a whole block must
+  accept, 2.0 in Strict and 2.5 in Spark, and a shorter step owes a share of
+  it. That rule stands in for the engine's throughput gate
+  (`ATLAS_MTP_GATE_FORCE=1`), whose off state carried from one request into
+  the next. With two live requests (Strict) each gets two drafts a step: the
+  two proposes share one pass over the vocabulary head, and a pair whose
+  drafts stop paying decodes plain, batched, until the re-probe. A verify runs the target over 8 rows at
   once, and those kernels round differently from single-row decode, so
   greedy text with and without speculation can part at a near tie.
 

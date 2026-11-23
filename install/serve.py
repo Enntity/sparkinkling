@@ -19,25 +19,28 @@ OVERLAY_FILE = 'spark-nvfp4.safetensors'
 DRAFTERS = ('dspark', 'none')
 # The drafter's block is 8: seven drafts a step.
 DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
-# Drafts by live requests (`n:drafts`), and only while they pay: a sequence
-# whose drafts average under a threshold accepted a step over 12 steps decodes
-# plainly until a re-probe 256 tokens later (the engine's adaptive suspend).
-# What pays differs by mode, because a verify step costs about the same in
-# both and a plain step is a third shorter in Spark (GB10, 2026-11-23, a
-# development build with other services resident; the runs are in
-# Enntity/sparkinkling issues 1 and 2):
-# - Strict: seven drafts alone, two each for two requests (two code requests
-#   73 vs 54 tok/s, prose level), plain from three. Drafts pay from about half
-#   a token accepted a step, so the threshold is 0.7: at the engine's 2.0 a
-#   reasoning block that accepts 1.9 a step lost its drafts on a coin flip
-#   (structured output 54-85 tok/s run to run, 87-89 at 0.7).
-# - Spark: seven drafts alone at the engine's threshold of 2.0 (0.7 cost prose
-#   4%), plain from two (two drafts each gained 13% on code and lost 5% on
-#   prose).
+# How the drafter is run (GB10, 2026-11-23, a development build with other
+# services resident; the runs are in Enntity/sparkinkling issues 1 and 2):
+# - A verify stops where the drafter is unsure (ATLAS_DFLASH_CONF_WIDTH: the
+#   engine learns, while serving, how often the target accepts a draft at each
+#   confidence, and cuts the block where the chance it is still right falls
+#   under 0.3). An extra verify row costs about 6 ms of expert weights, so a
+#   drafted step fell from about 77 ms to 52-56 ms.
+# - Drafts go off for a sequence whose steps stop paying, for 32 tokens at
+#   first and doubling while re-probes keep failing (ATLAS_DFLASH_ADAPTIVE).
+#   The threshold is what a whole block must accept: 2.0 in Strict (the
+#   engine's default) and 2.5 in Spark, where a plain step is a third
+#   shorter. That per-sequence rule replaces the engine's throughput gate
+#   (ATLAS_MTP_GATE_FORCE), which carries its off state from one request into
+#   the next (Strict structured output read 70 and 89 tok/s run to run).
+# - Drafts by live requests (`n:drafts`): Strict drafts two each for two
+#   requests (two code requests 73 vs 54 tok/s, prose level) and decodes
+#   plainly from three; Spark from two (two drafts each gained on code and
+#   lost on prose).
+_DSPARK_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}
 DSPARK_ENV = {
-    'strict': {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:2,1000000:0', 'ATLAS_DFLASH_ADAPTIVE': '1',
-               'ATLAS_DFLASH_ADAPTIVE_MIN': '0.7'},
-    'spark': {'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE': '1'},
+    'strict': {**_DSPARK_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:2,1000000:0'},
+    'spark': {**_DSPARK_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE_MIN': '2.5'},
 }
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
