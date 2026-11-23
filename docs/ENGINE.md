@@ -5,26 +5,28 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/concurrent-spec-20261123` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`c86d0e312` (tree `b1394160`), for the kernel target `inkling-2-mini`
+`76d866b15` (tree `c99c4334`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
 file. The pin moves only in `install/atlas-source.json` and on this page.
 
-The series is stacked for review upstream: `inkling2/mini-20261121` is the
-part in the first pull request, `inkling2/budget-forcing-20261122` and
-`inkling2/images-and-serving-20261123` (0.4.1's engine, also tagged
-`sparkinkling-0.4.1`) the next two, and the pinned branch adds seven
-commits: drafting with two live requests, verifies sized by the drafter's
-confidence, a verify that attends exactly as decode does, and decode batches
-at their own width. The build fetches by commit.
+The series went upstream as stacked pull requests. The first two are merged
+into Atlas-Inf `main` (401, the serving series, and 404, budget forcing and
+streamed tool-call arguments). `inkling2/images-and-serving-20261123` is the
+third (405: image input, the streaming tool guard, branch checkpoints; 0.4.1's
+engine, `6cf40a5a0`, is tagged `sparkinkling-0.4.1`), and the pinned branch
+adds the fourth (408, a draft): drafting with two live requests, verifies
+sized by the drafter's confidence, a verify that attends exactly as decode
+does, decode batches at their own width, and one launch for a Spark decode
+row's input projections. Both branches carry a merge of `main` at
+`7a717b659`. The build fetches by commit.
 
 ## What the branch adds
 
-The branch is the Inkling 2 Mini series on Atlas-Inf `main` `269b533bc` (the
-merge of #332), proposed upstream as three stacked pull requests
-(Atlas-Inf/atlas 401, 404 and 405); the drafting commits follow them as a
-fourth, a draft (Atlas-Inf/atlas 408). In order:
+The branch is the Inkling 2 Mini series, first written on Atlas-Inf `main`
+`269b533bc` (the merge of #332) and merged up to `main` `7a717b659`
+(Atlas-Inf/atlas 401 and 404 merged, 405 and 408 open). In order:
 
 - **Loading.** The config parses as 48 unrolled layer visits (24 physical
   layers; the core 6-17 run three times with shared weights), and the
