@@ -85,7 +85,7 @@ RUN --mount=type=cache,target=/build/target,id=atlas-cargo-target-sparkinkling,s
     ATLAS_SKIP_BUILD=1 CUDARC_CUDA_VERSION=13000 \
     cargo clippy --locked --workspace --tests -j "$BUILD_JOBS"
 
-# Inkling is served text-only (the engine target has no vision tower), so the
+# Inkling takes text and still images (decoded in process), not video, so the
 # runtime carries no ffmpeg.
 FROM nvidia/cuda:13.0.0-runtime-ubuntu24.04@sha256:95318efecfd68ab3d109da5277863257b06137c84f34a87f38de970d5cd035d3
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends --allow-change-held-packages \

@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`f4684808c` (tree `b70413ac`), for the kernel target `inkling-2-mini`
+`6cf40a5a0` (tree `de033b9a`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -77,6 +77,20 @@ order:
   tier (`ATLAS_KV_NVME_DIR`) evicted KV blocks are restored from disk only
   up to such a snapshot, as for the SSM models: KV alone cannot resume a
   sequence whose conv state is gone.
+- **Images.** The checkpoint's vision tower (`model.visual.*`): a 23-layer
+  ViT over 20-pixel patches with a class token, a learned position table
+  resampled to each image's grid, axial 2D RoPE and layer scale, then a
+  bias-free projector over each 2x2 block of patches. Images are not resized:
+  the processor pads to a grid of 40x40 pixel tiles (padding at -1 on the
+  0-255 scale, transparency on a checkerboard) and each tile is one token.
+  The tower runs on Atlas's shared ViT kernels; its query and key rows are
+  permuted per head at load to the kernels' rotation layout and layer scale
+  is folded into the output projections. On a test image its features match
+  the transformers implementation (mean row norm 5.437 against 5.432 in
+  float32). Token embeddings are normed once at load, in place (the first
+  visit used to norm its input, which also normed image rows; text output is
+  byte-identical). An image of more tiles than the encoder holds (1,600 by
+  default) is scaled down first.
 - **Budget forcing.** The scheduler tracks the reasoning block by Inkling's
   markers and closes it with `<|end_message|>` at a sentence boundary once
   it passes its effort's budget (minimal 2K, low 4K, medium 8K, high 16K,
@@ -120,10 +134,9 @@ order:
 - **Expert input quantization in decode.** Decode and verify rows (fewer than
   16 at once) still give the experts BF16 inputs, so a token's experts see the
   checkpoint's declared numerics in prefill and BF16 inputs in decode.
-- **Images.** The target has no vision tower. Inkling 2 Mini takes image
-  input; SparkInkling serves text only.
-- **Known gaps** recorded on the branch: `usage.reasoning_tokens` reads 0, and
-  streamed `return_token_ids` carry the rewritten ids.
+- **Video.** The tower serves still images only.
+- **Known gap** recorded on the branch: streamed `return_token_ids` carry the
+  rewritten ids.
 
 ## Build-time gates
 

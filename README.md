@@ -30,7 +30,7 @@ and full attention without RoPE, text and image input, and up to 1M tokens of
 context. Thinking Machines ships it as one ~20 GB checkpoint with NVFP4 and
 MXFP8 experts and BF16 everything else, plus a bundled DSpark draft model.
 
-SparkInkling serves text only for now: the engine target has no vision tower.
+SparkInkling serves text and images. Video is not supported.
 
 ## Strict and Spark modes
 
@@ -121,6 +121,23 @@ curl -s http://127.0.0.1:8895/v1/chat/completions -H 'Content-Type: application/
   "model": "inkling-2-mini-atlas", "max_tokens": 1024, "reasoning_effort": "low",
   "messages": [{"role": "user", "content": "Write a haiku about one small computer."}]}'
 ```
+
+**Images** go in as OpenAI `image_url` parts with a base64 `data:` URI (PNG,
+JPEG, WebP, GIF, BMP, TIFF):
+
+```sh
+curl -s http://127.0.0.1:8895/v1/chat/completions -H 'Content-Type: application/json' -d '{
+  "model": "inkling-2-mini-atlas", "max_tokens": 1024,
+  "messages": [{"role": "user", "content": [
+    {"type": "image_url", "image_url": {"url": "data:image/png;base64,'"$(base64 -w0 photo.png)"'"}},
+    {"type": "text", "text": "What is in this picture?"}]}]}'
+```
+
+Inkling does not resize an image: each 40x40 pixel tile is one token, so a
+1280x960 image is 768 tokens. An image of more than 1,600 tiles (about
+1600x1600 pixels) is scaled down to fit, which the checkpoint's own processor
+does not do. `http(s)` image URLs are refused unless the engine is started
+with remote fetching allowed.
 
 Reasoning comes back separately from the answer. `reasoning_effort` (`none`,
 `minimal`, `low`, `medium`, `high`, `xhigh`) is passed to the model's own
