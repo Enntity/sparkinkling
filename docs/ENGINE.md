@@ -5,7 +5,7 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/concurrent-spec-20261123` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`185add96e` (tree `08b9f997`), for the kernel target `inkling-2-mini`
+`c86d0e312` (tree `b1394160`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -14,9 +14,10 @@ file. The pin moves only in `install/atlas-source.json` and on this page.
 The series is stacked for review upstream: `inkling2/mini-20261121` is the
 part in the first pull request, `inkling2/budget-forcing-20261122` and
 `inkling2/images-and-serving-20261123` (0.4.1's engine, also tagged
-`sparkinkling-0.4.1`) the next two, and the pinned branch adds six
+`sparkinkling-0.4.1`) the next two, and the pinned branch adds seven
 commits: drafting with two live requests, verifies sized by the drafter's
-confidence, and a verify that attends exactly as decode does. The build fetches by commit.
+confidence, a verify that attends exactly as decode does, and decode batches
+at their own width. The build fetches by commit.
 
 ## What the branch adds
 
@@ -151,14 +152,16 @@ fourth, a draft (Atlas-Inf/atlas 408). In order:
 
 ## What it does not do yet
 
-- **Drafting for more requests.** Strict drafts for one, two or three live
-  requests and decodes plainly from four
-  (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,3:1,1000000:0`, set by the image); Spark
+- **Drafting for more requests.** Strict drafts for one or two live requests
+  and decodes plainly from three
+  (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0`, set by the image); Spark
   drafts for one (`1:7,1000000:0`). The drafter proposes one sequence at a
-  time, about 5 ms each, and a verify row costs about 6 ms, so at four
-  requests one draft each gained 8% on code and lost 9% on prose, and in
-  Spark two drafts each at two requests gained on code and lost on prose
-  ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
+  time, about 5 ms each, and a verify row costs about 6 ms: one draft each
+  gained 10% on code and lost 6% on prose at three requests, 8% and 9% at
+  four, and in Spark two drafts each at two requests gained on code and lost
+  on prose ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
+  Three, five, six and seven requests decode at their own width (three as
+  three rows, not four): 57 to 67 tok/s aggregate at three, 78 to 92 at five.
 - **Expert input quantization in decode.** Decode and verify rows (fewer than
   16 at once) still give the experts BF16 inputs, so a token's experts see the
   checkpoint's declared numerics in prefill and BF16 inputs in decode.

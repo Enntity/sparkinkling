@@ -98,10 +98,9 @@ class Launch(unittest.TestCase):
         self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
         self.assertEqual(flag(argv, '--num-drafts'), '7')
-        # Strict: seven drafts alone, two each for two requests, one each for three; verifies sized
-        # by the drafter's confidence; drafts off per sequence at the engine's threshold, not by
-        # the throughput gate
-        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:2,3:1,1000000:0')
+        # Strict: seven drafts alone, two each for two requests; verifies sized by the drafter's
+        # confidence; drafts off per sequence at the engine's threshold, not by the throughput gate
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:2,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
         self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
