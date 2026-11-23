@@ -108,8 +108,8 @@ spark serve --model-from-path=<model dir> --gpu-memory-utilization=0.80 \
 with the drafter's settings in its environment: in both modes
 `ATLAS_DFLASH_CONF_WIDTH=1`, `ATLAS_DFLASH_ADAPTIVE=1` and
 `ATLAS_MTP_GATE_FORCE=1`; Strict adds
-`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0` (seven drafts alone, two each for
-two requests), Spark `ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0` and
+`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,3:1,1000000:0` (seven drafts alone, two each
+for two requests, one each for three), Spark `ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0` and
 `ATLAS_DFLASH_ADAPTIVE_MIN=2.5` ([ENGINE](ENGINE.md) says what each does). `-e SPARKINKLING_DRAFTER=none` drops the four drafter
 flags.
 

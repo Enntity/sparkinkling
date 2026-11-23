@@ -151,13 +151,13 @@ fourth, a draft (Atlas-Inf/atlas 408). In order:
 
 ## What it does not do yet
 
-- **Drafting for more requests.** Strict drafts for one or two live requests
-  and decodes plainly from three (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0`,
-  set by the image); Spark drafts for one (`1:7,1000000:0`). The drafter
-  proposes one sequence at a time, about 5 ms each, and a verify row costs
-  about as much as a decode row, so at four requests one draft each measured
-  level with plain decode, and in Spark two drafts each at two requests
-  gained on code and lost on prose
+- **Drafting for more requests.** Strict drafts for one, two or three live
+  requests and decodes plainly from four
+  (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,3:1,1000000:0`, set by the image); Spark
+  drafts for one (`1:7,1000000:0`). The drafter proposes one sequence at a
+  time, about 5 ms each, and a verify row costs about 6 ms, so at four
+  requests one draft each gained 8% on code and lost 9% on prose, and in
+  Spark two drafts each at two requests gained on code and lost on prose
   ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
 - **Expert input quantization in decode.** Decode and verify rows (fewer than
   16 at once) still give the experts BF16 inputs, so a token's experts see the
