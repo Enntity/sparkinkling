@@ -7,7 +7,8 @@
 BASE_DIR holds SparkQwen's `banner.png` and `social-preview.png`
 (Enntity/sparkqwen docs/assets at commit bd26c6d). The frame, starfield,
 logo, icons and tunnel are kept as they are; the title, version, subtitle,
-lanes, supporting lines and URL are painted out and the new text is set in
+lanes, supporting lines and URL are painted out and the new text (a
+high-score table where the lanes were) is set in
 Press Start 2P (SIL OFL 1.1, not shipped here). Adapted from SparkQwen's
 make_cards.py. Needs Pillow. The JPEG is a format export of the social card.
 """
@@ -126,27 +127,40 @@ class Card:
         self.inked.append((x, y0, x + 2, y1))
 
 
-def lanes(card, x0, x1, y, k, ky):
-    """The two modes between x0 and x1 from y down; k scales the type, ky the leading."""
-    mid = (x0 + x1) // 2
-    card.rule(mid - int(18 * k), y, y + int(160 * ky))
-    lane = [
-        (x0, ["DEFAULT", "AS SHIPPED"], "Strict", "./start.sh",
-         ["NVFP4 + MXFP8 experts", "BF16 attention"]),
-        (mid + int(18 * k), ["CALIBRATED", "OVERLAY PENDING"], "Spark", "./start.sh --mode spark",
-         ["+ NVFP4 attention", "lm_head", "coda experts"]),
-    ]
-    for x, label, name, cmd, detail in lane:
-        card.text((x, y), label, int(19 * k), PURPLE)
-        card.text((x, y + int(38 * ky)), [name], int(33 * k), YELLOW, glow=ORANGE)
-        card.text((x, y + int(95 * ky)), [cmd], int(18 * k), WHITE)
-        card.text((x, y + int(138 * ky)), detail, int(14 * k), VIOLET, gap=int(10 * k))
+PINK = (255, 70, 120)
+# SparkInkling 0.4.1, RigMark 1.1.0, low effort, medians, tok/s
+# (results/2026-11-23-release-0.4.1): label, Strict, Spark.
+SCORES = [("CODE", "54.2", "68.4"), ("PROSE", "35.0", "54.9"), ("8 REQUESTS", "121.0", "135.2")]
 
 
-LINES = (["Atlas engine", "OpenAI-compatible API"],
+def scores(card, x0, y, k, ky):
+    """The high-score table from (x0, y): a row per workload, a column per
+    mode with its launch command; k scales the type, ky the leading."""
+    head, small, label, num = int(21 * k), int(13 * k), int(23 * k), int(31 * k)
+    cols = [("STRICT", "./start.sh", x0 + int(800 * k)), ("SPARK", "--mode spark", x0 + int(1200 * k))]
+
+    def right(xr, yy, s, size, color, glow=None):
+        card.text((xr - int(card.font(size).getlength(s)), yy), [s], size, color, glow=glow)
+
+    end = card.text((x0, y), ["HIGH SCORES"], head, PINK, glow=(150, 20, 70))
+    card.text((end + int(18 * k), y), ["TOK/S"], head, YELLOW)
+    for name, cmd, xr in cols:
+        right(xr, y, name, head, WHITE)
+        right(xr, y + int(30 * ky), cmd, small, VIOLET)
+    line = y + int(54 * ky)
+    card.draw.rectangle((x0, line, cols[-1][2], line + 2), fill=(170, 60, 230))
+    card.inked.append((x0, line, cols[-1][2], line + 2))
+    for row, (name, strict, spark) in enumerate(SCORES):
+        yy = y + int(72 * ky) + row * int(42 * ky)
+        card.text((x0, yy + (num - label) // 2), [name], label, WHITE)
+        for value, (_, _, xr) in zip((strict, spark), cols):
+            right(xr, yy, value, num, YELLOW, glow=ORANGE)
+
+
+LINES = (["Atlas engine", "images", "prefix caching"],
          ["Reasoning and tool calls", "tool-call guard on"],
-         ["In development", "no benchmarks yet"])
-SOURCE = ["Inkling 2 Mini by Thinking Machines", "Apache-2.0"]
+         ["32K prefill 3,283 tok/s", "6/6 output gates"])
+SOURCE = ["0.4.1 benchmarks", "RigMark 1.1.0", "low effort"]
 URL = "github.com/Enntity/sparkinkling"
 
 
@@ -159,7 +173,7 @@ def banner(base, font, out):
     c.clear((1550, 636, 2110, 688), stars=False)  # the URL (the GitHub mark stays)
     c.title((88, 112), [("Spark", SPARK), ("Inkling", INKLING)], 112)
     c.text((88, 270), ["Inkling 2 Mini on one NVIDIA DGX Spark", "Atlas"], 23, WHITE)
-    lanes(c, 100, 1340, 330, 1.0, 1.0)
+    scores(c, 100, 326, 1.0, 1.0)
     for y, parts in zip((537, 580, 624), LINES):
         c.text((172, y), parts, 20, WHITE)
     c.text((172, 668), SOURCE, 14, DIM, gap=10)
@@ -181,7 +195,7 @@ def social(base, font, out):
     c.clear((1140, 784, 1690, 830), stars=False)  # the URL (the GitHub mark stays)
     c.title((80, 178), [("Spark", SPARK), ("Inkling", INKLING)], 86)
     c.text((82, 312), ["Inkling 2 Mini on one NVIDIA DGX Spark", "Atlas"], 19, WHITE)
-    lanes(c, 82, 1120, 384, 0.84, 1.08)
+    scores(c, 82, 380, 0.84, 1.08)
     for y, parts in zip((618, 668, 718), LINES):
         c.text((170, y), parts, 17, WHITE, gap=12)
     c.text((170, 770), SOURCE, 13, DIM, gap=9)
