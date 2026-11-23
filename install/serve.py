@@ -34,7 +34,7 @@ DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 #   (ATLAS_MTP_GATE_FORCE), which carries its off state from one request into
 #   the next (Strict structured output read 70 and 89 tok/s run to run).
 # - Drafts by live requests (`n:drafts`): Strict drafts two each for two
-#   requests (two code requests 73 vs 54 tok/s, prose level) and decodes
+#   requests (two code requests 74 vs 55 tok/s, prose 2% under) and decodes
 #   plainly from three; Spark from two (two drafts each gained on code and
 #   lost on prose).
 _DSPARK_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}

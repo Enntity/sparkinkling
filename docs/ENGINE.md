@@ -5,7 +5,7 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/concurrent-spec-20261123` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`67acea8f5` (tree `f873be4d`), for the kernel target `inkling-2-mini`
+`185add96e` (tree `08b9f997`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -14,9 +14,9 @@ file. The pin moves only in `install/atlas-source.json` and on this page.
 The series is stacked for review upstream: `inkling2/mini-20261121` is the
 part in the first pull request, `inkling2/budget-forcing-20261122` and
 `inkling2/images-and-serving-20261123` (0.4.1's engine, also tagged
-`sparkinkling-0.4.1`) the next two, and the pinned branch adds four
-commits: drafting with two live requests, and verifies sized by the
-drafter's confidence. The build fetches by commit.
+`sparkinkling-0.4.1`) the next two, and the pinned branch adds six
+commits: drafting with two live requests, verifies sized by the drafter's
+confidence, and a verify that attends exactly as decode does. The build fetches by commit.
 
 ## What the branch adds
 
@@ -142,9 +142,12 @@ fourth, a draft (Atlas-Inf/atlas 408). In order:
   (`ATLAS_MTP_GATE_FORCE=1`), whose off state carried from one request into
   the next. With two live requests (Strict) each gets two drafts a step: the
   two proposes share one pass over the vocabulary head, and a pair whose
-  drafts stop paying decodes plain, batched, until the re-probe. A verify runs the target over 8 rows at
-  once, and those kernels round differently from single-row decode, so
-  greedy text with and without speculation can part at a near tie.
+  drafts stop paying decodes plain, batched, until the re-probe. A verify runs its rows through the same attention
+  body and key splits as a decode row, so a verified token is the one plain
+  decode picks: on 8 prompts of 320 tokens greedy text was identical with
+  the drafter off and on, one request at a time and two at once, in both
+  modes (a development build; before, the tensor-core prefill attention
+  summed a row's keys in another order and text parted at near ties).
 
 ## What it does not do yet
 

@@ -30,12 +30,12 @@ What to know before relying on SparkInkling. Everything here is about version
 
 ## Fidelity
 
-- **Text with drafts can differ from text without them.** The target verifies
-  every draft, so each emitted token is the target's own pick. But a verify
-  runs the target over up to 8 rows at once, and those kernels round
-  differently from single-row decode, so greedy output with the drafter on and
-  off can part at a near tie and then diverge. `DRAFTER=none` removes that
-  difference at the cost of the drafter's speed.
+- **Text with drafts matched text without them in our check, not by proof.**
+  A verify run attends exactly as a decode row does, and on 8 prompts of 320
+  tokens (4 code, 4 prose, reasoning low) greedy text was identical with the
+  drafter off and on, with one request and with two at once, in both modes.
+  That is a small sample on a development build; `DRAFTER=none` remains the
+  way to rule the drafter out.
 - **Expert inputs in decode are BF16.** The checkpoint declares its experts'
   inputs quantized (NVFP4 rows for layers 0-19, MXFP8 rows for 20-23). Prefill
   follows that; decode and verify rows (fewer than 16 at once) give the
