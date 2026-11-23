@@ -72,6 +72,8 @@ class Launch(unittest.TestCase):
         self.assertEqual(flag(argv, '--bind'), '127.0.0.1')
         self.assertEqual(flag(argv, '--port'), '8895')  # SparkQwen and SparkGLM use 8893 (and 8894)
         self.assertEqual(flag(argv, '--model-name'), 'inkling-2-mini-atlas')
+        self.assertIn('--tool-guard=stream', argv)
+        argv, _ = launch(SPARKINKLING_TOOL_GUARD='on')
         self.assertIn('--tool-guard=on', argv)
         argv, _ = launch(SPARKINKLING_TOOL_GUARD='off', SPARKINKLING_TOOL_GUARD_DENY_HOSTS='a.example,b.example')
         self.assertIn('--tool-guard=off', argv)
@@ -232,7 +234,7 @@ class StartScript(unittest.TestCase):
         self.assertIn(f'-e MODEL_PATH={checkpoint} ', run)
         for part in ('--name atlas-sparkinkling', '--memory 114g', '-e SPARKINKLING_MODE=strict',
                      '-e SPARKINKLING_DRAFTER=none', '-e SERVED_MODEL_NAME=inkling-2-mini-atlas',
-                     '-e SPARKINKLING_TOOL_GUARD=on', '-e HF_HUB_OFFLINE=1', 'test-image'):
+                     '-e SPARKINKLING_TOOL_GUARD=stream', '-e HF_HUB_OFFLINE=1', 'test-image'):
             self.assertIn(part, run)
         self.assertNotIn('spark-nvfp4', run)
         self.assertNotIn('SPARKINKLING_GPU_MEMORY_UTILIZATION', run)

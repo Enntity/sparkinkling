@@ -36,9 +36,9 @@ def tool_guard_args(environ, profile_args):
     """Operator policy is explicit and independent of model/performance profiles."""
     if any(arg.split('=', 1)[0].startswith('--tool-guard') for arg in profile_args):
         raise ValueError('Configure the tool guard with SPARKINKLING_TOOL_GUARD variables, not profile arguments')
-    mode = environ.get('SPARKINKLING_TOOL_GUARD', 'on')
-    if mode not in ('on', 'off'):
-        raise ValueError('SPARKINKLING_TOOL_GUARD must be on or off')
+    mode = environ.get('SPARKINKLING_TOOL_GUARD', 'stream')
+    if mode not in ('stream', 'on', 'off'):
+        raise ValueError('SPARKINKLING_TOOL_GUARD must be stream, on or off')
     limit = environ.get('SPARKINKLING_TOOL_GUARD_MAX_BYTES', '1048576')
     if not re.fullmatch(r'[1-9][0-9]{0,7}', limit) or int(limit) > 67108864:
         raise ValueError('SPARKINKLING_TOOL_GUARD_MAX_BYTES must be 1 to 67108864')

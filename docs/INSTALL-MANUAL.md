@@ -6,7 +6,7 @@ on the one Spark that serves.
 
 | Component | Pin |
 |---|---|
-| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `8ff871196` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
+| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at `887d17894` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
 | Model | [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini) @ `ed40e7da625f594fc9c4990f5f66be24873c22d7` ([`install/checkpoint.json`](../install/checkpoint.json)) |
 | Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4) @ `e9df93dceea2fbf0927caf178104e868452a6292` |
 | Build dependencies | CUTLASS `cf064d2e`, NCCL 2.31.2, Rust 1.93.1, CUDA 13.0 |
@@ -102,7 +102,7 @@ spark serve --model-from-path=<model dir> --gpu-memory-utilization=0.80 \
   --enable-prefix-caching --ssm-cache-slots=128 --oom-guard-mb=4096 --request-timeout=3600 \
   --tool-max-tokens=32768 --max-num-seqs=8 --max-batch-size=8 --max-seq-len=131072 --no-tui \
   --dflash --dflash-gamma=8 --num-drafts=7 --draft-model=<drafter dir> \
-  --bind=127.0.0.1 --port=8895 --model-name=inkling-2-mini-atlas --tool-guard=on ...
+  --bind=127.0.0.1 --port=8895 --model-name=inkling-2-mini-atlas --tool-guard=stream ...
 ```
 
 with `ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0` in its environment (speculate

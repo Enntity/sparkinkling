@@ -4,7 +4,7 @@
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas) `inkling2/mini-20261121` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`8ff871196` (tree `ea5dacb5`), for the kernel target `inkling-2-mini`
+`887d17894` (tree `9d17cd50`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -81,9 +81,10 @@ order:
   model card says so); DSpark keeps speculating inside the block.
 - **Streamed tool calls.** Once a tool block reads `{"name":NAME,"args":`,
   the engine opens the call and passes its argument tokens through as they
-  arrive, so `function.arguments` streams. With the tool guard on (the
-  default), a call's arguments still arrive whole, after the guard passes
-  the finished call.
+  arrive, so `function.arguments` streams. The tool guard (`stream`, the
+  default) checks each call when it ends; a call it blocks ends the response
+  with `content_filter` instead of `tool_calls`, and must not be run.
+  `TOOL_GUARD=on` holds each call until it passes instead.
 - **Launch overlap.** The target's kernels always launch with programmatic
   dependent launch, so each one's launch overlaps its predecessor's tail
   (bit-identical; every listed kernel waits for its predecessor first).
@@ -130,5 +131,5 @@ build, with the exact-name skips listed in
 hardware separately.
 
 The [tool-call guard](https://github.com/Enntity/sparkqwen/blob/main/docs/TOOL-GUARD.md)
-is on by default, as in SparkQwen and SparkGLM. It runs after tool-call
-parsing; the 0.1.0 task probe's tool calls passed through it in both modes.
+is on by default, as in SparkQwen and SparkGLM, here in its `stream` setting
+(a call streams and is checked when it ends). It runs after tool-call parsing; the 0.1.0 task probe's tool calls passed through it in both modes.
