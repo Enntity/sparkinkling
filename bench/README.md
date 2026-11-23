@@ -1,5 +1,26 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
-# Functional-check drivers
+# Benchmark runner and functional-check drivers
+
+## Throughput
+
+`rigmark.sh` runs the two [RigMark](https://github.com/alexellis/rigmark)
+suites behind the published figures against the server `./start.sh` started,
+in whatever mode it is serving: the code suite (decode, cold and replayed
+prefill at 8K and 32K, 1/2/4/8 concurrent requests) and the prose suite
+(decode, 1/4/8 concurrent requests), reasoning low. About ten minutes a mode.
+
+```sh
+MODE=strict ./start.sh
+RIGMARK=/path/to/rigmark bench/rigmark.sh strict metadata.json out/
+```
+
+`metadata.json` describes the run (hardware, image tag, drafter, competing
+traffic); [REPRODUCE](../docs/REPRODUCE.md) says what goes in it and how to
+read the result. It writes `out/strict-code.json` and `out/strict-prose.json`.
+`SPARKINKLING_URL` and `SERVED_MODEL_NAME` override the default address and
+model name.
+
+## Functional check
 
 The small drivers each release's functional check runs
 ([REPRODUCE](../docs/REPRODUCE.md#the-functional-check)). They are the scripts

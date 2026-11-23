@@ -26,8 +26,9 @@ cd results/2026-11-23-release-0.4.1 && sha256sum -c SHA256SUMS
 
 [`raw/run_image.sh`](../results/2026-11-23-release-0.4.1/raw/run_image.sh) is
 the script that produced the 0.4.1 figures. It is kept as it ran, so its paths
-are the measuring machine's; these are its commands with the paths left to
-you. For each mode:
+are the measuring machine's. [`bench/rigmark.sh`](../bench/README.md) runs the
+same two suites with the paths left to you; these are its commands. For each
+mode:
 
 ```sh
 MODE=strict ./start.sh          # then again with MODE=spark
