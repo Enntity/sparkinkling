@@ -22,7 +22,7 @@ jobs:
       - name: Shell scripts
         run: shellcheck -S warning -e SC2054 start.sh install/*.sh
       - name: Python compiles
-        run: python3 -m py_compile install/*.py docs/assets/make_cards.py
+        run: python3 -m py_compile install/*.py bench/*.py docs/assets/make_cards.py
       - name: JSON is valid
         run: for f in install/*.json install/profiles/*.json; do python3 -m json.tool "$f" > /dev/null || exit 1; done
       - name: Spark overlay pin

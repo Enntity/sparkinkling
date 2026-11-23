@@ -9,7 +9,7 @@ Run the same checks as CI before opening a pull request:
 ```sh
 python3 -m unittest discover -s install -p 'test_*.py'
 shellcheck -S warning -e SC2054 start.sh install/*.sh
-python3 -m py_compile install/*.py docs/assets/make_cards.py
+python3 -m py_compile install/*.py bench/*.py docs/assets/make_cards.py
 ```
 
 **Changes to `install/`** change the image. Before merging, test them with

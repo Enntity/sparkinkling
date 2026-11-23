@@ -9,7 +9,7 @@ credited in the README's [Credits](../README.md#credits) and in
 
 | Material | License |
 |---|---|
-| `start.sh`, `install/`, docs and results | AGPL-3.0-only |
+| `start.sh`, `install/`, `bench/`, docs and results | AGPL-3.0-only |
 | `start.sh` and `install/` as adapted from [SparkQwen](https://github.com/Enntity/sparkqwen) and [SparkGLM](https://github.com/Enntity/sparkglm) | AGPL-3.0-only, the same contributors |
 
 The scripts under `results/*/raw/` are the ones that produced each receipt,
