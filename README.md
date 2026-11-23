@@ -272,10 +272,10 @@ SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/mini-20261121`,
 the Inkling 2 Mini serving series on Atlas-Inf `main`, pinned by commit and
 tree in [`install/atlas-source.json`](install/atlas-source.json). The first
-part is in Atlas upstream
-([Atlas-Inf/atlas 401](https://github.com/Atlas-Inf/atlas/pull/401), merged
-2026-11-23); the rest is proposed as
-[404](https://github.com/Atlas-Inf/atlas/pull/404) and
+two parts are in Atlas upstream
+([Atlas-Inf/atlas 401](https://github.com/Atlas-Inf/atlas/pull/401) and
+[404](https://github.com/Atlas-Inf/atlas/pull/404), merged 2026-11-23); the
+rest of 0.4.1's engine is proposed as
 [405](https://github.com/Atlas-Inf/atlas/pull/405).
 What the branch adds and what it does not do yet:
 [docs/ENGINE.md](docs/ENGINE.md).
