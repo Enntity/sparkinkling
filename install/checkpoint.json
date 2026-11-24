@@ -17,7 +17,7 @@
   "draft": {
     "file": "mtp.safetensors",
     "method": "DSpark",
-    "status": "loaded by default (DRAFTER=dspark): install/dspark_drafter.py links it beside its mtp_config as the engine's DFlash drafter directory"
+    "status": "loaded with DRAFTER=dspark: install/dspark_drafter.py links it beside its mtp_config as the engine's DFlash drafter directory"
   },
   "overlay": {
     "repository": "Enntity/Inkling-2-Mini-Spark-NVFP4",
@@ -36,5 +36,17 @@
     "license": "apache-2.0",
     "format": "ModelOpt NVFP4 (E2M1 codes, an E4M3 scale per 16 inputs, an F32 weight_scale_2 per tensor or expert) under the transformers module names: the attention q, k, v, output-gate, output and relative-bias projections of all 24 layers, the vocabulary head, and the routed experts of layers 20-23.",
     "why": "Spark mode only: calibrated NVFP4 copies (GPTQ, wide scale search) of the BF16 projections and the MXFP8 experts, about half the bytes a token reads. KL to the checkpoint as shipped 0.0081 [0.0075, 0.0088] on 224 held-out documents (97.0% top-1); receipts in the overlay repository."
+  },
+  "dflash2": {
+    "repository": "incoai/Inkling-2-Mini-DFlash2",
+    "revision": "4f9088ea66c21f2b99ed657d1941c306b03e84d2",
+    "files": {
+      "model.safetensors": "217980ab00d116693fa5946df7bbfd967caf5fac1f529afd541fbd470ddb54ee"
+    },
+    "size_gb": 0.99,
+    "method": "DFlash2 (block diffusion with a candidate selector)",
+    "license": "apache-2.0",
+    "status": "loaded by default (DRAFTER=dflash2): the repository's config.json and model.safetensors served as the engine's DFlash drafter directory",
+    "why": "incoai's DFlash2 drafter for Inkling 2 Mini reads the same four target taps as the bundled DSpark and accepts more of its drafts on code and math. The sha256 is Hugging Face's LFS object id at this revision; config.json is fetched at the same revision and not hashed here."
   }
 }

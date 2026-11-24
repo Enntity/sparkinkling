@@ -27,7 +27,7 @@ def flag(argv, name):
     return hits[0] if len(hits) == 1 else None
 
 
-DRAFTER = CHECKPOINT + '+dspark'
+DRAFTER = '/models/incoai--Inkling-2-Mini-DFlash2'
 
 
 def launch(**env):
@@ -91,9 +91,16 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_MODE='fast')
 
-    def test_dspark_by_default_speculating_alone(self):
+    def test_dflash2_by_default_and_dspark_on_request(self):
+        # incoai's DFlash2 drafter is the default; the checkpoint's own DSpark runs the same way
+        for drafter, env_extra in (('dflash2', {}), ('dspark', {'SPARKINKLING_DRAFTER': 'dspark'})):
+            argv, env = launch(**env_extra)
+            self.assertEqual(env['SPARKINKLING_DRAFTER'], drafter)
+            self.assertEqual(flag(argv, '--draft-model'), DRAFTER, drafter)
+            self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1', drafter)
+
+    def test_the_drafter_speculates_alone_in_strict(self):
         argv, env = launch()
-        self.assertEqual(env['SPARKINKLING_DRAFTER'], 'dspark')
         self.assertIn('--dflash', argv)
         self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
@@ -158,6 +165,17 @@ class Launch(unittest.TestCase):
         self.assertNotIn('ATLAS_MTP_GATE_FORCE', env)
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_DRAFTER='eagle')
+
+    def test_the_disk_prefix_cache_keeps_the_full_length_limits(self):
+        # with the disk tier the engine keeps every visit's KV at full length, so each
+        # profile serves 0.4.2's per-request limit; without it, the window-bounded limit
+        limits = {'default': ('1048576', '131072'), 'saver': ('786432', '131072'), 'max': ('1048576', '262144')}
+        for name, (window, disk) in limits.items():
+            p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
+            base = {'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}
+            self.assertEqual(flag(serve.launch(base, p)[0], '--max-seq-len'), window, name)
+            argv = serve.launch({**base, 'SPARKINKLING_PREFIX_CACHE_GB': '48'}, p)[0]
+            self.assertEqual(flag(argv, '--max-seq-len'), disk, name)
 
     def test_a_profile_cannot_speculate_go_multi_rank_or_change_target(self):
         for extra in (['--dflash'], ['--draft-model=/m/mtp.safetensors'], ['--world-size=2'], ['--tp-size=2'],
@@ -264,8 +282,10 @@ class StartScript(unittest.TestCase):
 
     def test_start_mounts_the_assembled_drafter(self):
         start = (ROOT/'start.sh').read_text()
-        self.assertIn('DRAFTER=${DRAFTER:-dspark}', start)
+        self.assertIn('DRAFTER=${DRAFTER:-dflash2}', start)
         self.assertIn('drafter=$checkpoint+dspark', start)
+        self.assertIn('drafter=$MODEL_ROOT/${DFLASH2_REPO/\\//--}', start)
+        self.assertIn('python3 install/check_files.py install/checkpoint.json "$drafter" dflash2', start)
         self.assertIn('python3 install/dspark_drafter.py install/checkpoint.json "$checkpoint" "$drafter"', start)
         self.assertIn('--mount "type=bind,src=$drafter,dst=$drafter,readonly"', start)
         self.assertIn('-e DRAFTER_PATH="$drafter"', start)

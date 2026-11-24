@@ -3,9 +3,9 @@
 
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
-`inkling2/swa-kv-window-20261124` at
+`inkling2/rc-0.5.0-20261124` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`b83832a7e` (tree `95124d87`), for the kernel target `inkling-2-mini`
+`ba55c1f83` (tree `64d7c79d`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -20,13 +20,37 @@ adds the fourth (408, a draft): drafting with two live requests, verifies
 sized by the drafter's confidence, a verify that attends exactly as decode
 does, decode batches at their own width, and one launch for a Spark decode
 row's input projections. Both branches carry a merge of `main` at
-`7a717b659`. The pinned branch adds three commits on 408's branch
-(`d3318e087`), not yet proposed upstream: window-bounded KV (below). The
-build fetches by commit.
+`7a717b659`. The pinned branch merges two branches on 408's (`d3318e087`), neither
+proposed upstream yet: window-bounded KV (`inkling2/swa-kv-window-20261124`,
+three commits) and incoai's DFlash2 drafter
+(`inkling2/dflash2-drafter-20261124`, two commits), both below. The build
+fetches by commit.
 
 ## What the branch adds
 
-**Window-bounded KV (the three newest commits).** 40 of the 48 layer visits
+**incoai's DFlash2 drafter (two commits).** `incoai/Inkling-2-Mini-DFlash2`
+is a standard DFlash2 drafter (five layers, two-tap dynamic convolutions, a
+16-candidate selector over the target's vocabulary head) that reads the same
+four taps as the bundled DSpark: what enters visits 5, 23 and 41, and the
+final-norm output. Atlas's DFlash2 head already loads its tensors; the branch
+maps those taps to visit outputs for a DFlash2 drafter on an Inkling target as
+it does for DSpark, and applies the target's final norm to the last tap
+before the drafter's context projection (on a chunk copy of the rows, so the
+accumulator keeps the raw capture). The selector's `after_correction` softcap
+is applied after a candidate's score and does not change which candidate
+scores highest, so the picks are the reference's. A copy of GLM's confidence
+twin of the selector (`dflash2_selector_conf.cu`) lets
+`ATLAS_DFLASH_CONF_WIDTH` size its verifies; without it the drafter lost to
+DSpark on long code. Observed 2026-11-24 on a development build of these
+commits over `d3318e087` (other services resident, 0.5 of GPU memory, product
+settings per mode, 40 prompts: 20 HumanEval, 10 GSM8K, 10 MMLU-Pro, reasoning
+low, temperature 0, single runs), aggregate tok/s with DSpark and with
+DFlash2: Strict one request 53.2 and 64.7, two at once 67.3 and 70.2; Spark
+one request 67.4 and 78.8, two at once 71.3 and 71.0 (Spark decodes plainly
+from two). Greedy text for 8 prompts x 320 tokens was identical to plain
+decode at one and two requests in both modes.
+
+**Window-bounded KV (three commits).** 40 of the 48 layer visits
 are sliding-window attention over 1,024 tokens, yet the paged cache held a row
 for every token of context in all 48: 192 KiB a token. They now keep their K/V
 in a pool of their own, at a local block each KV block maps to, and only for
@@ -197,11 +221,11 @@ The branch is the Inkling 2 Mini series, first written on Atlas-Inf `main`
 - **Drafting for more requests.** Strict drafts for one or two live requests
   and decodes plainly from three
   (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0`, set by the image); Spark
-  drafts for one (`1:7,1000000:0`). The drafter proposes one sequence at a
-  time, about 5 ms each, and a verify row costs about 6 ms: one draft each
-  gained 10% on code and lost 6% on prose at three requests, 8% and 9% at
-  four, and in Spark two drafts each at two requests gained on code and lost
-  on prose ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
+  drafts for one (`1:7,1000000:0`). These settings were tuned with the DSpark
+  drafter and have not been retuned for DFlash2. With DSpark a verify row
+  costs about 6 ms, and one draft each gained 10% on code and lost 6% on
+  prose at three requests, 8% and 9% at four
+  ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
   Three, five, six and seven requests decode at their own width (three as
   three rows, not four): 57 to 67 tok/s aggregate at three, 78 to 92 at five.
 - **Expert input quantization in decode.** Decode and verify rows (fewer than

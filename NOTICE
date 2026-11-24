@@ -15,7 +15,9 @@ Inkling 2 Mini, including its bundled DSpark draft model, is by Thinking
 Machines Lab, Inc., licensed under Apache-2.0; its weights are downloaded at
 install time (thinkingmachines/Inkling-2-Mini) and are not part of this
 repository. Spark mode also downloads Enntity/Inkling-2-Mini-Spark-NVFP4, an
-NVFP4 quantization derived from those weights (Apache-2.0).
+NVFP4 quantization derived from those weights (Apache-2.0). The default
+drafter, incoai/Inkling-2-Mini-DFlash2, is by Inco AI (Apache-2.0) and is
+downloaded at install time.
 
 docs/assets/make_cards.py sets text in Press Start 2P by CodeMan38 (SIL Open
 Font License 1.1); the font is not included in this repository.

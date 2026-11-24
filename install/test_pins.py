@@ -63,7 +63,7 @@ class Pins(unittest.TestCase):
                 self.assertRegex(digest, r'^[0-9a-f]{64}$')
 
     def test_release_and_image_tag(self):
-        self.assertEqual(pin('release.json')['version'], '0.4.2')
+        self.assertEqual(pin('release.json')['version'], '0.5.0')
         tag = subprocess.run([str(HERE/'build.sh'), '--tag'], capture_output=True, text=True,
                              env={**os.environ, 'SPARKINKLING_IMAGE_REPO': 'ghcr.io/enntity/atlas-sparkinkling'})
         if tag.returncode == 0:  # needs a git checkout
@@ -99,14 +99,21 @@ class Docs(unittest.TestCase):
                     self.assertTrue((ROOT/'results'/name/'RESULT.md').is_file(), name)
                     self.assertTrue((ROOT/'results'/name/'SHA256SUMS').is_file(), name)
 
-    def test_dspark_is_the_documented_default(self):
+    def test_dflash2_is_the_documented_default(self):
         pin = json.loads((ROOT/'install'/'checkpoint.json').read_text())
         self.assertEqual(pin['draft']['file'], 'mtp.safetensors')
         self.assertIn('mtp.safetensors', pin['files'])
+        d = pin['dflash2']
+        self.assertEqual(d['repository'], 'incoai/Inkling-2-Mini-DFlash2')
+        self.assertRegex(d['revision'], r'^[0-9a-f]{40}$')
+        self.assertEqual(set(d['files']), {'model.safetensors'})
+        for digest in d['files'].values():
+            self.assertRegex(digest, r'^[0-9a-f]{64}$')
+        self.assertEqual(d['license'], 'apache-2.0')
         for doc in ('README.md', 'docs/MODES.md'):
             with self.subTest(doc=doc):
-                self.assertIn('DRAFTER=dspark', text(doc))
-                self.assertIn('DRAFTER=none', text(doc))
+                for drafter in ('DRAFTER=dflash2', 'DRAFTER=dspark', 'DRAFTER=none'):
+                    self.assertIn(drafter, text(doc))
 
 
 class Privacy(unittest.TestCase):

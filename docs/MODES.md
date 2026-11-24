@@ -48,19 +48,28 @@ receipts are in the overlay repository.
 
 ## Speculative decoding
 
-The checkpoint bundles a DSpark draft model (`mtp.safetensors`), and both
-modes run it by default (`DRAFTER=dspark`). `./start.sh` assembles the
+Both modes run incoai's DFlash2 drafter for Inkling 2 Mini by default
+(`DRAFTER=dflash2`): [`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2)
+(Apache-2.0, about 1 GB), pinned by revision and sha256 in
+[`install/checkpoint.json`](../install/checkpoint.json) and served from its own
+directory, `<model root>/incoai--Inkling-2-Mini-DFlash2`. It reads the same
+four taps of the target as the bundled drafter and accepts more of its drafts
+on code and math.
+
+The checkpoint also bundles a DSpark draft model (`mtp.safetensors`), which
+`DRAFTER=dspark` runs with the same settings. `./start.sh` assembles the
 drafter's directory next to the checkpoint, `<checkpoint>+dspark`
 ([`install/dspark_drafter.py`](../install/dspark_drafter.py)): the
 checkpoint's `mtp.safetensors`, checked against its pinned sha256 and linked
 as `model.safetensors`, beside a `config.json` that is the checkpoint's
 `mtp_config` plus the tokenizer's vocabulary size. The engine verifies every
-draft against the mode's own weights, so the drafter changes speed and not
-the model. It drafts while one request is live; from two requests the engine
-decodes plainly, which delivers more there. `DRAFTER=none` turns it off.
+draft against the mode's own weights, so either drafter changes speed and not
+the model. Strict drafts for one or two live requests and Spark for one; from
+there the engine decodes plainly, which delivers more. `DRAFTER=none` turns
+drafting off.
 
-DSpark pays on predictable text (code, structured output) and costs on
-prose, where few drafts are accepted; see the results for both.
+Drafting pays on predictable text (code, structured output, math) and less
+on prose, where fewer drafts are accepted; see the results for both.
 
 ## Choosing a mode
 

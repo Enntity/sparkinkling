@@ -26,13 +26,13 @@ if [[ ${1:-} == --mode ]]; then
 fi
 MODEL_ROOT=${MODEL_ROOT:-$HOME/models/sparkinkling}
 PROFILE=${PROFILE:-default}
-DRAFTER=${DRAFTER:-dspark}
+DRAFTER=${DRAFTER:-dflash2}
 NAME=atlas-sparkinkling
 API=http://127.0.0.1:8895
 
 # shellcheck source=install/common.sh
 . install/common.sh
-read -r CHECKPOINT_REPO CHECKPOINT_REVISION SERVED OVERLAY_REPO OVERLAY_REVISION OVERLAY_FILE < <(python3 -c 'import json,sys; m=json.load(open(sys.argv[1])); o=m["overlay"]; print(m["repository"], m["revision"], m["served_model_name"], o["repository"], o["revision"], o["serve"])' install/checkpoint.json)
+read -r CHECKPOINT_REPO CHECKPOINT_REVISION SERVED OVERLAY_REPO OVERLAY_REVISION OVERLAY_FILE DFLASH2_REPO DFLASH2_REVISION < <(python3 -c 'import json,sys; m=json.load(open(sys.argv[1])); o=m["overlay"]; d=m["dflash2"]; print(m["repository"], m["revision"], m["served_model_name"], o["repository"], o["revision"], o["serve"], d["repository"], d["revision"])' install/checkpoint.json)
 
 # Launch-only checks must not prevent inspecting or stopping an older deployment.
 if [[ ${1:-up} == up || ${1:-} == download ]]; then
@@ -42,7 +42,7 @@ if [[ ${1:-up} == up || ${1:-} == download ]]; then
     exit 2
   fi
   [[ -f $PROFILE || -f install/profiles/$PROFILE.json ]] || { echo "PROFILE: no $PROFILE or install/profiles/$PROFILE.json" >&2; exit 2; }
-  [[ $DRAFTER =~ ^(none|dspark)$ ]] || { echo 'DRAFTER must be none or dspark' >&2; exit 2; }
+  [[ $DRAFTER =~ ^(none|dspark|dflash2)$ ]] || { echo 'DRAFTER must be dflash2, dspark or none' >&2; exit 2; }
   [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||
     { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.90' >&2; exit 2; }
   if [[ -n ${PREFIX_CACHE_DIR:-} || -n ${PREFIX_CACHE_GB:-} ]]; then
@@ -63,9 +63,11 @@ weights=$MODEL_ROOT/${OVERLAY_REPO/\//--}
 # Spark mode's model directory: the checkpoint's files linked, the overlay
 # mapped in (install/spark_overlay.py). It sits next to $checkpoint.
 spark_model=$checkpoint+spark-nvfp4
-# The DSpark drafter's directory: mtp.safetensors linked beside its config
-# (install/dspark_drafter.py), next to $checkpoint too.
-drafter=$checkpoint+dspark
+# The drafter's directory: incoai's DFlash2 repository as downloaded, or the
+# DSpark drafter's mtp.safetensors linked beside its config
+# (install/dspark_drafter.py), next to $checkpoint.
+drafter=$MODEL_ROOT/${DFLASH2_REPO/\//--}
+if [[ $DRAFTER == dspark ]]; then drafter=$checkpoint+dspark; fi
 
 # The image for this checkout is pulled from ghcr.io/enntity/atlas-sparkinkling
 # (its tag is the install/ tree); if that tag is not published, it is built
@@ -89,6 +91,12 @@ download() {
   fi
   if [[ $DRAFTER == dspark ]]; then
     python3 install/dspark_drafter.py install/checkpoint.json "$checkpoint" "$drafter"
+  fi
+  if [[ $DRAFTER == dflash2 && $(cat "$drafter/.sparkinkling-revision" 2>/dev/null) != "$DFLASH2_REVISION" ]]; then
+    say "download $DFLASH2_REPO @ $DFLASH2_REVISION (sha256 checked)"
+    hf_download "$DFLASH2_REPO" "$DFLASH2_REVISION" "$drafter" config.json model.safetensors
+    python3 install/check_files.py install/checkpoint.json "$drafter" dflash2
+    echo "$DFLASH2_REVISION" > "$drafter/.sparkinkling-revision"
   fi
   [[ $MODE == spark ]] || return 0
   if [[ $(cat "$weights/.sparkinkling-revision" 2>/dev/null) != "$OVERLAY_REVISION" ]]; then
@@ -121,7 +129,7 @@ serve() {
     mounts+=(--mount "type=bind,src=$weights,dst=$weights,readonly"
              --mount "type=bind,src=$spark_model,dst=$spark_model,readonly")
   fi
-  if [[ $DRAFTER == dspark ]]; then
+  if [[ $DRAFTER != none ]]; then
     mounts+=(--mount "type=bind,src=$drafter,dst=$drafter,readonly")
   fi
   if [[ -f $profile ]]; then

@@ -6,7 +6,7 @@ on the one Spark that serves.
 
 | Component | Pin |
 |---|---|
-| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/swa-kv-window-20261124` at `b83832a7e` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
+| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/rc-0.5.0-20261124` at `ba55c1f83` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
 | Model | [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini) @ `ed40e7da625f594fc9c4990f5f66be24873c22d7` ([`install/checkpoint.json`](../install/checkpoint.json)) |
 | Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4) @ `e9df93dceea2fbf0927caf178104e868452a6292` |
 | Build dependencies | CUTLASS `cf064d2e`, NCCL 2.31.2, Rust 1.93.1, CUDA 13.0 |
@@ -43,7 +43,18 @@ python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/thinkingmach
 
 About 20 GB, including the bundled DSpark draft model (`mtp.safetensors`).
 `check_files.py` compares the weight and tokenizer files with the sha256
-values in the pin. Then the drafter's directory (skip with `DRAFTER=none`):
+values in the pin. Then the drafter (skip with `DRAFTER=none`): incoai's
+DFlash2 drafter, the default, about 1 GB at the revision pinned under
+`dflash2` in `install/checkpoint.json`:
+
+```sh
+hf download incoai/Inkling-2-Mini-DFlash2 config.json model.safetensors \
+  --revision 4f9088ea66c21f2b99ed657d1941c306b03e84d2 \
+  --local-dir "$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2"
+python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2" dflash2
+```
+
+Or, for `DRAFTER=dspark`, the checkpoint's own drafter's directory:
 
 ```sh
 python3 install/dspark_drafter.py install/checkpoint.json \
@@ -79,12 +90,13 @@ Strict:
 
 ```sh
 ck=$MODEL_ROOT/thinkingmachines--Inkling-2-Mini
+dr=$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2   # or $ck+dspark with SPARKINKLING_DRAFTER=dspark
 mkdir -p ~/.cache/atlas-cuda
 docker run -d --name atlas-sparkinkling --network host --ipc host --shm-size 16g --memory 114g \
   --gpus all --security-opt no-new-privileges=true \
-  --mount "type=bind,src=$ck,dst=$ck,readonly" --mount "type=bind,src=$ck+dspark,dst=$ck+dspark,readonly" \
+  --mount "type=bind,src=$ck,dst=$ck,readonly" --mount "type=bind,src=$dr,dst=$dr,readonly" \
   --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
-  -e MODEL_PATH="$ck" -e SPARKINKLING_MODE=strict -e DRAFTER_PATH="$ck+dspark" -e HF_HUB_OFFLINE=1 \
+  -e MODEL_PATH="$ck" -e SPARKINKLING_MODE=strict -e DRAFTER_PATH="$dr" -e HF_HUB_OFFLINE=1 \
   -e CUDA_CACHE_PATH=/atlas-cuda-cache "$IMAGE"
 until curl -sf http://127.0.0.1:8895/health; do sleep 10; done
 ```

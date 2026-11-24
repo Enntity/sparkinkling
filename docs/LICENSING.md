@@ -59,6 +59,11 @@ DSpark draft model (`mtp.safetensors`): by Thinking Machines Lab, Inc., under
 the Apache License 2.0. Read the model card before use, and before
 redistributing anything derived from it.
 
+The default drafter,
+[`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2),
+is downloaded from its publisher at the revision pinned in the same file: by
+Inco AI, under the Apache License 2.0.
+
 Spark mode also downloads
 [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4):
 NVFP4 copies of the checkpoint's attention projections, vocabulary head and

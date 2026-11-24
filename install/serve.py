@@ -13,10 +13,12 @@ PORT = 8895
 SERVED_MODEL_NAME = 'inkling-2-mini-atlas'
 MODES = ('strict', 'spark')
 OVERLAY_FILE = 'spark-nvfp4.safetensors'
-# SPARKINKLING_DRAFTER: 'dspark' runs the checkpoint's bundled drafter
-# (mtp.safetensors, assembled by install/dspark_drafter.py at DRAFTER_PATH);
-# 'none' decodes without speculation.
-DRAFTERS = ('dspark', 'none')
+# SPARKINKLING_DRAFTER: 'dflash2' (the default) runs incoai's DFlash2 drafter
+# for Inkling 2 Mini (incoai/Inkling-2-Mini-DFlash2, at DRAFTER_PATH);
+# 'dspark' the checkpoint's bundled drafter (mtp.safetensors, assembled by
+# install/dspark_drafter.py at DRAFTER_PATH); 'none' decodes without
+# speculation. Both drafters run with the same settings below.
+DRAFTERS = ('dflash2', 'dspark', 'none')
 # The drafter's block is 8: seven drafts a step.
 DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 # How the drafter is run (GB10, 2026-11-23, a development build with other
@@ -105,6 +107,15 @@ def disk_prefix_cache(gb, mode):
     return {'ATLAS_KV_NVME_DIR': f'/prefix-cache/{mode}/kv', 'ATLAS_KV_NVME_GB': gb, 'ATLAS_GLM_NVME_FAST': '1'}
 
 
+def _disk_tier_limit(args, profile):
+    """With the disk tier the engine keeps every visit's KV at full length (the
+    window-bounded pools do not reach the disk), so a request is held to the
+    profile's `max_seq_len_with_disk_tier`, 0.4.2's limit for its pool."""
+    limit = int(profile['max_seq_len_with_disk_tier'])
+    return [f'--max-seq-len={min(limit, int(a.split("=", 1)[1]))}' if a.startswith('--max-seq-len=') else a
+            for a in args]
+
+
 def check_prefix_cache_dir(env):
     """The disk tier's directory must be a mount (start.sh makes it): without
     one the engine would fill the container's own filesystem."""
@@ -132,7 +143,7 @@ def launch(environ, profile):
     mode = environ.get('SPARKINKLING_MODE', 'strict')
     if mode not in MODES:
         raise ValueError('SPARKINKLING_MODE must be strict or spark')
-    drafter = environ.get('SPARKINKLING_DRAFTER', 'dspark')
+    drafter = environ.get('SPARKINKLING_DRAFTER', 'dflash2')
     if drafter not in DRAFTERS:
         raise ValueError(f'SPARKINKLING_DRAFTER must be one of {", ".join(DRAFTERS)}')
     model = environ.get('MODEL_PATH', '')
@@ -140,9 +151,12 @@ def launch(environ, profile):
         raise ValueError('MODEL_PATH must be an absolute path')
     env = _engine_env(environ, profile)
     env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter)
-    env.update(disk_prefix_cache(environ.get('SPARKINKLING_PREFIX_CACHE_GB', ''), mode))
+    disk = disk_prefix_cache(environ.get('SPARKINKLING_PREFIX_CACHE_GB', ''), mode)
+    env.update(disk)
     args = _memory_share(environ, [str(a).replace('${model}', model) for a in args])
-    if drafter == 'dspark':
+    if disk:
+        args = _disk_tier_limit(args, profile)
+    if drafter != 'none':
         draft = environ.get('DRAFTER_PATH', '')
         if not Path(draft).is_absolute() or any(c in draft for c in '\r\n\0'):
             raise ValueError('DRAFTER_PATH must be an absolute path')

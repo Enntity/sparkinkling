@@ -109,8 +109,11 @@ engine.
    [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
    at revision `ed40e7da625f` (pinned in
    [`install/checkpoint.json`](install/checkpoint.json)) and checks its weight
-   and tokenizer files' sha256, then assembles the DSpark drafter's directory
-   next to it ([`install/dspark_drafter.py`](install/dspark_drafter.py)). In
+   and tokenizer files' sha256, then downloads and checks the drafter,
+   [`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2)
+   at revision `4f9088ea66c2` (about 1 GB; with `DRAFTER=dspark` it assembles
+   the checkpoint's own DSpark drafter instead,
+   [`install/dspark_drafter.py`](install/dspark_drafter.py)). In
    Spark mode it also downloads and checks the overlay, then assembles the
    Spark model directory ([`install/spark_overlay.py`](install/spark_overlay.py)).
    It uses `hf` when installed and a throwaway container otherwise.
@@ -239,10 +242,13 @@ soon as it has them open, and clears a crash's leftovers when it starts.
 
 ## Speculative decoding
 
-Both modes run the checkpoint's bundled DSpark drafter by default
-(`DRAFTER=dspark`): it proposes up to seven tokens a step and the mode's own
-weights verify them, so it changes speed, not the model. Greedy text with the
-drafter on matched text with it off in our check
+Both modes run incoai's DFlash2 drafter for Inkling 2 Mini by default
+(`DRAFTER=dflash2`,
+[`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2),
+Apache-2.0): it proposes up to seven tokens a step and the mode's own weights
+verify them, so it changes speed, not the model. `DRAFTER=dspark` runs the
+checkpoint's bundled DSpark drafter instead, with the same settings. Greedy
+text with either drafter on matched text with it off in our check
 ([LIMITATIONS](docs/LIMITATIONS.md#fidelity)).
 
 - **A verify stops where the drafter is unsure.** The drafter reports how
@@ -278,7 +284,7 @@ What SparkInkling does not do, and what its evidence does not cover, is in
 
 SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas)
-`inkling2/swa-kv-window-20261124`, the Inkling 2 Mini serving series on
+`inkling2/rc-0.5.0-20261124`, the Inkling 2 Mini serving series on
 Atlas-Inf `main`, pinned by commit and tree in
 [`install/atlas-source.json`](install/atlas-source.json). The first two parts
 are in Atlas upstream
@@ -292,7 +298,7 @@ What the branch adds and what it does not do yet:
 ## Credits
 
 Inkling 2 Mini and its DSpark draft model are by Thinking Machines Lab
-(Apache-2.0). Measurement uses [RigMark](https://github.com/alexellis/rigmark)
+(Apache-2.0). The DFlash2 draft model is by Inco AI (Apache-2.0). Measurement uses [RigMark](https://github.com/alexellis/rigmark)
 by Alex Ellis (MIT). The launcher and install directory are adapted from
 [SparkQwen](https://github.com/Enntity/sparkqwen) and
 [SparkGLM](https://github.com/Enntity/sparkglm).
