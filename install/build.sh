@@ -34,8 +34,16 @@ GIT_LFS_SKIP_SMUDGE=1 git -C "$context/engine" -c advice.detachedHead=false chec
 git -C "$product" archive HEAD install | tar -x -C "$context"
 cp "$here/dockerignore" "$context/.dockerignore"
 
+# Compile jobs: every core, but no more than one per 3 GB of the host memory
+# available now, so a build beside running models cannot run a GB10 out of
+# memory (it hangs instead of killing a process). ATLAS_BUILD_JOBS overrides.
+jobs=${ATLAS_BUILD_JOBS:-$(awk -v cores="$(nproc 2>/dev/null || echo 4)" \
+  '/^MemAvailable:/ { j = int($2 / 3145728); if (j > cores) j = cores; if (j < 4) j = 4; print j }' \
+  /proc/meminfo 2>/dev/null)}
+[[ ${jobs:-} =~ ^[1-9][0-9]*$ ]] || jobs=4
+echo "build: $jobs compile jobs" >&2
 docker build --build-arg "INSTALL_TREE=$tree" --build-arg "PRODUCT_VERSION=$version" \
-  --build-arg "BUILD_JOBS=${ATLAS_BUILD_JOBS:-4}" --build-arg "ATLAS_TARGET_MODEL=$target" \
+  --build-arg "BUILD_JOBS=$jobs" --build-arg "ATLAS_TARGET_MODEL=$target" \
   -f "$context/install/Dockerfile" -t "$image" "$context" >&2
 [[ $(docker image inspect -f '{{.Architecture}} {{index .Config.Labels "io.enntity.sparkinkling.install-tree"}}' "$image") == "arm64 $tree" ]] || {
   echo "built image $image has the wrong architecture or install-tree label" >&2; exit 1; }
