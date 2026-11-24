@@ -58,7 +58,6 @@ COPY engine/ /build/
 # itself, by exact name and nothing else (the 0.1.0 build passed with them).
 #   #233 ffmpeg decode (frame count and timestamps with a real ffmpeg): 5
 #   #198/#199 fast_weights CSF deferral and U32 staging tests: 2
-#   closure attestation in a single-target build: 1 (Atlas-Inf #250)
 #   cmd_ring under build CPU load: 1 (Atlas-Inf #251)
 #   dflash2_selector_abi HIP hash: 1 (Atlas-Inf b75da4a76/#329)
 #   probe_timeout_covers_a_blocked_stdout_read: 1, a write-then-exec race on
@@ -73,7 +72,6 @@ RUN --mount=type=cache,target=/build/target,id=atlas-cargo-target-sparkinkling,s
       --skip video_decode_ffmpeg::tests::a_128_frame_plan_keeps_the_late_tail_without_recursive_filter_depth \
       --skip fast_weights::expert_filter_tests::host_decoded_tensors_are_deferred \
       --skip fast_weights::header::tests::u32_stages_as_a_raw_four_byte_container \
-      --skip the_baked_attestation_reproduces_from_the_tree \
       --skip nccl_backend::rdma_pair::cmd_ring::tests::words_arrive_in_order_exactly_once_in_both_directions \
       --skip hip_kernel_is_the_unmodified_upstream_implementation \
       --skip video_decode_ffmpeg::hour_tests::probe_timeout_covers_a_blocked_stdout_read

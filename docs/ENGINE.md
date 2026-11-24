@@ -5,7 +5,7 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/rc-0.5.0-20261124` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`ba55c1f83` (tree `64d7c79d`), for the kernel target `inkling-2-mini`
+`5be9b28fe` (tree `6a30329b`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -23,8 +23,10 @@ row's input projections. Both branches carry a merge of `main` at
 `7a717b659`. The pinned branch merges two branches on 408's (`d3318e087`), neither
 proposed upstream yet: window-bounded KV (`inkling2/swa-kv-window-20261124`,
 three commits) and incoai's DFlash2 drafter
-(`inkling2/dflash2-drafter-20261124`, two commits), both below. The build
-fetches by commit.
+(`inkling2/dflash2-drafter-20261124`, two commits), both below, plus two
+closure-attestation fixes (the first proposed upstream as Atlas-Inf/atlas#419)
+that let the image's test suite run `the_baked_attestation_reproduces_from_the_tree`
+for this one-model build instead of skipping it. The build fetches by commit.
 
 ## What the branch adds
 
