@@ -171,15 +171,17 @@ and `PREFIX_CACHE_GB` (below), `MODEL_ROOT`, `PULL=0`.
 
 | `PROFILE` | Requests | Tokens each | GPU memory | KV pool | Prefix-cache snapshots |
 |---|---:|---:|---:|---:|---:|
-| `default` | 8 | 131,072 | 0.80 | about 404K tokens | 128 |
-| `max` | 32 | 262,144 | 0.85 | about 446K tokens | 256 |
-| `saver` | 8 | 131,072 | 0.50 | about 213K tokens | 64 |
+| `default` | 8 | 1,048,576 | 0.80 | about 2.0M tokens (1.86M Spark) | 264 |
+| `max` | 32 | 1,048,576 | 0.85 | about 1.94M tokens (1.82M Spark) | 264 |
+| `saver` | 8 | 786,432 | 0.50 | about 952K tokens (830K Spark) | 192 |
 
 All three keep BF16 KV, 4,096-token prefill chunks, prefix caching,
 hour-long requests and up to 32,768 generated tokens a tool-calling request
 (the model reasons before it calls). Requests the pool cannot hold yet wait
-for blocks rather than fail. `saver` is the smallest footprint that still
-serves eight full-length requests. In a check on 2026-11-21, `max` ran 32
+for blocks rather than fail. KV costs about 32 KiB a token: the 40
+sliding-window layer visits keep only their last 1,024 tokens
+([ENGINE](docs/ENGINE.md)). `saver` is the smallest footprint, for a Spark
+shared with other services. In a check on 2026-11-21, `max` ran 32
 concurrent short code requests to a normal stop and recalled a code hidden a
 third of the way into a 182,100-token prompt (82 s for the prompt;
 [receipts](results/2026-11-21-prefix-cache-and-profiles/RESULT.md)). A JSON file
@@ -218,8 +220,11 @@ PREFIX_CACHE_GB=48                            # GiB, 16-100 (default 48)
 ```
 
 `start.sh` creates `<mode>/kv/` in the directory, refuses one on tmpfs or
-without that much space free, and mounts it into the container. KV takes
-192 KiB a token (all 48 layer visits), so 48 GiB holds about 262K tokens. In one check on 2026-11-21 (Strict, a pool
+without that much space free, and mounts it into the container. With the tier on, the engine keeps
+full-length KV (192 KiB a token over all 48 layer visits; the window-bounded
+pool needs one block id for every layer), so 48 GiB holds about 262K tokens
+and the profile's pool falls back to 0.4.2's size: requests longer than that
+pool cannot be admitted. In one check on 2026-11-21 (Strict, a pool
 held to 5,373 blocks, ~20K-token conversations pushed out by five others), a
 returning conversation's time to first token went from 5.82 s to 0.90 s: the
 engine read its 1,237 blocks back in 403 ms and resumed from the snapshot at
@@ -273,7 +278,7 @@ What SparkInkling does not do, and what its evidence does not cover, is in
 
 SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas)
-`inkling2/concurrent-spec-20261123`, the Inkling 2 Mini serving series on
+`inkling2/swa-kv-window-20261124`, the Inkling 2 Mini serving series on
 Atlas-Inf `main`, pinned by commit and tree in
 [`install/atlas-source.json`](install/atlas-source.json). The first two parts
 are in Atlas upstream

@@ -84,11 +84,18 @@ unless they say they come from a development build.
 
 ## Memory and context
 
-- **KV is about 192 KiB a token** (all 48 layer visits), so context is bounded
-  by memory before it is bounded by the model's 1M-token limit. The default
-  profile serves 8 requests of up to 131,072 tokens over a pool of about 404K
-  tokens: eight full-length requests cannot be resident together. `max`
-  serves 32 requests of up to 262,144 tokens over about 446K.
+- **KV is about 32 KiB a token** (the 8 global layer visits; the 40
+  sliding-window visits keep only their last 1,024 tokens), so one Spark holds
+  the model's 1M-token context. `default` and `max` accept requests of up to
+  1,048,576 tokens over pools of about 1.8M to 2.0M tokens, and `saver` up to
+  786,432 over about 830K to 950K: two full-length requests cannot be
+  resident together, and requests the pool cannot hold wait for blocks.
+- **A 1M-token prompt is slow**: about 21 minutes to prefill (attention over
+  the 8 global visits grows with the square of the context), and decode at
+  that length reads about 32 GiB of KV a token.
+- **The disk tier keeps full-length KV.** With `PREFIX_CACHE_DIR` set the
+  engine cannot bound the sliding-window visits, the pool falls back to 0.4.2's
+  size (about 194K to 446K tokens) and a longer request cannot be admitted.
 - **A host that runs out of memory hangs** instead of killing a process (GB10
   memory is shared with the host). The container is capped at 114 GiB; keep
   builds and other models off the Spark while it serves, or use `saver`.

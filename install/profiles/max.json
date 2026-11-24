@@ -2,7 +2,7 @@
  "schema": "sparkinkling.atlas-install-profile/v1",
  "model": "inkling-2-mini",
  "status": "development",
- "note": "Inkling 2 Mini on one DGX Spark (TP=1), engine install/atlas-source.json. BF16 KV (about 192 KiB a token: the paged cache holds all 48 layer visits, the sliding-window ones included), prefill chunks of 4,096 tokens (on the 0.2.0 image a 32K-token prompt took 10.0 s against 11.3 s at 2,048; a longer chunk also holds other requests' decode steps longer), programmatic dependent launch for the engine's Inkling kernels (always on in the pinned engine), prefix caching (each visit's short-conv state, about 4.8 MB a sequence, rides the cache's snapshots in host memory; their readback through a page-locked stage; a prefill also saves a state where its prompt forks from a cached one by 512 tokens or more). Requests may run an hour (--request-timeout=3600); a tool-calling request may generate up to 32,768 tokens (--tool-max-tokens: the model reasons before it calls). A request that names no reasoning effort reasons at low (--default-chat-template-kwargs): the template's own default, high (0.9), often reasons in loops at temperature 0, which the model card warns about; on MMLU-Pro (150 questions, 8,192-token cap) high scored 107 with 30 answers cut off, medium 120 with 8, low 125 with 2; at low GSM8K 142/150 (high 143) and HumanEval 159/164 (high 147). A request's own reasoning_effort still wins, and thinking off is unchanged. The launcher adds the DSpark drafter (DRAFTER) and, with PREFIX_CACHE_DIR, the disk tier for evicted KV. Max: 32 concurrent requests of up to 262,144 tokens each at utilization 0.85 (a KV pool of about 446K tokens, so long requests wait for blocks rather than all run at once), 256 prefix-cache snapshots. At 0.88 the host kept about 8 GB available under a full batch; 0.85 is SparkQwen 27B's share. Checked 2026-11-21 at 0.88: 32 concurrent short code requests all stopped, and a code hidden in a 182,100-token prompt was recalled.",
+ "note": "Inkling 2 Mini on one DGX Spark (TP=1), engine install/atlas-source.json. BF16 KV, window-bounded: the 40 sliding-window layer visits keep only the rows their last 1,024 tokens need, so context costs the 8 global visits' 32 KiB a token (192 KiB before 0.5.0); saved prefix-cache windows stay pinned in up to an eighth of the KV budget. With PREFIX_CACHE_DIR (the disk tier) the engine keeps full-length KV, the pool falls back to 0.4.2's size (about 194K to 446K tokens by profile) and a longer request cannot be admitted, prefill chunks of 4,096 tokens (on the 0.2.0 image a 32K-token prompt took 10.0 s against 11.3 s at 2,048; a longer chunk also holds other requests' decode steps longer), programmatic dependent launch for the engine's Inkling kernels (always on in the pinned engine), prefix caching (each visit's short-conv state, about 4.8 MB a sequence, rides the cache's snapshots in host memory; their readback through a page-locked stage; a prefill also saves a state where its prompt forks from a cached one by 512 tokens or more). Requests may run an hour (--request-timeout=3600); a tool-calling request may generate up to 32,768 tokens (--tool-max-tokens: the model reasons before it calls). A request that names no reasoning effort reasons at low (--default-chat-template-kwargs): the template's own default, high (0.9), often reasons in loops at temperature 0, which the model card warns about; on MMLU-Pro (150 questions, 8,192-token cap) high scored 107 with 30 answers cut off, medium 120 with 8, low 125 with 2; at low GSM8K 142/150 (high 143) and HumanEval 159/164 (high 147). A request's own reasoning_effort still wins, and thinking off is unchanged. The launcher adds the DSpark drafter (DRAFTER) and, with PREFIX_CACHE_DIR, the disk tier for evicted KV. Max: 32 concurrent requests of up to 1,048,576 tokens each at utilization 0.85 (a KV pool of 1,944,304 tokens in Strict and 1,815,120 in Spark, measured 2026-11-24 on the pinned engine with the voice engines suspended; 0.4.2 held about 446K), so long requests wait for blocks rather than all run at once, 264 prefix-cache snapshots. At 0.88 the host kept about 8 GB available under a full batch; 0.85 is SparkQwen 27B's share. Checked 2026-11-21 at 0.88: 32 concurrent short code requests all stopped, and a code hidden in a 182,100-token prompt was recalled.",
  "environment": {
   "CUDA_CACHE_PATH": "/atlas-cuda-cache",
   "LD_LIBRARY_PATH": "/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64",
@@ -20,13 +20,13 @@
   "--kv-cache-dtype=bf16",
   "--max-prefill-tokens=4096",
   "--enable-prefix-caching",
-  "--ssm-cache-slots=256",
+  "--ssm-cache-slots=264",
   "--oom-guard-mb=4096",
   "--request-timeout=3600",
   "--tool-max-tokens=32768",
   "--max-num-seqs=32",
   "--max-batch-size=32",
-  "--max-seq-len=262144",
+  "--max-seq-len=1048576",
   "--default-chat-template-kwargs={\"reasoning_effort\":\"low\"}",
   "--no-tui"
  ]

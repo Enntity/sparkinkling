@@ -3,9 +3,9 @@
 
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
-`inkling2/concurrent-spec-20261123` at
+`inkling2/swa-kv-window-20261124` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`d3318e087` (tree `a53a4b2d`), for the kernel target `inkling-2-mini`
+`b83832a7e` (tree `95124d87`), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -20,9 +20,46 @@ adds the fourth (408, a draft): drafting with two live requests, verifies
 sized by the drafter's confidence, a verify that attends exactly as decode
 does, decode batches at their own width, and one launch for a Spark decode
 row's input projections. Both branches carry a merge of `main` at
-`7a717b659`. The build fetches by commit.
+`7a717b659`. The pinned branch adds three commits on 408's branch
+(`d3318e087`), not yet proposed upstream: window-bounded KV (below). The
+build fetches by commit.
 
 ## What the branch adds
+
+**Window-bounded KV (the three newest commits).** 40 of the 48 layer visits
+are sliding-window attention over 1,024 tokens, yet the paged cache held a row
+for every token of context in all 48: 192 KiB a token. They now keep their K/V
+in a pool of their own, at a local block each KV block maps to, and only for
+the blocks a sequence's next forward can read (its window, from the 32-key
+tile the prefill kernels start at). So context costs the 8 global visits'
+32 KiB a token. A shared prefix shares its window rows; a rejected draft never
+moves the window's floor; a prefix-cache snapshot pins the window it resumes
+from (pins take up to an eighth of the KV budget, least recently used go
+first), and a snapshot whose window is gone is declined, so the prompt is
+recomputed rather than read from missing rows. Visit 0 maps each forward's KV
+slots and block tables through the window map (one small kernel, inside the
+decode graphs); the attention kernels are unchanged and read the same rows in
+the same order, so greedy text is identical to `d3318e087`'s. Measured
+2026-11-24 on a development build of the pinned commit, against the 0.4.2
+image's own engine, product flags, DSpark on:
+
+- **Greedy text identical**, in Strict and Spark mode: the 8-prompt check at
+  320 tokens, one request and two at once; at 2,048 tokens (past the window);
+  three long prompts of 8K, 34K and 106K tokens; and a two-turn prefix-cache
+  resume.
+- **Speed level**: decode 57.03 vs 57.01 tok/s on code and 35.93 vs 35.90 on
+  prose, 32K cold prefill 9.91 vs 9.90 s.
+- **KV pools** (tokens): `default` 2,004,064 Strict and 1,856,048 Spark (was
+  about 404K), `max` 1,944,304 and 1,815,120 (was about 446K), `saver`
+  952,016 and 830,416 (was about 194K beside the voice engines).
+- **Long context**: a code hidden a third of the way into a 1,032,929-token
+  prompt was recalled (1,252 s for the prompt, Strict, utilization 0.50).
+
+The disk tier (`ATLAS_KV_NVME_DIR`, `PREFIX_CACHE_DIR`), `--high-speed-swap`
+and multi-rank serving still assume one block id addresses every layer, so
+with any of them the engine keeps full-length KV and logs why. Swapping a
+preempted request to host memory is off with the window; such a request is
+prefilled again.
 
 The branch is the Inkling 2 Mini series, first written on Atlas-Inf `main`
 `269b533bc` (the merge of #332) and merged up to `main` `7a717b659`
