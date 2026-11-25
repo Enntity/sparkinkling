@@ -48,9 +48,10 @@ commits over `d3318e087` (other services resident, 0.5 of GPU memory, product
 settings per mode, 40 prompts: 20 HumanEval, 10 GSM8K, 10 MMLU-Pro, reasoning
 low, temperature 0, single runs), aggregate tok/s with DSpark and with
 DFlash2: Strict one request 53.2 and 64.7, two at once 67.3 and 70.2; Spark
-one request 67.4 and 78.8, two at once 71.3 and 71.0 (Spark decodes plainly
-from two). Greedy text for 8 prompts x 320 tokens was identical to plain
-decode at one and two requests in both modes.
+one request 67.4 and 78.8, two at once 71.3 and 71.0 (with 0.4.2's
+settings, under which Spark decoded plainly from two). Greedy text for 8
+prompts x 320 tokens was identical to plain decode at one and two requests
+in both modes. 0.5.0 runs DFlash2 only, with settings retuned for it.
 
 **Window-bounded KV (three commits).** 40 of the 48 layer visits
 are sliding-window attention over 1,024 tokens, yet the paged cache held a row
@@ -171,7 +172,7 @@ The branch is the Inkling 2 Mini series, first written on Atlas-Inf `main`
   it passes its effort's budget (minimal 2K, low 4K, medium 8K, high 16K,
   xhigh 32K reasoning tokens) or its loop watchdog fires; the model then
   writes its answer. Inkling loops in its reasoning at high effort (its
-  model card says so); DSpark keeps speculating inside the block.
+  model card says so); the drafter keeps speculating inside the block.
 - **Streamed tool calls, on request.** Once a tool block reads
   `{"name":NAME,"args":`, the engine can open the call and pass its argument
   tokens through as they arrive. Under the tool guard's `stream` setting (the
@@ -191,45 +192,43 @@ The branch is the Inkling 2 Mini series, first written on Atlas-Inf `main`
   checkpoint's weights (Strict), a visit's input projections (q, k, v,
   relative bias, gate, sinks, dynamic conv taps) run as one launch over a
   per-visit table. Verify rows journal each visit's conv state and inputs so
-  rejected drafts roll back exactly. The checkpoint's DSpark drafter runs as a
-  variant of Atlas's DFlash head: each draft layer mixes four target taps
-  (the inputs of visits 5, 23 and 41 and the final-norm output) with its own
-  weights, the block is the anchor's embedding plus mask rows, and a
-  recurrent Markov head corrects the drafts, its latent folded into the
-  vocabulary head at load. The target verifies every draft, so the drafts
-  change speed and not the text (in development an NVFP4 and a BF16 drafter
-  gave byte-identical greedy text). A verify stops where the drafter is unsure
-  (`ATLAS_DFLASH_CONF_WIDTH=1`): the drafter reports the log-probability of
-  each draft, the engine learns while serving how often the target accepts a
-  draft at each confidence, and the step verifies only as far as the block is
-  still likely right, because every extra verify row reads about 1.7 GB of
-  expert weights (about 6 ms). Drafts go off for a sequence whose steps stop
-  paying (`ATLAS_DFLASH_ADAPTIVE=1`), for 32 tokens at first and doubling
-  while re-probes keep failing; the threshold is what a whole block must
-  accept, 2.0 in Strict and 2.5 in Spark, and a shorter step owes a share of
-  it. That rule stands in for the engine's throughput gate
-  (`ATLAS_MTP_GATE_FORCE=1`), whose off state carried from one request into
-  the next. With two live requests (Strict) each gets two drafts a step: the
-  two proposes share one pass over the vocabulary head, and a pair whose
-  drafts stop paying decodes plain, batched, until the re-probe. A verify runs its rows through the same attention
-  body and key splits as a decode row, so a verified token is the one plain
-  decode picks: on 8 prompts of 320 tokens greedy text was identical with
-  the drafter off and on, one request at a time and two at once, in both
-  modes (a development build; before, the tensor-core prefill attention
-  summed a row's keys in another order and text parted at near ties).
+  rejected drafts roll back exactly. The drafter is incoai's DFlash2 (above);
+the target verifies every draft, so the drafts change speed and not the
+text. A verify stops where the drafter is unsure
+(`ATLAS_DFLASH_CONF_WIDTH=1`): the drafter reports the log-probability of
+each draft, the engine learns while serving how often the target accepts a
+draft at each confidence, and the step verifies only as far as the block is
+still likely right, because every extra verify row reads about 1.7 GB of
+expert weights (about 6 ms). Drafts go off for a sequence whose steps stop
+paying (`ATLAS_DFLASH_ADAPTIVE=1`), for 32 tokens at first and doubling
+while re-probes keep failing; the threshold is what a whole block must
+accept, 1.0 in Strict and the engine's 2.0 in Spark, and a shorter step owes
+a share of it. That rule stands in for the engine's throughput gate
+(`ATLAS_MTP_GATE_FORCE=1`), whose off state carried from one request into
+the next. Several live requests draft together: their proposes share one
+pass over the vocabulary head and their verifies one batch, and a sequence
+whose drafts stop paying decodes plainly in the same batch until its
+re-probe. Strict drafts seven tokens alone and three each for two to six
+requests, then decodes plainly
+(`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,3:3,4:3,5:3,6:3,1000000:0`); Spark,
+whose plain step is a third shorter, drafts seven alone and three each for
+two (`1:7,2:3,1000000:0`). The settings were tuned for DFlash2 on 0.5.0's
+engine ([results](../results/2026-11-25-dflash2-tuning/RESULT.md)). A verify
+runs its rows through the same attention body and key splits as a decode
+row, so a verified token is the one plain decode picks: on 8 prompts of 320
+tokens greedy text was identical with the drafter off and on, one request at
+a time and two at once, in both modes (before 0.4.2, the tensor-core prefill
+attention summed a row's keys in another order and text parted at near
+ties).
 
 ## What it does not do yet
 
-- **Drafting for more requests.** Strict drafts for one or two live requests
-  and decodes plainly from three
-  (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0`, set by the image); Spark
-  drafts for one (`1:7,1000000:0`). These settings were tuned with the DSpark
-  drafter and have not been retuned for DFlash2. With DSpark a verify row
-  costs about 6 ms, and one draft each gained 10% on code and lost 6% on
-  prose at three requests, 8% and 9% at four
-  ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
-  Three, five, six and seven requests decode at their own width (three as
-  three rows, not four): 57 to 67 tok/s aggregate at three, 78 to 92 at five.
+- **Drafting under heavy load.** Strict decodes plainly from seven live
+  requests and Spark from three: drafting there lost in tuning (Strict two
+  each at eight requests 95.6 against 97.1-98.7 tok/s plain; Spark one to
+  three each at three and four requests 2-12% under plain;
+  [issue 1](https://github.com/Enntity/sparkinkling/issues/1)). Batches
+  decode at their own width (three as three rows, not four).
 - **Expert input quantization in decode.** Decode and verify rows (fewer than
   16 at once) still give the experts BF16 inputs, so a token's experts see the
   checkpoint's declared numerics in prefill and BF16 inputs in decode.

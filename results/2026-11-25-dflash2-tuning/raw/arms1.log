@@ -1,0 +1,131 @@
+== strict tc c1
+  code: 3337 tokens, 65.9 tok/s
+  math: 1432 tokens, 68.9 tok/s
+  mmlu: 1284 tokens, 50.4 tok/s
+  prose: 1721 tokens, 40.9 tok/s
+  all: 7774 tokens in 139s = 55.9 tok/s aggregate
+== strict tc c2
+  code: 3429 tokens, 72.5 tok/s
+  math: 1432 tokens, 72.4 tok/s
+  mmlu: 1284 tokens, 63.8 tok/s
+  prose: 1721 tokens, 58.6 tok/s
+  all: 7866 tokens in 117s = 67.0 tok/s aggregate
+  errors: 0
+== strict head c1
+  code: 3337 tokens, 65.9 tok/s
+  math: 1432 tokens, 68.8 tok/s
+  mmlu: 1284 tokens, 50.3 tok/s
+  prose: 1721 tokens, 40.7 tok/s
+  all: 7774 tokens in 139s = 55.8 tok/s aggregate
+== strict head c2
+  code: 3429 tokens, 72.5 tok/s
+  math: 1432 tokens, 72.3 tok/s
+  mmlu: 1284 tokens, 63.8 tok/s
+  prose: 1721 tokens, 58.6 tok/s
+  all: 7866 tokens in 117s = 67.0 tok/s aggregate
+  errors: 0
+== strict ctx c1
+  code: 3337 tokens, 65.9 tok/s
+  math: 1432 tokens, 68.9 tok/s
+  mmlu: 1284 tokens, 50.3 tok/s
+  prose: 1721 tokens, 40.8 tok/s
+  all: 7774 tokens in 139s = 55.9 tok/s aggregate
+== strict ctx c2
+  code: 3434 tokens, 71.0 tok/s
+  math: 1432 tokens, 71.6 tok/s
+  mmlu: 1284 tokens, 63.1 tok/s
+  prose: 1721 tokens, 58.4 tok/s
+  all: 7871 tokens in 119s = 66.0 tok/s aggregate
+  errors: 0
+== strict conv c1
+  code: 3337 tokens, 65.9 tok/s
+  math: 1432 tokens, 68.9 tok/s
+  mmlu: 1284 tokens, 50.4 tok/s
+  prose: 1721 tokens, 40.8 tok/s
+  all: 7774 tokens in 139s = 55.9 tok/s aggregate
+== strict conv c2
+  code: 3429 tokens, 72.5 tok/s
+  math: 1432 tokens, 72.3 tok/s
+  mmlu: 1284 tokens, 63.7 tok/s
+  prose: 1721 tokens, 58.5 tok/s
+  all: 7866 tokens in 117s = 67.0 tok/s aggregate
+  errors: 0
+== strict async c1
+  code: 3337 tokens, 65.9 tok/s
+  math: 1432 tokens, 68.9 tok/s
+  mmlu: 1284 tokens, 50.4 tok/s
+  prose: 1721 tokens, 40.9 tok/s
+  all: 7774 tokens in 139s = 55.9 tok/s aggregate
+== strict async c2
+  code: 3429 tokens, 72.6 tok/s
+  math: 1432 tokens, 72.4 tok/s
+  mmlu: 1284 tokens, 63.9 tok/s
+  prose: 1721 tokens, 58.7 tok/s
+  all: 7866 tokens in 117s = 67.1 tok/s aggregate
+  errors: 0
+== strict copy c1
+  code: 3337 tokens, 64.0 tok/s
+  math: 1432 tokens, 66.6 tok/s
+  mmlu: 1284 tokens, 47.7 tok/s
+  prose: 1721 tokens, 41.0 tok/s
+  all: 7774 tokens in 143s = 54.5 tok/s aggregate
+== strict copy c2
+  code: 3204 tokens, 71.2 tok/s
+  math: 1432 tokens, 72.0 tok/s
+  mmlu: 1284 tokens, 63.6 tok/s
+  prose: 1721 tokens, 58.5 tok/s
+  all: 7641 tokens in 115s = 66.3 tok/s aggregate
+  errors: 0
+== strict first c1
+  code: 3337 tokens, 66.3 tok/s
+  math: 1432 tokens, 69.0 tok/s
+  mmlu: 1284 tokens, 49.8 tok/s
+  prose: 1721 tokens, 41.4 tok/s
+  all: 7774 tokens in 138s = 56.2 tok/s aggregate
+== strict first c2
+  code: 3429 tokens, 71.7 tok/s
+  math: 1432 tokens, 72.2 tok/s
+  mmlu: 1284 tokens, 63.9 tok/s
+  prose: 1721 tokens, 58.6 tok/s
+  all: 7866 tokens in 118s = 66.8 tok/s aggregate
+  errors: 0
+== strict masked c1
+  code: 3337 tokens, 64.9 tok/s
+  math: 1432 tokens, 68.5 tok/s
+  mmlu: 1284 tokens, 50.4 tok/s
+  prose: 1721 tokens, 41.2 tok/s
+  all: 7774 tokens in 140s = 55.7 tok/s aggregate
+== strict masked c2
+  code: 3204 tokens, 71.1 tok/s
+  math: 1432 tokens, 72.3 tok/s
+  mmlu: 1284 tokens, 63.8 tok/s
+  prose: 1721 tokens, 58.5 tok/s
+  all: 7641 tokens in 115s = 66.3 tok/s aggregate
+  errors: 0
+== strict awidth c1
+  code: 3337 tokens, 65.9 tok/s
+  math: 1432 tokens, 68.9 tok/s
+  mmlu: 1284 tokens, 50.4 tok/s
+  prose: 1721 tokens, 40.9 tok/s
+  all: 7774 tokens in 139s = 55.9 tok/s aggregate
+== strict awidth c2
+  code: 3429 tokens, 72.5 tok/s
+  math: 1432 tokens, 72.3 tok/s
+  mmlu: 1284 tokens, 63.8 tok/s
+  prose: 1721 tokens, 58.6 tok/s
+  all: 7866 tokens in 117s = 67.0 tok/s aggregate
+  errors: 0
+== strict probe c1
+  code: 3337 tokens, 65.7 tok/s
+  math: 1432 tokens, 68.9 tok/s
+  mmlu: 1284 tokens, 50.4 tok/s
+  prose: 1721 tokens, 41.3 tok/s
+  all: 7774 tokens in 139s = 56.0 tok/s aggregate
+== strict probe c2
+  code: 3429 tokens, 72.4 tok/s
+  math: 1432 tokens, 72.2 tok/s
+  mmlu: 1284 tokens, 63.7 tok/s
+  prose: 1721 tokens, 58.5 tok/s
+  all: 7866 tokens in 118s = 66.9 tok/s aggregate
+  errors: 0
+end 07:35:10Z

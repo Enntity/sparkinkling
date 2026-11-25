@@ -1,0 +1,26 @@
+== strict base c1
+  code: 3337 tokens, 65.7 tok/s
+  math: 1432 tokens, 68.8 tok/s
+  mmlu: 1284 tokens, 50.3 tok/s
+  prose: 1721 tokens, 40.8 tok/s
+  all: 7774 tokens in 139s = 55.8 tok/s aggregate
+== strict base c2
+  code: 3434 tokens, 71.7 tok/s
+  math: 1432 tokens, 72.4 tok/s
+  mmlu: 1284 tokens, 63.8 tok/s
+  prose: 1721 tokens, 58.7 tok/s
+  all: 7871 tokens in 118s = 66.8 tok/s aggregate
+  errors: 0
+== spark base c1
+  code: 3205 tokens, 88.4 tok/s
+  math: 1498 tokens, 76.6 tok/s
+  mmlu: 1251 tokens, 62.6 tok/s
+  prose: 1785 tokens, 58.6 tok/s
+  all: 7739 tokens in 106s = 72.8 tok/s aggregate
+== spark base c2
+  code: 3342 tokens, 72.3 tok/s
+  math: 1498 tokens, 73.4 tok/s
+  mmlu: 1251 tokens, 70.1 tok/s
+  prose: 1785 tokens, 75.0 tok/s
+  all: 7876 tokens in 109s = 72.0 tok/s aggregate
+  errors: 0

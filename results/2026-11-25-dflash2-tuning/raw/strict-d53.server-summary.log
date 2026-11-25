@@ -1,0 +1,60 @@
+2026-11-25T09:57:49.137965Z  INFO spark::main_modules::serve_load: Port: 8895
+2026-11-25T09:57:49.137967Z  INFO spark::main_modules::serve_load: SSM decode h-state dtype: f32 (full precision) (--ssm-h-dtype)
+2026-11-25T09:57:49.139283Z  INFO spark::main_modules::serve_load: Vision pixel budget: none declared — falling back to the 1280px long-side clamp
+2026-11-25T09:57:49.139295Z  INFO spark::main_modules::serve_load: Remote image fetching disabled (default); image_url parts carrying an http(s) URL are refused with a 400. Send base64 data: URIs, or pass --vision-allow-remote-images.
+2026-11-25T09:57:49.139311Z  INFO spark::main_modules::serve_load: Video decoding disabled (default). Animated GIF decodes in-process; every other container needs ffmpeg — pass --video-allow-ffmpeg to enable it.
+2026-11-25T09:57:49.139313Z  INFO spark::main_modules::serve_load: Quantization config: method="modelopt", algo="NVFP4", format="", 0 module(s) in ignore list
+2026-11-25T09:57:49.139321Z  INFO spark::main_modules::serve_load: Model config: 48 layers, 48 attention, 0 SSM, 128 experts, rope_theta=10000, head_dim=128, rotary_dim=0
+2026-11-25T09:57:49.139361Z  INFO spark::main_modules::serve_load: Selected kernel target: (sm_121, inkling-2-mini, nvfp4) (217 modules) — quant compat: kernel=nvfp4 model=nvfp4 OK
+2026-11-25T09:57:49.139396Z  INFO spark::main_modules::serve_phases::config: DFlash γ=8 (source: cli)
+2026-11-25T09:58:16.625560Z  INFO spark::main_modules::serve_load: OOM watchdog started (threshold: 2 GB, interval: 2s)
+2026-11-25T09:58:16.625567Z  INFO spark::main_modules::serve_load: OOM guard reserve: 4096 MB
+2026-11-25T09:58:20.656008Z  WARN spark_model::preflight: Pre-flight: config.num_experts=128 but no expert tensors found locally. Normal under EP>1 when the local rank owns zero experts; otherwise check your checkpoint.
+2026-11-25T09:58:20.656023Z  INFO spark::main_modules::serve_load: Quantization format: modelopt (base variant Standard), ignored globs = 0
+2026-11-25T09:58:20.866101Z  WARN spark::main_modules::serve_load: dflash: --enable-prefix-caching has a community-reported correctness regression on SM12.x with DFlash; outputs may be wrong on multi-turn cache hits. Run a greedy diff-test against a non-DFlash baseline before relying on outputs.
+2026-11-25T09:58:21.384914Z  INFO spark::main_modules::serve_phases::weights: DFlash: resolving drafter '/models/sparkinkling/incoai--Inkling-2-Mini-DFlash2'
+2026-11-25T09:58:21.384944Z  INFO spark::model_resolver: Model path: /models/sparkinkling/incoai--Inkling-2-Mini-DFlash2 (local directory)
+2026-11-25T09:58:21.519770Z  INFO spark::main_modules::serve_phases::weights: DFlash drafter store: 81 tensors, 989966848 bytes
+2026-11-25T09:58:21.519834Z  INFO spark_model::factory::build: DFlash: target layer capture indices = [4, 22, 40, 47] (drafter target_layer_ids, used directly)
+2026-11-25T09:58:22.242827Z  INFO spark_model::model::drafter_context: MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+2026-11-25T09:58:22.242976Z  INFO spark_model::weight_loader::dflash_loader: DFlash2 candidate selector loaded: rank=256, top_k=16
+2026-11-25T09:58:22.242979Z  INFO spark_model::weight_loader::dflash_loader: DFlash/DSpark drafter loaded: 5 layers, hidden=2304, vocab=201024, γ=8, markov_rank=0, own_embed=false, causal=None, swa=None/None, sinks=0/5, candidate_selector=true, target_layers=[5, 23, 41, 48]
+2026-11-25T09:58:22.242987Z  INFO spark_model::layers::dflash_head::first_append: DFlash first context append: Legacy (ATLAS_DFLASH_FIRST_APPEND=legacy|none|own|zero)
+2026-11-25T09:58:22.242989Z  INFO spark_model::layers::dflash_head::warm_ctx: DFlash warm context: Legacy (ATLAS_DFLASH_WARM_CTX=legacy|exact|seed|restore)
+2026-11-25T09:58:22.242994Z  INFO spark_model::layers::dflash_head::from_weights: DFlash KV pool: 2056 blocks (257 per seq × batch 8)
+2026-11-25T09:58:22.265477Z  INFO spark_runtime::kv_cache::paged_impl: KV cache: 2056 blocks × 5 layers = 0.6 GB total
+2026-11-25T09:58:22.265546Z  INFO spark_model::layers::dflash_head::small_m_gemm: DFlash drafter small-M GEMM arm: pipelined GEMM
+2026-11-25T09:58:22.265740Z  INFO spark_model::layers::dflash_head::from_weights: DFlash ctx_window = 4096 (set ATLAS_DFLASH_CTX_WINDOW to override; drafter trained on full captured prefix — larger is better, scratch grows linearly)
+2026-11-25T09:58:22.284685Z  INFO spark_model::layers::dflash_head::from_weights: DFlash propose lanes: 1 (extra scratch + streams)
+2026-11-25T09:58:22.284711Z  INFO spark_model::layers::dflash_head::from_weights: DFlash RoPE = plain (no rope_scaling in drafter config), theta=10000, 64 pairs
+2026-11-25T09:58:22.286884Z  INFO spark_model::layers::dflash_head::from_weights: DFlash fused_kv_weight: 47185920 bytes (5 layers × 2 × kv_dim × h × bf16), layout [K0,V0,K1,V1,…] to match vLLM precompute_and_store_context_kv
+2026-11-25T09:58:22.401223Z  INFO spark_model::layers::dflash_head::from_weights: DFlash batched propose: authoritative Bxgamma for generic DFlash (default on; rollback ATLAS_DFLASH_BATCHED_PROPOSE=0; min 2, max 8)
+2026-11-25T09:58:22.401306Z  INFO spark_model::layers::dflash_head::nvfp4: DFlash NVFP4: quantizing 5 layers × 7 GEMMs for w4a16_gemv_batch8
+2026-11-25T09:58:22.418468Z  INFO spark_model::layers::dflash_head::nvfp4: DFlash NVFP4: ready (quant = Nvfp4Weights)
+2026-11-25T09:58:22.418481Z  INFO spark_model::layers::dflash_head::twins: DFlash twins: NVFP4 tensor-core layers false, MXFP8 layers 0, head NVFP4 false / MXFP8 false, context NVFP4 false, conv None x 0, async context positions false, async uploads false
+2026-11-25T09:58:22.418566Z  INFO spark_model::factory::build: DFlash context accumulators reserved from the KV budget: 0.60 GB for 8 sequences
+2026-11-25T09:58:22.432584Z  INFO spark_model::factory::build::kv_budget: KV budget self-relative (auto): baseline-free 90.7 GB − free-now 65.8 GB = Atlas-own 24.9 GB; co-tenants 31.0 GB excluded (set ATLAS_KV_EXTERNAL_RESERVE_GB to override)
+2026-11-25T09:58:22.432597Z  INFO spark_model::factory::build::kv_budget: KV own-footprint cross-check: free-memory measure 24.89 GB, tracked 23.86 GB (device 23.11 GB by driver accounting + host 0.76 GB) → 24.89 GB pre-KV
+2026-11-25T09:58:22.432603Z  INFO spark_model::factory::build::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 2552 blocks (6.23 GiB, 26 snapshot pins); the other layers' 32 KiB a token buy 58705 blocks
+2026-11-25T09:58:22.432606Z  INFO spark_model::factory::build: KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 24.9 GB pre-KV + 1.1 GB reserve → 34.9 GB for KV → 58705 blocks × 16 tok/block = 939280 max KV tokens
+2026-11-25T09:58:23.557583Z  INFO spark_runtime::kv_cache::paged_impl: KV cache: 58705 blocks × 48 layers = 28.7 GB total
+2026-11-25T09:58:23.557767Z  INFO spark_model::model::drafter_context: MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+2026-11-25T09:58:23.558437Z  INFO spark_model::factory::build: DFlash drafter installed as the active proposer
+2026-11-25T09:58:24.433211Z  WARN spark::main_modules::serve_phases::tokenizer_runtime: Tool call start token unresolved for <tool_call> — require_tool_call / suppress / force-emit-after-think will be no-ops
+2026-11-25T09:58:24.546568Z  WARN spark::main_modules::serve_phases::tokenizer_runtime: Tool parameter markers unresolved for this tokenizer: parameter-value tracking and the envelope-stuck cap are off (--tool-max-tokens still applies)
+2026-11-25T09:58:24.982951Z  INFO spark::main_modules::serve_load: DFlash speculative decoding: ENABLED (γ=8, window=4096, drafter installed)
+2026-11-25T09:58:24.982960Z  INFO spark::main_modules::serve_load: Scheduling policy: FIFO
+2026-11-25T09:58:24.983115Z  INFO spark::main_modules::serve_load: tool-call guard configured enabled=false stream=false max_bytes=1048576
+2026-11-25T09:58:24.983713Z  WARN spark::scheduler: --mtp-gate force: MTP throughput gate DISARMED (diagnostic; verify runs even where the gate would measure it net-negative)
+2026-11-25T09:58:24.983908Z  WARN spark::scheduler::preempt: --swap-space-gb=3 ignored: this model cannot resume a swapped sequence, so preempted sequences re-prefill instead
+2026-11-25T09:58:25.425686Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:58:25.426581Z  WARN spark_runtime::cuda_backend::host_staging: copy_h2d_async was handed a PAGE-LOCKED source. That copy is genuinely asynchronous, so the promise that the caller may drop the buffer on return is now being paid for with a cuStreamSynchronize on every such call. If the source outlives the next sync, switch the call site to copy_h2d_async_retained; if it does not, this sync is what keeps it from being a use-after-free.
+2026-11-25T09:58:25.463748Z  WARN spark_model::model::glm_vocab_split: GLM vocab-split verify head declined (no_comm, rows=8); min_tokens end-token ban inactive
+2026-11-25T09:58:25.498271Z  INFO spark_model::model::trait_impl: DFlash UNIFIED_CTX ACTIVE: first commit_ctx rows=8 base_pos=25 ctx_len=34
+2026-11-25T09:58:25.570577Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 269351892536832, ctx_ptr: 269350705561600, markov_ptr: 269375543699968, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:58:25.571004Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 269351892536832, ctx_ptr: 269350705561600, markov_ptr: 269375543699968, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:58:27.338941Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:58:27.340512Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 2 }, block_table_ptr: 269351892536832, ctx_ptr: 269350705561600, markov_ptr: 269375543699968, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:58:27.340886Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 2 }, block_table_ptr: 269351892536832, ctx_ptr: 269350705561600, markov_ptr: 269375543699968, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:58:27.425584Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 32 tokens (2 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:58:27.611628Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV

@@ -1,0 +1,34 @@
+== strict d2344 c3
+  code: 3406 tokens, 87.5 tok/s
+  math: 1432 tokens, 87.2 tok/s
+  mmlu: 1284 tokens, 72.2 tok/s
+  prose: 1721 tokens, 67.8 tok/s
+  all: 7843 tokens in 103s = 76.2 tok/s aggregate
+== strict d2344 c4
+  code: 3102 tokens, 96.8 tok/s
+  math: 1432 tokens, 97.3 tok/s
+  mmlu: 1284 tokens, 78.2 tok/s
+  prose: 1721 tokens, 74.7 tok/s
+  all: 7539 tokens in 91s = 82.4 tok/s aggregate
+  errors: 0
+== strict d233353 c4
+  code: 3259 tokens, 96.9 tok/s
+  math: 1432 tokens, 95.8 tok/s
+  mmlu: 1284 tokens, 79.8 tok/s
+  prose: 1721 tokens, 80.0 tok/s
+  all: 7696 tokens in 92s = 83.9 tok/s aggregate
+== strict d233353 c5
+  code: 3438 tokens, 100.5 tok/s
+  math: 1432 tokens, 100.4 tok/s
+  mmlu: 1284 tokens, 83.9 tok/s
+  prose: 1721 tokens, 85.8 tok/s
+  all: 7875 tokens in 89s = 88.1 tok/s aggregate
+  errors: 0
+== spark d2343 c4
+  code: 3338 tokens, 103.4 tok/s
+  math: 1498 tokens, 98.2 tok/s
+  mmlu: 1251 tokens, 84.3 tok/s
+  prose: 1785 tokens, 91.7 tok/s
+  all: 7872 tokens in 86s = 91.1 tok/s aggregate
+  errors: 0
+end 09:33:50Z

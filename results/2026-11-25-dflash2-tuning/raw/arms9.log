@@ -1,0 +1,28 @@
+== strict d63 c6
+  code: 3280 tokens, 105.4 tok/s
+  math: 1432 tokens, 106.4 tok/s
+  mmlu: 1284 tokens, 90.8 tok/s
+  prose: 1721 tokens, 94.6 tok/s
+  all: 7717 tokens in 84s = 91.9 tok/s aggregate
+  errors: 0
+== strict d53 c6
+  code: 3349 tokens, 92.9 tok/s
+  math: 1432 tokens, 90.9 tok/s
+  mmlu: 1284 tokens, 89.3 tok/s
+  prose: 1721 tokens, 96.9 tok/s
+  all: 7786 tokens in 92s = 84.3 tok/s aggregate
+== strict d53 c8
+  code: 3257 tokens, 107.4 tok/s
+  math: 1432 tokens, 107.1 tok/s
+  mmlu: 1284 tokens, 109.3 tok/s
+  prose: 1721 tokens, 125.0 tok/s
+  all: 7694 tokens in 79s = 97.1 tok/s aggregate
+  errors: 0
+== strict d82 c8
+  code: 3424 tokens, 108.6 tok/s
+  math: 1432 tokens, 109.7 tok/s
+  mmlu: 1284 tokens, 102.1 tok/s
+  prose: 1721 tokens, 114.6 tok/s
+  all: 7861 tokens in 82s = 95.6 tok/s aggregate
+  errors: 0
+end 10:03:25Z

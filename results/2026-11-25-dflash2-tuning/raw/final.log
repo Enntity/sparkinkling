@@ -1,0 +1,76 @@
+== strict final c1
+  code: 3337 tokens, 67.9 tok/s
+  math: 1432 tokens, 71.1 tok/s
+  mmlu: 1284 tokens, 53.4 tok/s
+  prose: 1721 tokens, 42.3 tok/s
+  all: 7774 tokens in 134s = 58.0 tok/s aggregate
+== strict final c2
+  code: 3204 tokens, 79.6 tok/s
+  math: 1432 tokens, 80.7 tok/s
+  mmlu: 1284 tokens, 66.1 tok/s
+  prose: 1721 tokens, 58.4 tok/s
+  all: 7641 tokens in 108s = 71.1 tok/s aggregate
+== strict final c3
+  code: 3406 tokens, 84.5 tok/s
+  math: 1432 tokens, 85.7 tok/s
+  mmlu: 1284 tokens, 71.6 tok/s
+  prose: 1721 tokens, 70.2 tok/s
+  all: 7843 tokens in 104s = 75.3 tok/s aggregate
+== strict final c4
+  code: 3259 tokens, 97.1 tok/s
+  math: 1432 tokens, 96.8 tok/s
+  mmlu: 1284 tokens, 80.2 tok/s
+  prose: 1721 tokens, 79.9 tok/s
+  all: 7696 tokens in 91s = 84.3 tok/s aggregate
+== strict final c5
+  code: 3546 tokens, 85.6 tok/s
+  math: 1432 tokens, 84.2 tok/s
+  mmlu: 1284 tokens, 82.3 tok/s
+  prose: 1721 tokens, 89.8 tok/s
+  all: 7983 tokens in 99s = 80.9 tok/s aggregate
+== strict final c8
+  code: 3435 tokens, 107.6 tok/s
+  math: 1432 tokens, 108.0 tok/s
+  mmlu: 1284 tokens, 109.2 tok/s
+  prose: 1721 tokens, 128.8 tok/s
+  all: 7872 tokens in 80s = 98.7 tok/s aggregate
+  errors: 0
+== strict final53 c5
+  code: 3441 tokens, 101.5 tok/s
+  math: 1432 tokens, 100.6 tok/s
+  mmlu: 1284 tokens, 83.4 tok/s
+  prose: 1721 tokens, 85.2 tok/s
+  all: 7878 tokens in 89s = 88.6 tok/s aggregate
+  errors: 0
+== spark final c1
+  code: 3205 tokens, 89.5 tok/s
+  math: 1498 tokens, 79.4 tok/s
+  mmlu: 1251 tokens, 63.3 tok/s
+  prose: 1785 tokens, 58.2 tok/s
+  all: 7739 tokens in 105s = 73.6 tok/s aggregate
+== spark final c2
+  code: 3134 tokens, 90.9 tok/s
+  math: 1498 tokens, 85.2 tok/s
+  mmlu: 1251 tokens, 70.3 tok/s
+  prose: 1785 tokens, 68.7 tok/s
+  all: 7668 tokens in 96s = 79.8 tok/s aggregate
+== spark final c3
+  code: 3280 tokens, 86.0 tok/s
+  math: 1498 tokens, 86.6 tok/s
+  mmlu: 1251 tokens, 82.2 tok/s
+  prose: 1785 tokens, 89.4 tok/s
+  all: 7814 tokens in 95s = 82.6 tok/s aggregate
+== spark final c4
+  code: 3269 tokens, 96.0 tok/s
+  math: 1498 tokens, 95.8 tok/s
+  mmlu: 1251 tokens, 94.0 tok/s
+  prose: 1785 tokens, 109.3 tok/s
+  all: 7803 tokens in 84s = 92.5 tok/s aggregate
+== spark final c8
+  code: 3335 tokens, 118.7 tok/s
+  math: 1498 tokens, 116.9 tok/s
+  mmlu: 1251 tokens, 122.9 tok/s
+  prose: 1785 tokens, 161.9 tok/s
+  all: 7869 tokens in 71s = 111.2 tok/s aggregate
+  errors: 0
+end 09:55:40Z

@@ -1,0 +1,66 @@
+== spark d23 c3
+  code: 3146 tokens, 84.8 tok/s
+  math: 1498 tokens, 87.4 tok/s
+  mmlu: 1251 tokens, 81.7 tok/s
+  prose: 1785 tokens, 95.6 tok/s
+  all: 7680 tokens in 92s = 83.0 tok/s aggregate
+== spark d23 c4
+  code: 3208 tokens, 95.6 tok/s
+  math: 1498 tokens, 95.6 tok/s
+  mmlu: 1251 tokens, 93.8 tok/s
+  prose: 1785 tokens, 109.0 tok/s
+  all: 7742 tokens in 84s = 92.4 tok/s aggregate
+  errors: 0
+== spark d2331 c3
+  code: 3313 tokens, 76.8 tok/s
+  math: 1498 tokens, 77.0 tok/s
+  mmlu: 1251 tokens, 68.5 tok/s
+  prose: 1785 tokens, 80.9 tok/s
+  all: 7847 tokens in 107s = 73.1 tok/s aggregate
+== spark d2331 c4
+  code: 3294 tokens, 94.9 tok/s
+  math: 1498 tokens, 94.5 tok/s
+  mmlu: 1251 tokens, 92.4 tok/s
+  prose: 1785 tokens, 100.6 tok/s
+  all: 7828 tokens in 87s = 89.5 tok/s aggregate
+  errors: 0
+== spark d2332 c3
+  code: 3322 tokens, 89.1 tok/s
+  math: 1498 tokens, 86.0 tok/s
+  mmlu: 1251 tokens, 76.0 tok/s
+  prose: 1785 tokens, 81.3 tok/s
+  all: 7856 tokens in 97s = 80.6 tok/s aggregate
+== spark d2332 c4
+  code: 3322 tokens, 94.6 tok/s
+  math: 1498 tokens, 94.4 tok/s
+  mmlu: 1251 tokens, 92.0 tok/s
+  prose: 1785 tokens, 98.1 tok/s
+  all: 7856 tokens in 88s = 89.4 tok/s aggregate
+  errors: 0
+== strict base c3
+  code: 3286 tokens, 67.0 tok/s
+  math: 1432 tokens, 66.8 tok/s
+  mmlu: 1284 tokens, 65.1 tok/s
+  prose: 1721 tokens, 73.2 tok/s
+  all: 7723 tokens in 118s = 65.4 tok/s aggregate
+== strict base c4
+  code: 3406 tokens, 78.0 tok/s
+  math: 1432 tokens, 77.8 tok/s
+  mmlu: 1284 tokens, 76.2 tok/s
+  prose: 1721 tokens, 85.8 tok/s
+  all: 7843 tokens in 104s = 75.3 tok/s aggregate
+  errors: 0
+== strict d2232 c3
+  code: 3359 tokens, 79.5 tok/s
+  math: 1432 tokens, 78.3 tok/s
+  mmlu: 1284 tokens, 70.0 tok/s
+  prose: 1721 tokens, 70.4 tok/s
+  all: 7796 tokens in 107s = 72.7 tok/s aggregate
+== strict d2232 c4
+  code: 3406 tokens, 77.1 tok/s
+  math: 1432 tokens, 76.6 tok/s
+  mmlu: 1284 tokens, 75.0 tok/s
+  prose: 1721 tokens, 82.2 tok/s
+  all: 7843 tokens in 106s = 74.0 tok/s aggregate
+  errors: 0
+end 08:31:57Z

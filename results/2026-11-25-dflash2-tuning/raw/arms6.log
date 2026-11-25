@@ -1,0 +1,15 @@
+== strict min05 c1
+  code: 3337 tokens, 67.6 tok/s
+  math: 1432 tokens, 70.7 tok/s
+  mmlu: 1284 tokens, 53.1 tok/s
+  prose: 1721 tokens, 42.8 tok/s
+  all: 7774 tokens in 134s = 58.0 tok/s aggregate
+  errors: 0
+== strict noadapt c1
+  code: 3337 tokens, 67.7 tok/s
+  math: 1432 tokens, 70.8 tok/s
+  mmlu: 1284 tokens, 53.2 tok/s
+  prose: 1721 tokens, 42.9 tok/s
+  all: 7774 tokens in 134s = 58.1 tok/s aggregate
+  errors: 0
+end 09:09:41Z
