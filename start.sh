@@ -5,21 +5,21 @@
 #
 #   ./start.sh                     prepare whatever is missing, then serve
 #   ./start.sh --version           checkout product version and pinned engine
-#   ./start.sh --mode strict|spark [command]
+#   ./start.sh --mode spark|strict [command]
 #   ./start.sh stop | status | logs
 #   ./start.sh build | download    run one preparation step
 #
 # Settings (environment or .env): MODEL_ROOT (default ~/models/sparkinkling),
-# MODE (strict, the default, or spark), PROFILE (default, or a JSON file of your
+# MODE (spark, the default, or strict), PROFILE (default, or a JSON file of your
 # own), DRAFTER (dflash2, the default: incoai's DFlash2 drafter; or none),
 # GPU_MEMORY_UTILIZATION (0.50-0.90), IMAGE, PULL=0 (always build), TOOL_GUARD*.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ ${1:-} == --version ]]; then exec python3 install/serve.py --version; fi
 if [[ -f .env ]]; then set -a; . ./.env; set +a; fi
-MODE=${MODE:-strict}
+MODE=${MODE:-spark}
 if [[ ${1:-} == --mode ]]; then
-  [[ $# -ge 2 ]] || { echo '--mode requires strict or spark' >&2; exit 2; }
+  [[ $# -ge 2 ]] || { echo '--mode requires spark or strict' >&2; exit 2; }
   MODE=$2; shift 2
 fi
 MODEL_ROOT=${MODEL_ROOT:-$HOME/models/sparkinkling}
@@ -34,11 +34,7 @@ read -r CHECKPOINT_REPO CHECKPOINT_REVISION SERVED OVERLAY_REPO OVERLAY_REVISION
 
 # Launch-only checks must not prevent inspecting or stopping an older deployment.
 if [[ ${1:-up} == up || ${1:-} == download ]]; then
-  [[ $MODE == strict || $MODE == spark ]] || { echo '--mode (MODE) must be strict or spark' >&2; exit 2; }
-  if [[ $MODE == spark && ! $OVERLAY_REVISION =~ ^[0-9a-f]{40}$ ]]; then
-    echo "MODE=spark: the overlay $OVERLAY_REPO is not published yet (install/checkpoint.json pins no revision); use MODE=strict" >&2
-    exit 2
-  fi
+  [[ $MODE == spark || $MODE == strict ]] || { echo '--mode (MODE) must be spark or strict' >&2; exit 2; }
   [[ -f $PROFILE || -f install/profiles/$PROFILE.json ]] || { echo "PROFILE: no $PROFILE or install/profiles/$PROFILE.json" >&2; exit 2; }
   [[ $DRAFTER =~ ^(none|dflash2)$ ]] || { echo 'DRAFTER must be dflash2 or none' >&2; exit 2; }
   [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||

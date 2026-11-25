@@ -31,7 +31,7 @@ same two suites with the paths left to you; these are its commands. For each
 mode:
 
 ```sh
-MODE=strict ./start.sh          # then again with MODE=spark
+MODE=spark ./start.sh           # then again with MODE=strict
 cd /path/to/rigmark
 EB='{"chat_template_kwargs":{"reasoning_effort":"low"}}'
 

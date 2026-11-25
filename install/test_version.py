@@ -68,7 +68,7 @@ class VersionQueries(unittest.TestCase):
     def test_bad_launch_options_fail_before_side_effects(self):
         pin = json.loads((HERE/'checkpoint.json').read_text())
         cases = [({'GPU_MEMORY_UTILIZATION': '0.95'}, 'GPU_MEMORY_UTILIZATION'),
-                 ({'MODE': 'fast'}, 'strict or spark'),
+                 ({'MODE': 'fast'}, 'spark or strict'),
                  ({'DRAFTER': 'eagle'}, 'DRAFTER'),
                  ({'PREFIX_CACHE_DIR': '/srv/pc'}, 'PREFIX_CACHE_DIR and PREFIX_CACHE_GB were removed in 0.5.0'),
                  ({'DRAFTER': 'eagle'}, 'DRAFTER must be dflash2 or none'),

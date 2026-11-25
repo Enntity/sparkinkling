@@ -10,8 +10,8 @@ prefill at 8K and 32K, 1/2/4/8 concurrent requests) and the prose suite
 (decode, 1/4/8 concurrent requests), reasoning low. About ten minutes a mode.
 
 ```sh
-MODE=strict ./start.sh
-RIGMARK=/path/to/rigmark bench/rigmark.sh strict metadata.json out/
+MODE=spark ./start.sh
+RIGMARK=/path/to/rigmark bench/rigmark.sh spark metadata.json out/
 ```
 
 `metadata.json` describes the run (hardware, image tag, drafter, competing

@@ -57,9 +57,9 @@ hf download incoai/Inkling-2-Mini-DFlash2 config.json model.safetensors \
 python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2" dflash2
 ```
 
-## 4. Spark mode only: the overlay
+## 4. The Spark overlay
 
-Skip this for Strict.
+Spark is the default mode. Skip this only for Strict.
 
 ```sh
 hf download Enntity/Inkling-2-Mini-Spark-NVFP4 spark-nvfp4.safetensors --revision e9df93dceea2fbf0927caf178104e868452a6292 \
@@ -78,25 +78,27 @@ it is a no-op until a revision changes. See [MODES](MODES.md).
 
 ## 5. Serve
 
-Strict:
+Spark:
 
 ```sh
 ck=$MODEL_ROOT/thinkingmachines--Inkling-2-Mini
+ov=$MODEL_ROOT/Enntity--Inkling-2-Mini-Spark-NVFP4
+sp=$ck+spark-nvfp4
 dr=$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2
 mkdir -p ~/.cache/atlas-cuda
 docker run -d --name atlas-sparkinkling --network host --ipc host --shm-size 16g --memory 114g \
   --gpus all --security-opt no-new-privileges=true \
-  --mount "type=bind,src=$ck,dst=$ck,readonly" --mount "type=bind,src=$dr,dst=$dr,readonly" \
+  --mount "type=bind,src=$ck,dst=$ck,readonly" --mount "type=bind,src=$ov,dst=$ov,readonly" \
+  --mount "type=bind,src=$sp,dst=$sp,readonly" --mount "type=bind,src=$dr,dst=$dr,readonly" \
   --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
-  -e MODEL_PATH="$ck" -e SPARKINKLING_MODE=strict -e DRAFTER_PATH="$dr" -e HF_HUB_OFFLINE=1 \
+  -e MODEL_PATH="$sp" -e SPARKINKLING_MODE=spark -e DRAFTER_PATH="$dr" -e HF_HUB_OFFLINE=1 \
   -e CUDA_CACHE_PATH=/atlas-cuda-cache "$IMAGE"
 until curl -sf http://127.0.0.1:8895/health; do sleep 10; done
 ```
 
-For Spark, mount the overlay directory and the assembled directory too (each
-at its own path, read-only), and pass `MODEL_PATH` = the assembled directory
-and `SPARKINKLING_MODE=spark`. The image refuses a directory that does not
-match its mode.
+For Strict, mount only the checkpoint and the drafter, and pass `MODEL_PATH`
+= the checkpoint and `SPARKINKLING_MODE=strict`. The image refuses a
+directory that does not match its mode.
 
 The image's entry point turns those settings into one engine command:
 

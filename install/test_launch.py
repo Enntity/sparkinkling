@@ -86,8 +86,8 @@ class Launch(unittest.TestCase):
                 launch(**bad)
 
     def test_modes(self):
-        self.assertEqual(launch()[1]['SPARKINKLING_MODE'], 'strict')  # the default
-        self.assertEqual(launch(SPARKINKLING_MODE='spark')[1]['SPARKINKLING_MODE'], 'spark')
+        self.assertEqual(launch()[1]['SPARKINKLING_MODE'], 'spark')  # the default
+        self.assertEqual(launch(SPARKINKLING_MODE='strict')[1]['SPARKINKLING_MODE'], 'strict')
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_MODE='fast')
 
@@ -101,7 +101,7 @@ class Launch(unittest.TestCase):
             launch(SPARKINKLING_DRAFTER='dspark')  # removed in 0.5.0
 
     def test_strict_drafts_for_up_to_two_requests(self):
-        argv, env = launch()
+        argv, env = launch(SPARKINKLING_MODE='strict')
         self.assertIn('--dflash', argv)
         self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
@@ -117,7 +117,7 @@ class Launch(unittest.TestCase):
             launch(DRAFTER_PATH='relative/dir')
 
     def test_spark_drafts_alone(self):
-        _, env = launch(SPARKINKLING_MODE='spark')
+        _, env = launch()  # Spark is the default
         self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)  # the engine's 2.0
@@ -241,7 +241,7 @@ class StartScript(unittest.TestCase):
         return result, (root/'calls').read_text() if (root/'calls').exists() else '', checkpoint.resolve()
 
     def test_strict_serves_the_checkpoint_read_only_with_a_memory_cap(self):
-        result, calls, checkpoint = self.run_up(DRAFTER='none')
+        result, calls, checkpoint = self.run_up(MODE='strict', DRAFTER='none')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('smoke: 17*23 = 391', result.stdout)
         run = next(line for line in calls.splitlines() if line.startswith('docker run '))
@@ -255,7 +255,7 @@ class StartScript(unittest.TestCase):
         self.assertNotIn('SPARKINKLING_GPU_MEMORY_UTILIZATION', run)
 
     def test_the_utilization_override_reaches_the_container(self):
-        result, calls, _ = self.run_up(GPU_MEMORY_UTILIZATION='0.60', DRAFTER='none')
+        result, calls, _ = self.run_up(MODE='strict', GPU_MEMORY_UTILIZATION='0.60', DRAFTER='none')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('-e SPARKINKLING_GPU_MEMORY_UTILIZATION=0.60', calls)
 

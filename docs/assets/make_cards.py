@@ -129,15 +129,15 @@ class Card:
 
 PINK = (255, 70, 120)
 # SparkInkling 0.5.0, RigMark 1.1.0, low effort, medians, tok/s
-# (results/2026-11-25-release-0.5.0): label, Strict, Spark.
-SCORES = [("CODE", "70.0", "81.4"), ("STRUCTURED", "103.2", "117.4"), ("8 REQUESTS", "122.7", "135.2")]
+# (results/2026-11-25-release-0.5.0): label, Spark (the default), Strict.
+SCORES = [("CODE", "81.4", "70.0"), ("STRUCTURED", "117.4", "103.2"), ("8 REQUESTS", "135.2", "122.7")]
 
 
 def scores(card, x0, y, k, ky):
     """The high-score table from (x0, y): a row per workload, a column per
     mode with its launch command; k scales the type, ky the leading."""
     head, small, label, num = int(21 * k), int(13 * k), int(23 * k), int(31 * k)
-    cols = [("STRICT", "./start.sh", x0 + int(800 * k)), ("SPARK", "--mode spark", x0 + int(1200 * k))]
+    cols = [("SPARK", "./start.sh", x0 + int(800 * k)), ("STRICT", "--mode strict", x0 + int(1200 * k))]
 
     def right(xr, yy, s, size, color, glow=None):
         card.text((xr - int(card.font(size).getlength(s)), yy), [s], size, color, glow=glow)
@@ -150,10 +150,10 @@ def scores(card, x0, y, k, ky):
     line = y + int(54 * ky)
     card.draw.rectangle((x0, line, cols[-1][2], line + 2), fill=(170, 60, 230))
     card.inked.append((x0, line, cols[-1][2], line + 2))
-    for row, (name, strict, spark) in enumerate(SCORES):
+    for row, (name, spark, strict) in enumerate(SCORES):
         yy = y + int(72 * ky) + row * int(42 * ky)
         card.text((x0, yy + (num - label) // 2), [name], label, WHITE)
-        for value, (_, _, xr) in zip((strict, spark), cols):
+        for value, (_, _, xr) in zip((spark, strict), cols):
             right(xr, yy, value, num, YELLOW, glow=ORANGE)
 
 

@@ -1,12 +1,13 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
-# Strict and Spark
+# Spark and Strict
 
 This page records the contract the two modes are built to and how the
 launcher serves them. Their 0.4.2 measurements are in
 [`results/2026-11-23-release-0.4.2`](../results/2026-11-23-release-0.4.2/RESULT.md).
 
-Set `MODE=strict` (the default) or `MODE=spark` in `.env`, or run
-`./start.sh --mode spark`. The container takes `SPARKINKLING_MODE`.
+Set `MODE=spark` (the default) or `MODE=strict` in `.env`, or run
+`./start.sh --mode strict`. The container takes `SPARKINKLING_MODE`, also
+`spark` when unset.
 
 Both modes run on one DGX Spark with BF16 KV and keep the checkpoint's NVFP4
 expert weights in layers 0-19 with their own scales.
@@ -31,7 +32,7 @@ files and the overlay file, with a `model.safetensors.index.json` whose
 `weight_map` is the checkpoint's plus every overlay tensor mapped to
 `spark-nvfp4.safetensors`. Wherever the index maps an overlay tensor, the
 engine serves it in place of the checkpoint's; without one nothing changes.
-`./start.sh --mode spark` builds that directory next to the checkpoint,
+`./start.sh` builds that directory next to the checkpoint,
 `<checkpoint>+spark-nvfp4`, with relative links to the checkpoint's files. It
 checks the overlay's sha256, tensor count and names against
 [`install/checkpoint.json`](../install/checkpoint.json) first, leaves a
@@ -66,11 +67,11 @@ on prose, where fewer drafts are accepted; see the results for both.
 
 ## Choosing a mode
 
-Strict is the default and serves the checkpoint's own numerics: its weights
-as shipped, and in prefill its experts' inputs quantized as its
-`hf_quant_config.json` declares (decode still gives the experts BF16 inputs).
-Spark decodes faster in every measured cell (up to 1.58x on prose) for a KL of
-0.0081 to Strict's weights, prefills exactly as Strict does (both read the
-checkpoint's own tensors there), and both answered the 0.4.2 task probe (30
-arithmetic problems, 10 tool calls) without a miss. Neither mode promises identical text
+Spark is the default. It decodes faster than Strict in every measured cell
+(up to 1.42x on prose in 0.5.0) for a KL of 0.0081 to Strict's weights, and
+prefills exactly as Strict does (both read the checkpoint's own tensors
+there). Strict serves the checkpoint's own numerics: its weights as shipped,
+and in prefill its experts' inputs quantized as its `hf_quant_config.json`
+declares (decode still gives the experts BF16 inputs). Both answered the
+0.5.0 task probe (30 arithmetic problems, 10 tool calls) without a miss. Neither mode promises identical text
 to another engine or numerical reference.
