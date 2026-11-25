@@ -19,29 +19,32 @@ OVERLAY_FILE = 'spark-nvfp4.safetensors'
 DRAFTERS = ('dflash2', 'none')
 # The drafter's block is 8: seven drafts a step.
 DRAFT_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
-# How the drafter is run (GB10, 2026-11-23, a development build with other
-# services resident; the runs are in Enntity/sparkinkling issues 1 and 2):
+# How the drafter is run. Tuned for DFlash2 on GB10, 2026-11-25, with the 0.5.0
+# engine beside the voice engines (results/2026-11-25-dflash2-tuning):
 # - A verify stops where the drafter is unsure (ATLAS_DFLASH_CONF_WIDTH: the
 #   engine learns, while serving, how often the target accepts a draft at each
 #   confidence, and cuts the block where the chance it is still right falls
-#   under 0.3). An extra verify row costs about 6 ms of expert weights, so a
-#   drafted step fell from about 77 ms to 52-56 ms.
+#   under 0.3).
 # - Drafts go off for a sequence whose steps stop paying, for 32 tokens at
 #   first and doubling while re-probes keep failing (ATLAS_DFLASH_ADAPTIVE).
-#   The threshold is what a whole block must accept: 2.0 in Strict (the
-#   engine's default) and 2.5 in Spark, where a plain step is a third
-#   shorter. That per-sequence rule replaces the engine's throughput gate
-#   (ATLAS_MTP_GATE_FORCE), which carries its off state from one request into
-#   the next (Strict structured output read 70 and 89 tok/s run to run).
-# - Drafts by live requests (`n:drafts`): Strict drafts two each for two
-#   requests (two code requests 74 vs 55 tok/s, prose 2% under) and decodes
-#   plainly from three (one draft each: at three, code +10% and prose -6%;
-#   at four, +8% and -9%); Spark decodes plainly from two (two drafts each
-#   gained on code and lost on prose).
+#   The threshold is what a whole block must accept: 1.0 in Strict, where a
+#   plain step reads the BF16 attention weights and nearly any accepted draft
+#   pays (at one request +4% over 2.0, the same as never turning drafts off),
+#   and the engine's 2.0 in Spark. That per-sequence rule replaces the
+#   engine's throughput gate (ATLAS_MTP_GATE_FORCE), which carries its off
+#   state from one request into the next.
+# - Drafts by live requests (`n:drafts`, up to n requests): seven alone, then
+#   three each for two requests in both modes (aggregate +6% Strict, +11%
+#   Spark against the 0.5.0 candidate's two and none). Strict drafts three
+#   each up to six requests (+15%, +13%, +9% and +5-9% at three to six
+#   against plain decode) and decodes plainly from seven (two each at eight:
+#   -2%); Spark decodes plainly from three, where drafting lost (one or two
+#   each at three: -12% and -3%; two or three at four: -6% and -2%).
 _DRAFT_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}
 DRAFT_ENV = {
-    'strict': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:2,1000000:0'},
-    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE_MIN': '2.5'},
+    'strict': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,3:3,4:3,5:3,6:3,1000000:0',
+               'ATLAS_DFLASH_ADAPTIVE_MIN': '1.0'},
+    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,1000000:0'},
 }
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')

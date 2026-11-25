@@ -100,27 +100,27 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_DRAFTER='dspark')  # removed in 0.5.0
 
-    def test_the_drafter_speculates_alone_in_strict(self):
+    def test_strict_drafts_for_up_to_six_requests(self):
         argv, env = launch()
         self.assertIn('--dflash', argv)
         self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
         self.assertEqual(flag(argv, '--dflash-gamma'), '8')
         self.assertEqual(flag(argv, '--num-drafts'), '7')
-        # Strict: seven drafts alone, two each for two requests; verifies sized by the drafter's
-        # confidence; drafts off per sequence at the engine's threshold, not by the throughput gate
-        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:2,1000000:0')
+        # Strict: seven drafts alone, three each for two to six requests; verifies sized by the
+        # drafter's confidence; drafts off per sequence below one accepted a block, not by the gate
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:3,3:3,4:3,5:3,6:3,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
-        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)
+        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE_MIN'], '1.0')
         self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
         self.assertEqual(env['ATLAS_MTP_GATE_FORCE'], '1')
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
 
-    def test_spark_speculates_alone_at_its_own_threshold(self):
+    def test_spark_drafts_for_up_to_two_requests(self):
         _, env = launch(SPARKINKLING_MODE='spark')
-        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:3,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
-        self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE_MIN'], '2.5')
+        self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)  # the engine's 2.0
         self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
         self.assertEqual(env['ATLAS_MTP_GATE_FORCE'], '1')
 
