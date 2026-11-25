@@ -3,9 +3,10 @@
 
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
-`inkling2/rc-0.5.0-20261124` at
+`inkling2/loopcd-20261124` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`1559aa4bc` (tree `acfa8e09`), for the kernel target `inkling-2-mini`
+`6ab2e9c78` (tree `c5d33a60`), which is `inkling2/rc-0.5.0-20261124`
+(`1559aa4bc`) plus one opt-in commit, LoopCD (below), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -29,6 +30,17 @@ that let the image's test suite run `the_baked_attestation_reproduces_from_the_t
 for this one-model build instead of skipping it. The build fetches by commit.
 
 ## What the branch adds
+
+**LoopCD (one commit, off by default).** `--loopcd on` runs the coda layers
+18-23 a second time from the state after the first loop pass (six more layer
+visits after the model's 48, with their own KV and conv state), then the final
+norm and head, and serves `final + w (final - reference)` with
+`w = 0.5 (1 - (p1 - p2))`, both rows softcapped at 30: LoopCD-Logits with the
+adaptive rule (arXiv 2610.02185), as oMLX serves it. `--loopcd skip-thinking`
+leaves rows inside the reasoning block unguided. Off runs the unchanged
+schedule and launches no extra kernel: greedy text with `--loopcd off` was
+identical to `1559aa4bc`'s in both modes. SparkInkling sets it with `LOOPCD`
+([LOOPCD](LOOPCD.md), [results](../results/2026-11-25-loopcd/RESULT.md)).
 
 **incoai's DFlash2 drafter (two commits).** `incoai/Inkling-2-Mini-DFlash2`
 is a standard DFlash2 drafter (five layers, two-tap dynamic convolutions, a

@@ -13,20 +13,20 @@ on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atla
 engine with an OpenAI-compatible API, image input, reasoning and tool calls.
 
 0.5.0 drafts with incoai's DFlash2 drafter and serves 1,048,576-token
-requests. Spark mode, SparkInkling's calibrated NVFP4 overlay, is the
-default. Against 0.4.2, one request decodes code 5% faster in Spark and 7% in
-Strict, structured output 13% and 11%, and Strict prose 12%; one short
-request is 9-21% faster, and prefill and two to eight requests are level.
-The 40 sliding-window layer visits now keep only their last 1,024 tokens, so
-a token of context costs 32 KiB instead of 192 KiB: the default profile's
-pool holds about 1.97M tokens (0.4.2: about 404K), and a code hidden in a
+requests. Spark mode, SparkInkling's calibrated NVFP4 overlay, is the default.
+Against 0.4.2, one request decodes code 5% faster in Spark and 7% in Strict,
+structured output 13% and 11%, and Strict prose 12%; one short request is
+9-21% faster, and prefill and two to eight requests are level. The 40
+sliding-window layer visits now keep only their last 1,024 tokens, so a token
+of context costs 32 KiB instead of 192 KiB: the default profile's pool holds
+about 1.84M tokens in Spark mode (0.4.2: about 404K), and a code hidden in a
 1,032,929-token prompt was recalled. Greedy text with the drafter on matched
 text with it off in our checks. Spark is ahead of vLLM's own Inkling 2 Mini
 image with its DSpark drafter on code, prose, structured output, prefill and
 one to four requests and trails it at eight; Strict, the checkpoint as
 shipped, is level with that image on code and structured output and ahead on
-prose, prefill and one or two requests. See [Performance](#performance);
-every result has its receipts under [`results/`](results/).
+prose, prefill and one or two requests. See [Performance](#performance); every
+result has its receipts under [`results/`](results/).
 
 ## The model
 
@@ -173,15 +173,17 @@ finishes `content_filter`, not `tool_calls`, which such a client must not run
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
 (below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90),
-`MODEL_ROOT`, `PULL=0`.
+`MODEL_ROOT`, `PULL=0`, and `LOOPCD`, an opt-in that trades decode speed for
+fewer reasoning loops at high effort ([docs/LOOPCD.md](docs/LOOPCD.md)), off
+by default.
 
 ### Profiles
 
 | `PROFILE` | Requests | Tokens each | GPU memory | KV pool | Prefix-cache snapshots |
 |---|---:|---:|---:|---:|---:|
-| `default` | 8 | 1,048,576 | 0.80 | 1.97M tokens (1.84M Spark) | 264 |
-| `max` | 32 | 1,048,576 | 0.85 | 1.91M tokens (1.75M Spark) | 264 |
-| `saver` | 8 | 786,432 | 0.50 | 965K tokens (800K Spark) | 192 |
+| `default` | 8 | 1,048,576 | 0.80 | 1.84M tokens (1.97M Strict) | 264 |
+| `max` | 32 | 1,048,576 | 0.85 | 1.75M tokens (1.91M Strict) | 264 |
+| `saver` | 8 | 786,432 | 0.50 | 800K tokens (965K Strict) | 192 |
 
 All three keep BF16 KV, 4,096-token prefill chunks, prefix caching,
 hour-long requests and up to 32,768 generated tokens a tool-calling request
@@ -262,7 +264,8 @@ What SparkInkling does not do, and what its evidence does not cover, is in
 
 SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas)
-`inkling2/rc-0.5.0-20261124`, the Inkling 2 Mini serving series on
+`inkling2/loopcd-20261124` (`inkling2/rc-0.5.0-20261124` plus the opt-in
+LoopCD commit), the Inkling 2 Mini serving series on
 Atlas-Inf `main`, pinned by commit and tree in
 [`install/atlas-source.json`](install/atlas-source.json). The first two parts
 are in Atlas upstream
@@ -273,7 +276,7 @@ next are proposed as [414](https://github.com/Atlas-Inf/atlas/pull/414) to
 [408](https://github.com/Atlas-Inf/atlas/pull/408) (a draft), and the two
 closure-attestation fixes as [419](https://github.com/Atlas-Inf/atlas/pull/419)
 and [420](https://github.com/Atlas-Inf/atlas/pull/420). Window-bounded KV and
-the DFlash2 drafter are not proposed upstream yet.
+the DFlash2 drafter and LoopCD are not proposed upstream yet.
 What the branch adds and what it does not do yet:
 [docs/ENGINE.md](docs/ENGINE.md).
 

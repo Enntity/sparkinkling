@@ -1,0 +1,831 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.0.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+2026-11-25T09:00:38.724663Z  INFO spark::main_modules::serve: Atlas Spark starting...
+2026-11-25T09:00:38.724699Z  INFO spark::main_modules::serve: Licensed under AGPL-3.0-only — see /LICENSE in this container
+2026-11-25T09:00:38.724730Z  WARN spark::disk_guard: Disk 99% full at /root/.cache/huggingface/hub — only 57.1 GB free of 4031.9 GB. Model downloads will fail and page-cache thrashing can make benchmarks look like regressions. Free space before starting a long run.
+2026-11-25T09:00:38.724800Z  INFO spark::main_modules::serve_flags: kernel flags: ssm_h_dtype=f32 gdn_fused_norm=false ssm_batched_recurrent=false exact_verify=false ssm_tail_midchunk=true mtp_gate=force ssm_rollback_mode=Snapshot prefill_varlen_batch=false
+2026-11-25T09:00:38.724831Z  INFO spark::model_resolver: Model path: /models/thinkingmachines--Inkling-2-Mini+spark-nvfp4 (local directory)
+2026-11-25T09:00:38.724834Z  INFO spark::main_modules::serve_load: Port: 8895
+2026-11-25T09:00:38.724835Z  INFO spark::main_modules::serve_load: SSM decode h-state dtype: f32 (full precision) (--ssm-h-dtype)
+2026-11-25T09:00:38.724948Z  INFO spark::main_modules::serve_load: Vision pixel budget: none declared — falling back to the 1280px long-side clamp
+2026-11-25T09:00:38.724949Z  INFO spark::main_modules::serve_load: Remote image fetching disabled (default); image_url parts carrying an http(s) URL are refused with a 400. Send base64 data: URIs, or pass --vision-allow-remote-images.
+2026-11-25T09:00:38.724953Z  INFO spark::main_modules::serve_load: Video decoding disabled (default). Animated GIF decodes in-process; every other container needs ffmpeg — pass --video-allow-ffmpeg to enable it.
+2026-11-25T09:00:38.724954Z  INFO spark::main_modules::serve_load: Quantization config: method="modelopt", algo="NVFP4", format="", 0 module(s) in ignore list
+2026-11-25T09:00:38.724957Z  INFO spark::main_modules::serve_load: Model config: 54 layers, 54 attention, 0 SSM, 128 experts, rope_theta=10000, head_dim=128, rotary_dim=0
+2026-11-25T09:00:38.724979Z  INFO spark::main_modules::serve_load: Selected kernel target: (sm_121, inkling-2-mini, nvfp4) (218 modules) — quant compat: kernel=nvfp4 model=nvfp4 OK
+2026-11-25T09:00:38.724998Z  INFO spark::main_modules::serve_phases::config: DFlash γ=8 (source: cli)
+2026-11-25T09:01:06.340968Z  INFO spark_runtime::cuda_backend: AtlasCudaBackend initialized on GPU 0 with 218 PTX modules
+2026-11-25T09:01:06.356231Z  INFO spark::main_modules::serve_phases::preflight::gpu_init: BF16 GEMM fallback installed (gemv<=8 / pipelined WMMA / scalar) for backends without cuBLASLt
+2026-11-25T09:01:06.356290Z  INFO spark::main_modules::serve_phases::preflight::gpu_init: GPU 0: 121.7 GB total, 116.0 GB free
+2026-11-25T09:01:06.356303Z  INFO spark::main_modules::serve_phases::preflight: Preflight reserve: inference=512 MB, buffer_arena=589 MB (pre-load free: 116.0 GB)
+2026-11-25T09:01:06.356315Z  INFO spark::main_modules::serve_load: OOM watchdog started (threshold: 2 GB, interval: 2s)
+2026-11-25T09:01:06.356323Z  INFO spark::main_modules::serve_phases::kv_cache: Prefill config: ssm_prefill_chunk=0, args.max_prefill_tokens=4096, prefill_budget=4096, max_batch_tokens=4104
+2026-11-25T09:01:06.356326Z  INFO spark::main_modules::serve_load: OOM guard reserve: 4096 MB
+2026-11-25T09:01:06.356373Z  INFO spark::main_modules::serve_phases::weights: Using fast weight loader (O_DIRECT + pipelined read/copy)
+2026-11-25T09:01:06.361603Z  INFO spark_runtime::fast_weights: Fast-load pre-flight: 20.90 GB on-disk, 1.3x overhead = 27.17 GB peak, 115.97 GB free, 4.0 GB reserve (FP8: false)
+2026-11-25T09:01:06.361867Z  INFO spark_runtime::fast_weights: Fast-loading shard 1/2: model-00001-of-00001.safetensors (1244 tensors)
+2026-11-25T09:01:09.968976Z  INFO spark_runtime::fast_weights:   Shard 1/2 done — GPU memory: 18.71 GB used, 97.26 GB free
+2026-11-25T09:01:09.969043Z  INFO spark_runtime::fast_weights: Fast-loading shard 2/2: spark-nvfp4.safetensors (459 tensors)
+2026-11-25T09:01:10.464567Z  INFO spark_runtime::fast_weights:   Shard 2/2 done — GPU memory: 22.29 GB used, 93.68 GB free
+2026-11-25T09:01:10.464633Z  INFO spark_runtime::fast_weights: Fast-loaded 1703 weight tensors
+2026-11-25T09:01:10.464754Z  INFO spark::main_modules::serve_phases::weights: Loaded 1703 weight tensors
+2026-11-25T09:01:10.464758Z  INFO spark_runtime::weights::prefix_detect: Weight prefix: model.llm
+2026-11-25T09:01:10.465322Z  WARN spark_model::preflight: Pre-flight: config.num_experts=128 but no expert tensors found locally. Normal under EP>1 when the local rank owns zero experts; otherwise check your checkpoint.
+2026-11-25T09:01:10.465337Z  INFO spark_model::preflight: Pre-flight checks passed
+2026-11-25T09:01:10.465340Z  INFO spark_model::quant_format: QuantFormat: modelopt (algo="NVFP4"), 0 ignored module(s)
+2026-11-25T09:01:10.465344Z  INFO spark::main_modules::serve_load: Quantization format: modelopt (base variant Standard), ignored globs = 0
+2026-11-25T09:01:10.692363Z  INFO spark_runtime::cublaslt: cuBLASLt BF16 GEMM live (first matmul status 0 — real library answered; on HIP targets this is the hipBLASLt shim)
+2026-11-25T09:01:10.692410Z  INFO spark_runtime::cublaslt: cuBLASLt pre-warmed (handle + workspace + kernel images)
+2026-11-25T09:01:10.692541Z  INFO spark::main_modules::serve_phases::preflight::gpu_init: Weights: 20.90 GB, estimated free: 95.1 GB, actual free: 93.6 GB (reserve: 512 MB)
+2026-11-25T09:01:10.692549Z  WARN spark::main_modules::serve_load: dflash: --enable-prefix-caching has a community-reported correctness regression on SM12.x with DFlash; outputs may be wrong on multi-turn cache hits. Run a greedy diff-test against a non-DFlash baseline before relying on outputs.
+2026-11-25T09:01:10.692552Z  INFO spark::main_modules::serve_phases::build: Prefix caching: ENABLED (radix tree)
+2026-11-25T09:01:11.193828Z  INFO spark::main_modules::serve_phases::config: Capping vocab_size from 201024 to 200058 (tokenizer)
+2026-11-25T09:01:11.222136Z  INFO spark::main_modules::serve_phases::weights: DFlash: resolving drafter '/drafter/incoai--Inkling-2-Mini-DFlash2'
+2026-11-25T09:01:11.222169Z  INFO spark::model_resolver: Model path: /drafter/incoai--Inkling-2-Mini-DFlash2 (local directory)
+2026-11-25T09:01:11.232825Z  INFO spark_runtime::fast_weights: Fast-load pre-flight: 0.92 GB on-disk, 1.3x overhead = 1.20 GB peak, 93.61 GB free, 0.0 GB reserve (FP8: false)
+2026-11-25T09:01:11.232858Z  INFO spark_runtime::fast_weights: Fast-loading shard 1/1: model.safetensors
+2026-11-25T09:01:11.375106Z  INFO spark_runtime::fast_weights:   Shard 1/1 done — GPU memory: 1.20 GB used, 92.41 GB free
+2026-11-25T09:01:11.375146Z  INFO spark_runtime::fast_weights: Fast-loaded 81 weight tensors
+2026-11-25T09:01:11.375155Z  INFO spark::main_modules::serve_phases::weights: DFlash drafter store: 81 tensors, 989966848 bytes
+2026-11-25T09:01:11.375223Z  INFO spark_model::factory::build: DFlash: target layer capture indices = [4, 22, 40, 47] (drafter target_layer_ids, used directly)
+2026-11-25T09:01:11.449416Z  INFO spark_model::weight_loader::inkling2: Inkling2: 24 physical layers, 54 visits, block stack 4
+2026-11-25T09:01:11.926741Z  INFO spark_model::layers::inkling2::shared: Inkling2 shared buffers: 1775.0 MB for 4104 rows, 8 sequences
+2026-11-25T09:01:11.927198Z  INFO spark_model::factory::build: Layer construction: 3.48 GB consumed (99.22 GB free -> 95.75 GB free) across 54 layers, 64.4 MB/layer average
+2026-11-25T09:01:12.165278Z  WARN spark_model::factory::lm_head_setup: --lm-head-dtype override ignored: this checkpoint ships lm_head                  pre-packed as NVFP4 (no BF16 tensor exists to keep or requantize);                  using the packed NVFP4 head
+2026-11-25T09:01:12.165325Z  INFO spark_model::factory::lm_head_setup: LM head loaded as pre-packed NVFP4 (vocab=200058, skipped requantize)
+2026-11-25T09:01:12.165417Z  INFO spark_model::factory::m2_setup: MoE transpose: 128 experts x 54 layers, costs hybrid 57.7 / full 28.8 / gate_up 19.2 GB, free 88.7 GB -> selected HYBRID (originals kept, decode unaffected)
+2026-11-25T09:01:12.165421Z  INFO spark_model::factory::m2_setup: MoE transpose pass (hybrid layout): ATLAS_HYBRID_MOE_LAYOUT=1, dual-layout (cost 57.7 GB), free pre-pass 88.7 GB → RUNNING
+2026-11-25T09:01:12.165440Z  INFO spark_model::factory::m2_setup: MoE transpose pass (hybrid layout): done, 88.7 GB free
+2026-11-25T09:01:12.187977Z  INFO spark_runtime::buffers: Buffer arena: 4104 tokens × 590.6 MB total (attn_out=24.0MB, ssm_deint=24.0MB, kv_lora_rank=0)
+2026-11-25T09:01:12.188023Z  INFO spark_model::model::drafter_context: MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+2026-11-25T09:01:12.188028Z  INFO spark_model::layers::ops::model_levers: GDN deferred commit on (default; ATLAS_GDN_DEFERRED_COMMIT=0 opts out):                  wyN verify stores nothing; accepted prefix replayed from H0
+2026-11-25T09:01:12.188035Z  INFO spark_model::model::ssm_pool: SSM verify H snapshots per slot: [7, 7, 7, 7, 7, 7, 7, 7, 7]
+2026-11-25T09:01:12.188038Z  INFO spark_model::model::ssm_pool: SSM MTP pools (8 intermediates + checkpoints): 0 MB
+2026-11-25T09:01:12.188040Z  INFO spark_model::model::ssm_pool: SSM state pool: 8 slots × 0 layers = 0 MB
+2026-11-25T09:01:12.188131Z  INFO spark_model::model::ssm_snapshot: SSM snapshot pool: Marconi 64 slots (0 MB), decode-rollback 0 slots × 8 seqs (0 MB), 0 layers
+2026-11-25T09:01:12.188194Z  INFO spark_model::weight_loader::dflash_loader: DFlash2 candidate selector loaded: rank=256, top_k=16
+2026-11-25T09:01:12.188199Z  INFO spark_model::weight_loader::dflash_loader: DFlash/DSpark drafter loaded: 5 layers, hidden=2304, vocab=201024, γ=8, markov_rank=0, own_embed=false, causal=None, swa=None/None, sinks=0/5, candidate_selector=true, target_layers=[5, 23, 41, 48]
+2026-11-25T09:01:12.188209Z  INFO spark_model::layers::dflash_head::first_append: DFlash first context append: Legacy (ATLAS_DFLASH_FIRST_APPEND=legacy|none|own|zero)
+2026-11-25T09:01:12.188211Z  INFO spark_model::layers::dflash_head::warm_ctx: DFlash warm context: Legacy (ATLAS_DFLASH_WARM_CTX=legacy|exact|seed|restore)
+2026-11-25T09:01:12.188215Z  INFO spark_model::layers::dflash_head::from_weights: DFlash KV pool: 2056 blocks (257 per seq × batch 8)
+2026-11-25T09:01:12.213117Z  INFO spark_runtime::kv_cache::paged_impl: KV cache: 2056 blocks × 5 layers = 0.6 GB total
+2026-11-25T09:01:12.213202Z  INFO spark_model::layers::dflash_head::small_m_gemm: DFlash drafter small-M GEMM arm: pipelined GEMM
+2026-11-25T09:01:12.213419Z  INFO spark_model::layers::dflash_head::from_weights: DFlash ctx_window = 4096 (set ATLAS_DFLASH_CTX_WINDOW to override; drafter trained on full captured prefix — larger is better, scratch grows linearly)
+2026-11-25T09:01:12.234034Z  INFO spark_model::layers::dflash_head::from_weights: DFlash propose lanes: 1 (extra scratch + streams)
+2026-11-25T09:01:12.234058Z  INFO spark_model::layers::dflash_head::from_weights: DFlash RoPE = plain (no rope_scaling in drafter config), theta=10000, 64 pairs
+2026-11-25T09:01:12.236432Z  INFO spark_model::layers::dflash_head::from_weights: DFlash fused_kv_weight: 47185920 bytes (5 layers × 2 × kv_dim × h × bf16), layout [K0,V0,K1,V1,…] to match vLLM precompute_and_store_context_kv
+2026-11-25T09:01:12.343963Z  INFO spark_model::layers::dflash_head::from_weights: BlockDiffusionDraftHead loaded: 5 layers, hidden=2304, intermediate=6912, GQA 32/8, head_dim=128, γ=8, vocab=200058, mask_token_id=200056, causal=false, window=Some(4096), sinks=0, target_layers=[5, 23, 41, 48]
+2026-11-25T09:01:12.343978Z  INFO spark_model::layers::dflash_head::from_weights: DFlash batched propose: authoritative Bxgamma for generic DFlash (default on; rollback ATLAS_DFLASH_BATCHED_PROPOSE=0; min 2, max 8)
+2026-11-25T09:01:12.344071Z  INFO spark_model::layers::dflash_head::nvfp4: DFlash NVFP4: quantizing 5 layers × 7 GEMMs for w4a16_gemv_batch8
+2026-11-25T09:01:12.344291Z  INFO spark_model::weight_map::loaders_fp8: quantize_to_nvfp4: n=4096 k=2304 total=9437184 global_max=1.062500 scale2=0.00039528 grid1=1024
+2026-11-25T09:01:12.344757Z  INFO spark_model::weight_map::loaders_fp8: quantize_to_nvfp4: n=1024 k=2304 total=2359296 global_max=0.574219 scale2=0.00021362 grid1=1024
+2026-11-25T09:01:12.345033Z  INFO spark_model::weight_map::loaders_fp8: quantize_to_nvfp4: n=1024 k=2304 total=2359296 global_max=0.644531 scale2=0.00023978 grid1=1024
+2026-11-25T09:01:12.345383Z  INFO spark_model::weight_map::loaders_fp8: quantize_to_nvfp4: n=2304 k=4096 total=9437184 global_max=0.953125 scale2=0.00035459 grid1=1024
+2026-11-25T09:01:12.345937Z  INFO spark_model::weight_map::loaders_fp8: quantize_to_nvfp4: n=6912 k=2304 total=15925248 global_max=1.000000 scale2=0.00037202 grid1=1024
+2026-11-25T09:01:12.362600Z  INFO spark_model::layers::dflash_head::nvfp4: DFlash NVFP4: ready (quant = Nvfp4Weights)
+2026-11-25T09:01:12.362615Z  INFO spark_model::layers::dflash_head::twins: DFlash twins: NVFP4 tensor-core layers false, MXFP8 layers 0, head NVFP4 false / MXFP8 false, context NVFP4 false, conv None x 0, async context positions false, async uploads false
+2026-11-25T09:01:12.362704Z  INFO spark_model::factory::build: DFlash context accumulators reserved from the KV budget: 0.60 GB for 8 sequences
+2026-11-25T09:01:12.375847Z  INFO spark_model::factory::build::kv_budget: KV budget self-relative (auto): baseline-free 116.0 GB − free-now 86.8 GB = Atlas-own 29.2 GB; co-tenants 5.7 GB excluded (set ATLAS_KV_EXTERNAL_RESERVE_GB to override)
+2026-11-25T09:01:12.375853Z  INFO spark_model::factory::build::kv_budget: KV own-footprint cross-check: free-memory measure 29.18 GB, tracked 28.10 GB (device 27.35 GB by driver accounting + host 0.75 GB) → 29.18 GB pre-KV
+2026-11-25T09:01:12.375857Z  INFO spark_model::factory::build::kv_window: KV window: 45 of 54 layers keep the last 1024 tokens in 2150 blocks (5.91 GiB, 20 snapshot pins); the other layers' 36 KiB a token buy 44512 blocks
+2026-11-25T09:01:12.375861Z  INFO spark_model::factory::build: KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 29.2 GB pre-KV + 1.3 GB reserve → 30.4 GB for KV → 44512 blocks × 16 tok/block = 712192 max KV tokens
+2026-11-25T09:01:13.490285Z  INFO spark_runtime::kv_cache::paged_impl: KV cache: 44512 blocks × 54 layers = 24.5 GB total
+2026-11-25T09:01:13.502415Z  INFO spark_model::model::drafter_context: MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+2026-11-25T09:01:13.502429Z  INFO spark_model::layers::ops::model_levers: GDN deferred commit on (default; ATLAS_GDN_DEFERRED_COMMIT=0 opts out):                  wyN verify stores nothing; accepted prefix replayed from H0
+2026-11-25T09:01:13.502436Z  INFO spark_model::model::impl_a1: TransformerModel: 54 layers, vocab=200058, hidden=2304
+2026-11-25T09:01:13.502438Z  INFO spark_model::model::impl_a1: Marconi intermediate checkpoints: every 256 blocks (4096 tokens at block_size=16)
+2026-11-25T09:01:13.533105Z  WARN spark_model::model::impl_a1: lm_head twin uses a PADDED stride (200064 != vocab 200058): this target's w4a16_gemm_t MUST accept the `ldb` argument, or decode at padded_n>=5 will read sheared rows. Disable with ATLAS_NO_LMHEAD_TGEMM=1.
+2026-11-25T09:01:13.533119Z  INFO spark_model::model::impl_a1: lm_head transposed twin: vocab=200058 -> padded stride=200064 (vocab%16=10), tile GEMM active
+2026-11-25T09:01:13.533560Z  INFO spark_model::model::impl_a1: Pinned metadata staging: 1059 KB
+2026-11-25T09:01:13.535889Z  INFO spark_model::model::loopcd: LoopCD SkipThinking: strength 0.5, reference rows for 4104 of the forward's rows, 128 a head
+2026-11-25T09:01:13.535907Z  INFO spark_model::factory::build: DFlash drafter installed as the active proposer
+2026-11-25T09:01:13.564046Z  INFO spark::main_modules::serve_phases::kernel_gate: 
+┌─ Kernel load audit ─ 218 kernels embedded · set-hash e5c9ae7ff3ef ─
+│ MODULE (operation)                 PTX-HASH       RESOLUTION           SHADOWED
+│ ────────────────────────────────────────────────────────────────────────────────────
+│ argmax                             0db62935f368   used                 N
+│ bf16_add                           9ccfff111c1c   -                    N
+│ causal_conv1d                      4c6ef9415ff9   -                    N
+│ dense_gemv_bf16_batch2             8e42d4734916   used                 N
+│ dense_gemv_bf16_batchm             4ac0d1a889d1   used                 N
+│ dense_gemv_fp8w_batch2             345343265bf0   used                 N
+│ dense_gemv_fp8w_batchm             613837fe1f2f   -                    N
+│ dequant_fp8_blockscaled_bf16       112ae266baa4   -                    N
+│ dequant_gguf_bf16                  f8d7ed4a7232   -                    N
+│ dequant_nvfp4_bf16                 34cc9dce8f28   -                    N
+│ dflash2_candidate_selector         9a25f3309182   used                 N
+│ dflash2_candidate_selector_k32     089d1a239dfd   -                    N
+│ dflash2_conv                       c2cad2c1626a   used                 N
+│ dflash2_selector_conf              29432a4ba0c3   used                 N
+│ dflash_batch_anchor_add            6a6c6d5fa4cf   used                 N
+│ dflash_batch_markov                7abeae68eb04   used                 N
+│ dspine_bridge                      b060d23f1589   -                    N
+│ e2m1                               a9f7db7882e8   -                    N
+│ embed_from_argmax                  eed8441b052b   used                 N
+│ fp8_gemm_t_blockscaled             ccd83dc3175b   -                    N
+│ fused_k_norm_rope_cache            40945835fbe7   -                    N
+│ gated_delta_rule                   e69f490672bb   -                    N
+│ gated_delta_rule_fla               3b1f17d91259   -                    N
+│ gated_delta_rule_persistent        119c888ceaa1   -                    N
+│ gated_delta_rule_regresident       f1d7ac7ec2b9   -                    N
+│ gated_delta_rule_wy                2944fa406929   -                    N
+│ gated_delta_rule_wy2_resident      13434e14525a   -                    N
+│ gated_delta_rule_wy2_resident_f16  de9282606c87   -                    N
+│ gated_delta_rule_wy3               f39dfc5fc64c   -                    N
+│ gated_delta_rule_wy3_f16           6f86c5cdca50   -                    N
+│ gated_delta_rule_wy3_resident      2d735fa17437   -                    N
+│ gated_delta_rule_wy3_resident_f16  ca7279841d78   -                    N
+│ gated_delta_rule_wy4               696eacd7fc6f   -                    N
+│ gated_delta_rule_wy4_f16           6117982cee6e   -                    N
+│ gated_delta_rule_wy64_prefill      295277d38edf   -                    N
+│ gated_delta_rule_wy_f16            4e8093d34899   -                    N
+│ gated_delta_rule_wyn               6ff125d1bd34   -                    N
+│ gdn_verify_fused_conv_kn           6d34c1967f19   -                    N
+│ gdn_verify_fused_k2                364133e92759   -                    N
+│ gemm                               ef29bc79a026   used                 N
+│ gemm_splitk                        c3196ada403c   -                    N
+│ gemm_tc                            867449b3a6f2   -                    N
+│ gemv                               8a393e2aee68   used                 N
+│ gemv_fp8w                          cfe758bf0e7d   used                 N
+│ grammar_bitmask                    18765c10e57f   used                 N
+│ inferspark_decode                  d0c1c712396c   -                    N
+│ inferspark_prefill                 db71130b38b4   -                    N
+│ inferspark_prefill_h128            848531341467   used                 N
+│ inferspark_prefill_paged_512       dbb0dff6b267   -                    N
+│ inferspark_prefill_paged_batched   94187b042339   -                    N
+│ inferspark_prefill_paged_batched_sink 137b625e9111   -                    N
+│ inferspark_prefill_paged_batched_sink_h128 a7d74763391c   used                 N
+│ inferspark_prefill_paged_fp8_batched 939f59e0aa41   -                    N
+│ inferspark_prefill_paged_nvfp4_batched b79639415a34   -                    N
+│ inferspark_prefill_v47             30c1870d6711   -                    N
+│ inkling2_block_res                 7fdc74024791   used                 N
+│ inkling2_decode_attn               3f62d6ea28fc   used                 N
+│ inkling2_dspark                    6b3f5a4210f7   -                    N
+│ inkling2_flash_prefill             669fea3389d0   used                 N
+│ inkling2_head_ops                  88d9d7a17a62   used                 N
+│ inkling2_loopcd                    e912a7160e90   used                 N
+│ inkling2_misc                      ad1e4541c65d   used                 N
+│ inkling2_moe_decode                678b87a168c9   used                 N
+│ inkling2_moe_gemm                  68c178a418a2   used                 N
+│ inkling2_moe_prefill               754d98516fef   used                 N
+│ inkling2_prefill_attn              9d6b054737e5   used                 N
+│ inkling2_proj_gemv                 c1faf11c10b2   used                 N
+│ inkling2_router_gemv               c053fc69d624   used                 N
+│ inkling2_sconv                     08965bdcfe40   used                 N
+│ kv_cache                           671ff8649e90   -                    N
+│ logit_softcap                      ae0bc6241086   used                 N
+│ lora_bgmv                          4c745ed771b5   -                    N
+│ mamba2_ssd_chunk                   f0dbc0b4b3d0   -                    N
+│ mamba2_ssm                         26f1ce59a559   -                    N
+│ marlin_align                       c8912ab9c527   -                    N
+│ marlin_moe_nvfp4                   3db67bc8707a   -                    N
+│ marlin_nvfp4_gemm                  a4df867f66fe   -                    N
+│ marlin_pack_rows                   7899dad7530b   -                    N
+│ marlin_pack_slots                  71d8218c2315   -                    N
+│ marlin_repack                      a508acc54114   -                    N
+│ marlin_row_repeat                  02f547be5f66   -                    N
+│ marlin_scatter_slots               02a0b126a1cf   -                    N
+│ metadata_fill                      4cd48e0860e2   used                 N
+│ moe                                80c985554155   used                 N
+│ moe_bf16_grouped_gemm              b595ccb1a5b5   -                    N
+│ moe_decode_atomic_c4               6c6f857639b5   -                    N
+│ moe_expert_gemv                    4f92cfbebeb4   -                    N
+│ moe_expert_gemv_fused              7b91573b2a01   -                    N
+│ moe_expert_gemv_wide               0173a8c36628   -                    N
+│ moe_expert_gemv_wide_grouped       eee38ad35ec8   -                    N
+│ moe_expert_relu2_down_wide         5046c2f1283e   -                    N
+│ moe_fp8_grouped_gemm               182621af1065   -                    N
+│ moe_fused_batch2                   f3a3774dc1b1   -                    N
+│ moe_fused_batch3                   716fca88de04   -                    N
+│ moe_gate_topk                      05f3ddb5d210   -                    N
+│ moe_hash_route                     b236e1cd8b24   -                    N
+│ moe_lora_gather_bgmv               6ccfd9e689ee   -                    N
+│ moe_lora_grouped_down              fcdd26c27755   -                    N
+│ moe_prefill                        4c4540c33547   -                    N
+│ moe_relu2_down_shared_slot         d342c6ba5765   -                    N
+│ moe_relu2_fused                    f5b158ec76dc   -                    N
+│ moe_shared_expert_fused            41e715ee2e88   -                    N
+│ moe_shared_expert_fused_batch2_t   78ce432df9f5   -                    N
+│ moe_shared_expert_fused_batch3_t   7467a2b88c92   -                    N
+│ moe_shared_expert_fused_bf16       2c42d2c21279   -                    N
+│ moe_shared_expert_fused_bf16_batch2 511eaa0bcb51   -                    N
+│ moe_shared_expert_fused_fp8        45f5a488ad9f   -                    N
+│ moe_shared_expert_fused_fp8_batch2 3b964642816b   -                    N
+│ moe_shared_expert_fused_fp8_batch2_t cac7dc7940d5   -                    N
+│ moe_shared_expert_fused_fp8_batch3 2c01e7fabd07   -                    N
+│ moe_shared_expert_fused_fp8_batch3_t 39e92ce0bd1b   -                    N
+│ moe_shared_expert_fused_fp8_t      4cd0bf5221b4   -                    N
+│ moe_shared_expert_fused_t          46bb9fae4c7d   -                    N
+│ moe_silu_mul                       e2c5455edc95   used                 N
+│ moe_sorted                         30a15fee04f9   -                    N
+│ moe_topk                           1f7c99a781c4   -                    N
+│ moe_topk_sig                       78e5a50579e5   used                 N
+│ moe_topk_softmax_bias              e74c9eeebd56   -                    N
+│ moe_topk_sqrt                      946575af8c5f   -                    N
+│ moe_transpose_batched              5e6fa7328d64   -                    N
+│ moe_w4a16                          9163ecc47c39   -                    Y (1 dropped)
+│ moe_w8a8_grouped_gemm              672c54f91493   -                    N
+│ mxfp8_act_quant                    b3e05b776733   -                    N
+│ nemotron_moe_prefill               8603de61b1b2   -                    N
+│ nllb_encoder                       4e0cefdcb886   -                    N
+│ norm                               7c99bb87e77e   used                 N
+│ paged_decode                       d4c7abd60b73   used                 N
+│ paged_decode_attn_turbo2_128       a54257f08198   -                    N
+│ paged_decode_attn_turbo3           b1e6e11fe0d8   -                    N
+│ paged_decode_attn_turbo3_128       b1e6e11fe0d8   -                    N
+│ paged_decode_attn_turbo4           effd4f08eec2   -                    N
+│ paged_decode_attn_turbo4_128       effd4f08eec2   -                    N
+│ paged_decode_attn_turbo4_512       50334f364bcf   -                    N
+│ paged_decode_attn_turbo8           72395008e1db   -                    N
+│ paged_decode_attn_turbo8_128       8d806a75bd1c   -                    N
+│ paged_decode_attn_turbo8_512       141c9ebe7930   -                    N
+│ paged_decode_bf16k_turbo2v         7c83934696fc   -                    N
+│ paged_decode_bf16k_turbo2v_128     7c83934696fc   -                    N
+│ paged_decode_bf16k_turbo3v         a85c761cad47   -                    N
+│ paged_decode_bf16k_turbo3v_128     a85c761cad47   -                    N
+│ paged_decode_bf16k_turbo4v         99ef0985ddd2   -                    N
+│ paged_decode_bf16k_turbo4v_128     99ef0985ddd2   -                    N
+│ paged_decode_fp8                   fc2f2a76fc4b   -                    N
+│ paged_decode_fp8k_turbo2v          f59a4282349b   -                    N
+│ paged_decode_fp8k_turbo2v_128      f59a4282349b   -                    N
+│ paged_decode_fp8k_turbo3v          f638c88697b2   -                    N
+│ paged_decode_fp8k_turbo3v_128      f638c88697b2   -                    N
+│ paged_decode_fp8k_turbo4v          4f1ef311e532   -                    N
+│ paged_decode_fp8k_turbo4v_128      4f1ef311e532   -                    N
+│ paged_decode_nvfp4                 c1e3be0ab793   -                    N
+│ paged_decode_turbo2                a54257f08198   -                    N
+│ paged_decode_turbo3k_turbo8v       eaee50b401ea   -                    N
+│ paged_decode_turbo3k_turbo8v_128   eaee50b401ea   -                    N
+│ paged_decode_turbo4k_turbo3v       4419902b39e0   -                    N
+│ paged_decode_turbo4k_turbo3v_128   4419902b39e0   -                    N
+│ paged_decode_turbo4k_turbo8v       72c4e6036610   -                    N
+│ paged_decode_turbo4k_turbo8v_128   72c4e6036610   -                    N
+│ per_token_group_quant_fp8          a740d461be1c   -                    N
+│ prefill_fp8kv                      b4037f4b3c07   -                    N
+│ prefill_paged                      915863eb80f8   -                    N
+│ prefill_paged_bf16k_turbo2v        b89f89608294   -                    N
+│ prefill_paged_bf16k_turbo3v        6124bb6cb5ba   -                    N
+│ prefill_paged_bf16k_turbo4v        fff36a9ba70e   -                    N
+│ prefill_paged_fp8                  d2fd2d21e464   used                 N
+│ prefill_paged_fp8k_turbo2v         53f933d5b6ae   -                    N
+│ prefill_paged_fp8k_turbo3v         97166760273e   -                    N
+│ prefill_paged_fp8k_turbo4v         832378c10eac   -                    N
+│ prefill_paged_indirect             a3c854db221f   -                    N
+│ prefill_paged_indirect_sink        32b8be702204   -                    N
+│ prefill_paged_indirect_sink_h128   577188858259   used                 N
+│ prefill_paged_nvfp4                b3ba173d8ab7   -                    N
+│ prefill_paged_sink                 4bad5b7ae4c5   -                    N
+│ prefill_paged_sink_h128            7cba4c7e3164   used                 N
+│ prefill_paged_turbo2               c74ad830db0e   -                    N
+│ prefill_paged_turbo3               75252a13beb8   -                    N
+│ prefill_paged_turbo3k_turbo8v      7ec08da11940   -                    N
+│ prefill_paged_turbo4               87510e4d6321   -                    N
+│ prefill_paged_turbo4k_turbo3v      afd35b408934   -                    N
+│ prefill_paged_turbo4k_turbo8v      2e690623bb66   -                    N
+│ prefill_paged_turbo8               38abb13eb5ab   -                    N
+│ q2_0_gemv                          5d98978700ab   -                    N
+│ q2_0_gemv_vec                      85aa154a6585   -                    N
+│ quant_rowwise_fp8                  498cf54228f3   -                    N
+│ quantize_bf16_to_fp8_blockscaled   ba34cdbc80ef   -                    N
+│ quantize_nvfp4                     cc5186db26e6   used                 N
+│ qwen4exp_attn                      20475966c1c8   -                    N
+│ qwen4exp_hc                        d4220d100ec3   -                    N
+│ qwen4exp_ple                       ae0676f5ba1a   -                    N
+│ rank_split_join                    1c346cfaa158   -                    N
+│ rdma_oneshot                       c8862af91ab5   -                    N
+│ relu2                              0494c7397566   -                    N
+│ reshape_and_cache                  b780a1a5eb10   used                 N
+│ reshape_and_cache_turbo            510485da9044   -                    N
+│ residual_add                       2567cc0ef127   used                 N
+│ rms_norm_vanilla                   02523febe64b   used                 N
+│ rope                               d77ef54b9bd7   used                 N
+│ rope_mrope_interleaved             36e28e57ba15   -                    N
+│ ssm_h_dtype                        1857b474be8c   used                 N
+│ ssm_preprocess                     6057e33ef202   -                    N
+│ ssm_state_norm                     5acf60599b06   used                 N
+│ token_overlay                      98e387417c45   used                 N
+│ tq_plus_innerq_apply               28e95d86aea0   -                    N
+│ transpose_u8                       8aa091f067b1   used                 N
+│ vector_add                         aaeea326e703   -                    N
+│ vision_encoder                     241f2f93d59e   used                 N
+│ w4a16                              36d3573dec61   used                 Y (1 dropped)
+│ w4a16_fp8_ldmab                    ef00062efb9a   -                    N
+│ w4a16_gemv                         aa69eccbbd2d   used                 N
+│ w4a16_gemv_fused                   a7b45e1849e0   -                    N
+│ w8a16_gemm                         099b32ffb0e8   -                    N
+│ w8a16_gemm_pipelined               6877c736e13c   -                    N
+│ w8a16_gemm_t                       2d77c473cf82   -                    N
+│ w8a16_gemm_t_m128                  02ac98f727f2   -                    N
+│ w8a16_gemv                         8ba35552fc66   -                    N
+│ w8a16_gemv_batch4                  340977e6688b   -                    N
+│ w8a16_gemv_fused                   bd3342f79a99   -                    N
+│ wht_bf16                           e6a015d83736   -                    N
+│ widen_block_scale_f32              79165f4d8859   -                    N
+└─
+
+3 kernel(s) declared expected-absent in this target's MODEL.toml [expected_absent] (no action):
+    w4a16::fp8_gemm_t_row_scaled, w4a16::fp8_gemm_t_row_scaled_m16, w4a16::w4a16_gemm_t_p3
+
+2026-11-25T09:01:13.564172Z  INFO spark::main_modules::serve_phases::runtime: EOS token (from generation_config.json): 200006
+2026-11-25T09:01:13.564185Z  INFO spark::main_modules::serve_phases::runtime: Default sampling: temperature=1, top_k=0, top_p=1, top_n_sigma=1, min_p=0
+2026-11-25T09:01:13.981741Z  INFO spark::tokenizer::jinja_helpers: Loaded standalone chat_template.jinja (6866 chars)
+2026-11-25T09:01:13.981974Z  INFO spark::tokenizer::chat_impl::load: Loaded tokenizer from /models/thinkingmachines--Inkling-2-Mini+spark-nvfp4/tokenizer.json
+2026-11-25T09:01:14.018999Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Reasoning parser: inkling2 (auto-detected from model_type 'inkling2_loop')
+2026-11-25T09:01:14.019135Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Code-fence token: 68790 (``` — F2 fence guard active)
+2026-11-25T09:01:14.121012Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Numeric-token mask: 1110/200058 ids classified as digit-runs (digit-normalized content-loop path active)
+2026-11-25T09:01:14.224739Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Punctuation-token mask: 329/200058 ids classified as punctuation/whitespace (numeric-list loop exemption active)
+2026-11-25T09:01:14.332797Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Boundary-token mask: 71/200058 ids end in a newline / sentence boundary (Phase-C rollback-to-boundary active)
+2026-11-25T09:01:14.443549Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Mid-word token mask: 193320/200058 ids end in alphanumeric (mid-word </think> defer active during thinking)
+2026-11-25T09:01:14.443561Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Thinking end token: 200010 (<|end_message|>)
+2026-11-25T09:01:14.443652Z  WARN spark::main_modules::serve_phases::tokenizer_runtime: Tool call start token unresolved for <tool_call> — require_tool_call / suppress / force-emit-after-think will be no-ops
+2026-11-25T09:01:14.575198Z  WARN spark::main_modules::serve_phases::tokenizer_runtime: Tool parameter markers unresolved for this tokenizer: parameter-value tracking and the envelope-stuck cap are off (--tool-max-tokens still applies)
+2026-11-25T09:01:14.925671Z  INFO spark::grammar::engine: Grammar: detected tokenizer vocab_type=byte_level, add_prefix_space=false
+2026-11-25T09:01:15.071846Z  INFO spark::main_modules::serve_phases::tokenizer_runtime: Grammar engine initialized (vocab_size=200058, vocab_type=auto-detected from tokenizer)
+2026-11-25T09:01:15.074169Z  INFO spark::main_modules::serve_load: DFlash speculative decoding: ENABLED (γ=8, window=4096, drafter installed)
+2026-11-25T09:01:15.074180Z  INFO spark::main_modules::serve_load: Scheduling policy: FIFO
+2026-11-25T09:01:15.074308Z  INFO spark::main_modules::serve_phases::runtime: Tool call parser: hermes (auto-detected from model_type 'inkling2_loop')
+2026-11-25T09:01:15.074314Z  INFO spark::main_modules::serve_phases::runtime: Tool call parser: 'hermes' has registered XGrammar grammar — constrained decoding ENABLED for tool requests
+2026-11-25T09:01:15.074316Z  INFO spark::main_modules::serve_phases::runtime: Response store: max_entries=10000, ttl=86400s, persist=memory-only
+2026-11-25T09:01:15.074323Z  INFO spark::main_modules::serve_load: tool-call guard configured enabled=false stream=false max_bytes=1048576
+2026-11-25T09:01:15.074330Z  INFO spark::main_modules::serve_phases::runtime: Model behavior: max_thinking_budget=8192, thinking_default=true
+2026-11-25T09:01:15.074331Z  INFO spark::main_modules::serve_phases::runtime: Model behavior: MODEL sampling defaults enabled (non-thinking: temp=1, top_k=0, top_p=1; tools: temp=1, top_k=0, top_p=1)
+2026-11-25T09:01:15.074334Z  INFO spark::main_modules::serve_phases::runtime: Model behavior: F2 confidence early-stop DISABLED
+2026-11-25T09:01:15.074335Z  INFO spark::main_modules::serve_phases::runtime: Model behavior: watchdog rollback+re-steer DISABLED (legacy hard-stop)
+2026-11-25T09:01:15.074361Z  WARN spark::scheduler: --mtp-gate force: MTP throughput gate DISARMED (diagnostic; verify runs even where the gate would measure it net-negative)
+2026-11-25T09:01:15.074376Z  INFO spark::scheduler: Scheduler started (batched mode, max_batch=8, mtp=true, ngram=false, num_drafts=7, policy=fifo, chunked_prefill=true, max_prefill_tokens=4096)
+2026-11-25T09:01:15.074494Z  WARN spark::scheduler::preempt: --swap-space-gb=3 ignored: this model cannot resume a swapped sequence, so preempted sequences re-prefill instead
+2026-11-25T09:01:15.075045Z  INFO spark::main_modules::serve_router: API reachable only from this machine (loopback). To expose on the LAN pass --bind 0.0.0.0; combine with --require-auth and --auth-tokens-file for non-trusted networks.
+2026-11-25T09:01:15.075098Z  INFO spark::main_modules::serve_router: Server live and ready at 127.0.0.1:8895 running thinkingmachines--Inkling-2-Mini+spark-nvfp4
+2026-11-25T09:01:17.830976Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=300, freq_pen=None, rep_pen=None
+2026-11-25T09:01:17.831098Z  INFO spark::tokenizer::chat_impl: Jinja rendered (194 chars): "<|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>Write a Python class for an LRU cache with get and put, with docstrings.<|end_message|>"
+2026-11-25T09:01:17.831720Z  INFO spark::session_key: session key: source=first_user_turn hash=0x198df474d683a0b6
+2026-11-25T09:01:17.831740Z  INFO spark::api::chat::inner: Session 0x198df474d683a0b6: 33 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:17.831746Z  INFO spark::api::chat::sampling_setup: sampling resolved (first request): temp=0.000 top_p=1.000 top_k=0 min_p=0.0000 top_n_sigma=0.0000 rep_pen=1.000 (core_preset=true)
+2026-11-25T09:01:17.832053Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:17.832071Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 33 prompt tokens, chunk_size=33, max_tokens=300
+2026-11-25T09:01:18.027532Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 0 for 33 tokens (3 blocks) [chunk]
+2026-11-25T09:01:18.093184Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:18.093197Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=33, remaining=299
+2026-11-25T09:01:18.093251Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:18.094109Z  WARN spark_runtime::cuda_backend::host_staging: copy_h2d_async was handed a PAGE-LOCKED source. That copy is genuinely asynchronous, so the promise that the caller may drop the buffer on return is now being paid for with a cuStreamSynchronize on every such call. If the source outlives the next sync, switch the call site to copy_h2d_async_retained; if it does not, this sync is what keeps it from being a use-after-free.
+2026-11-25T09:01:18.136977Z  WARN spark_model::model::glm_vocab_split: GLM vocab-split verify head declined (no_comm, rows=8); min_tokens end-token ban inactive
+2026-11-25T09:01:18.166837Z  INFO spark_model::model::trait_impl: DFlash UNIFIED_CTX ACTIVE: first commit_ctx rows=8 base_pos=33 ctx_len=42
+2026-11-25T09:01:18.239952Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:18.240309Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:19.109193Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.42 < 1.52 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:01:19.110336Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:01:19.115512Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268492962096)
+2026-11-25T09:01:19.535887Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 83 tokens (budget=Some(4096))
+2026-11-25T09:01:19.756233Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:01:20.527317Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.50 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:01:21.171448Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:01:22.683541Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=333, max_seq_len=32768, output_tokens=300, thinking_tokens=83
+2026-11-25T09:01:22.683564Z  INFO spark::scheduler::mtp_accept_debug: Done: 300 tokens (length) 65.4 tok/s, TTFT=261.1ms, serial=0.00 mtp=1.00 p1=0.383 mean_na=1.500 tok_step=2.500 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.38,0.31,0.22,0.18,0.16,0.13,0.12
+2026-11-25T09:01:22.685734Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=300, freq_pen=None, rep_pen=None
+2026-11-25T09:01:22.685831Z  INFO spark::tokenizer::chat_impl: Jinja rendered (185 chars): "<|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>Describe a walk along a foggy coastline at dawn in vivid prose.<|end_message|>"
+2026-11-25T09:01:22.685942Z  INFO spark::session_key: session key: source=first_user_turn hash=0xf9a7b341970b4389
+2026-11-25T09:01:22.685953Z  INFO spark::api::chat::inner: Session 0xf9a7b341970b4389: 32 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:22.686211Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:22.686229Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 32 prompt tokens, chunk_size=32, max_tokens=300
+2026-11-25T09:01:22.770451Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 1 for 32 tokens (2 blocks) [chunk]
+2026-11-25T09:01:22.832064Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:22.832070Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=32, remaining=299
+2026-11-25T09:01:22.832107Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:22.832968Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 2 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:22.833282Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 2 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:24.272461Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 91 tokens (budget=Some(4096))
+2026-11-25T09:01:24.804759Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.08 < 1.25 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:01:24.806163Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:01:24.810082Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268491896256)
+2026-11-25T09:01:25.451529Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:01:26.012106Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.00 < 1.29 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:01:27.298237Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:01:27.827888Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 0.92 < 1.18 over 12 steps) — serial decode for 128 tokens
+2026-11-25T09:01:28.532817Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=331, max_seq_len=32768, output_tokens=300, thinking_tokens=91
+2026-11-25T09:01:28.532834Z  INFO spark::scheduler::mtp_accept_debug: Done: 300 tokens (length) 52.6 tok/s, TTFT=145.8ms, serial=0.00 mtp=1.00 p1=0.258 mean_na=0.541 tok_step=1.541 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.26,0.14,0.07,0.03,0.02,0.02,0.01
+2026-11-25T09:01:28.535289Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=300, freq_pen=None, rep_pen=None
+2026-11-25T09:01:28.535386Z  INFO spark::tokenizer::chat_impl: Jinja rendered (216 chars): "|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>Return a JSON array of 12 objects with fields id, name, and score for a fictional leaderboard.<|end_message|>"
+2026-11-25T09:01:28.535512Z  INFO spark::session_key: session key: source=first_user_turn hash=0xe423ca212936a642
+2026-11-25T09:01:28.535520Z  INFO spark::api::chat::inner: Session 0xe423ca212936a642: 39 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:28.535774Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:28.535793Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 39 prompt tokens, chunk_size=39, max_tokens=300
+2026-11-25T09:01:28.628556Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 2 for 39 tokens (3 blocks) [chunk]
+2026-11-25T09:01:28.692662Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:28.692668Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=39, remaining=299
+2026-11-25T09:01:28.692702Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:28.693543Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 3 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:28.693864Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 3 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:29.898249Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 85 tokens (budget=Some(4096))
+2026-11-25T09:01:32.531765Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=342, max_seq_len=32768, output_tokens=300, thinking_tokens=85
+2026-11-25T09:01:32.531790Z  INFO spark::scheduler::mtp_accept_debug: Done: 300 tokens (length) 78.1 tok/s, TTFT=156.9ms, serial=0.00 mtp=1.00 p1=0.839 mean_na=3.887 tok_step=4.887 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.84,0.71,0.58,0.50,0.45,0.40,0.40
+2026-11-25T09:01:32.589858Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:01:32.589960Z  INFO spark::tokenizer::chat_impl: Jinja rendered (500 chars): "resentation after the conversion.\n    base numbers are less than 10.\n    >>> change_base(8, 3)\n    '22'\n    >>> change_base(8, 2)\n    '1000'\n    >>> change_base(7, 2)\n    '111'\n    \"\"\"\n<|end_message|>"
+2026-11-25T09:01:32.590594Z  INFO spark::session_key: session key: source=first_user_turn hash=0x48376685aa9ef1af
+2026-11-25T09:01:32.590609Z  INFO spark::api::chat::inner: Session 0x48376685aa9ef1af: 133 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:32.590923Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:32.590936Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 133 prompt tokens, chunk_size=133, max_tokens=512
+2026-11-25T09:01:32.725612Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 3 for 133 tokens (9 blocks) [chunk]
+2026-11-25T09:01:32.801203Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:32.801210Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=133, remaining=511
+2026-11-25T09:01:32.801249Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:32.802412Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 4 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:32.802725Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 4 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:33.646531Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.47 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:01:33.647673Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:01:33.651664Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268489106672)
+2026-11-25T09:01:34.288984Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:01:36.269622Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 229 tokens (budget=Some(4096))
+2026-11-25T09:01:38.418231Z  INFO spark::scheduler::mtp_accept_debug: Done: 461 tokens (stop) 82.1 tok/s, TTFT=210.3ms, serial=0.00 mtp=1.00 p1=0.630 mean_na=3.269 tok_step=4.269 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.63,0.54,0.49,0.46,0.44,0.38,0.33
+2026-11-25T09:01:38.420203Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:01:38.420305Z  INFO spark::tokenizer::chat_impl: Jinja rendered (548 chars): "oser to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \"\"\"\n<|end_message|>"
+2026-11-25T09:01:38.420593Z  INFO spark::session_key: session key: source=first_user_turn hash=0x1ae5b2d41de15a5b
+2026-11-25T09:01:38.420605Z  INFO spark::api::chat::inner: Session 0x1ae5b2d41de15a5b: 167 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:38.420867Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:38.420878Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 167 prompt tokens, chunk_size=167, max_tokens=512
+2026-11-25T09:01:38.421953Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:01:38.568930Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 4 for 167 tokens (11 blocks) [chunk]
+2026-11-25T09:01:38.637194Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:38.637201Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=167, remaining=511
+2026-11-25T09:01:38.637237Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:38.638389Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 5 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:38.638731Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 5 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:42.028321Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 223 tokens (budget=Some(4096))
+2026-11-25T09:01:43.903183Z  INFO spark::scheduler::mtp_accept_debug: Done: 424 tokens (stop) 80.5 tok/s, TTFT=216.3ms, serial=0.00 mtp=1.00 p1=0.849 mean_na=3.942 tok_step=4.942 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.85,0.73,0.59,0.56,0.47,0.38,0.36
+2026-11-25T09:01:43.905057Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:01:43.905208Z  INFO spark::tokenizer::chat_impl: Jinja rendered (459 chars): "nput are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\n<|end_message|>"
+2026-11-25T09:01:43.905430Z  INFO spark::session_key: session key: source=first_user_turn hash=0x2099880084dc5a93
+2026-11-25T09:01:43.905440Z  INFO spark::api::chat::inner: Session 0x2099880084dc5a93: 114 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:43.905720Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:43.905730Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 114 prompt tokens, chunk_size=114, max_tokens=512
+2026-11-25T09:01:43.906844Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 32 tokens (2 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:01:44.033516Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 5 for 114 tokens (8 blocks) [chunk]
+2026-11-25T09:01:44.107573Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:44.107581Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=114, remaining=511
+2026-11-25T09:01:44.107619Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:44.108480Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 6 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:44.108794Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 6 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:45.963104Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.17 < 1.34 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:01:45.964255Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:01:45.968224Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268494938976)
+2026-11-25T09:01:46.605935Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:01:47.631737Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 243 tokens (budget=Some(4096))
+2026-11-25T09:01:48.725224Z  INFO spark::scheduler::mtp_accept_debug: Done: 361 tokens (stop) 78.2 tok/s, TTFT=201.9ms, serial=0.00 mtp=1.00 p1=0.588 mean_na=2.722 tok_step=3.722 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.59,0.51,0.44,0.37,0.31,0.27,0.24
+2026-11-25T09:01:48.727116Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:01:48.727298Z  INFO spark::tokenizer::chat_impl: Jinja rendered (385 chars): "\n\ndef max_element(l: list):\n    \"\"\"Return maximum element in the list.\n    >>> max_element([1, 2, 3])\n    3\n    >>> max_element([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])\n    123\n    \"\"\"\n<|end_message|>"
+2026-11-25T09:01:48.727526Z  INFO spark::session_key: session key: source=first_user_turn hash=0x525f60c9d13995d
+2026-11-25T09:01:48.727536Z  INFO spark::api::chat::inner: Session 0x525f60c9d13995d: 121 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:48.727782Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:48.727791Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 121 prompt tokens, chunk_size=121, max_tokens=512
+2026-11-25T09:01:48.728887Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:01:48.859517Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 6 for 121 tokens (8 blocks) [chunk]
+2026-11-25T09:01:48.928128Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:48.928135Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=121, remaining=511
+2026-11-25T09:01:48.928171Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:48.929043Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 7 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:48.929380Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 7 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:50.287570Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 100 tokens (budget=Some(4096))
+2026-11-25T09:01:51.234653Z  INFO spark::scheduler::mtp_accept_debug: Done: 207 tokens (stop) 89.7 tok/s, TTFT=200.3ms, serial=0.00 mtp=1.00 p1=0.912 mean_na=5.088 tok_step=6.088 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.91,0.79,0.76,0.74,0.68,0.65,0.56
+2026-11-25T09:01:51.236653Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:01:51.236855Z  INFO spark::tokenizer::chat_impl: Jinja rendered (424 chars): "an integer. return a tuple that has the number of even and odd digits respectively.\n\n     Example:\n        even_odd_count(-12) ==> (1, 1)\n        even_odd_count(123) ==> (1, 2)\n    \"\"\"\n<|end_message|>"
+2026-11-25T09:01:51.237148Z  INFO spark::session_key: session key: source=first_user_turn hash=0xd84c7ed22cb0abfe
+2026-11-25T09:01:51.237160Z  INFO spark::api::chat::inner: Session 0xd84c7ed22cb0abfe: 109 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:51.237647Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:51.237659Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 109 prompt tokens, chunk_size=109, max_tokens=512
+2026-11-25T09:01:51.238819Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:01:51.366683Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 7 for 109 tokens (7 blocks) [chunk]
+2026-11-25T09:01:51.437917Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:51.437925Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=109, remaining=511
+2026-11-25T09:01:51.437961Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:51.438812Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 8 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:51.439230Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 8 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:53.477927Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 152 tokens (budget=Some(4096))
+2026-11-25T09:01:54.770867Z  INFO spark::scheduler::mtp_accept_debug: Done: 292 tokens (stop) 87.6 tok/s, TTFT=200.3ms, serial=0.00 mtp=1.00 p1=0.922 mean_na=4.745 tok_step=5.745 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.92,0.86,0.75,0.67,0.59,0.51,0.45
+2026-11-25T09:01:54.772288Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:01:54.772414Z  INFO spark::tokenizer::chat_impl: Jinja rendered (841 chars): "\n    Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.\n\n    Examples:\n    match_parens(['()(', ')']) == 'Yes'\n    match_parens([')', ')']) == 'No'\n    '''\n<|end_message|>"
+2026-11-25T09:01:54.772743Z  INFO spark::session_key: session key: source=first_user_turn hash=0x53465230861ded74
+2026-11-25T09:01:54.772754Z  INFO spark::api::chat::inner: Session 0x53465230861ded74: 231 prompt tokens, tools=false (0 defined)
+2026-11-25T09:01:54.773043Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:01:54.773054Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 231 prompt tokens, chunk_size=231, max_tokens=512
+2026-11-25T09:01:54.774197Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:01:54.939987Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 8 for 231 tokens (15 blocks) [chunk]
+2026-11-25T09:01:55.006945Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:01:55.006954Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=231, remaining=511
+2026-11-25T09:01:55.006992Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:01:55.008249Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 9 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:01:55.008581Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 9 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:01:58.907531Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 295 tokens (budget=Some(4096))
+2026-11-25T09:02:00.912330Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=748, max_seq_len=32768, output_tokens=512, thinking_tokens=295
+2026-11-25T09:02:00.912357Z  INFO spark::scheduler::mtp_accept_debug: Done: 512 tokens (length) 86.7 tok/s, TTFT=233.9ms, serial=0.00 mtp=1.00 p1=0.934 mean_na=4.681 tok_step=5.681 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.93,0.82,0.70,0.65,0.56,0.54,0.47
+2026-11-25T09:02:00.913846Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:00.913950Z  INFO spark::tokenizer::chat_impl: Jinja rendered (694 chars): ", ... ord('z') = 25\n    Examples\n    split_words(\"Hello world!\") ➞ [\"Hello\", \"world!\"]\n    split_words(\"Hello,world!\") ➞ [\"Hello\", \"world!\"]\n    split_words(\"abcdef\") == 3 \n    '''\n<|end_message|>"
+2026-11-25T09:02:00.914302Z  INFO spark::session_key: session key: source=first_user_turn hash=0xc29af1bfebd2d895
+2026-11-25T09:02:00.914315Z  INFO spark::api::chat::inner: Session 0xc29af1bfebd2d895: 206 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:00.914464Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:00.914475Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 206 prompt tokens, chunk_size=206, max_tokens=512
+2026-11-25T09:02:00.915647Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:02:01.077697Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 9 for 206 tokens (13 blocks) [chunk]
+2026-11-25T09:02:01.144518Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:01.144526Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=206, remaining=511
+2026-11-25T09:02:01.144573Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:01.145735Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 10 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:01.146111Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 10 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:06.256870Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.58 < 1.63 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:06.258021Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:06.262221Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268495234800)
+2026-11-25T09:02:06.686718Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 425 tokens (budget=Some(4096))
+2026-11-25T09:02:06.911111Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:07.721518Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=724, max_seq_len=32768, output_tokens=512, thinking_tokens=425
+2026-11-25T09:02:07.721538Z  INFO spark::scheduler::mtp_accept_debug: Done: 512 tokens (length) 77.8 tok/s, TTFT=230.1ms, serial=0.00 mtp=1.00 p1=0.680 mean_na=3.144 tok_step=4.144 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.68,0.59,0.49,0.42,0.36,0.32,0.28
+2026-11-25T09:02:07.723215Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:07.723335Z  INFO spark::tokenizer::chat_impl: Jinja rendered (847 chars): "re infinitely sturdy and strong; as a result, they continue moving\n    in their trajectory as if they did not collide.\n\n    This function outputs the number of such collisions.\n    \"\"\"\n<|end_message|>"
+2026-11-25T09:02:07.723782Z  INFO spark::session_key: session key: source=first_user_turn hash=0xfa6800066f25d7da
+2026-11-25T09:02:07.723790Z  INFO spark::api::chat::inner: Session 0xfa6800066f25d7da: 198 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:07.724062Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:07.724074Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 198 prompt tokens, chunk_size=198, max_tokens=512
+2026-11-25T09:02:07.725183Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:02:07.886776Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 10 for 198 tokens (13 blocks) [chunk]
+2026-11-25T09:02:07.956401Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:07.956409Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=198, remaining=511
+2026-11-25T09:02:07.956451Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:07.957611Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 11 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:07.958003Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 11 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:08.997380Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.58 < 1.65 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:08.998531Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:09.002386Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268491350992)
+2026-11-25T09:02:09.640080Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:12.322862Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 253 tokens (budget=Some(4096))
+2026-11-25T09:02:14.053524Z  INFO spark::scheduler::mtp_accept_debug: Done: 436 tokens (stop) 71.5 tok/s, TTFT=232.3ms, serial=0.00 mtp=1.00 p1=0.648 mean_na=2.480 tok_step=3.480 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.65,0.53,0.35,0.30,0.25,0.23,0.17
+2026-11-25T09:02:14.055375Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:14.055796Z  INFO spark::tokenizer::chat_impl: Jinja rendered (607 chars): "est dollar. If Artie sells 12 pots of marigolds, 9 pots of petunias and 17 pots of begonias, how much will he make?\nSolve step by step, then give the final answer on a line 'Answer: N'.<|end_message|>"
+2026-11-25T09:02:14.056164Z  INFO spark::session_key: session key: source=first_user_turn hash=0x5790912fa96158a3
+2026-11-25T09:02:14.056171Z  INFO spark::api::chat::inner: Session 0x5790912fa96158a3: 163 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:14.056687Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:14.056698Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 163 prompt tokens, chunk_size=163, max_tokens=512
+2026-11-25T09:02:14.200700Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 11 for 163 tokens (11 blocks) [chunk]
+2026-11-25T09:02:14.272019Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:14.272026Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=163, remaining=511
+2026-11-25T09:02:14.272063Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:14.273224Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 12 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:14.273647Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 12 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:16.556184Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.58 < 1.61 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:16.557333Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:16.561064Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268495480464)
+2026-11-25T09:02:17.201875Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:18.166941Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.43 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:18.187277Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 257 tokens (budget=Some(4096))
+2026-11-25T09:02:18.814574Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:19.769681Z  INFO spark::scheduler::mtp_accept_debug: Done: 377 tokens (stop) 68.6 tok/s, TTFT=215.3ms, serial=0.00 mtp=1.00 p1=0.455 mean_na=1.856 tok_step=2.856 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.45,0.32,0.27,0.23,0.21,0.20,0.17
+2026-11-25T09:02:19.771266Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:19.771385Z  INFO spark::tokenizer::chat_impl: Jinja rendered (505 chars): "Angela has 6 mirrors and 2 chandeliers and 20 pictures that she needs installed/hung.  How much will this cost her?\nSolve step by step, then give the final answer on a line 'Answer: N'.<|end_message|>"
+2026-11-25T09:02:19.771650Z  INFO spark::session_key: session key: source=first_user_turn hash=0xeb2e3bfcb16f3117
+2026-11-25T09:02:19.771657Z  INFO spark::api::chat::inner: Session 0xeb2e3bfcb16f3117: 122 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:19.771930Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:19.771940Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 122 prompt tokens, chunk_size=122, max_tokens=512
+2026-11-25T09:02:19.905374Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 12 for 122 tokens (8 blocks) [chunk]
+2026-11-25T09:02:19.975785Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:19.975793Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=122, remaining=511
+2026-11-25T09:02:19.975829Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:19.976695Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 13 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:19.977028Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 13 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:23.159551Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.50 < 1.67 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:23.160702Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:23.164513Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268494392112)
+2026-11-25T09:02:23.810902Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:24.750237Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 304 tokens (budget=Some(4096))
+2026-11-25T09:02:26.420977Z  INFO spark::scheduler::mtp_accept_debug: Done: 458 tokens (stop) 71.1 tok/s, TTFT=203.9ms, serial=0.00 mtp=1.00 p1=0.576 mean_na=2.656 tok_step=3.656 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.58,0.51,0.42,0.37,0.30,0.26,0.22
+2026-11-25T09:02:26.422480Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:26.422599Z  INFO spark::tokenizer::chat_impl: Jinja rendered (489 chars): "gs. However, 40 guests showed up, and everyone wanted a second hotdog. How many guests did not get a second hotdog?\nSolve step by step, then give the final answer on a line 'Answer: N'.<|end_message|>"
+2026-11-25T09:02:26.422828Z  INFO spark::session_key: session key: source=first_user_turn hash=0x3e5c22ccdcc2b328
+2026-11-25T09:02:26.422836Z  INFO spark::api::chat::inner: Session 0x3e5c22ccdcc2b328: 108 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:26.423139Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:26.423150Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 108 prompt tokens, chunk_size=108, max_tokens=512
+2026-11-25T09:02:26.550084Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 13 for 108 tokens (7 blocks) [chunk]
+2026-11-25T09:02:26.626254Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:26.626261Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=108, remaining=511
+2026-11-25T09:02:26.626297Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:26.627169Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 14 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:26.627490Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 14 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:28.050073Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.92 < 1.92 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:28.051220Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:28.055198Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268495490768)
+2026-11-25T09:02:28.700266Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:29.501958Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.36 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:30.141337Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:31.785910Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 311 tokens (budget=Some(4096))
+2026-11-25T09:02:33.305437Z  INFO spark::scheduler::mtp_accept_debug: Done: 432 tokens (stop) 64.7 tok/s, TTFT=203.1ms, serial=0.00 mtp=1.00 p1=0.484 mean_na=1.794 tok_step=2.794 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.48,0.41,0.30,0.22,0.15,0.13,0.10
+2026-11-25T09:02:33.306811Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:33.306926Z  INFO spark::tokenizer::chat_impl: Jinja rendered (547 chars): "day before. At the end of the week, how many clouds will she have counted in the sky at lunch across all five days?\nSolve step by step, then give the final answer on a line 'Answer: N'.<|end_message|>"
+2026-11-25T09:02:33.307162Z  INFO spark::session_key: session key: source=first_user_turn hash=0x9b3c56cdf610c60b
+2026-11-25T09:02:33.307169Z  INFO spark::api::chat::inner: Session 0x9b3c56cdf610c60b: 119 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:33.307416Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:33.307426Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 119 prompt tokens, chunk_size=119, max_tokens=512
+2026-11-25T09:02:33.434933Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 14 for 119 tokens (8 blocks) [chunk]
+2026-11-25T09:02:33.514904Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:33.514913Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=119, remaining=511
+2026-11-25T09:02:33.514948Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:33.515813Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 15 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:33.516138Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 15 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:35.199097Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 120 tokens (budget=Some(4096))
+2026-11-25T09:02:35.958750Z  INFO spark::scheduler::mtp_accept_debug: Done: 199 tokens (stop) 81.4 tok/s, TTFT=207.5ms, serial=0.00 mtp=1.00 p1=0.872 mean_na=4.103 tok_step=5.103 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.87,0.74,0.64,0.56,0.49,0.44,0.36
+2026-11-25T09:02:35.960377Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:35.960506Z  INFO spark::tokenizer::chat_impl: Jinja rendered (1462 chars): "and Dr. Z should not be included as an author.\nJ. Dr. Z should be listed as first author, and the student should be listed as second author.\nThink briefly, then answer with 'Answer: X'.<|end_message|>"
+2026-11-25T09:02:35.960982Z  INFO spark::session_key: session key: source=first_user_turn hash=0x96f0c32997e35a7b
+2026-11-25T09:02:35.960989Z  INFO spark::api::chat::inner: Session 0x96f0c32997e35a7b: 329 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:35.961255Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:35.961265Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 329 prompt tokens, chunk_size=329, max_tokens=512
+2026-11-25T09:02:36.140070Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 15 for 329 tokens (21 blocks) [chunk]
+2026-11-25T09:02:36.219514Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:36.219522Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=329, remaining=511
+2026-11-25T09:02:36.219557Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:36.221384Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 16 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:36.221680Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 16 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:36.979023Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.41 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:36.979073Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:36.983022Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268494126416)
+2026-11-25T09:02:37.624450Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:38.984993Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.17 < 1.25 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:39.568132Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 170 tokens (budget=Some(4096))
+2026-11-25T09:02:39.628995Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:40.447384Z  INFO spark::scheduler::mtp_accept_debug: Done: 224 tokens (stop) 53.0 tok/s, TTFT=258.3ms, serial=0.00 mtp=1.00 p1=0.328 mean_na=0.882 tok_step=1.882 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.33,0.23,0.13,0.09,0.07,0.03,0.01
+2026-11-25T09:02:40.448928Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:40.449059Z  INFO spark::tokenizer::chat_impl: Jinja rendered (581 chars): "; backed blade\nG. Maglemosian; Natufian\nH. Maglemosian; backed blade\nI. Natufian; Capsian culture\nJ. Capsian culture; Iberomaurusian culture\nThink briefly, then answer with 'Answer: X'.<|end_message|>"
+2026-11-25T09:02:40.449312Z  INFO spark::session_key: session key: source=first_user_turn hash=0x70f4b418ef43d78b
+2026-11-25T09:02:40.449319Z  INFO spark::api::chat::inner: Session 0x70f4b418ef43d78b: 155 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:40.449584Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:40.449594Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 155 prompt tokens, chunk_size=155, max_tokens=512
+2026-11-25T09:02:40.584716Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 16 for 155 tokens (10 blocks) [chunk]
+2026-11-25T09:02:40.662661Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:40.662668Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=155, remaining=511
+2026-11-25T09:02:40.662704Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:40.663861Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 17 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:40.664195Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 17 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:43.864770Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.75 < 1.79 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:43.865922Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:43.870222Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268492173792)
+2026-11-25T09:02:44.515374Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:45.271090Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 263 tokens (budget=Some(4096))
+2026-11-25T09:02:45.600524Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.67 < 1.83 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:45.704354Z  INFO spark::scheduler::mtp_accept_debug: Done: 285 tokens (stop) 56.5 tok/s, TTFT=213.1ms, serial=0.00 mtp=1.00 p1=0.514 mean_na=1.559 tok_step=2.559 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.51,0.41,0.26,0.17,0.13,0.05,0.04
+2026-11-25T09:02:45.705958Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:45.706142Z  INFO spark::tokenizer::chat_impl: Jinja rendered (536 chars): "ansfer at a point 3 in. from the top?\nA. 1,486 Btu/hr-ft^2-°F\nB. 1,071.6 Btu/hr-ft^2-°F\nC. 1,567 Btu/hr-ft^2-°F\nD. 0.3656 Btu/hr-ft^2-°F\nThink briefly, then answer with 'Answer: X'.<|end_message|>"
+2026-11-25T09:02:45.706592Z  INFO spark::session_key: session key: source=first_user_turn hash=0x7e5523de9cd4ab67
+2026-11-25T09:02:45.706602Z  INFO spark::api::chat::inner: Session 0x7e5523de9cd4ab67: 169 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:45.706931Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:45.706942Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 169 prompt tokens, chunk_size=169, max_tokens=512
+2026-11-25T09:02:45.846341Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 17 for 169 tokens (11 blocks) [chunk]
+2026-11-25T09:02:45.917636Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:45.917643Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=169, remaining=511
+2026-11-25T09:02:45.917680Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:45.918830Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 18 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:45.919151Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 18 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:47.589823Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.36 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:47.590965Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:47.594797Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268489416560)
+2026-11-25T09:02:48.237552Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:48.808923Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.00 < 1.34 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:02:50.090900Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:02:50.777994Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.50 < 1.54 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:51.419618Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:53.686398Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.08 < 1.43 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:54.334231Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:54.736399Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=680, max_seq_len=32768, output_tokens=512, thinking_tokens=511
+2026-11-25T09:02:54.736418Z  INFO spark::scheduler::mtp_accept_debug: Done: 512 tokens (length) 58.1 tok/s, TTFT=210.7ms, serial=0.00 mtp=1.00 p1=0.280 mean_na=0.958 tok_step=1.958 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.28,0.21,0.15,0.13,0.08,0.06,0.05
+2026-11-25T09:02:54.738574Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:54.738700Z  INFO spark::tokenizer::chat_impl: Jinja rendered (1480 chars): " expedite the passage of the nail\nH. Observation to allow passage of the nail via normal peristalsis\nI. Use of a magnet to draw out the nail\nThink briefly, then answer with 'Answer: X'.<|end_message|>"
+2026-11-25T09:02:54.739259Z  INFO spark::session_key: session key: source=first_user_turn hash=0x305516afab8a4d20
+2026-11-25T09:02:54.739265Z  INFO spark::api::chat::inner: Session 0x305516afab8a4d20: 334 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:54.739776Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:54.739788Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 334 prompt tokens, chunk_size=334, max_tokens=512
+2026-11-25T09:02:54.918145Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 18 for 334 tokens (21 blocks) [chunk]
+2026-11-25T09:02:54.991908Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:02:54.991915Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=334, remaining=511
+2026-11-25T09:02:54.991952Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:02:54.993777Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 19 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:02:54.994122Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 19 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:02:55.868939Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.42 < 1.47 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:02:55.870083Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:02:55.874279Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268494666048)
+2026-11-25T09:02:56.515414Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:02:57.113372Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.41 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:02:58.397781Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:02:59.047053Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 204 tokens (budget=Some(4096))
+2026-11-25T09:02:59.894257Z  INFO spark::scheduler::mtp_accept_debug: Done: 256 tokens (stop) 52.2 tok/s, TTFT=252.1ms, serial=0.00 mtp=1.00 p1=0.240 mean_na=0.707 tok_step=1.707 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.24,0.17,0.15,0.09,0.05,0.01,0.01
+2026-11-25T09:02:59.895888Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:02:59.896017Z  INFO spark::tokenizer::chat_impl: Jinja rendered (242 chars): " effort level: 0.2<|end_message|><|message_user|><|content_text|>Write an internal engineering memo arguing for or against moving a team from weekly to daily releases. Plain paragraphs.<|end_message|>"
+2026-11-25T09:02:59.896148Z  INFO spark::session_key: session key: source=first_user_turn hash=0xff233e47466eaaae
+2026-11-25T09:02:59.896154Z  INFO spark::api::chat::inner: Session 0xff233e47466eaaae: 38 prompt tokens, tools=false (0 defined)
+2026-11-25T09:02:59.896418Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:02:59.896428Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 38 prompt tokens, chunk_size=38, max_tokens=512
+2026-11-25T09:02:59.986203Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 19 for 38 tokens (3 blocks) [chunk]
+2026-11-25T09:03:00.049393Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:03:00.049403Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=38, remaining=511
+2026-11-25T09:03:00.049439Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:03:00.050288Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 20 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:03:00.050607Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 20 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:03:00.972826Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.08 < 1.34 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:00.973971Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:03:00.977815Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268489985872)
+2026-11-25T09:03:01.615150Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:02.572520Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.08 < 1.16 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:03.208777Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:03.476980Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 179 tokens (budget=Some(4096))
+2026-11-25T09:03:03.807373Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.08 < 1.38 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:03:05.094830Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:03:05.697584Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.17 < 1.23 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:06.342781Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:06.917223Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.34 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:03:08.214964Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:03:08.806978Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.36 over 12 steps) — serial decode for 128 tokens
+2026-11-25T09:03:10.287880Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=549, max_seq_len=32768, output_tokens=512, thinking_tokens=179
+2026-11-25T09:03:10.287898Z  INFO spark::scheduler::mtp_accept_debug: Done: 512 tokens (length) 50.0 tok/s, TTFT=153.0ms, serial=0.00 mtp=1.00 p1=0.149 mean_na=0.338 tok_step=1.338 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.15,0.10,0.03,0.02,0.02,0.01,0.00
+2026-11-25T09:03:10.290219Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:03:10.290336Z  INFO spark::tokenizer::chat_impl: Jinja rendered (230 chars): "xt|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>Explain to a new hire how a write-ahead log keeps a database consistent after a crash. Plain prose, no code.<|end_message|>"
+2026-11-25T09:03:10.290471Z  INFO spark::session_key: session key: source=first_user_turn hash=0x17e9ad861d530531
+2026-11-25T09:03:10.290476Z  INFO spark::api::chat::inner: Session 0x17e9ad861d530531: 40 prompt tokens, tools=false (0 defined)
+2026-11-25T09:03:10.290761Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:03:10.290771Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 40 prompt tokens, chunk_size=40, max_tokens=512
+2026-11-25T09:03:10.384527Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 20 for 40 tokens (3 blocks) [chunk]
+2026-11-25T09:03:10.448153Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:03:10.448160Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=40, remaining=511
+2026-11-25T09:03:10.448196Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:03:10.449050Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 21 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:03:10.449385Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 21 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:03:11.466704Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.17 < 1.25 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:11.467858Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:03:11.472002Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268495765184)
+2026-11-25T09:03:12.111523Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:12.536688Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 110 tokens (budget=Some(4096))
+2026-11-25T09:03:12.903451Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.38 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:13.547511Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:14.132837Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 0.92 < 1.34 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:03:15.418668Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:03:16.241163Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.34 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:16.888503Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:16.963310Z  INFO spark::scheduler::mtp_accept_debug: Done: 331 tokens (stop) 50.8 tok/s, TTFT=157.4ms, serial=0.00 mtp=1.00 p1=0.230 mean_na=0.460 tok_step=1.460 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.23,0.11,0.04,0.03,0.02,0.02,0.02
+2026-11-25T09:03:16.964975Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:03:16.965180Z  INFO spark::tokenizer::chat_impl: Jinja rendered (250 chars): "level: 0.2<|end_message|><|message_user|><|content_text|>Write a short story, about 400 words, about a lighthouse keeper who receives a letter addressed to someone who left decades ago.<|end_message|>"
+2026-11-25T09:03:16.965404Z  INFO spark::session_key: session key: source=first_user_turn hash=0x45813ddafb4c05bd
+2026-11-25T09:03:16.965413Z  INFO spark::api::chat::inner: Session 0x45813ddafb4c05bd: 43 prompt tokens, tools=false (0 defined)
+2026-11-25T09:03:16.965775Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:03:16.965786Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 43 prompt tokens, chunk_size=43, max_tokens=512
+2026-11-25T09:03:16.966888Z  INFO spark_model::model::trait_impl::prefill_b::prefix_lookup: Prefix cache hit: 16 tokens (1 blocks) but no SSM snapshot — recomputing all KV
+2026-11-25T09:03:17.063147Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 21 for 43 tokens (3 blocks) [chunk]
+2026-11-25T09:03:17.126867Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:03:17.126875Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=43, remaining=511
+2026-11-25T09:03:17.126911Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:03:17.127766Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 22 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:03:17.128085Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 22 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:03:18.518834Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.25 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:18.519988Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:03:18.523954Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268305166688)
+2026-11-25T09:03:19.160711Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:19.703092Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 0.92 < 1.18 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:03:20.974759Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:03:21.556221Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.08 < 1.34 over 12 steps) — serial decode for 128 tokens
+2026-11-25T09:03:24.118792Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 128 serial tokens
+2026-11-25T09:03:24.718872Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 392 tokens (budget=Some(4096))
+2026-11-25T09:03:25.245467Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.41 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:25.903406Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:26.704998Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 0.83 < 1.18 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:27.173248Z  INFO spark::scheduler::emit_step: emit_token: remaining=0, seq_len=554, max_seq_len=32768, output_tokens=512, thinking_tokens=392
+2026-11-25T09:03:27.173263Z  INFO spark::scheduler::mtp_accept_debug: Done: 512 tokens (length) 51.0 tok/s, TTFT=161.1ms, serial=0.00 mtp=1.00 p1=0.173 mean_na=0.385 tok_step=1.385 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.17,0.09,0.05,0.03,0.02,0.02,0.01
+2026-11-25T09:03:27.175779Z  INFO spark::api::chat::prepare: Request: model=m, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=512, freq_pen=None, rep_pen=None
+2026-11-25T09:03:27.175983Z  INFO spark::tokenizer::chat_impl: Jinja rendered (238 chars): "king effort level: 0.2<|end_message|><|message_user|><|content_text|>Summarize the trade-offs between renting and buying a home for someone in their early thirties, in plain paragraphs.<|end_message|>"
+2026-11-25T09:03:27.176174Z  INFO spark::session_key: session key: source=first_user_turn hash=0x9f31ce81189cf258
+2026-11-25T09:03:27.176180Z  INFO spark::api::chat::inner: Session 0x9f31ce81189cf258: 43 prompt tokens, tools=false (0 defined)
+2026-11-25T09:03:27.176735Z  INFO spark::scheduler::prefill_a_step: Thinking enabled, budget=Some(4096)
+2026-11-25T09:03:27.176745Z  INFO spark::scheduler::prefill_a_step: Chunked prefill start: 43 prompt tokens, chunk_size=43, max_tokens=512
+2026-11-25T09:03:27.273246Z  INFO spark_model::model::trait_impl::prefill_b::finalize_last: Saved SSM snapshot 22 for 43 tokens (3 blocks) [chunk]
+2026-11-25T09:03:27.338972Z  INFO spark::scheduler::prefill_a_step: Prefill first token: 200001
+2026-11-25T09:03:27.338980Z  INFO spark::scheduler::phase_start_prefills: Prefilled (single chunk): seq_len=43, remaining=511
+2026-11-25T09:03:27.339015Z  INFO spark_model::layers::dflash_head::propose: DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+2026-11-25T09:03:27.339860Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 23 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } warmup_count=2, target=2, slots=11)
+2026-11-25T09:03:27.340179Z  INFO spark_model::layers::dflash_head::forward_block: DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 23 }, block_table_ptr: 275248337385472, ctx_ptr: 275239275593728, markov_ptr: 275251569095168, lane: 0 } (11/11 subgraphs captured)
+2026-11-25T09:03:28.521411Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 0.92 < 1.18 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:28.522557Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph capture: starting for 54 layers
+2026-11-25T09:03:28.526783Z  INFO spark_model::model::trait_impl::decode_a: CUDA graph captured successfully for slot=0 (handle=275268488951136)
+2026-11-25T09:03:29.162670Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:29.776745Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.27 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:30.414036Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:30.477820Z  INFO spark::scheduler::emit_step::think_commit: Thinking ended after 171 tokens (budget=Some(4096))
+2026-11-25T09:03:31.000687Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.33 < 1.38 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:03:32.294027Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 64 serial tokens
+2026-11-25T09:03:33.273873Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.25 < 1.25 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:33.920867Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:34.697115Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 1.17 < 1.23 over 12 steps) — serial decode for 32 tokens
+2026-11-25T09:03:35.344517Z  INFO spark::scheduler::adaptive_spec: adaptive spec: RE-PROBING after 32 serial tokens
+2026-11-25T09:03:35.903083Z  INFO spark::scheduler::adaptive_spec: adaptive spec: SUSPENDED (mean accepted 0.83 < 1.25 over 12 steps) — serial decode for 64 tokens
+2026-11-25T09:03:36.653231Z  INFO spark::scheduler::mtp_accept_debug: Done: 479 tokens (stop) 51.4 tok/s, TTFT=162.2ms, serial=0.00 mtp=1.00 p1=0.212 mean_na=0.466 tok_step=1.466 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.21,0.12,0.07,0.03,0.02,0.01,0.01
