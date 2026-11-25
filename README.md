@@ -1,31 +1,31 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <p align="center">
-  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Strict (./start.sh) and Spark (--mode spark): code 65.2 and 77.5, prose 35.3 and 55.7, eight requests 120.7 and 135.4. 32K prefill 3,277 tok/s, 6 of 6 output gates. SparkInkling 0.4.2, RigMark 1.1.0, low effort." width="100%">
+  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Strict (./start.sh) and Spark (--mode spark): code 70.0 and 81.4, structured output 103.2 and 117.4, eight requests 122.7 and 135.2. 1M-token context, 6 of 6 output gates. SparkInkling 0.5.0, RigMark 1.1.0, low effort." width="100%">
 </p>
 
 # SparkInkling
 
-**SparkInkling 0.4.2.** Run `./start.sh --version` for this checkout, or
+**SparkInkling 0.5.0.** Run `./start.sh --version` for this checkout, or
 `./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
 engine with an OpenAI-compatible API, image input, reasoning and tool calls.
 
-0.4.2 drafts faster and exactly: a verify stops where the drafter is unsure,
-Strict drafts for two requests at once, and greedy text with drafts matched
-text without them in our checks. Against 0.4.1, Strict code is 20% faster and
-structured output 16%, Spark code 13%. Tool calls now stream only for a
-request that asks (`stream_tool_arguments: true`); every other request's calls
-are held until the tool guard passes them. 0.4.1 added image input, an end to
-Inkling's reasoning loops and resuming a rebuilt conversation from the prefix
-cache. Spark is ahead of vLLM's own Inkling 2 Mini image with its DSpark
-drafter on code, prose, prefill and one to four requests and level on
-structured output, and Strict, the checkpoint as shipped, is ahead of vLLM
-without speculation on code, structured output, prefill and one or two
-requests and within 1-2% of it on prose and four to eight requests. See
-[Performance](#performance); every result has its receipts under
-[`results/`](results/).
+0.5.0 drafts with incoai's DFlash2 drafter and serves 1,048,576-token
+requests. Against 0.4.2, one request decodes code 7% faster in Strict and 5%
+in Spark, structured output 11% and 13%, and Strict prose 12%; one short
+request is 9-21% faster, and prefill and two to eight requests are level.
+The 40 sliding-window layer visits now keep only their last 1,024 tokens, so
+a token of context costs 32 KiB instead of 192 KiB: the default profile's
+pool holds about 1.97M tokens (0.4.2: about 404K), and a code hidden in a
+1,032,929-token prompt was recalled. Greedy text with the drafter on matched
+text with it off in our checks. Spark is ahead of vLLM's own Inkling 2 Mini
+image with its DSpark drafter on code, prose, structured output, prefill and
+one to four requests and trails it at eight; Strict, the checkpoint as
+shipped, is level with that image on code and structured output and ahead on
+prose, prefill and one or two requests. See [Performance](#performance);
+every result has its receipts under [`results/`](results/).
 
 ## The model
 
@@ -52,30 +52,33 @@ detail](docs/MODES.md).
 
 ## Performance
 
-Measured on the 0.4.2 image with RigMark (reasoning low, temperature 0), one
-Spark, the default profile and drafter, against vLLM's own Inkling 2 Mini image
-on the same Spark: [the result, with every receipt](results/2026-11-23-release-0.4.2/RESULT.md).
+Measured on the 0.5.0 image with RigMark (reasoning low, temperature 0), one
+Spark, the default profile and drafter, against 0.4.2 and vLLM's own Inkling 2
+Mini image on the same Spark:
+[the result, with every receipt](results/2026-11-25-release-0.5.0/RESULT.md).
 
-| | Strict | Spark | vLLM | vLLM + DSpark |
-|---|---:|---:|---:|---:|
-| Code decode, tok/s | 65.2 | **77.5** | 35.1 | 69.8 |
-| Prose decode | 35.3 | **55.7** | 35.6 | 31.2 |
-| Structured decode | 92.6 | **103.6** | 35.6 | 104.3 |
-| 32K cold prefill, tok/s | **3,274** | **3,277** | 2,722 | 2,723 |
-| Short code, C1 / C2 / C4 / C8 aggregate | 41.3 / 63.1 / 85.0 / 120.7 | **53.9 / 77.7 / 105.8 / 135.4** | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / 144.0 |
-| 32K prompt sent again, time to first token | 0.16 s | 0.16 s | | |
-| Basic output gates | 6/6 | 6/6 | 6/6 | 6/6 |
+| | Strict | Spark | Strict 0.4.2 | Spark 0.4.2 | vLLM | vLLM + DSpark |
+|---|---:|---:|---:|---:|---:|---:|
+| Code decode, tok/s | 70.0 | **81.4** | 65.2 | 77.5 | 35.1 | 69.8 |
+| Prose decode | 39.6 | **56.1** | 35.3 | 55.7 | 35.6 | 31.2 |
+| Structured decode | 103.2 | **117.4** | 92.6 | 103.6 | 35.6 | 104.3 |
+| 32K cold prefill, tok/s | 3,268 | **3,282** | 3,274 | 3,277 | 2,722 | 2,723 |
+| Short code, C1 / C2 / C4 / C8 aggregate | 46.5 / 62.6 / 85.7 / 122.7 | **58.8 / 77.8 / 103.5** / 135.2 | 41.3 / 63.1 / 85.0 / 120.7 | 53.9 / 77.7 / 105.8 / 135.4 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / **144.0** |
+| Short prose, C1 / C4 / C8 aggregate | 44.6 / 84.3 / 120.0 | **61.4 / 100.9 / 131.7** | 36.9 / 82.7 / 120.6 | 53.2 / 100.4 / 129.1 | 35.3 / 89.2 / 126.4 | 36.0 / 88.2 / 122.1 |
+| 32K prompt sent again, time to first token | 0.16 s | 0.15 s | 0.16 s | 0.16 s | | |
+| Longest request | 1,048,576 | 1,048,576 | 131,072 | 131,072 | | |
+| Basic output gates | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 |
 
-Spark leads vLLM without speculation everywhere and vLLM with its drafter on
-code, prose, prefill and one to four requests, is level with it on structured
-output, and trails it at eight requests. Strict reads the checkpoint's BF16
-attention weights as shipped, about twice the bytes a Spark token reads.
-SparkInkling drafts for one or two live requests and decodes plainly from
-three ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)); vLLM's
-drafter also runs under load.
-Prefix caching costs a cold prompt of 512 tokens or more one short extra pass
-(about 0.1 s: about 2% at 32K and 5-6% at 8K against 0.3.0), which is what lets the
-next turn resume. The vLLM receipts were measured the day before.
+Spark leads vLLM without speculation everywhere, and vLLM with its drafter on
+code (1.17x), prose (1.80x), structured output (1.13x), prefill (1.21x) and
+one to four requests, and trails it at eight short-code requests (0.94x).
+Strict reads the checkpoint's BF16 attention weights as shipped, about twice
+the bytes a Spark token reads. SparkInkling drafts for one live request, or
+two in Strict, and decodes plainly from there: on these short requests
+drafting in a batch lost (see [LIMITATIONS](docs/LIMITATIONS.md#speed)),
+while vLLM's drafter gains under load. Prefix caching costs a cold prompt of
+512 tokens or more one short extra pass (about 0.1 s), which is what lets the
+next turn resume. The vLLM receipts were measured on 2026-11-20.
 
 ## Quick start
 
@@ -90,7 +93,7 @@ cp .env.example .env      # optional: every setting has a default
 
 - One DGX Spark (GB10, 128 GB unified memory) with Docker and the NVIDIA
   runtime.
-- About 25 GB free for the checkpoint, plus 2.9 GB for Spark mode's overlay.
+- About 25 GB free for the checkpoint and the DFlash2 drafter (1 GB), plus 2.9 GB for Spark mode's overlay.
 - The default profile takes 0.80 of GPU memory; leave the rest for the host
   and anything else it runs.
 
@@ -104,7 +107,9 @@ engine.
    checkout. If that tag is not published, it builds the image
    from source ([`install/build.sh`](install/build.sh): Atlas at the commit
    and tree pinned in [`install/atlas-source.json`](install/atlas-source.json),
-   for the `inkling-2-mini` kernel target; 30-60 minutes cold).
+   for the `inkling-2-mini` kernel target; the 0.5.0 image built in under
+   5 minutes on a Spark with Docker's build cache warm, and a first build also
+   downloads the CUDA base images).
 2. **Weights.** Downloads
    [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
    at revision `ed40e7da625f` (pinned in
@@ -172,17 +177,19 @@ finishes `content_filter`, not `tool_calls`, which such a client must not run
 
 | `PROFILE` | Requests | Tokens each | GPU memory | KV pool | Prefix-cache snapshots |
 |---|---:|---:|---:|---:|---:|
-| `default` | 8 | 1,048,576 | 0.80 | about 2.0M tokens (1.86M Spark) | 264 |
-| `max` | 32 | 1,048,576 | 0.85 | about 1.94M tokens (1.82M Spark) | 264 |
-| `saver` | 8 | 786,432 | 0.50 | about 952K tokens (830K Spark) | 192 |
+| `default` | 8 | 1,048,576 | 0.80 | 1.97M tokens (1.84M Spark) | 264 |
+| `max` | 32 | 1,048,576 | 0.85 | 1.91M tokens (1.75M Spark) | 264 |
+| `saver` | 8 | 786,432 | 0.50 | 965K tokens (800K Spark) | 192 |
 
 All three keep BF16 KV, 4,096-token prefill chunks, prefix caching,
 hour-long requests and up to 32,768 generated tokens a tool-calling request
 (the model reasons before it calls). Requests the pool cannot hold yet wait
 for blocks rather than fail. KV costs about 32 KiB a token: the 40
 sliding-window layer visits keep only their last 1,024 tokens
-([ENGINE](docs/ENGINE.md)). `saver` is the smallest footprint, for a Spark
-shared with other services. In a check on 2026-11-21, `max` ran 32
+([ENGINE](docs/ENGINE.md)). On the 0.5.0 candidate in Spark mode, a code
+hidden a third of the way into a 1,032,929-token prompt was recalled (1,253 s
+for the request). `saver` is the smallest footprint, for a Spark shared with
+other services. In a check on 2026-11-21, `max` ran 32
 concurrent short code requests to a normal stop and recalled a code hidden a
 third of the way into a 182,100-token prompt (82 s for the prompt;
 [receipts](results/2026-11-21-prefix-cache-and-profiles/RESULT.md)). A JSON file
@@ -214,8 +221,8 @@ Both modes run incoai's DFlash2 drafter for Inkling 2 Mini by default
 [`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2),
 Apache-2.0): it proposes up to seven tokens a step and the mode's own weights
 verify them, so it changes speed, not the model. It replaces the checkpoint's
-bundled DSpark drafter, which 0.4.2 ran. Greedy text with the drafter on
-matched text with it off in our check
+bundled DSpark drafter, which 0.4.2 ran. Greedy text with the drafter on, at
+one, two and four requests, matched text with it off in our check
 ([LIMITATIONS](docs/LIMITATIONS.md#fidelity)).
 
 - **A verify stops where the drafter is unsure.** The drafter reports how
@@ -226,8 +233,10 @@ matched text with it off in our check
   accepted decodes plainly for a short stretch (32 tokens at first, longer
   while re-probes keep failing), so code and structured output draft and
   prose mostly does not.
-- **Concurrent requests.** Strict drafts for one or two live requests and
-  decodes plainly, in a batch, from three; Spark drafts for one.
+- **Concurrent requests.** Strict drafts three tokens each for two live
+  requests and decodes plainly, in a batch, from three; Spark drafts for one.
+  The settings were tuned for this drafter
+  ([results](results/2026-11-25-dflash2-tuning/RESULT.md)).
 
 `DRAFTER=none` turns the drafter off.
 
@@ -257,8 +266,12 @@ Atlas-Inf `main`, pinned by commit and tree in
 are in Atlas upstream
 ([Atlas-Inf/atlas 401](https://github.com/Atlas-Inf/atlas/pull/401) and
 [404](https://github.com/Atlas-Inf/atlas/pull/404), merged 2026-11-23); the
-rest is proposed as [405](https://github.com/Atlas-Inf/atlas/pull/405) and
-[408](https://github.com/Atlas-Inf/atlas/pull/408).
+next are proposed as [414](https://github.com/Atlas-Inf/atlas/pull/414) to
+[418](https://github.com/Atlas-Inf/atlas/pull/418) and
+[408](https://github.com/Atlas-Inf/atlas/pull/408) (a draft), and the two
+closure-attestation fixes as [419](https://github.com/Atlas-Inf/atlas/pull/419)
+and [420](https://github.com/Atlas-Inf/atlas/pull/420). Window-bounded KV and
+the DFlash2 drafter are not proposed upstream yet.
 What the branch adds and what it does not do yet:
 [docs/ENGINE.md](docs/ENGINE.md).
 

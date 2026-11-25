@@ -117,27 +117,46 @@ Strict's `4:3` read 97.1 tok/s on code and 79.9 on prose against plain
 decode's 78.0 and 85.8. The aggregate gain is what ships; the release
 measurement reports prose at four and eight requests on its own.
 
+## Checked against RigMark
+
+The suite's answers are long (512 tokens), and drafting under load paid on
+them. RigMark's concurrency workloads are short requests (256 tokens,
+reasoning low, end to end), where much of the output is reasoning that
+accepts fewer drafts. Before release the depth was checked there on the same
+engine and setup, RigMark 1.1.0, two runs per level (`raw/rigmark-ab/`).
+Aggregate tok/s:
+
+| Mode | Depth (threshold) | Short code C2 | Short code C4 | Short prose C4 |
+|---|---|---:|---:|---:|
+| Strict | `1:7,2:3,3:3,4:3,5:3,6:3,1000000:0` (1.0), the suite's pick | 63.6 | 76.3 | 74.5 |
+| Strict | `1:7,2:2,1000000:0` (1.0) | 61.3 | 85.5 | 83.5 |
+| Strict | **`1:7,2:3,1000000:0` (1.0)** | **64.6** | **86.0** | **82.2** |
+| Strict | `1:7,2:2,1000000:0` (2.0), 0.4.2's | 61.9 | 85.6 | 84.2 |
+| Spark | `1:7,2:3,1000000:0` (2.0), the suite's pick | 70.2 | 102.0 | 101.3 |
+| Spark | **`1:7,1000000:0` (2.0)** | **77.4** | **104.1** | **101.6** |
+| Spark | `1:7,2:2,1000000:0` (2.0) | 69.5 | 105.6 | 103.0 |
+
+At two requests in Spark a drafted step cost about 69 ms (verify 55.9 ms,
+propose 13.6 ms, measured on the release image) for about five tokens, while
+a plain step of two rows returns two tokens in about a third of that time.
+Drafting in a batch pays only when most drafts are accepted. The
+per-sequence threshold does not weigh that, so the release follows RigMark.
+
 ## What ships
 
-Strict `ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,3:3,4:3,5:3,6:3,1000000:0`,
-`ATLAS_DFLASH_ADAPTIVE_MIN=1.0`; Spark `1:7,2:3,1000000:0` at the engine's
-threshold. Combined, against the base:
-
-| Mode | C1 | C2 | C3 | C4 | C5 | C6 | C8 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Strict, base | 55.8 | 66.8 | 65.4 | 75.3 | 80.9 ² | 87.9, 84.3 ² | 98.7 ² |
-| Strict, shipped | 58.0 (+4%) | 71.1 (+6%) | 75.3 (+15%) | 84.3 (+12%) | 88.6 (+10%) | 91.9 (+5-9%) | 98.7 (plain) |
-| Spark, base | 72.8 | 72.0 | 83.0 | 92.4 | | | |
-| Spark, shipped | 73.6 (+1%) | 79.8 (+11%) | 82.6 (plain) | 92.5 (plain) | | | 111.2 (plain) |
-
-² plain decode, which is what the base does from three requests (measured
-with settings that draft only below five or six requests). C5, C6 and C8
-shipped come from the runs in the depth table with the shipped depth at
-that concurrency.
+Strict `ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,1000000:0` with
+`ATLAS_DFLASH_ADAPTIVE_MIN=1.0`; Spark `1:7,1000000:0` at the engine's
+threshold (0.4.2's depth, without its 2.5 override). Against the base, on
+the suite: Strict C1 58.0 (+4%) and C2 71.1 (+6%); Spark C1 73.6 (+1%);
+from three requests in Strict and two in Spark both decode plainly, as the
+base did. The suite's drafting gains under load (Strict up to six requests,
+Spark two) stay unshipped until the engine weighs drafts against a plain
+batched step.
 
 ## Files
 
 `raw/`: the scripts (`tune.sh` serves one arm and runs the suite,
+`rigmark-ab/abrig.sh` one RigMark arm,
 `tune_*.sh` the batches in order), the suite, each arm's per-request
 results (`<mode>-<arm>-c<n>.json`: kind, tokens, seconds, a hash of the
 text), the batch logs, and a startup summary of each arm's server log (the

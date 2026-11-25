@@ -14,18 +14,18 @@ thing on your own Spark.
   you want to measure ([INSTALL-MANUAL](INSTALL-MANUAL.md) for the steps by
   hand).
 - [RigMark](https://github.com/alexellis/rigmark) at the commit the result
-  names (0.4.2: `40fabcaf6e96`, protocol 1.1.0).
+  names (0.5.0: `40fabcaf6e96`, protocol 1.1.0).
 
 Check the receipts you are comparing against first:
 
 ```sh
-cd results/2026-11-23-release-0.4.2 && sha256sum -c SHA256SUMS
+cd results/2026-11-25-release-0.5.0 && sha256sum -c SHA256SUMS
 ```
 
 ## The release run
 
-[`raw/run042.sh`](../results/2026-11-23-release-0.4.2/raw/run042.sh) is
-the script that produced the 0.4.2 figures. It is kept as it ran, so its paths
+[`raw/run050.sh`](../results/2026-11-25-release-0.5.0/raw/run050.sh) is
+the script that produced the 0.5.0 figures. It is kept as it ran, so its paths
 are the measuring machine's. [`bench/rigmark.sh`](../bench/README.md) runs the
 same two suites with the paths left to you; these are its commands. For each
 mode:
@@ -77,14 +77,16 @@ template and attach the RigMark JSON and the engine log
 
 ## The functional check
 
-[`raw/rc-check.sh`](../results/2026-11-23-release-0.4.2/raw/rc-check.sh) ran
+[`raw/rc050.sh`](../results/2026-11-25-release-0.5.0/raw/rc050.sh) ran
 the release's smoke-level checks in both modes: the task probe
 (`raw/task_probe.py`, 30 arithmetic questions and 10 tool calls), blocking and
 streamed tool calls (`raw/tooltest.py`, `raw/argstream.py`), forced tool
 choices and a guarded call, asked for streamed and not (`raw/forced_stream.py`), three images
 (`raw/vis_chat.py` with the PNGs beside it) and a voice-agent turn pattern
-(`raw/voice_turns.py`). Each takes the server's port or uses 8895. Their
-output for the release is `raw/rc-check.out`. The same drivers, with how to
+(`raw/voice_turns.py`), then greedy text with the drafter on against
+`DRAFTER=none` at one, two and four requests (`raw/greedy_eq.py`). Each takes
+the server's port or uses 8895. Their output for the release is
+`raw/rc050.out`. The same drivers, with how to
 run each, are in [`bench/`](../bench/README.md).
 
 ## The vLLM columns

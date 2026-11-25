@@ -22,3 +22,9 @@ Measure the baseline on the same Spark, and put its receipts in `raw/` too.
   image (confidence-sized verifies, exact drafts, two-request drafting, tool
   calls streamed only on request), both modes against 0.4.1 and vLLM, with its
   functional check.
+- [`2026-11-25-dflash2-tuning`](2026-11-25-dflash2-tuning/RESULT.md): the
+  drafting settings for incoai's DFlash2 drafter, one lever at a time, and the
+  RigMark check that chose the shipped depth.
+- [`2026-11-25-release-0.5.0`](2026-11-25-release-0.5.0/RESULT.md): the 0.5.0
+  image (DFlash2 drafter, 1M-token context), both modes against 0.4.2 and
+  vLLM, with its pools, 1M-token recall and functional check.

@@ -1,0 +1,20 @@
+strict SparkInkling 0.5.0 (Atlas, Enntity/atlas inkling2/rc-0.5.0-20261124 @ 1559aa4bc) | ghcr.io/enntity/atlas-sparkinkling:39e8f22fb0d4 (the release image) | 1048576 | SparkInkling default profile: max-num-seqs 8, gpu-memory-utilization 0.80, prefill chunks 
+spark SparkInkling 0.5.0 (Atlas, Enntity/atlas inkling2/rc-0.5.0-20261124 @ 1559aa4bc) | ghcr.io/enntity/atlas-sparkinkling:39e8f22fb0d4 (the release image) | 1048576 | SparkInkling default profile: max-num-seqs 8, gpu-memory-utilization 0.80, prefill chunks 
+voice-down 10:21:50Z
+  "applied": true,
+  "applied": true,
+gpu apps left: 
+IMAGE-RIG-DONE
+default strict: 2026-11-25T10:22:01.335275Z  INFO spark_model::factory::build::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 4428 blocks (10.81 GiB, 54 snapshot pins); the other layers' 32 KiB a token buy 123070 blo
+default strict: 2026-11-25T10:22:01.335279Z  INFO spark_model::factory::build: KV cache: 121.7 GB total × 80% util = 97.4 GB budget; 25.4 GB pre-KV + 1.1 GB reserve → 70.9 GB for KV → 123070 blocks × 16 tok/block = 1969120 max KV 
+max strict: 2026-11-25T10:39:23.131669Z  INFO spark_model::factory::build::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 6152 blocks (15.02 GiB, 55 snapshot pins); the other layers' 32 KiB a token buy 119266 blo
+max strict: 2026-11-25T10:39:23.131672Z  INFO spark_model::factory::build: KV cache: 121.7 GB total × 85% util = 103.4 GB budget; 27.4 GB pre-KV + 2.8 GB reserve → 73.3 GB for KV → 119266 blocks × 16 tok/block = 1908256 max KV
+default spark: 2026-11-25T10:31:48.904006Z  INFO spark_model::factory::build::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 4160 blocks (10.16 GiB, 50 snapshot pins); the other layers' 32 KiB a token buy 114937 blo
+default spark: 2026-11-25T10:31:48.904010Z  INFO spark_model::factory::build: KV cache: 121.7 GB total × 80% util = 97.4 GB budget; 29.8 GB pre-KV + 1.3 GB reserve → 66.3 GB for KV → 114937 blocks × 16 tok/block = 1838992 max KV 
+max spark: 2026-11-25T10:39:50.662139Z  INFO spark_model::factory::build::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 5884 blocks (14.37 GiB, 51 snapshot pins); the other layers' 32 KiB a token buy 109186 blo
+max spark: 2026-11-25T10:39:50.662142Z  INFO spark_model::factory::build: KV cache: 121.7 GB total × 85% util = 103.4 GB budget; 32.8 GB pre-KV + 3.0 GB reserve → 67.7 GB for KV → 109186 blocks × 16 tok/block = 1746976 max KV
+needle from 10:40:31Z
+prompt_tokens 1032929 1252.6s found '7391-KESTREL'
+  "applied": true,
+voice-up 11:08:27Z drama 200 parakeet 000
+WINDOW-DONE

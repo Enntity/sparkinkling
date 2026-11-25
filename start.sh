@@ -67,7 +67,7 @@ build() {
   say "image $IMAGE"
   docker image inspect "$IMAGE" >/dev/null 2>&1 && return
   if [[ ${PULL:-1} != 1 ]] || ! docker pull "$IMAGE"; then
-    say "building $IMAGE from source (a cold build takes 30-60 minutes)"
+    say "building $IMAGE from source (about 5 minutes on a Spark with the build cache warm; the first build also downloads the toolchain)"
     IMAGE=$(install/build.sh)
   fi
 }

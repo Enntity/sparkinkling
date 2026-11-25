@@ -7,17 +7,24 @@ with the settings the vLLM baseline on the same Spark was measured with.
 
 ## Results
 
-From [`results/2026-11-23-release-0.4.2`](../results/2026-11-23-release-0.4.2/RESULT.md),
-the 0.4.2 image (`b1e18bf91437`), default profile and drafter; medians over all
-repetitions; vLLM on the same Spark on 2026-11-20. Earlier releases' results are
-in [`results/`](../results/).
+From [`results/2026-11-25-release-0.5.0`](../results/2026-11-25-release-0.5.0/RESULT.md),
+the 0.5.0 image (`13920bc38fd6`), default profile and drafter (DFlash2);
+medians over all repetitions; vLLM on the same Spark on 2026-11-20. Earlier
+releases' results are in [`results/`](../results/).
 
-| Mode | C1 code decode | C1 prose decode | C2 aggregate | C4 aggregate | C8 aggregate | 32K prefill | 8K prefill | Gates |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Strict | 65.2 | 35.3 | 63.1 | 85.0 | 120.7 | 3,274 | 3,345 | 6/6 |
-| Spark | 77.5 | 55.7 | 77.7 | 105.8 | 135.4 | 3,277 | 3,352 | 6/6 |
-| vLLM | 35.1 | 35.6 | 54.0 | 86.6 | 122.4 | 2,722 | | 6/6 |
-| vLLM + DSpark | 69.8 | 31.2 | 60.9 | 94.7 | 144.0 | 2,723 | | 6/6 |
+| Mode | C1 code decode | C1 prose decode | C1 structured | C2 aggregate | C4 aggregate | C8 aggregate | 32K prefill | 8K prefill | Gates |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Strict | 70.0 | 39.6 | 103.2 | 62.6 | 85.7 | 122.7 | 3,268 | 3,334 | 6/6 |
+| Spark | 81.4 | 56.1 | 117.4 | 77.8 | 103.5 | 135.2 | 3,282 | 3,361 | 6/6 |
+| Strict 0.4.2 | 65.2 | 35.3 | 92.6 | 63.1 | 85.0 | 120.7 | 3,274 | 3,345 | 6/6 |
+| Spark 0.4.2 | 77.5 | 55.7 | 103.6 | 77.7 | 105.8 | 135.4 | 3,277 | 3,352 | 6/6 |
+| vLLM | 35.1 | 35.6 | 35.6 | 54.0 | 86.6 | 122.4 | 2,722 | | 6/6 |
+| vLLM + DSpark | 69.8 | 31.2 | 104.3 | 60.9 | 94.7 | 144.0 | 2,723 | | 6/6 |
+
+The aggregates are the short-code workload. The drafting settings behind
+these numbers were chosen in
+[`results/2026-11-25-dflash2-tuning`](../results/2026-11-25-dflash2-tuning/RESULT.md),
+where the tuning suite and RigMark disagreed about drafting under load.
 
 ## Protocol
 

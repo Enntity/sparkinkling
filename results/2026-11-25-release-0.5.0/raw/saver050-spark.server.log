@@ -1,0 +1,374 @@
+{"event": "atlas-recipe-start", "product": "SparkInkling", "version": "0.5.0", "engine_commit": "1559aa4bcbcea7de56a0f85ab29e0535a1922d92", "engine_tree": "acfa8e0983050a451b78179d1527064274f4461e", "profile": "saver", "mode": "spark", "drafter": "dflash2", "source": "https://github.com/Enntity/atlas.git@1559aa4bcbcea7de56a0f85ab29e0535a1922d92"}
+[2m2026-11-25T11:10:09.764352Z[0m [32m INFO[0m [2mspark::main_modules::serve[0m[2m:[0m Atlas Spark starting...
+[2m2026-11-25T11:10:09.764375Z[0m [32m INFO[0m [2mspark::main_modules::serve[0m[2m:[0m Licensed under AGPL-3.0-only — see /LICENSE in this container
+[2m2026-11-25T11:10:09.764533Z[0m [32m INFO[0m [2mspark::main_modules::serve_flags[0m[2m:[0m kernel flags: ssm_h_dtype=f32 gdn_fused_norm=false ssm_batched_recurrent=false exact_verify=false ssm_tail_midchunk=true mtp_gate=force ssm_rollback_mode=Snapshot prefill_varlen_batch=false
+[2m2026-11-25T11:10:09.764574Z[0m [32m INFO[0m [2mspark::model_resolver[0m[2m:[0m Model path: /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini+spark-nvfp4 (local directory)
+[2m2026-11-25T11:10:09.764576Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Port: 8895
+[2m2026-11-25T11:10:09.764578Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m SSM decode h-state dtype: f32 (full precision) (--ssm-h-dtype)
+[2m2026-11-25T11:10:09.766307Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Vision pixel budget: none declared — falling back to the 1280px long-side clamp
+[2m2026-11-25T11:10:09.766318Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Remote image fetching disabled (default); image_url parts carrying an http(s) URL are refused with a 400. Send base64 data: URIs, or pass --vision-allow-remote-images.
+[2m2026-11-25T11:10:09.766324Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Video decoding disabled (default). Animated GIF decodes in-process; every other container needs ffmpeg — pass --video-allow-ffmpeg to enable it.
+[2m2026-11-25T11:10:09.766326Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Quantization config: method="modelopt", algo="NVFP4", format="", 0 module(s) in ignore list
+[2m2026-11-25T11:10:09.766328Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Model config: 48 layers, 48 attention, 0 SSM, 128 experts, rope_theta=10000, head_dim=128, rotary_dim=0
+[2m2026-11-25T11:10:09.766366Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Selected kernel target: (sm_121, inkling-2-mini, nvfp4) (217 modules) — quant compat: kernel=nvfp4 model=nvfp4 OK
+[2m2026-11-25T11:10:09.766393Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::config[0m[2m:[0m DFlash γ=8 (source: cli)
+[2m2026-11-25T11:10:10.297838Z[0m [32m INFO[0m [2mspark_runtime::cuda_backend[0m[2m:[0m AtlasCudaBackend initialized on GPU 0 with 217 PTX modules
+[2m2026-11-25T11:10:10.314336Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight::gpu_init[0m[2m:[0m BF16 GEMM fallback installed (gemv<=8 / pipelined WMMA / scalar) for backends without cuBLASLt
+[2m2026-11-25T11:10:10.314409Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight::gpu_init[0m[2m:[0m GPU 0: 121.7 GB total, 90.8 GB free
+[2m2026-11-25T11:10:10.314425Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight[0m[2m:[0m Preflight reserve: inference=512 MB, buffer_arena=612 MB (pre-load free: 90.8 GB)
+[2m2026-11-25T11:10:10.314435Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m OOM watchdog started (threshold: 2 GB, interval: 2s)
+[2m2026-11-25T11:10:10.314439Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::kv_cache[0m[2m:[0m Prefill config: ssm_prefill_chunk=0, args.max_prefill_tokens=4096, prefill_budget=4096, max_batch_tokens=4104
+[2m2026-11-25T11:10:10.314444Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m OOM guard reserve: 4096 MB
+[2m2026-11-25T11:10:10.314490Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m Using fast weight loader (O_DIRECT + pipelined read/copy)
+[2m2026-11-25T11:10:10.320228Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-load pre-flight: 20.90 GB on-disk, 1.3x overhead = 27.17 GB peak, 90.84 GB free, 4.0 GB reserve (FP8: false)
+[2m2026-11-25T11:10:10.320527Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loading shard 1/2: model-00001-of-00001.safetensors (1244 tensors)
+[2m2026-11-25T11:10:13.790855Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m   Shard 1/2 done — GPU memory: 19.61 GB used, 71.23 GB free
+[2m2026-11-25T11:10:13.790915Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loading shard 2/2: spark-nvfp4.safetensors (459 tensors)
+[2m2026-11-25T11:10:14.231961Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m   Shard 2/2 done — GPU memory: 22.46 GB used, 68.38 GB free
+[2m2026-11-25T11:10:14.232037Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loaded 1703 weight tensors
+[2m2026-11-25T11:10:14.232152Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m Loaded 1703 weight tensors
+[2m2026-11-25T11:10:14.232156Z[0m [32m INFO[0m [2mspark_runtime::weights::prefix_detect[0m[2m:[0m Weight prefix: model.llm
+[2m2026-11-25T11:10:14.232660Z[0m [33m WARN[0m [2mspark_model::preflight[0m[2m:[0m Pre-flight: config.num_experts=128 but no expert tensors found locally. Normal under EP>1 when the local rank owns zero experts; otherwise check your checkpoint.
+[2m2026-11-25T11:10:14.232667Z[0m [32m INFO[0m [2mspark_model::preflight[0m[2m:[0m Pre-flight checks passed
+[2m2026-11-25T11:10:14.232673Z[0m [32m INFO[0m [2mspark_model::quant_format[0m[2m:[0m QuantFormat: modelopt (algo="NVFP4"), 0 ignored module(s)
+[2m2026-11-25T11:10:14.232678Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Quantization format: modelopt (base variant Standard), ignored globs = 0
+[2m2026-11-25T11:10:14.398746Z[0m [32m INFO[0m [2mspark_runtime::cublaslt[0m[2m:[0m cuBLASLt BF16 GEMM live (first matmul status 0 — real library answered; on HIP targets this is the hipBLASLt shim)
+[2m2026-11-25T11:10:14.398780Z[0m [32m INFO[0m [2mspark_runtime::cublaslt[0m[2m:[0m cuBLASLt pre-warmed (handle + workspace + kernel images)
+[2m2026-11-25T11:10:14.398907Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::preflight::gpu_init[0m[2m:[0m Weights: 20.90 GB, estimated free: 69.9 GB, actual free: 68.3 GB (reserve: 512 MB)
+[2m2026-11-25T11:10:14.398913Z[0m [33m WARN[0m [2mspark::main_modules::serve_load[0m[2m:[0m dflash: --enable-prefix-caching has a community-reported correctness regression on SM12.x with DFlash; outputs may be wrong on multi-turn cache hits. Run a greedy diff-test against a non-DFlash baseline before relying on outputs.
+[2m2026-11-25T11:10:14.398919Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::build[0m[2m:[0m Prefix caching: ENABLED (radix tree)
+[2m2026-11-25T11:10:14.839683Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::config[0m[2m:[0m Capping vocab_size from 201024 to 200058 (tokenizer)
+[2m2026-11-25T11:10:14.865251Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m DFlash: resolving drafter '/home/enntitysparkadmin/models/sparkinkling/incoai--Inkling-2-Mini-DFlash2'
+[2m2026-11-25T11:10:14.865286Z[0m [32m INFO[0m [2mspark::model_resolver[0m[2m:[0m Model path: /home/enntitysparkadmin/models/sparkinkling/incoai--Inkling-2-Mini-DFlash2 (local directory)
+[2m2026-11-25T11:10:14.875263Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-load pre-flight: 0.92 GB on-disk, 1.3x overhead = 1.20 GB peak, 68.32 GB free, 0.0 GB reserve (FP8: false)
+[2m2026-11-25T11:10:14.875286Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loading shard 1/1: model.safetensors
+[2m2026-11-25T11:10:15.011543Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m   Shard 1/1 done — GPU memory: 1.33 GB used, 66.99 GB free
+[2m2026-11-25T11:10:15.011583Z[0m [32m INFO[0m [2mspark_runtime::fast_weights[0m[2m:[0m Fast-loaded 81 weight tensors
+[2m2026-11-25T11:10:15.011590Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::weights[0m[2m:[0m DFlash drafter store: 81 tensors, 989966848 bytes
+[2m2026-11-25T11:10:15.011599Z[0m [33m WARN[0m [2mspark::main_modules::serve_phases::build[0m[2m:[0m raising --ssm-cache-slots 192 → 200 so Marconi snapshots cover --max-seq-len=786432 (4096 tok/snapshot). Pass a larger --ssm-cache-slots to override the cap (512).
+[2m2026-11-25T11:10:15.011648Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m DFlash: target layer capture indices = [4, 22, 40, 47] (drafter target_layer_ids, used directly)
+[2m2026-11-25T11:10:15.081365Z[0m [32m INFO[0m [2mspark_model::weight_loader::inkling2[0m[2m:[0m Inkling2: 24 physical layers, 48 visits, block stack 4
+[2m2026-11-25T11:10:15.477193Z[0m [32m INFO[0m [2mspark_model::layers::inkling2::shared[0m[2m:[0m Inkling2 shared buffers: 1680.4 MB for 4104 rows, 8 sequences
+[2m2026-11-25T11:10:15.477616Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m Layer construction: 3.38 GB consumed (71.93 GB free -> 68.55 GB free) across 48 layers, 70.4 MB/layer average
+[2m2026-11-25T11:10:15.706544Z[0m [33m WARN[0m [2mspark_model::factory::lm_head_setup[0m[2m:[0m --lm-head-dtype override ignored: this checkpoint ships lm_head                  pre-packed as NVFP4 (no BF16 tensor exists to keep or requantize);                  using the packed NVFP4 head
+[2m2026-11-25T11:10:15.706593Z[0m [32m INFO[0m [2mspark_model::factory::lm_head_setup[0m[2m:[0m LM head loaded as pre-packed NVFP4 (vocab=200058, skipped requantize)
+[2m2026-11-25T11:10:15.706686Z[0m [32m INFO[0m [2mspark_model::factory::m2_setup[0m[2m:[0m MoE transpose: 128 experts x 48 layers, costs hybrid 51.3 / full 25.6 / gate_up 17.1 GB, free 63.4 GB -> selected HYBRID (originals kept, decode unaffected)
+[2m2026-11-25T11:10:15.706690Z[0m [32m INFO[0m [2mspark_model::factory::m2_setup[0m[2m:[0m MoE transpose pass (hybrid layout): ATLAS_HYBRID_MOE_LAYOUT=1, dual-layout (cost 51.3 GB), free pre-pass 63.4 GB → RUNNING
+[2m2026-11-25T11:10:15.706710Z[0m [32m INFO[0m [2mspark_model::factory::m2_setup[0m[2m:[0m MoE transpose pass (hybrid layout): done, 63.4 GB free
+[2m2026-11-25T11:10:15.728452Z[0m [32m INFO[0m [2mspark_runtime::buffers[0m[2m:[0m Buffer arena: 4104 tokens × 613.6 MB total (attn_out=24.0MB, ssm_deint=24.0MB, kv_lora_rank=0)
+[2m2026-11-25T11:10:15.728487Z[0m [32m INFO[0m [2mspark_model::model::drafter_context[0m[2m:[0m MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+[2m2026-11-25T11:10:15.728492Z[0m [32m INFO[0m [2mspark_model::layers::ops::model_levers[0m[2m:[0m GDN deferred commit on (default; ATLAS_GDN_DEFERRED_COMMIT=0 opts out):                  wyN verify stores nothing; accepted prefix replayed from H0
+[2m2026-11-25T11:10:15.728500Z[0m [32m INFO[0m [2mspark_model::model::ssm_pool[0m[2m:[0m SSM verify H snapshots per slot: [7, 7, 7, 7, 7, 7, 7, 7, 7]
+[2m2026-11-25T11:10:15.728502Z[0m [32m INFO[0m [2mspark_model::model::ssm_pool[0m[2m:[0m SSM MTP pools (8 intermediates + checkpoints): 0 MB
+[2m2026-11-25T11:10:15.728503Z[0m [32m INFO[0m [2mspark_model::model::ssm_pool[0m[2m:[0m SSM state pool: 8 slots × 0 layers = 0 MB
+[2m2026-11-25T11:10:15.728584Z[0m [32m INFO[0m [2mspark_model::model::ssm_snapshot[0m[2m:[0m SSM snapshot pool: Marconi 200 slots (0 MB), decode-rollback 0 slots × 8 seqs (0 MB), 0 layers
+[2m2026-11-25T11:10:15.728644Z[0m [32m INFO[0m [2mspark_model::weight_loader::dflash_loader[0m[2m:[0m DFlash2 candidate selector loaded: rank=256, top_k=16
+[2m2026-11-25T11:10:15.728647Z[0m [32m INFO[0m [2mspark_model::weight_loader::dflash_loader[0m[2m:[0m DFlash/DSpark drafter loaded: 5 layers, hidden=2304, vocab=201024, γ=8, markov_rank=0, own_embed=false, causal=None, swa=None/None, sinks=0/5, candidate_selector=true, target_layers=[5, 23, 41, 48]
+[2m2026-11-25T11:10:15.728657Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::first_append[0m[2m:[0m DFlash first context append: Legacy (ATLAS_DFLASH_FIRST_APPEND=legacy|none|own|zero)
+[2m2026-11-25T11:10:15.728659Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::warm_ctx[0m[2m:[0m DFlash warm context: Legacy (ATLAS_DFLASH_WARM_CTX=legacy|exact|seed|restore)
+[2m2026-11-25T11:10:15.728663Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash KV pool: 2056 blocks (257 per seq × batch 8)
+[2m2026-11-25T11:10:15.751379Z[0m [32m INFO[0m [2mspark_runtime::kv_cache::paged_impl[0m[2m:[0m KV cache: 2056 blocks × 5 layers = 0.6 GB total
+[2m2026-11-25T11:10:15.751448Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::small_m_gemm[0m[2m:[0m DFlash drafter small-M GEMM arm: pipelined GEMM
+[2m2026-11-25T11:10:15.751658Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash ctx_window = 4096 (set ATLAS_DFLASH_CTX_WINDOW to override; drafter trained on full captured prefix — larger is better, scratch grows linearly)
+[2m2026-11-25T11:10:15.770615Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash propose lanes: 1 (extra scratch + streams)
+[2m2026-11-25T11:10:15.770639Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash RoPE = plain (no rope_scaling in drafter config), theta=10000, 64 pairs
+[2m2026-11-25T11:10:15.772853Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash fused_kv_weight: 47185920 bytes (5 layers × 2 × kv_dim × h × bf16), layout [K0,V0,K1,V1,…] to match vLLM precompute_and_store_context_kv
+[2m2026-11-25T11:10:15.871964Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m BlockDiffusionDraftHead loaded: 5 layers, hidden=2304, intermediate=6912, GQA 32/8, head_dim=128, γ=8, vocab=200058, mask_token_id=200056, causal=false, window=Some(4096), sinks=0, target_layers=[5, 23, 41, 48]
+[2m2026-11-25T11:10:15.871978Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::from_weights[0m[2m:[0m DFlash batched propose: authoritative Bxgamma for generic DFlash (default on; rollback ATLAS_DFLASH_BATCHED_PROPOSE=0; min 2, max 8)
+[2m2026-11-25T11:10:15.872076Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::nvfp4[0m[2m:[0m DFlash NVFP4: quantizing 5 layers × 7 GEMMs for w4a16_gemv_batch8
+[2m2026-11-25T11:10:15.872289Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=4096 k=2304 total=9437184 global_max=1.062500 scale2=0.00039528 grid1=1024
+[2m2026-11-25T11:10:15.872716Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=1024 k=2304 total=2359296 global_max=0.574219 scale2=0.00021362 grid1=1024
+[2m2026-11-25T11:10:15.872957Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=1024 k=2304 total=2359296 global_max=0.644531 scale2=0.00023978 grid1=1024
+[2m2026-11-25T11:10:15.873276Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=2304 k=4096 total=9437184 global_max=0.953125 scale2=0.00035459 grid1=1024
+[2m2026-11-25T11:10:15.873790Z[0m [32m INFO[0m [2mspark_model::weight_map::loaders_fp8[0m[2m:[0m quantize_to_nvfp4: n=6912 k=2304 total=15925248 global_max=1.000000 scale2=0.00037202 grid1=1024
+[2m2026-11-25T11:10:15.889276Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::nvfp4[0m[2m:[0m DFlash NVFP4: ready (quant = Nvfp4Weights)
+[2m2026-11-25T11:10:15.889287Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::twins[0m[2m:[0m DFlash twins: NVFP4 tensor-core layers false, MXFP8 layers 0, head NVFP4 false / MXFP8 false, context NVFP4 false, conv None x 0, async context positions false, async uploads false
+[2m2026-11-25T11:10:15.889364Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m DFlash context accumulators reserved from the KV budget: 0.60 GB for 8 sequences
+[2m2026-11-25T11:10:15.902011Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_budget[0m[2m:[0m KV budget self-relative (auto): baseline-free 90.8 GB − free-now 61.4 GB = Atlas-own 29.4 GB; co-tenants 30.8 GB excluded (set ATLAS_KV_EXTERNAL_RESERVE_GB to override)
+[2m2026-11-25T11:10:15.902016Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_budget[0m[2m:[0m KV own-footprint cross-check: free-memory measure 29.40 GB, tracked 28.14 GB (device 27.29 GB by driver accounting + host 0.85 GB) → 29.40 GB pre-KV
+[2m2026-11-25T11:10:15.902020Z[0m [32m INFO[0m [2mspark_model::factory::build::kv_window[0m[2m:[0m KV window: 40 of 48 layers keep the last 1024 tokens in 2351 blocks (5.74 GiB, 23 snapshot pins); the other layers' 32 KiB a token buy 49970 blocks
+[2m2026-11-25T11:10:15.902022Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 29.4 GB pre-KV + 1.3 GB reserve → 30.1 GB for KV → 49970 blocks × 16 tok/block = 799520 max KV tokens
+[2m2026-11-25T11:10:15.902027Z[0m [33m WARN[0m [2mspark_model::factory::build[0m[2m:[0m KV OVERCOMMIT: pool fits 1 seq(s) at full --max-seq-len=786432 but --max-batch-size=8 requested (49152 block(s)/seq, 49970 block(s) total). Paged KV allocates on demand; long-context bursts are back-pressured at the block allocator, not refused at boot.
+[2m2026-11-25T11:10:16.918072Z[0m [32m INFO[0m [2mspark_runtime::kv_cache::paged_impl[0m[2m:[0m KV cache: 49970 blocks × 48 layers = 24.4 GB total
+[2m2026-11-25T11:10:16.940824Z[0m [32m INFO[0m [2mspark_model::model::drafter_context[0m[2m:[0m MTP drafter context: prefill=ON carry=ON (default). Disable both with ATLAS_NO_MTP_DRAFTER_CONTEXT=1.
+[2m2026-11-25T11:10:16.940843Z[0m [32m INFO[0m [2mspark_model::layers::ops::model_levers[0m[2m:[0m GDN deferred commit on (default; ATLAS_GDN_DEFERRED_COMMIT=0 opts out):                  wyN verify stores nothing; accepted prefix replayed from H0
+[2m2026-11-25T11:10:16.942180Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m TransformerModel: 48 layers, vocab=200058, hidden=2304
+[2m2026-11-25T11:10:16.942197Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m Marconi intermediate checkpoints: every 256 blocks (4096 tokens at block_size=16)
+[2m2026-11-25T11:10:16.980033Z[0m [33m WARN[0m [2mspark_model::model::impl_a1[0m[2m:[0m lm_head twin uses a PADDED stride (200064 != vocab 200058): this target's w4a16_gemm_t MUST accept the `ldb` argument, or decode at padded_n>=5 will read sheared rows. Disable with ATLAS_NO_LMHEAD_TGEMM=1.
+[2m2026-11-25T11:10:16.980049Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m lm_head transposed twin: vocab=200058 -> padded stride=200064 (vocab%16=10), tile GEMM active
+[2m2026-11-25T11:10:16.987775Z[0m [32m INFO[0m [2mspark_model::model::impl_a1[0m[2m:[0m Pinned metadata staging: 24611 KB
+[2m2026-11-25T11:10:16.988748Z[0m [32m INFO[0m [2mspark_model::factory::build[0m[2m:[0m DFlash drafter installed as the active proposer
+[2m2026-11-25T11:10:17.018829Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::kernel_gate[0m[2m:[0m 
+┌─ Kernel load audit ─ 217 kernels embedded · set-hash 718cd075712b ─
+│ MODULE (operation)                 PTX-HASH       RESOLUTION           SHADOWED
+│ ────────────────────────────────────────────────────────────────────────────────────
+│ argmax                             0db62935f368   used                 N
+│ bf16_add                           9ccfff111c1c   -                    N
+│ causal_conv1d                      4c6ef9415ff9   -                    N
+│ dense_gemv_bf16_batch2             8e42d4734916   used                 N
+│ dense_gemv_bf16_batchm             4ac0d1a889d1   used                 N
+│ dense_gemv_fp8w_batch2             345343265bf0   used                 N
+│ dense_gemv_fp8w_batchm             613837fe1f2f   -                    N
+│ dequant_fp8_blockscaled_bf16       112ae266baa4   -                    N
+│ dequant_gguf_bf16                  f8d7ed4a7232   -                    N
+│ dequant_nvfp4_bf16                 34cc9dce8f28   -                    N
+│ dflash2_candidate_selector         9a25f3309182   used                 N
+│ dflash2_candidate_selector_k32     089d1a239dfd   -                    N
+│ dflash2_conv                       c2cad2c1626a   used                 N
+│ dflash2_selector_conf              29432a4ba0c3   used                 N
+│ dflash_batch_anchor_add            6a6c6d5fa4cf   used                 N
+│ dflash_batch_markov                7abeae68eb04   used                 N
+│ dspine_bridge                      b060d23f1589   -                    N
+│ e2m1                               a9f7db7882e8   -                    N
+│ embed_from_argmax                  eed8441b052b   used                 N
+│ fp8_gemm_t_blockscaled             ccd83dc3175b   -                    N
+│ fused_k_norm_rope_cache            40945835fbe7   -                    N
+│ gated_delta_rule                   e69f490672bb   -                    N
+│ gated_delta_rule_fla               3b1f17d91259   -                    N
+│ gated_delta_rule_persistent        119c888ceaa1   -                    N
+│ gated_delta_rule_regresident       f1d7ac7ec2b9   -                    N
+│ gated_delta_rule_wy                2944fa406929   -                    N
+│ gated_delta_rule_wy2_resident      13434e14525a   -                    N
+│ gated_delta_rule_wy2_resident_f16  de9282606c87   -                    N
+│ gated_delta_rule_wy3               f39dfc5fc64c   -                    N
+│ gated_delta_rule_wy3_f16           6f86c5cdca50   -                    N
+│ gated_delta_rule_wy3_resident      2d735fa17437   -                    N
+│ gated_delta_rule_wy3_resident_f16  ca7279841d78   -                    N
+│ gated_delta_rule_wy4               696eacd7fc6f   -                    N
+│ gated_delta_rule_wy4_f16           6117982cee6e   -                    N
+│ gated_delta_rule_wy64_prefill      295277d38edf   -                    N
+│ gated_delta_rule_wy_f16            4e8093d34899   -                    N
+│ gated_delta_rule_wyn               6ff125d1bd34   -                    N
+│ gdn_verify_fused_conv_kn           6d34c1967f19   -                    N
+│ gdn_verify_fused_k2                364133e92759   -                    N
+│ gemm                               ef29bc79a026   used                 N
+│ gemm_splitk                        c3196ada403c   -                    N
+│ gemm_tc                            867449b3a6f2   -                    N
+│ gemv                               8a393e2aee68   used                 N
+│ gemv_fp8w                          cfe758bf0e7d   used                 N
+│ grammar_bitmask                    18765c10e57f   used                 N
+│ inferspark_decode                  d0c1c712396c   -                    N
+│ inferspark_prefill                 db71130b38b4   -                    N
+│ inferspark_prefill_h128            848531341467   used                 N
+│ inferspark_prefill_paged_512       dbb0dff6b267   -                    N
+│ inferspark_prefill_paged_batched   94187b042339   -                    N
+│ inferspark_prefill_paged_batched_sink 137b625e9111   -                    N
+│ inferspark_prefill_paged_batched_sink_h128 a7d74763391c   used                 N
+│ inferspark_prefill_paged_fp8_batched 939f59e0aa41   -                    N
+│ inferspark_prefill_paged_nvfp4_batched b79639415a34   -                    N
+│ inferspark_prefill_v47             30c1870d6711   -                    N
+│ inkling2_block_res                 7fdc74024791   used                 N
+│ inkling2_decode_attn               3f62d6ea28fc   used                 N
+│ inkling2_dspark                    6b3f5a4210f7   -                    N
+│ inkling2_flash_prefill             669fea3389d0   used                 N
+│ inkling2_head_ops                  88d9d7a17a62   used                 N
+│ inkling2_misc                      ad1e4541c65d   used                 N
+│ inkling2_moe_decode                678b87a168c9   used                 N
+│ inkling2_moe_gemm                  68c178a418a2   used                 N
+│ inkling2_moe_prefill               754d98516fef   used                 N
+│ inkling2_prefill_attn              9d6b054737e5   used                 N
+│ inkling2_proj_gemv                 c1faf11c10b2   used                 N
+│ inkling2_router_gemv               c053fc69d624   used                 N
+│ inkling2_sconv                     08965bdcfe40   used                 N
+│ kv_cache                           671ff8649e90   -                    N
+│ logit_softcap                      ae0bc6241086   used                 N
+│ lora_bgmv                          4c745ed771b5   -                    N
+│ mamba2_ssd_chunk                   f0dbc0b4b3d0   -                    N
+│ mamba2_ssm                         26f1ce59a559   -                    N
+│ marlin_align                       c8912ab9c527   -                    N
+│ marlin_moe_nvfp4                   3db67bc8707a   -                    N
+│ marlin_nvfp4_gemm                  a4df867f66fe   -                    N
+│ marlin_pack_rows                   7899dad7530b   -                    N
+│ marlin_pack_slots                  71d8218c2315   -                    N
+│ marlin_repack                      a508acc54114   -                    N
+│ marlin_row_repeat                  02f547be5f66   -                    N
+│ marlin_scatter_slots               02a0b126a1cf   -                    N
+│ metadata_fill                      4cd48e0860e2   used                 N
+│ moe                                80c985554155   used                 N
+│ moe_bf16_grouped_gemm              b595ccb1a5b5   -                    N
+│ moe_decode_atomic_c4               6c6f857639b5   -                    N
+│ moe_expert_gemv                    4f92cfbebeb4   -                    N
+│ moe_expert_gemv_fused              7b91573b2a01   -                    N
+│ moe_expert_gemv_wide               0173a8c36628   -                    N
+│ moe_expert_gemv_wide_grouped       eee38ad35ec8   -                    N
+│ moe_expert_relu2_down_wide         5046c2f1283e   -                    N
+│ moe_fp8_grouped_gemm               182621af1065   -                    N
+│ moe_fused_batch2                   f3a3774dc1b1   -                    N
+│ moe_fused_batch3                   716fca88de04   -                    N
+│ moe_gate_topk                      05f3ddb5d210   -                    N
+│ moe_hash_route                     b236e1cd8b24   -                    N
+│ moe_lora_gather_bgmv               6ccfd9e689ee   -                    N
+│ moe_lora_grouped_down              fcdd26c27755   -                    N
+│ moe_prefill                        4c4540c33547   -                    N
+│ moe_relu2_down_shared_slot         d342c6ba5765   -                    N
+│ moe_relu2_fused                    f5b158ec76dc   -                    N
+│ moe_shared_expert_fused            41e715ee2e88   -                    N
+│ moe_shared_expert_fused_batch2_t   78ce432df9f5   -                    N
+│ moe_shared_expert_fused_batch3_t   7467a2b88c92   -                    N
+│ moe_shared_expert_fused_bf16       2c42d2c21279   -                    N
+│ moe_shared_expert_fused_bf16_batch2 511eaa0bcb51   -                    N
+│ moe_shared_expert_fused_fp8        45f5a488ad9f   -                    N
+│ moe_shared_expert_fused_fp8_batch2 3b964642816b   -                    N
+│ moe_shared_expert_fused_fp8_batch2_t cac7dc7940d5   -                    N
+│ moe_shared_expert_fused_fp8_batch3 2c01e7fabd07   -                    N
+│ moe_shared_expert_fused_fp8_batch3_t 39e92ce0bd1b   -                    N
+│ moe_shared_expert_fused_fp8_t      4cd0bf5221b4   -                    N
+│ moe_shared_expert_fused_t          46bb9fae4c7d   -                    N
+│ moe_silu_mul                       e2c5455edc95   used                 N
+│ moe_sorted                         30a15fee04f9   -                    N
+│ moe_topk                           1f7c99a781c4   -                    N
+│ moe_topk_sig                       78e5a50579e5   used                 N
+│ moe_topk_softmax_bias              e74c9eeebd56   -                    N
+│ moe_topk_sqrt                      946575af8c5f   -                    N
+│ moe_transpose_batched              5e6fa7328d64   -                    N
+│ moe_w4a16                          9163ecc47c39   -                    Y (1 dropped)
+│ moe_w8a8_grouped_gemm              672c54f91493   -                    N
+│ mxfp8_act_quant                    b3e05b776733   -                    N
+│ nemotron_moe_prefill               8603de61b1b2   -                    N
+│ nllb_encoder                       4e0cefdcb886   -                    N
+│ norm                               7c99bb87e77e   used                 N
+│ paged_decode                       d4c7abd60b73   used                 N
+│ paged_decode_attn_turbo2_128       a54257f08198   -                    N
+│ paged_decode_attn_turbo3           b1e6e11fe0d8   -                    N
+│ paged_decode_attn_turbo3_128       b1e6e11fe0d8   -                    N
+│ paged_decode_attn_turbo4           effd4f08eec2   -                    N
+│ paged_decode_attn_turbo4_128       effd4f08eec2   -                    N
+│ paged_decode_attn_turbo4_512       50334f364bcf   -                    N
+│ paged_decode_attn_turbo8           72395008e1db   -                    N
+│ paged_decode_attn_turbo8_128       8d806a75bd1c   -                    N
+│ paged_decode_attn_turbo8_512       141c9ebe7930   -                    N
+│ paged_decode_bf16k_turbo2v         7c83934696fc   -                    N
+│ paged_decode_bf16k_turbo2v_128     7c83934696fc   -                    N
+│ paged_decode_bf16k_turbo3v         a85c761cad47   -                    N
+│ paged_decode_bf16k_turbo3v_128     a85c761cad47   -                    N
+│ paged_decode_bf16k_turbo4v         99ef0985ddd2   -                    N
+│ paged_decode_bf16k_turbo4v_128     99ef0985ddd2   -                    N
+│ paged_decode_fp8                   fc2f2a76fc4b   -                    N
+│ paged_decode_fp8k_turbo2v          f59a4282349b   -                    N
+│ paged_decode_fp8k_turbo2v_128      f59a4282349b   -                    N
+│ paged_decode_fp8k_turbo3v          f638c88697b2   -                    N
+│ paged_decode_fp8k_turbo3v_128      f638c88697b2   -                    N
+│ paged_decode_fp8k_turbo4v          4f1ef311e532   -                    N
+│ paged_decode_fp8k_turbo4v_128      4f1ef311e532   -                    N
+│ paged_decode_nvfp4                 c1e3be0ab793   -                    N
+│ paged_decode_turbo2                a54257f08198   -                    N
+│ paged_decode_turbo3k_turbo8v       eaee50b401ea   -                    N
+│ paged_decode_turbo3k_turbo8v_128   eaee50b401ea   -                    N
+│ paged_decode_turbo4k_turbo3v       4419902b39e0   -                    N
+│ paged_decode_turbo4k_turbo3v_128   4419902b39e0   -                    N
+│ paged_decode_turbo4k_turbo8v       72c4e6036610   -                    N
+│ paged_decode_turbo4k_turbo8v_128   72c4e6036610   -                    N
+│ per_token_group_quant_fp8          a740d461be1c   -                    N
+│ prefill_fp8kv                      b4037f4b3c07   -                    N
+│ prefill_paged                      915863eb80f8   -                    N
+│ prefill_paged_bf16k_turbo2v        b89f89608294   -                    N
+│ prefill_paged_bf16k_turbo3v        6124bb6cb5ba   -                    N
+│ prefill_paged_bf16k_turbo4v        fff36a9ba70e   -                    N
+│ prefill_paged_fp8                  d2fd2d21e464   used                 N
+│ prefill_paged_fp8k_turbo2v         53f933d5b6ae   -                    N
+│ prefill_paged_fp8k_turbo3v         97166760273e   -                    N
+│ prefill_paged_fp8k_turbo4v         832378c10eac   -                    N
+│ prefill_paged_indirect             a3c854db221f   -                    N
+│ prefill_paged_indirect_sink        32b8be702204   -                    N
+│ prefill_paged_indirect_sink_h128   577188858259   used                 N
+│ prefill_paged_nvfp4                b3ba173d8ab7   -                    N
+│ prefill_paged_sink                 4bad5b7ae4c5   -                    N
+│ prefill_paged_sink_h128            7cba4c7e3164   used                 N
+│ prefill_paged_turbo2               c74ad830db0e   -                    N
+│ prefill_paged_turbo3               75252a13beb8   -                    N
+│ prefill_paged_turbo3k_turbo8v      7ec08da11940   -                    N
+│ prefill_paged_turbo4               87510e4d6321   -                    N
+│ prefill_paged_turbo4k_turbo3v      afd35b408934   -                    N
+│ prefill_paged_turbo4k_turbo8v      2e690623bb66   -                    N
+│ prefill_paged_turbo8               38abb13eb5ab   -                    N
+│ q2_0_gemv                          5d98978700ab   -                    N
+│ q2_0_gemv_vec                      85aa154a6585   -                    N
+│ quant_rowwise_fp8                  498cf54228f3   -                    N
+│ quantize_bf16_to_fp8_blockscaled   ba34cdbc80ef   -                    N
+│ quantize_nvfp4                     cc5186db26e6   used                 N
+│ qwen4exp_attn                      20475966c1c8   -                    N
+│ qwen4exp_hc                        d4220d100ec3   -                    N
+│ qwen4exp_ple                       ae0676f5ba1a   -                    N
+│ rank_split_join                    1c346cfaa158   -                    N
+│ rdma_oneshot                       c8862af91ab5   -                    N
+│ relu2                              0494c7397566   -                    N
+│ reshape_and_cache                  b780a1a5eb10   used                 N
+│ reshape_and_cache_turbo            510485da9044   -                    N
+│ residual_add                       2567cc0ef127   used                 N
+│ rms_norm_vanilla                   02523febe64b   used                 N
+│ rope                               d77ef54b9bd7   used                 N
+│ rope_mrope_interleaved             36e28e57ba15   -                    N
+│ ssm_h_dtype                        1857b474be8c   used                 N
+│ ssm_preprocess                     6057e33ef202   -                    N
+│ ssm_state_norm                     5acf60599b06   used                 N
+│ token_overlay                      98e387417c45   used                 N
+│ tq_plus_innerq_apply               28e95d86aea0   -                    N
+│ transpose_u8                       8aa091f067b1   used                 N
+│ vector_add                         aaeea326e703   -                    N
+│ vision_encoder                     241f2f93d59e   used                 N
+│ w4a16                              36d3573dec61   used                 Y (1 dropped)
+│ w4a16_fp8_ldmab                    ef00062efb9a   -                    N
+│ w4a16_gemv                         aa69eccbbd2d   used                 N
+│ w4a16_gemv_fused                   a7b45e1849e0   -                    N
+│ w8a16_gemm                         099b32ffb0e8   -                    N
+│ w8a16_gemm_pipelined               6877c736e13c   -                    N
+│ w8a16_gemm_t                       2d77c473cf82   -                    N
+│ w8a16_gemm_t_m128                  02ac98f727f2   -                    N
+│ w8a16_gemv                         8ba35552fc66   -                    N
+│ w8a16_gemv_batch4                  340977e6688b   -                    N
+│ w8a16_gemv_fused                   bd3342f79a99   -                    N
+│ wht_bf16                           e6a015d83736   -                    N
+│ widen_block_scale_f32              79165f4d8859   -                    N
+└─
+
+3 kernel(s) declared expected-absent in this target's MODEL.toml [expected_absent] (no action):
+    w4a16::fp8_gemm_t_row_scaled, w4a16::fp8_gemm_t_row_scaled_m16, w4a16::w4a16_gemm_t_p3
+
+[2m2026-11-25T11:10:17.020321Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m EOS token (from generation_config.json): 200006
+[2m2026-11-25T11:10:17.021214Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Default sampling: temperature=1, top_k=0, top_p=1, top_n_sigma=1, min_p=0
+[2m2026-11-25T11:10:17.448386Z[0m [32m INFO[0m [2mspark::tokenizer::jinja_helpers[0m[2m:[0m Loaded standalone chat_template.jinja (6866 chars)
+[2m2026-11-25T11:10:17.452253Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl::load[0m[2m:[0m Loaded tokenizer from /home/enntitysparkadmin/models/sparkinkling/thinkingmachines--Inkling-2-Mini+spark-nvfp4/tokenizer.json
+[2m2026-11-25T11:10:17.484734Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Reasoning parser: inkling2 (auto-detected from model_type 'inkling2_loop')
+[2m2026-11-25T11:10:17.485378Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Code-fence token: 68790 (``` — F2 fence guard active)
+[2m2026-11-25T11:10:17.573846Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Numeric-token mask: 1110/200058 ids classified as digit-runs (digit-normalized content-loop path active)
+[2m2026-11-25T11:10:17.662393Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Punctuation-token mask: 329/200058 ids classified as punctuation/whitespace (numeric-list loop exemption active)
+[2m2026-11-25T11:10:17.752617Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Boundary-token mask: 71/200058 ids end in a newline / sentence boundary (Phase-C rollback-to-boundary active)
+[2m2026-11-25T11:10:17.846120Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Mid-word token mask: 193320/200058 ids end in alphanumeric (mid-word </think> defer active during thinking)
+[2m2026-11-25T11:10:17.846131Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Thinking end token: 200010 (<|end_message|>)
+[2m2026-11-25T11:10:17.846529Z[0m [33m WARN[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Tool call start token unresolved for <tool_call> — require_tool_call / suppress / force-emit-after-think will be no-ops
+[2m2026-11-25T11:10:17.970598Z[0m [33m WARN[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Tool parameter markers unresolved for this tokenizer: parameter-value tracking and the envelope-stuck cap are off (--tool-max-tokens still applies)
+[2m2026-11-25T11:10:18.305340Z[0m [32m INFO[0m [2mspark::grammar::engine[0m[2m:[0m Grammar: detected tokenizer vocab_type=byte_level, add_prefix_space=false
+[2m2026-11-25T11:10:18.438329Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::tokenizer_runtime[0m[2m:[0m Grammar engine initialized (vocab_size=200058, vocab_type=auto-detected from tokenizer)
+[2m2026-11-25T11:10:18.440855Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m DFlash speculative decoding: ENABLED (γ=8, window=4096, drafter installed)
+[2m2026-11-25T11:10:18.440867Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m Scheduling policy: FIFO
+[2m2026-11-25T11:10:18.441641Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Tool call parser: hermes (auto-detected from model_type 'inkling2_loop')
+[2m2026-11-25T11:10:18.441646Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Tool call parser: 'hermes' has registered XGrammar grammar — constrained decoding ENABLED for tool requests
+[2m2026-11-25T11:10:18.441648Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Response store: max_entries=10000, ttl=86400s, persist=memory-only
+[2m2026-11-25T11:10:18.442206Z[0m [33m WARN[0m [2mspark::scheduler[0m[2m:[0m --mtp-gate force: MTP throughput gate DISARMED (diagnostic; verify runs even where the gate would measure it net-negative)
+[2m2026-11-25T11:10:18.442214Z[0m [32m INFO[0m [2mspark::scheduler[0m[2m:[0m Scheduler started (batched mode, max_batch=8, mtp=true, ngram=false, num_drafts=7, policy=fifo, chunked_prefill=true, max_prefill_tokens=4096)
+[2m2026-11-25T11:10:18.442376Z[0m [32m INFO[0m [2mspark::main_modules::serve_load[0m[2m:[0m tool-call guard configured [3menabled[0m[2m=[0mtrue [3mstream[0m[2m=[0mtrue [3mmax_bytes[0m[2m=[0m1048576
+[2m2026-11-25T11:10:18.442383Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: max_thinking_budget=8192, thinking_default=true
+[2m2026-11-25T11:10:18.442384Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: MODEL sampling defaults enabled (non-thinking: temp=1, top_k=0, top_p=1; tools: temp=1, top_k=0, top_p=1)
+[2m2026-11-25T11:10:18.442387Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: F2 confidence early-stop DISABLED
+[2m2026-11-25T11:10:18.442388Z[0m [32m INFO[0m [2mspark::main_modules::serve_phases::runtime[0m[2m:[0m Model behavior: watchdog rollback+re-steer DISABLED (legacy hard-stop)
+[2m2026-11-25T11:10:18.442569Z[0m [33m WARN[0m [2mspark::scheduler::preempt[0m[2m:[0m --swap-space-gb=3 ignored: this model cannot resume a swapped sequence, so preempted sequences re-prefill instead
+[2m2026-11-25T11:10:18.450004Z[0m [32m INFO[0m [2mspark::main_modules::serve_router[0m[2m:[0m API reachable only from this machine (loopback). To expose on the LAN pass --bind 0.0.0.0; combine with --require-auth and --auth-tokens-file for non-trusted networks.
+[2m2026-11-25T11:10:18.450098Z[0m [32m INFO[0m [2mspark::main_modules::serve_router[0m[2m:[0m Server live and ready at 127.0.0.1:8895 running inkling-2-mini-atlas
+[2m2026-11-25T11:10:19.671849Z[0m [32m INFO[0m [2mspark::api::chat::prepare[0m[2m:[0m Request: model=inkling-2-mini-atlas, messages=1, tools=0, tools_active=false, tool_choice=None, stream=false, temp=Some(0.0), max_tokens=1024, freq_pen=None, rep_pen=None
+[2m2026-11-25T11:10:19.673150Z[0m [32m INFO[0m [2mspark::tokenizer::chat_impl[0m[2m:[0m Jinja rendered (160 chars): "<|message_system|><|content_text|>Thinking effort level: 0.2<|end_message|><|message_user|><|content_text|>What is 17*23? Answer with the number.<|end_message|>"
+[2m2026-11-25T11:10:19.673380Z[0m [32m INFO[0m [2mspark::session_key[0m[2m:[0m session key: source=first_user_turn hash=0x77f4e83bb94eb638
+[2m2026-11-25T11:10:19.673395Z[0m [32m INFO[0m [2mspark::api::chat::inner[0m[2m:[0m Session 0x77f4e83bb94eb638: 27 prompt tokens, tools=false (0 defined)
+[2m2026-11-25T11:10:19.673436Z[0m [32m INFO[0m [2mspark::api::chat::sampling_setup[0m[2m:[0m sampling resolved (first request): temp=0.000 top_p=1.000 top_k=0 min_p=0.0000 top_n_sigma=0.0000 rep_pen=1.000 (core_preset=true)
+[2m2026-11-25T11:10:19.674424Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Thinking enabled, budget=Some(4096)
+[2m2026-11-25T11:10:19.674820Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Chunked prefill start: 27 prompt tokens, chunk_size=27, max_tokens=1024
+[2m2026-11-25T11:10:19.906696Z[0m [32m INFO[0m [2mspark_model::model::trait_impl::prefill_b::finalize_last[0m[2m:[0m Saved SSM snapshot 0 for 27 tokens (2 blocks) [chunk]
+[2m2026-11-25T11:10:19.962411Z[0m [32m INFO[0m [2mspark::scheduler::prefill_a_step[0m[2m:[0m Prefill first token: 200001
+[2m2026-11-25T11:10:19.962420Z[0m [32m INFO[0m [2mspark::scheduler::phase_start_prefills[0m[2m:[0m Prefilled (single chunk): seq_len=27, remaining=1023
+[2m2026-11-25T11:10:19.962529Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::propose[0m[2m:[0m DFlash Option B: allocated 257 blocks (4112 slots) for drafter paged cache
+[2m2026-11-25T11:10:19.963407Z[0m [33m WARN[0m [2mspark_runtime::cuda_backend::host_staging[0m[2m:[0m copy_h2d_async was handed a PAGE-LOCKED source. That copy is genuinely asynchronous, so the promise that the caller may drop the buffer on return is now being paid for with a cuStreamSynchronize on every such call. If the source outlives the next sync, switch the call site to copy_h2d_async_retained; if it does not, this sync is what keeps it from being a use-after-free.
+[2m2026-11-25T11:10:19.999179Z[0m [33m WARN[0m [2mspark_model::model::glm_vocab_split[0m[2m:[0m GLM vocab-split verify head declined (no_comm, rows=8); min_tokens end-token ban inactive
+[2m2026-11-25T11:10:20.026084Z[0m [32m INFO[0m [2mspark_model::model::trait_impl[0m[2m:[0m DFlash UNIFIED_CTX ACTIVE: first commit_ctx rows=5 base_pos=27 ctx_len=33
+[2m2026-11-25T11:10:20.091524Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: starting (key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 248287764402176, ctx_ptr: 248279229005824, markov_ptr: 248291522507264, lane: 0 } warmup_count=2, target=2, slots=11)
+[2m2026-11-25T11:10:20.091922Z[0m [32m INFO[0m [2mspark_model::layers::dflash_head::forward_block[0m[2m:[0m DFlash piecewise capture: complete key=DflashGraphIdentity { owner: SequenceGeneration { slot: 0, generation: 1 }, block_table_ptr: 248287764402176, ctx_ptr: 248279229005824, markov_ptr: 248291522507264, lane: 0 } (11/11 subgraphs captured)
+[2m2026-11-25T11:10:20.462339Z[0m [32m INFO[0m [2mspark::scheduler::emit_step::think_commit[0m[2m:[0m Thinking ended after 41 tokens (budget=Some(4096))
+[2m2026-11-25T11:10:20.462359Z[0m [32m INFO[0m [2mspark::scheduler::mtp_accept_debug[0m[2m:[0m Done: 48 tokens (stop) 96.0 tok/s, TTFT=288.0ms, serial=0.00 mtp=1.00 p1=0.889 mean_na=4.222 tok_step=5.222 regime_reprobes=0 depth=k5 depth_switches=0 acc=-,-,-,-,-,-,- surv=0.89,0.89,0.78,0.78,0.44,0.22,0.22

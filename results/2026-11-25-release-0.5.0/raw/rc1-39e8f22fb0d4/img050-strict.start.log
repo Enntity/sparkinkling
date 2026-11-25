@@ -1,0 +1,5 @@
+[1m== image ghcr.io/enntity/atlas-sparkinkling:39e8f22fb0d4[0m
+[1m== serving thinkingmachines/Inkling-2-Mini on this Spark (mode strict, profile default, drafter dflash2)[0m
+[1m== loading (the first start also compiles CUDA kernels)[0m
+smoke: 17*23 = 391
+[1m== ready: http://127.0.0.1:8895/v1 model inkling-2-mini-atlas[0m

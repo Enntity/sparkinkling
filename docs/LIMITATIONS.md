@@ -2,29 +2,33 @@
 # Limitations
 
 What to know before relying on SparkInkling, on one DGX Spark. This page
-describes 0.4.2. Figures here are from its release run
-([`results/2026-11-23-release-0.4.2`](../results/2026-11-23-release-0.4.2/RESULT.md))
+describes 0.5.0. Figures here are from its release run
+([`results/2026-11-25-release-0.5.0`](../results/2026-11-25-release-0.5.0/RESULT.md))
 unless they say they come from a development build.
 
 ## Speed
 
-- **Drafts help one or two requests at a time.** Strict drafts for one or two
-  live requests and Spark for one; from three the engine decodes plainly, in
-  a batch. The engine proposes for every live request in one pass, but a
-  verify row still costs more than the drafts it returns at that width: on a
-  development build with other services on the Spark, eight short-code
-  requests read about 106 tok/s drafting one token each against about 118
-  plain (Strict). vLLM's Inkling 2 Mini image drafts under load and is ahead
-  at eight short-code requests: 144.0 against 120.7 (Strict) and 135.4
+- **Drafts help one request at a time, or two in Strict.** From three live
+  requests in Strict and two in Spark the engine decodes plainly, in a batch.
+  On RigMark's short requests (256 tokens, reasoning low) drafting in a batch
+  lost: Strict three drafts each at four requests read 76.3 tok/s against 86.0
+  plain, Spark three each at two 70.2 against 77.4, on a development build of
+  the pinned engine. On longer answers the same settings gained (Strict up to
+  six requests, Spark two;
+  [tuning](../results/2026-11-25-dflash2-tuning/RESULT.md)); the engine's
+  per-sequence threshold does not yet weigh a draft against how cheap a plain
+  batched step is. vLLM's Inkling 2 Mini image drafts under load and is ahead
+  at eight short-code requests: 144.0 against 122.7 (Strict) and 135.2
   (Spark) ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
-- **Drafts do not help prose.** The target accepts about one draft in two on
-  prose, and a verify step costs more than that returns, so the engine turns
-  drafts off there. Spark's prose lead over vLLM comes from its weights, not
-  from drafts.
-- **Strict trails vLLM with its drafter on code and structured output.**
-  0.4.2 read 65.2 against 69.8 tok/s on code and 92.6 against 104.3 on
-  structured output (0.4.1: 54.2 and 79.9). Strict is ahead of vLLM without a
-  drafter on both.
+- **Drafts help prose little.** The target accepts about one draft in two on
+  prose. Strict keeps drafting there (a block that accepts one token is worth
+  it against Strict's slower plain step) and its prose decode rose from 35.3
+  to 39.6 tok/s; Spark turns drafts off on prose, and its prose lead over
+  vLLM comes from its weights, not from drafts.
+- **Strict is only level with vLLM's drafter on code and structured output**:
+  70.0 against 69.8 tok/s on code and 103.2 against 104.3 on structured
+  output (0.4.2: 65.2 and 92.6), and trails it at four and eight requests.
+  Strict is ahead of vLLM without a drafter on both.
 - **One Spark.** The image refuses multi-rank flags. The measurements were
   taken with nothing else serving on the Spark; other GPU work on the same
   machine slows it.
@@ -33,11 +37,10 @@ unless they say they come from a development build.
 
 - **Text with drafts matched text without them in our check, not by proof.**
   A verify run attends exactly as a decode row does, and on 8 prompts of 320
-  tokens (4 code, 4 prose, reasoning low) greedy text was identical with the
-  drafter off and on, with one request and with two at once, in both modes,
-  and with drafting forced on for four and eight at once (Strict). That is a
-  small sample on a development build; `DRAFTER=none` remains the
-  way to rule the drafter out.
+  tokens (4 code, 4 prose, reasoning low) greedy text on the release image
+  with the drafter on, at one, two and four requests, was identical to one
+  request with it off, in both modes. That is a small sample;
+  `DRAFTER=none` remains the way to rule the drafter out.
 - **Expert inputs in decode are BF16.** The checkpoint declares its experts'
   inputs quantized (NVFP4 rows for layers 0-19, MXFP8 rows for 20-23). Prefill
   follows that; decode and verify rows (fewer than 16 at once) give the
@@ -78,7 +81,7 @@ unless they say they come from a development build.
   call the guard blocks has already streamed when the response finishes
   `content_filter`; it must not be run. Requests that do not ask get each call
   held until it passes ([TOOL-GUARD](TOOL-GUARD.md)). SparkInkling 0.4.1
-  streamed every request's calls; 0.4.2 holds them unless asked.
+  streamed every request's calls; since 0.4.2 they are held unless asked.
 - **Streamed `return_token_ids` carry rewritten ids** for Inkling's message
   markers, not the model's raw tokens.
 
@@ -87,10 +90,12 @@ unless they say they come from a development build.
 - **KV is about 32 KiB a token** (the 8 global layer visits; the 40
   sliding-window visits keep only their last 1,024 tokens), so one Spark holds
   the model's 1M-token context. `default` and `max` accept requests of up to
-  1,048,576 tokens over pools of about 1.8M to 2.0M tokens, and `saver` up to
-  786,432 over about 830K to 950K: two full-length requests cannot be
-  resident together, and requests the pool cannot hold wait for blocks.
-- **A 1M-token prompt is slow**: about 21 minutes to prefill (attention over
+  1,048,576 tokens over pools of 1.75M to 1.97M tokens, and `saver` up to
+  786,432 over 800K to 965K: two full-length requests cannot be resident
+  together, and requests the pool cannot hold wait for blocks. The 1M-token
+  recall check is one prompt (a code a third of the way into 1,032,929
+  tokens, Spark mode), not a long-context benchmark.
+- **A 1M-token prompt is slow**: about 21 minutes to answer (1,253 s) (attention over
   the 8 global visits grows with the square of the context), and decode at
   that length reads about 32 GiB of KV a token.
 - **No disk tier for the prefix cache.** 0.4.x could keep evicted prefix-cache

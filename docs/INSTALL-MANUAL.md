@@ -28,9 +28,11 @@ IMAGE=$(install/build.sh)
 `install/build.sh --tag` prints the tag without building: the git tree hash of
 `install/`. The build needs a clean `install/` directory. It fetches the
 pinned engine commit, refuses any other tree, builds the `inkling-2-mini`
-kernel target and runs the engine's CPU tests and Clippy. A cold build
-downloads the CUDA base images and compiles every kernel; allow 30 to 60
-minutes. `ATLAS_BUILD_JOBS` (default 4) trades speed for memory.
+kernel target and runs the engine's CPU tests and Clippy. The 0.5.0 image
+built in 287 s on a Spark with Docker's build cache warm (20 jobs; the
+kernels compile on every core); a first build also downloads the CUDA base
+images. `ATLAS_BUILD_JOBS` (default: one per core, at most one per 3 GB of
+available memory) trades speed for memory.
 
 ## 3. Download the pinned checkpoint
 

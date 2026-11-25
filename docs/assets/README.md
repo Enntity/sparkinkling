@@ -6,14 +6,16 @@ matching social card (1733 × 907); `social-preview.jpg` is its same-dimension
 JPEG export, below 1 MB.
 
 The cards name the product and carry a high-score table for its two modes,
-Strict (`./start.sh`) and Spark (`--mode spark`): code decode, prose decode
-and eight short-code requests in tok/s, with cold 32K prefill and the output
-gates below. The figures are SparkInkling 0.4.2's RigMark medians
-([`results/2026-11-23-release-0.4.2`](../../results/2026-11-23-release-0.4.2/RESULT.md));
+Strict (`./start.sh`) and Spark (`--mode spark`): code decode,
+structured-output decode and eight short-code requests in tok/s, with cold 32K
+prefill and the output gates below. The figures are SparkInkling 0.5.0's
+RigMark medians
+([`results/2026-11-25-release-0.5.0`](../../results/2026-11-25-release-0.5.0/RESULT.md));
 `SCORES`, `LINES` and `SOURCE` in the script hold them, so a new release
 changes those and re-renders.
 
-They were first composed on 2026-11-21, and given the table on 2026-11-23, by [`make_cards.py`](make_cards.py) from
+They were first composed on 2026-11-21, given the table on 2026-11-23 and
+re-rendered for 0.5.0 on 2026-11-25, by [`make_cards.py`](make_cards.py) from
 SparkQwen's cards (Enntity/sparkqwen `docs/assets` at commit `bd26c6d`). The
 script keeps the purple arcade frame, starfield, Enntity logo, icons, wireframe
 tunnel and GitHub mark, paints out the title, version, subtitle, lanes,
