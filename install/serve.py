@@ -17,6 +17,12 @@ OVERLAY_FILE = 'spark-nvfp4.safetensors'
 # for Inkling 2 Mini (incoai/Inkling-2-Mini-DFlash2, at DRAFTER_PATH); 'none'
 # decodes without speculation.
 DRAFTERS = ('dflash2', 'none')
+# SPARKINKLING_LOOPCD: 'off' (the default), 'on' or 'skip-thinking'. LoopCD
+# (arXiv 2610.02185) runs the coda layers a second time from the first loop
+# pass and moves the logits away from that reference; it breaks reasoning
+# loops at high effort but costs 15-36% of decode speed and 10-12% of the KV
+# pool (results/2026-11-25-loopcd). skip-thinking leaves reasoning unguided.
+LOOPCD = ('off', 'on', 'skip-thinking')
 # The drafter's block is 8: seven drafts a step.
 DRAFT_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 # How the drafter is run. Tuned for DFlash2 on GB10, 2026-11-25, with the 0.5.0
@@ -110,6 +116,11 @@ def launch(environ, profile):
     for flag in SPECULATION_FLAGS:
         if _flag_values(args, flag):
             raise ValueError(f'{flag}: speculation is selected with SPARKINKLING_DRAFTER, not the profile')
+    if _flag_values(args, '--loopcd'):
+        raise ValueError('--loopcd: LoopCD is selected with SPARKINKLING_LOOPCD, not the profile')
+    loopcd = environ.get('SPARKINKLING_LOOPCD', 'off')
+    if loopcd not in LOOPCD:
+        raise ValueError('SPARKINKLING_LOOPCD must be off, on or skip-thinking')
     mode = environ.get('SPARKINKLING_MODE', 'spark')
     if mode not in MODES:
         raise ValueError('SPARKINKLING_MODE must be spark or strict')
@@ -120,8 +131,10 @@ def launch(environ, profile):
     if not Path(model).is_absolute() or any(c in model for c in '\r\n\0'):
         raise ValueError('MODEL_PATH must be an absolute path')
     env = _engine_env(environ, profile)
-    env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter)
+    env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter, SPARKINKLING_LOOPCD=loopcd)
     args = _memory_share(environ, [str(a).replace('${model}', model) for a in args])
+    if loopcd != 'off':
+        args.append(f'--loopcd={loopcd}')
     if drafter != 'none':
         draft = environ.get('DRAFTER_PATH', '')
         if not Path(draft).is_absolute() or any(c in draft for c in '\r\n\0'):
@@ -186,6 +199,7 @@ def main():
     source = json.loads((here/'source-manifest.json').read_text())
     print(json.dumps({'event': 'atlas-recipe-start', **release_info(here), 'profile': profile.stem,
                       'mode': env['SPARKINKLING_MODE'], 'drafter': env['SPARKINKLING_DRAFTER'],
+                      'loopcd': env['SPARKINKLING_LOOPCD'],
                       'source': f"{source['repository']}@{source['commit']}"}), flush=True)
     os.execve(argv[0], argv, env)
 

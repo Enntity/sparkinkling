@@ -12,6 +12,7 @@
 # Settings (environment or .env): MODEL_ROOT (default ~/models/sparkinkling),
 # MODE (spark, the default, or strict), PROFILE (default, or a JSON file of your
 # own), DRAFTER (dflash2, the default: incoai's DFlash2 drafter; or none),
+# LOOPCD (off, the default; on or skip-thinking: docs/LOOPCD.md),
 # GPU_MEMORY_UTILIZATION (0.50-0.90), IMAGE, PULL=0 (always build), TOOL_GUARD*.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -25,6 +26,7 @@ fi
 MODEL_ROOT=${MODEL_ROOT:-$HOME/models/sparkinkling}
 PROFILE=${PROFILE:-default}
 DRAFTER=${DRAFTER:-dflash2}
+LOOPCD=${LOOPCD:-off}
 NAME=atlas-sparkinkling
 API=http://127.0.0.1:8895
 
@@ -37,6 +39,7 @@ if [[ ${1:-up} == up || ${1:-} == download ]]; then
   [[ $MODE == spark || $MODE == strict ]] || { echo '--mode (MODE) must be spark or strict' >&2; exit 2; }
   [[ -f $PROFILE || -f install/profiles/$PROFILE.json ]] || { echo "PROFILE: no $PROFILE or install/profiles/$PROFILE.json" >&2; exit 2; }
   [[ $DRAFTER =~ ^(none|dflash2)$ ]] || { echo 'DRAFTER must be dflash2 or none' >&2; exit 2; }
+  [[ $LOOPCD =~ ^(off|on|skip-thinking)$ ]] || { echo 'LOOPCD must be off, on or skip-thinking' >&2; exit 2; }
   [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||
     { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.90' >&2; exit 2; }
   [[ -z ${PREFIX_CACHE_DIR:-}${PREFIX_CACHE_GB:-} ]] ||
@@ -122,7 +125,7 @@ serve() {
   fi
   mkdir -p "$HOME/.cache/atlas-cuda"
   stop
-  say "serving $CHECKPOINT_REPO on this Spark (mode $MODE, profile $PROFILE, drafter $DRAFTER)"
+  say "serving $CHECKPOINT_REPO on this Spark (mode $MODE, profile $PROFILE, drafter $DRAFTER, LoopCD $LOOPCD)"
   # GB10 memory is shared with the host, and a host that runs out of it hangs
   # instead of killing a process: the container is capped at 114 GiB.
   docker run -d --name "$NAME" --restart no --network host --ipc host \
@@ -130,6 +133,7 @@ serve() {
     "${mounts[@]}" --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
     ${profile_mount[@]+"${profile_mount[@]}"} \
     -e MODEL_PATH="$model" -e SPARKINKLING_MODE="$MODE" -e SPARKINKLING_DRAFTER="$DRAFTER" -e DRAFTER_PATH="$drafter" \
+    -e SPARKINKLING_LOOPCD="$LOOPCD" \
     -e SPARKINKLING_PROFILE="$profile" -e SERVED_MODEL_NAME="$SERVED" \
     -e SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-stream}" -e SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \
     -e SPARKINKLING_TOOL_GUARD_ALLOW_HOSTS="${TOOL_GUARD_ALLOW_HOSTS:-}" -e SPARKINKLING_TOOL_GUARD_DENY_HOSTS="${TOOL_GUARD_DENY_HOSTS:-}" \
