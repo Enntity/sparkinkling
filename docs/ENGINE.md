@@ -208,11 +208,10 @@ a share of it. That rule stands in for the engine's throughput gate
 the next. Several live requests draft together: their proposes share one
 pass over the vocabulary head and their verifies one batch, and a sequence
 whose drafts stop paying decodes plainly in the same batch until its
-re-probe. Strict drafts seven tokens alone and three each for two to six
-requests, then decodes plainly
-(`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,3:3,4:3,5:3,6:3,1000000:0`); Spark,
-whose plain step is a third shorter, drafts seven alone and three each for
-two (`1:7,2:3,1000000:0`). The settings were tuned for DFlash2 on 0.5.0's
+re-probe. Strict drafts seven tokens alone and three each for two requests,
+then decodes plainly (`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,1000000:0`); Spark,
+whose plain step is a third shorter, drafts seven alone and decodes plainly
+from two (`1:7,1000000:0`). The settings were tuned for DFlash2 on 0.5.0's
 engine ([results](../results/2026-11-25-dflash2-tuning/RESULT.md)). A verify
 runs its rows through the same attention body and key splits as a decode
 row, so a verified token is the one plain decode picks: on 8 prompts of 320
@@ -223,12 +222,15 @@ ties).
 
 ## What it does not do yet
 
-- **Drafting under heavy load.** Strict decodes plainly from seven live
-  requests and Spark from three: drafting there lost in tuning (Strict two
-  each at eight requests 95.6 against 97.1-98.7 tok/s plain; Spark one to
-  three each at three and four requests 2-12% under plain;
-  [issue 1](https://github.com/Enntity/sparkinkling/issues/1)). Batches
-  decode at their own width (three as three rows, not four).
+- **Drafting under load.** Strict decodes plainly from three live requests
+  and Spark from two. On RigMark's short requests (256 tokens, reasoning low)
+  drafting there lost: Strict three each at four requests 76.3 against 86.0
+  tok/s plain, Spark three each at two 70.2 against 77.4. On a suite of
+  longer answers the same settings gained (Strict up to six requests, Spark
+  two), so whether drafts pay in a batch depends on how many are accepted,
+  and the per-sequence threshold does not weigh a draft against how cheap a
+  plain batched step is ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
+  Batches decode at their own width (three as three rows, not four).
 - **Expert input quantization in decode.** Decode and verify rows (fewer than
   16 at once) still give the experts BF16 inputs, so a token's experts see the
   checkpoint's declared numerics in prefill and BF16 inputs in decode.

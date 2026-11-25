@@ -56,9 +56,9 @@ directory, `<model root>/incoai--Inkling-2-Mini-DFlash2`. It reads the same
 four taps of the target as the checkpoint's bundled DSpark draft model
 (`mtp.safetensors`) and accepts more of its drafts; 0.5.0 replaces DSpark
 with it. The engine verifies every draft against the mode's own weights, so
-the drafter changes speed and not the model. Strict drafts for up to six
-live requests and Spark for up to two; from there the engine decodes
-plainly, which delivers more. `DRAFTER=none` turns
+the drafter changes speed and not the model. Strict drafts for one or two
+live requests and Spark for one; from there the engine decodes plainly,
+which delivers more. `DRAFTER=none` turns
 drafting off.
 
 Drafting pays on predictable text (code, structured output, math) and less

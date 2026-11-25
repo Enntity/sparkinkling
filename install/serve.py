@@ -33,18 +33,18 @@ DRAFT_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 #   and the engine's 2.0 in Spark. That per-sequence rule replaces the
 #   engine's throughput gate (ATLAS_MTP_GATE_FORCE), which carries its off
 #   state from one request into the next.
-# - Drafts by live requests (`n:drafts`, up to n requests): seven alone, then
-#   three each for two requests in both modes (aggregate +6% Strict, +11%
-#   Spark against the 0.5.0 candidate's two and none). Strict drafts three
-#   each up to six requests (+15%, +13%, +9% and +5-9% at three to six
-#   against plain decode) and decodes plainly from seven (two each at eight:
-#   -2%); Spark decodes plainly from three, where drafting lost (one or two
-#   each at three: -12% and -3%; two or three at four: -6% and -2%).
+# - Drafts by live requests (`n:drafts`, up to n requests): seven alone in
+#   both modes; Strict drafts three each for two requests and decodes plainly
+#   from three, Spark decodes plainly from two. Chosen on RigMark's short
+#   requests (256 tokens, reasoning low): Strict two at once 64.6 tok/s against
+#   61.9 with 0.4.2's two each; drafting at four lost 11% (76.3 against 86.0
+#   plain); Spark drafting at two lost 10% (70.2 against 77.4). On a suite of
+#   longer answers drafting gained up to six requests in Strict and two in
+#   Spark, so the setting follows what the release measures.
 _DRAFT_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}
 DRAFT_ENV = {
-    'strict': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,3:3,4:3,5:3,6:3,1000000:0',
-               'ATLAS_DFLASH_ADAPTIVE_MIN': '1.0'},
-    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,1000000:0'},
+    'strict': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,1000000:0', 'ATLAS_DFLASH_ADAPTIVE_MIN': '1.0'},
+    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0'},
 }
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
