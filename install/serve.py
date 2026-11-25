@@ -110,9 +110,9 @@ def launch(environ, profile):
     for flag in SPECULATION_FLAGS:
         if _flag_values(args, flag):
             raise ValueError(f'{flag}: speculation is selected with SPARKINKLING_DRAFTER, not the profile')
-    mode = environ.get('SPARKINKLING_MODE', 'strict')
+    mode = environ.get('SPARKINKLING_MODE', 'spark')
     if mode not in MODES:
-        raise ValueError('SPARKINKLING_MODE must be strict or spark')
+        raise ValueError('SPARKINKLING_MODE must be spark or strict')
     drafter = environ.get('SPARKINKLING_DRAFTER', 'dflash2')
     if drafter not in DRAFTERS:
         raise ValueError(f'SPARKINKLING_DRAFTER must be one of {", ".join(DRAFTERS)}')

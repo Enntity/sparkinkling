@@ -1,6 +1,6 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <p align="center">
-  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Strict (./start.sh) and Spark (--mode spark): code 70.0 and 81.4, structured output 103.2 and 117.4, eight requests 122.7 and 135.2. 1M-token context, 6 of 6 output gates. SparkInkling 0.5.0, RigMark 1.1.0, low effort." width="100%">
+  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Spark (./start.sh, the default) and Strict (--mode strict): code 81.4 and 70.0, structured output 117.4 and 103.2, eight requests 135.2 and 122.7. 1M-token context, 6 of 6 output gates. SparkInkling 0.5.0, RigMark 1.1.0, low effort." width="100%">
 </p>
 
 # SparkInkling
@@ -13,8 +13,9 @@ on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atla
 engine with an OpenAI-compatible API, image input, reasoning and tool calls.
 
 0.5.0 drafts with incoai's DFlash2 drafter and serves 1,048,576-token
-requests. Against 0.4.2, one request decodes code 7% faster in Strict and 5%
-in Spark, structured output 11% and 13%, and Strict prose 12%; one short
+requests. Spark mode, SparkInkling's calibrated NVFP4 overlay, is the
+default. Against 0.4.2, one request decodes code 5% faster in Spark and 7% in
+Strict, structured output 13% and 11%, and Strict prose 12%; one short
 request is 9-21% faster, and prefill and two to eight requests are level.
 The 40 sliding-window layer visits now keep only their last 1,024 tokens, so
 a token of context costs 32 KiB instead of 192 KiB: the default profile's
@@ -38,17 +39,18 @@ MXFP8 experts and BF16 everything else, plus a bundled DSpark draft model.
 
 SparkInkling serves text and images. Video is not supported.
 
-## Strict and Spark modes
+## Spark and Strict modes
 
-| | Strict (default) | Spark |
+| | Spark (default) | Strict |
 |---|---|---|
-| Weights | The checkpoint as shipped: NVFP4 experts in layers 0-19, MXFP8 experts in 20-23, BF16 attention, router and vocabulary head | Strict plus a calibrated NVFP4 overlay for the attention projections, the vocabulary head and the experts of layers 20-23 |
-| Start | `./start.sh` (or `--mode strict`) | `./start.sh --mode spark` |
-| Extra download | none | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4), 2.9 GB |
-| Fidelity | the checkpoint's own numerics | KL 0.0081 to Strict's weights (97.0% top-1 agreement, 224 held-out documents) |
+| Weights | The checkpoint plus a calibrated NVFP4 overlay for the attention projections, the vocabulary head and the experts of layers 20-23 | The checkpoint as shipped: NVFP4 experts in layers 0-19, MXFP8 experts in 20-23, BF16 attention, router and vocabulary head |
+| Start | `./start.sh` (or `--mode spark`) | `./start.sh --mode strict` |
+| Extra download | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4), 2.9 GB | none |
+| Fidelity | KL 0.0081 to Strict's weights (97.0% top-1 agreement, 224 held-out documents) | the checkpoint's own numerics |
 
-Spark reads about half the bytes a token reads in Strict. [The modes in
-detail](docs/MODES.md).
+Spark reads about half the bytes a token reads in Strict and decodes faster
+in every measured cell. Strict is there when you want the checkpoint's own
+numerics. [The modes in detail](docs/MODES.md).
 
 ## Performance
 
@@ -57,15 +59,15 @@ Spark, the default profile and drafter, against 0.4.2 and vLLM's own Inkling 2
 Mini image on the same Spark:
 [the result, with every receipt](results/2026-11-25-release-0.5.0/RESULT.md).
 
-| | Strict | Spark | Strict 0.4.2 | Spark 0.4.2 | vLLM | vLLM + DSpark |
+| | Spark | Strict | Spark 0.4.2 | Strict 0.4.2 | vLLM | vLLM + DSpark |
 |---|---:|---:|---:|---:|---:|---:|
-| Code decode, tok/s | 70.0 | **81.4** | 65.2 | 77.5 | 35.1 | 69.8 |
-| Prose decode | 39.6 | **56.1** | 35.3 | 55.7 | 35.6 | 31.2 |
-| Structured decode | 103.2 | **117.4** | 92.6 | 103.6 | 35.6 | 104.3 |
-| 32K cold prefill, tok/s | 3,268 | **3,282** | 3,274 | 3,277 | 2,722 | 2,723 |
-| Short code, C1 / C2 / C4 / C8 aggregate | 46.5 / 62.6 / 85.7 / 122.7 | **58.8 / 77.8 / 103.5** / 135.2 | 41.3 / 63.1 / 85.0 / 120.7 | 53.9 / 77.7 / 105.8 / 135.4 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / **144.0** |
-| Short prose, C1 / C4 / C8 aggregate | 44.6 / 84.3 / 120.0 | **61.4 / 100.9 / 131.7** | 36.9 / 82.7 / 120.6 | 53.2 / 100.4 / 129.1 | 35.3 / 89.2 / 126.4 | 36.0 / 88.2 / 122.1 |
-| 32K prompt sent again, time to first token | 0.16 s | 0.15 s | 0.16 s | 0.16 s | | |
+| Code decode, tok/s | **81.4** | 70.0 | 77.5 | 65.2 | 35.1 | 69.8 |
+| Prose decode | **56.1** | 39.6 | 55.7 | 35.3 | 35.6 | 31.2 |
+| Structured decode | **117.4** | 103.2 | 103.6 | 92.6 | 35.6 | 104.3 |
+| 32K cold prefill, tok/s | **3,282** | 3,268 | 3,277 | 3,274 | 2,722 | 2,723 |
+| Short code, C1 / C2 / C4 / C8 aggregate | **58.8 / 77.8 / 103.5** / 135.2 | 46.5 / 62.6 / 85.7 / 122.7 | 53.9 / 77.7 / 105.8 / 135.4 | 41.3 / 63.1 / 85.0 / 120.7 | 35.1 / 54.0 / 86.6 / 122.4 | 43.4 / 60.9 / 94.7 / **144.0** |
+| Short prose, C1 / C4 / C8 aggregate | **61.4 / 100.9 / 131.7** | 44.6 / 84.3 / 120.0 | 53.2 / 100.4 / 129.1 | 36.9 / 82.7 / 120.6 | 35.3 / 89.2 / 126.4 | 36.0 / 88.2 / 122.1 |
+| 32K prompt sent again, time to first token | 0.15 s | 0.16 s | 0.16 s | 0.16 s | | |
 | Longest request | 1,048,576 | 1,048,576 | 131,072 | 131,072 | | |
 | Basic output gates | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 | 6/6 |
 
