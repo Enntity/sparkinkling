@@ -70,6 +70,7 @@ class VersionQueries(unittest.TestCase):
         cases = [({'GPU_MEMORY_UTILIZATION': '0.95'}, 'GPU_MEMORY_UTILIZATION'),
                  ({'MODE': 'fast'}, 'spark or strict'),
                  ({'DRAFTER': 'eagle'}, 'DRAFTER'),
+                 ({'LOOPCD': 'yes'}, 'LOOPCD must be off, on or skip-thinking'),
                  ({'PREFIX_CACHE_DIR': '/srv/pc'}, 'PREFIX_CACHE_DIR and PREFIX_CACHE_GB were removed in 0.5.0'),
                  ({'DRAFTER': 'eagle'}, 'DRAFTER must be dflash2 or none'),
                  ({'PROFILE': 'nonesuch'}, 'PROFILE'),

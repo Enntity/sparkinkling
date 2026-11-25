@@ -1,0 +1,78 @@
+### build 08:36:53Z
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 13.0.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+WARNING: The NVIDIA Driver was not detected.  GPU functionality will not be available.
+   Use the NVIDIA Container Toolkit to start this container with GPU support; see
+   https://docs.nvidia.com/datacenter/cloud-native/ .
+
+   Compiling rand v0.9.3
+   Compiling hyper-util v0.1.20
+   Compiling url v2.5.8
+   Compiling sharded-slab v0.1.7
+   Compiling tower v0.5.3
+   Compiling matchers v0.2.0
+   Compiling regex v1.12.3
+   Compiling ureq-proto v0.6.0
+   Compiling atlas-governance v1.0.0-beta-preview (/build/crates/atlas-governance)
+   Compiling dary_heap v0.3.8
+   Compiling compact_str v0.9.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling webpki-roots v1.0.10
+   Compiling clap_derive v4.6.4
+   Compiling serde_path_to_error v0.1.20
+   Compiling tracing-log v0.2.0
+   Compiling unicode-normalization-alignments v0.1.12
+   Compiling thread_local v1.1.9
+   Compiling matchit v0.8.4
+   Compiling daachorse v1.0.1
+   Compiling unicode_categories v0.1.1
+   Compiling nu-ansi-term v0.50.3
+   Compiling memo-map v0.3.3
+   Compiling utf8-zero v0.8.1
+   Compiling atlas-tool-guard v0.1.0 (/build/crates/atlas-tool-guard)
+   Compiling ureq v3.3.0
+   Compiling tracing-subscriber v0.3.23
+   Compiling minijinja v2.21.0
+   Compiling tokenizers v0.23.1
+   Compiling axum v0.8.9
+   Compiling clap v4.6.6
+   Compiling atlas-plugin v1.0.0-beta-preview (/build/crates/atlas-plugin)
+   Compiling xgrammar v1.0.0-beta-preview (/build/crates/xgrammar)
+   Compiling tui-textarea v0.7.0
+   Compiling tower-http v0.7.0
+   Compiling tokio-stream v0.1.19
+warning: atlas-kernels@1.0.0-beta-preview: atlas-kernels: compiled 218 kernels for target 0 (gb10, inkling-2-mini, nvfp4) (19 model-specific overrides)
+warning: atlas-kernels@1.0.0-beta-preview: atlas-kernels: dedup+parallel: 218/218 unique nvcc invocations (0 cache hits, 1.0× dedup), 20 parallel workers
+   Compiling spark-server v1.0.0-beta-preview (/build/crates/spark-server)
+    Finished `release` profile [optimized] target(s) in 3m 35s
+-rwxr-xr-x 2 root root 83502496 Nov 25 01:40 /home/enntitysparkadmin/inkling2-loopcd/target/release/spark
+BUILD-OK
+-rwxr-xr-x 1 enntitysparkadmin enntitysparkadmin 83426248 Nov 24 14:23 base/spark
+-rwxr-xr-x 2 root              root              83502496 Nov 25 01:40 target/release/spark
+### check 08:40:30Z
+UP spark off base
+  all: 7739 tokens in 134s = 57.7 tok/s aggregate
+  spark base: ld::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 2485 blocks (6.07 GiB, 25 snapshot pins); the other layers' 32 KiB a t ld: KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 26.3 GB pre-KV + 0.7 GB reserve → 33.8 GB for KV → 56726 blocks × 16 tok/bloc 
+  loopcd: 0 lines, unguided/unstamped: 0, errors 0
+UP spark off new
+  all: 7739 tokens in 134s = 57.6 tok/s aggregate
+  spark off: ld::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 2485 blocks (6.07 GiB, 25 snapshot pins); the other layers' 32 KiB a t ld: KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 26.8 GB pre-KV + 0.7 GB reserve → 33.3 GB for KV → 55826 blocks × 16 tok/bloc 
+  loopcd: 0 lines, unguided/unstamped: 0, errors 0
+UP spark on new
+  all: 7739 tokens in 134s = 57.7 tok/s aggregate
+  spark on: ld::kv_window: KV window: 40 of 48 layers keep the last 1024 tokens in 2485 blocks (6.07 GiB, 25 snapshot pins); the other layers' 32 KiB a t ld: KV cache: 121.7 GB total × 50% util = 60.8 GB budget; 27.2 GB pre-KV + 0.7 GB reserve → 32.9 GB for KV → 54918 blocks × 16 tok/bloc 
+  loopcd: 0 lines, unguided/unstamped: 0, errors 0
+UP spark skip-thinking new

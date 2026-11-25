@@ -91,6 +91,21 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_MODE='fast')
 
+    def test_loopcd_is_opt_in(self):
+        argv, env = launch()
+        self.assertFalse([a for a in argv if a.startswith('--loopcd')])
+        self.assertEqual(env['SPARKINKLING_LOOPCD'], 'off')
+        for value in ('on', 'skip-thinking'):
+            argv, env = launch(SPARKINKLING_LOOPCD=value)
+            self.assertEqual(flag(argv, '--loopcd'), value)
+            self.assertEqual(env['SPARKINKLING_LOOPCD'], value)
+        for bad in ('yes', 'ON', ''):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                launch(SPARKINKLING_LOOPCD=bad)
+        with self.assertRaises(ValueError):  # set with SPARKINKLING_LOOPCD, not the profile
+            serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER},
+                         {**profile(), 'server_argv': [*profile()['server_argv'], '--loopcd=on']})
+
     def test_dflash2_by_default(self):
         argv, env = launch()
         self.assertEqual(env['SPARKINKLING_DRAFTER'], 'dflash2')
@@ -258,6 +273,13 @@ class StartScript(unittest.TestCase):
         result, calls, _ = self.run_up(MODE='strict', GPU_MEMORY_UTILIZATION='0.60', DRAFTER='none')
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('-e SPARKINKLING_GPU_MEMORY_UTILIZATION=0.60', calls)
+
+    def test_loopcd_reaches_the_container(self):
+        result, calls, _ = self.run_up(MODE='strict', DRAFTER='none')
+        self.assertIn('-e SPARKINKLING_LOOPCD=off ', calls)
+        result, calls, _ = self.run_up(MODE='strict', DRAFTER='none', LOOPCD='skip-thinking')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('-e SPARKINKLING_LOOPCD=skip-thinking ', calls)
 
     def test_start_mounts_the_assembled_drafter(self):
         start = (ROOT/'start.sh').read_text()

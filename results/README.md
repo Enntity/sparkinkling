@@ -28,3 +28,5 @@ Measure the baseline on the same Spark, and put its receipts in `raw/` too.
 - [`2026-11-25-release-0.5.0`](2026-11-25-release-0.5.0/RESULT.md): the 0.5.0
   image (DFlash2 drafter, 1M-token context), both modes against 0.4.2 and
   vLLM, with its pools, 1M-token recall and functional check.
+- [`2026-11-25-loopcd`](2026-11-25-loopcd/RESULT.md): the opt-in LoopCD
+  setting, its speed and pool cost in both modes and its quality in Strict.

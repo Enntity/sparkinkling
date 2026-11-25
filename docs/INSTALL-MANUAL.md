@@ -6,7 +6,7 @@ on the one Spark that serves.
 
 | Component | Pin |
 |---|---|
-| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/rc-0.5.0-20261124` at `1559aa4bc` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
+| Engine | [`Enntity/atlas`](https://github.com/Enntity/atlas) `inkling2/loopcd-20261124` at `6ab2e9c78` ([`install/atlas-source.json`](../install/atlas-source.json), [ENGINE](ENGINE.md)) |
 | Model | [`thinkingmachines/Inkling-2-Mini`](https://huggingface.co/thinkingmachines/Inkling-2-Mini) @ `ed40e7da625f594fc9c4990f5f66be24873c22d7` ([`install/checkpoint.json`](../install/checkpoint.json)) |
 | Spark overlay | [`Enntity/Inkling-2-Mini-Spark-NVFP4`](https://huggingface.co/Enntity/Inkling-2-Mini-Spark-NVFP4) @ `e9df93dceea2fbf0927caf178104e868452a6292` |
 | Build dependencies | CUTLASS `cf064d2e`, NCCL 2.31.2, Rust 1.93.1, CUDA 13.0 |
@@ -113,11 +113,13 @@ spark serve --model-from-path=<model dir> --gpu-memory-utilization=0.80 \
 
 with the drafter's settings in its environment: in both modes
 `ATLAS_DFLASH_CONF_WIDTH=1`, `ATLAS_DFLASH_ADAPTIVE=1` and
-`ATLAS_MTP_GATE_FORCE=1`; Strict adds
-`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:2,1000000:0` (seven drafts alone, two each for
-two requests), Spark `ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0` and
-`ATLAS_DFLASH_ADAPTIVE_MIN=2.5` ([ENGINE](ENGINE.md) says what each does). `-e SPARKINKLING_DRAFTER=none` drops the four drafter
-flags.
+`ATLAS_MTP_GATE_FORCE=1`; Spark adds `ATLAS_DFLASH_BATCH_DEPTH=1:7,1000000:0`
+(seven drafts alone, plain decode from two requests), Strict
+`ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,1000000:0` (three each for two requests) and
+`ATLAS_DFLASH_ADAPTIVE_MIN=1.0` ([ENGINE](ENGINE.md) says what each does).
+`-e SPARKINKLING_DRAFTER=none` drops the four drafter flags.
+`-e SPARKINKLING_LOOPCD=on` (or `skip-thinking`) adds `--loopcd`
+([LOOPCD](LOOPCD.md)); unset or `off` leaves it out.
 
 **Memory share.** `-e SPARKINKLING_GPU_MEMORY_UTILIZATION=0.70` (two decimals,
 0.50-0.90) overrides the profile's 0.80. GB10 memory is shared with the host;

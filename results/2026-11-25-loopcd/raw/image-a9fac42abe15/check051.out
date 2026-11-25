@@ -1,0 +1,37 @@
+== default: mode spark, profile default, drafter dflash2, LoopCD off pool = 807328 max KV
+
+greedy spark c1 vs 0.5.0 image: 8/8 identical
+greedy spark c2 vs 0.5.0 image: 8/8 identical
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+errors: 0
+== strict: mode strict, profile default, drafter dflash2, LoopCD off pool = 930352 max KV
+
+greedy strict c1 vs 0.5.0 image: 8/8 identical
+errors: 0
+== saver-spark-loopcd-on: mode spark, profile saver, drafter dflash2, LoopCD on pool = 711776 max KV
+
+greedy spark loopcd=on c1 vs off: 0/8 identical
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+errors: 0
+== saver-strict-loopcd-on: mode strict, profile saver, drafter dflash2, LoopCD on pool = 824560 max KV
+
+greedy strict loopcd=on c1 vs off: 0/8 identical
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+errors: 0
+== saver-spark-loopcd-skip-thinking: mode spark, profile saver, drafter dflash2, LoopCD skip-thinking pool = 704816 max KV
+
+greedy spark loopcd=skip-thinking c1 vs off: 0/8 identical
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+errors: 0
+== saver-strict-loopcd-skip-thinking: mode strict, profile saver, drafter dflash2, LoopCD skip-thinking pool = 824064 max KV
+
+greedy strict loopcd=skip-thinking c1 vs off: 0/8 identical
+"math": "30/30", "tools": "10/10", "math_ok": [true, true, t
+errors: 0
+== saver-spark-off: mode spark, profile saver, drafter dflash2, LoopCD off pool = 802016 max KV
+
+errors: 0
+== saver-strict-off: mode strict, profile saver, drafter dflash2, LoopCD off pool = 945968 max KV
+
+errors: 0
+CHECK-DONE 17:08:52Z
