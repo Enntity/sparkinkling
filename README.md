@@ -111,9 +111,7 @@ engine.
    [`install/checkpoint.json`](install/checkpoint.json)) and checks its weight
    and tokenizer files' sha256, then downloads and checks the drafter,
    [`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2)
-   at revision `4f9088ea66c2` (about 1 GB; with `DRAFTER=dspark` it assembles
-   the checkpoint's own DSpark drafter instead,
-   [`install/dspark_drafter.py`](install/dspark_drafter.py)). In
+   at revision `4f9088ea66c2` (about 1 GB). In
    Spark mode it also downloads and checks the overlay, then assembles the
    Spark model directory ([`install/spark_overlay.py`](install/spark_overlay.py)).
    It uses `hf` when installed and a throwaway container otherwise.
@@ -167,8 +165,8 @@ finishes `content_filter`, not `tool_calls`, which such a client must not run
 ([docs/TOOL-GUARD.md](docs/TOOL-GUARD.md)).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
-(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90), `PREFIX_CACHE_DIR`
-and `PREFIX_CACHE_GB` (below), `MODEL_ROOT`, `PULL=0`.
+(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90),
+`MODEL_ROOT`, `PULL=0`.
 
 ### Profiles
 
@@ -209,46 +207,15 @@ replay of a voice call (16-17K-token prompts, three rebuilt trailing messages)
 the time to first token of a new turn went from 1.3-1.7 s to 0.6-0.8 s (one
 run on a development build).
 
-### Prefix cache on disk
-
-When the KV pool fills, the prefix cache drops the conversations used least
-recently, and one that comes back is prefilled again from the start. With
-`PREFIX_CACHE_DIR` set, the engine writes the KV blocks it drops to that disk
-instead and reads them back when the conversation returns; the engine tier
-and settings are SparkQwen's and SparkGLM's.
-
-```sh
-PREFIX_CACHE_DIR=/srv/sparkinkling/prefix-cache
-PREFIX_CACHE_GB=48                            # GiB, 16-100 (default 48)
-```
-
-`start.sh` creates `<mode>/kv/` in the directory, refuses one on tmpfs or
-without that much space free, and mounts it into the container. With the tier on, the engine keeps
-full-length KV (192 KiB a token over all 48 layer visits; the window-bounded
-pool needs one block id for every layer), so 48 GiB holds about 262K tokens
-and the profile's pool falls back to 0.4.2's size: requests longer than that
-pool cannot be admitted. In one check on 2026-11-21 (Strict, a pool
-held to 5,373 blocks, ~20K-token conversations pushed out by five others), a
-returning conversation's time to first token went from 5.82 s to 0.90 s: the
-engine read its 1,237 blocks back in 403 ms and resumed from the snapshot at
-token 19,776, and the answer was identical to a run with the tier off
-([receipts](results/2026-11-21-prefix-cache-and-profiles/RESULT.md)).
-The engine takes the tier's staging buffers and on-disk index out of the KV
-pool (388 MiB at 16 GiB). The state snapshots a restore starts from stay in
-host memory: a conversation
-comes back from disk while its snapshot is still among the profile's
-snapshots. Nothing is kept across a restart: the engine deletes its files as
-soon as it has them open, and clears a crash's leftovers when it starts.
-
 ## Speculative decoding
 
 Both modes run incoai's DFlash2 drafter for Inkling 2 Mini by default
 (`DRAFTER=dflash2`,
 [`incoai/Inkling-2-Mini-DFlash2`](https://huggingface.co/incoai/Inkling-2-Mini-DFlash2),
 Apache-2.0): it proposes up to seven tokens a step and the mode's own weights
-verify them, so it changes speed, not the model. `DRAFTER=dspark` runs the
-checkpoint's bundled DSpark drafter instead, with the same settings. Greedy
-text with either drafter on matched text with it off in our check
+verify them, so it changes speed, not the model. It replaces the checkpoint's
+bundled DSpark drafter, which 0.4.2 ran. Greedy text with the drafter on
+matched text with it off in our check
 ([LIMITATIONS](docs/LIMITATIONS.md#fidelity)).
 
 - **A verify stops where the drafter is unsure.** The drafter reports how

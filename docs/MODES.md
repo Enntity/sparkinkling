@@ -53,18 +53,11 @@ Both modes run incoai's DFlash2 drafter for Inkling 2 Mini by default
 (Apache-2.0, about 1 GB), pinned by revision and sha256 in
 [`install/checkpoint.json`](../install/checkpoint.json) and served from its own
 directory, `<model root>/incoai--Inkling-2-Mini-DFlash2`. It reads the same
-four taps of the target as the bundled drafter and accepts more of its drafts
-on code and math.
-
-The checkpoint also bundles a DSpark draft model (`mtp.safetensors`), which
-`DRAFTER=dspark` runs with the same settings. `./start.sh` assembles the
-drafter's directory next to the checkpoint, `<checkpoint>+dspark`
-([`install/dspark_drafter.py`](../install/dspark_drafter.py)): the
-checkpoint's `mtp.safetensors`, checked against its pinned sha256 and linked
-as `model.safetensors`, beside a `config.json` that is the checkpoint's
-`mtp_config` plus the tokenizer's vocabulary size. The engine verifies every
-draft against the mode's own weights, so either drafter changes speed and not
-the model. Strict drafts for one or two live requests and Spark for one; from
+four taps of the target as the checkpoint's bundled DSpark draft model
+(`mtp.safetensors`) and accepts more of its drafts; 0.5.0 replaces DSpark
+with it. The engine verifies every draft against the mode's own weights, so
+the drafter changes speed and not the model. Strict drafts for one or two live
+requests and Spark for one; from
 there the engine decodes plainly, which delivers more. `DRAFTER=none` turns
 drafting off.
 

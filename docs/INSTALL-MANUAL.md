@@ -41,7 +41,8 @@ hf download thinkingmachines/Inkling-2-Mini --revision ed40e7da625f594fc9c4990f5
 python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/thinkingmachines--Inkling-2-Mini"
 ```
 
-About 20 GB, including the bundled DSpark draft model (`mtp.safetensors`).
+About 20 GB, including the bundled DSpark draft model (`mtp.safetensors`),
+which SparkInkling checks as part of the checkpoint but does not run.
 `check_files.py` compares the weight and tokenizer files with the sha256
 values in the pin. Then the drafter (skip with `DRAFTER=none`): incoai's
 DFlash2 drafter, the default, about 1 GB at the revision pinned under
@@ -53,17 +54,6 @@ hf download incoai/Inkling-2-Mini-DFlash2 config.json model.safetensors \
   --local-dir "$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2"
 python3 install/check_files.py install/checkpoint.json "$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2" dflash2
 ```
-
-Or, for `DRAFTER=dspark`, the checkpoint's own drafter's directory:
-
-```sh
-python3 install/dspark_drafter.py install/checkpoint.json \
-  "$MODEL_ROOT/thinkingmachines--Inkling-2-Mini" "$MODEL_ROOT/thinkingmachines--Inkling-2-Mini+dspark"
-```
-
-It links `mtp.safetensors` as `model.safetensors` beside a `config.json` that
-is the checkpoint's `mtp_config` plus the tokenizer vocabulary size, the
-layout the engine loads a drafter from.
 
 ## 4. Spark mode only: the overlay
 
@@ -90,7 +80,7 @@ Strict:
 
 ```sh
 ck=$MODEL_ROOT/thinkingmachines--Inkling-2-Mini
-dr=$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2   # or $ck+dspark with SPARKINKLING_DRAFTER=dspark
+dr=$MODEL_ROOT/incoai--Inkling-2-Mini-DFlash2
 mkdir -p ~/.cache/atlas-cuda
 docker run -d --name atlas-sparkinkling --network host --ipc host --shm-size 16g --memory 114g \
   --gpus all --security-opt no-new-privileges=true \
@@ -135,11 +125,6 @@ hangs instead of killing a process.
 `/opt/atlas/profiles/custom.json` and name `custom`. A profile must keep one
 `--kernel-target=inkling-2-mini`, BF16 KV and one rank, and may not configure
 speculation (that is `SPARKINKLING_DRAFTER`).
-
-**Prefix cache on disk.** Mount a directory on a real disk at `/prefix-cache`
-(`--mount type=bind,src=/srv/sparkinkling/prefix-cache,dst=/prefix-cache`) and
-pass `-e SPARKINKLING_PREFIX_CACHE_GB=48` (16-100). The engine keeps evicted KV
-blocks in `/prefix-cache/<mode>/kv`; create that subdirectory first.
 
 **Stopping.** `docker rm -f atlas-sparkinkling`.
 

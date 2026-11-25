@@ -70,7 +70,8 @@ class VersionQueries(unittest.TestCase):
         cases = [({'GPU_MEMORY_UTILIZATION': '0.95'}, 'GPU_MEMORY_UTILIZATION'),
                  ({'MODE': 'fast'}, 'strict or spark'),
                  ({'DRAFTER': 'eagle'}, 'DRAFTER'),
-                 ({'DRAFTER': 'eagle'}, 'DRAFTER must be dflash2, dspark or none'),
+                 ({'PREFIX_CACHE_DIR': '/srv/pc'}, 'PREFIX_CACHE_DIR and PREFIX_CACHE_GB were removed in 0.5.0'),
+                 ({'DRAFTER': 'eagle'}, 'DRAFTER must be dflash2 or none'),
                  ({'PROFILE': 'nonesuch'}, 'PROFILE'),
                  ({'TOOL_GUARD': 'maybe'}, 'TOOL_GUARD')]
         if pin['overlay']['revision'] == 'TODO':

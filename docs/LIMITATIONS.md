@@ -93,9 +93,10 @@ unless they say they come from a development build.
 - **A 1M-token prompt is slow**: about 21 minutes to prefill (attention over
   the 8 global visits grows with the square of the context), and decode at
   that length reads about 32 GiB of KV a token.
-- **The disk tier keeps full-length KV.** With `PREFIX_CACHE_DIR` set the
-  engine cannot bound the sliding-window visits, the pool falls back to 0.4.2's
-  size (about 194K to 446K tokens) and a longer request cannot be admitted.
+- **No disk tier for the prefix cache.** 0.4.x could keep evicted prefix-cache
+  KV on disk (`PREFIX_CACHE_DIR`); the engine's disk tier needs full-length KV,
+  which would cost 1M-token context, so 0.5.0 removed the setting. A
+  conversation pushed out of the pool is prefilled again when it returns.
 - **A host that runs out of memory hangs** instead of killing a process (GB10
   memory is shared with the host). The container is capped at 114 GiB; keep
   builds and other models off the Spark while it serves, or use `saver`.

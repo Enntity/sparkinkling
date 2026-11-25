@@ -91,13 +91,14 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_MODE='fast')
 
-    def test_dflash2_by_default_and_dspark_on_request(self):
-        # incoai's DFlash2 drafter is the default; the checkpoint's own DSpark runs the same way
-        for drafter, env_extra in (('dflash2', {}), ('dspark', {'SPARKINKLING_DRAFTER': 'dspark'})):
-            argv, env = launch(**env_extra)
-            self.assertEqual(env['SPARKINKLING_DRAFTER'], drafter)
-            self.assertEqual(flag(argv, '--draft-model'), DRAFTER, drafter)
-            self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1', drafter)
+    def test_dflash2_by_default(self):
+        argv, env = launch()
+        self.assertEqual(env['SPARKINKLING_DRAFTER'], 'dflash2')
+        self.assertEqual(flag(argv, '--draft-model'), DRAFTER)
+        self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
+        self.assertEqual(serve.DRAFTERS, ('dflash2', 'none'))
+        with self.assertRaises(ValueError):
+            launch(SPARKINKLING_DRAFTER='dspark')  # removed in 0.5.0
 
     def test_the_drafter_speculates_alone_in_strict(self):
         argv, env = launch()
@@ -129,30 +130,6 @@ class Launch(unittest.TestCase):
             self.assertIn('--enable-prefix-caching', argv, mode)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', mode)
 
-    def test_disk_prefix_cache_is_off_unless_sized(self):
-        for gb in (None, '', '0'):
-            env = launch(**({} if gb is None else {'SPARKINKLING_PREFIX_CACHE_GB': gb}))[1]
-            self.assertFalse([k for k in env if k.startswith('ATLAS_KV_NVME')], gb)
-
-    def test_disk_prefix_cache_needs_its_mount(self):
-        serve.check_prefix_cache_dir({})
-        with tempfile.TemporaryDirectory() as d:
-            serve.check_prefix_cache_dir({'ATLAS_KV_NVME_DIR': d})
-            with self.assertRaises(ValueError):
-                serve.check_prefix_cache_dir({'ATLAS_KV_NVME_DIR': os.path.join(d, 'strict', 'kv')})
-
-    def test_disk_prefix_cache_per_mode(self):
-        dirs = {}
-        for mode in ('strict', 'spark'):
-            env = launch(SPARKINKLING_MODE=mode, SPARKINKLING_PREFIX_CACHE_GB='48')[1]
-            self.assertEqual(env['ATLAS_KV_NVME_GB'], '48')
-            self.assertEqual(env['ATLAS_GLM_NVME_FAST'], '1')
-            dirs[mode] = env['ATLAS_KV_NVME_DIR']
-        self.assertEqual(dirs, {'strict': '/prefix-cache/strict/kv', 'spark': '/prefix-cache/spark/kv'})
-        for bad in ('8', '101', '4x', '48.5'):
-            with self.assertRaises(ValueError):
-                launch(SPARKINKLING_PREFIX_CACHE_GB=bad)
-
     def test_no_drafter(self):
         argv, env = launch(SPARKINKLING_DRAFTER='none')
         self.assertEqual(env['SPARKINKLING_DRAFTER'], 'none')
@@ -166,16 +143,18 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(SPARKINKLING_DRAFTER='eagle')
 
-    def test_the_disk_prefix_cache_keeps_the_full_length_limits(self):
-        # with the disk tier the engine keeps every visit's KV at full length, so each
-        # profile serves 0.4.2's per-request limit; without it, the window-bounded limit
-        limits = {'default': ('1048576', '131072'), 'saver': ('786432', '131072'), 'max': ('1048576', '262144')}
-        for name, (window, disk) in limits.items():
+    def test_profiles_serve_the_window_bounded_limits(self):
+        limits = {'default': '1048576', 'saver': '786432', 'max': '1048576'}
+        for name, window in limits.items():
             p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
-            base = {'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}
-            self.assertEqual(flag(serve.launch(base, p)[0], '--max-seq-len'), window, name)
-            argv = serve.launch({**base, 'SPARKINKLING_PREFIX_CACHE_GB': '48'}, p)[0]
-            self.assertEqual(flag(argv, '--max-seq-len'), disk, name)
+            argv = serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}, p)[0]
+            self.assertEqual(flag(argv, '--max-seq-len'), window, name)
+            self.assertNotIn('max_seq_len_with_disk_tier', p, name)
+
+    def test_ambient_engine_settings_do_not_reach_the_engine(self):
+        # the disk tier was removed in 0.5.0: an ambient ATLAS_KV_NVME_* must not turn it back on
+        env = launch(ATLAS_KV_NVME_DIR='/prefix-cache/strict/kv', ATLAS_KV_NVME_GB='48')[1]
+        self.assertFalse([k for k in env if k.startswith('ATLAS_KV_NVME')])
 
     def test_a_profile_cannot_speculate_go_multi_rank_or_change_target(self):
         for extra in (['--dflash'], ['--draft-model=/m/mtp.safetensors'], ['--world-size=2'], ['--tp-size=2'],
@@ -283,10 +262,10 @@ class StartScript(unittest.TestCase):
     def test_start_mounts_the_assembled_drafter(self):
         start = (ROOT/'start.sh').read_text()
         self.assertIn('DRAFTER=${DRAFTER:-dflash2}', start)
-        self.assertIn('drafter=$checkpoint+dspark', start)
         self.assertIn('drafter=$MODEL_ROOT/${DFLASH2_REPO/\\//--}', start)
         self.assertIn('python3 install/check_files.py install/checkpoint.json "$drafter" dflash2', start)
-        self.assertIn('python3 install/dspark_drafter.py install/checkpoint.json "$checkpoint" "$drafter"', start)
+        self.assertNotIn('dspark', start)
+        self.assertNotIn('/prefix-cache', start)
         self.assertIn('--mount "type=bind,src=$drafter,dst=$drafter,readonly"', start)
         self.assertIn('-e DRAFTER_PATH="$drafter"', start)
 

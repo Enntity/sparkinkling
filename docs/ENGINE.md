@@ -81,8 +81,8 @@ image's own engine, product flags, DSpark on:
 - **Long context**: a code hidden a third of the way into a 1,032,929-token
   prompt was recalled (1,252 s for the prompt, Strict, utilization 0.50).
 
-The disk tier (`ATLAS_KV_NVME_DIR`, `PREFIX_CACHE_DIR`), `--high-speed-swap`
-and multi-rank serving still assume one block id addresses every layer, so
+The engine's disk tier (`ATLAS_KV_NVME_DIR`, which SparkInkling 0.5.0 no longer
+offers), `--high-speed-swap` and multi-rank serving still assume one block id addresses every layer, so
 with any of them the engine keeps full-length KV and logs why. Swapping a
 preempted request to host memory is off with the window; such a request is
 prefilled again.

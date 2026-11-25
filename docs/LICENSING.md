@@ -72,6 +72,5 @@ the Apache License 2.0 ([MODES](MODES.md)). `install/spark_overlay.py` checks
 its sha256, tensor count and names against the pin and links it beside the
 checkpoint; the checkpoint's own directory is never changed.
 
-Files the engine writes while serving (the CUDA compile cache, the prefix
-cache's disk tier) are derived from the checkpoint's weights or from your
+Files the engine writes while serving (the CUDA compile cache) are derived from the checkpoint's weights or from your
 prompts; they stay on your Spark.

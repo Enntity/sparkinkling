@@ -4,7 +4,7 @@
   "revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
   "size_gib": 18.8,
   "model_type": "inkling2_loop",
-  "format": "One shard: routed experts NVFP4 in layers 0-19 and MXFP8 in layers 20-23; attention projections, router, loop controllers, embeddings and lm_head BF16. mtp.safetensors is the bundled DSpark draft model.",
+  "format": "One shard: routed experts NVFP4 in layers 0-19 and MXFP8 in layers 20-23; attention projections, router, loop controllers, embeddings and lm_head BF16. mtp.safetensors is the bundled DSpark draft model (downloaded and checked with the checkpoint as shipped; SparkInkling drafts with DFlash2).",
   "files": {
     "model-00001-of-00001.safetensors": "65e60f51aa1284d4fb022584908c315270334d991828bb774af60584523539d1",
     "mtp.safetensors": "7c3b651317f01f73bcf4e1dceba66ef8b7e1a1eac6bc171e882e690a4b10a1d2",
@@ -14,11 +14,6 @@
   "why": "Thinking Machines' own release, served as shipped in Strict mode. The sha256 values are Hugging Face's LFS object ids at this revision; the small JSON and template files are fetched at the same revision and not hashed here.",
   "served_model_name": "inkling-2-mini-atlas",
   "license": "apache-2.0",
-  "draft": {
-    "file": "mtp.safetensors",
-    "method": "DSpark",
-    "status": "loaded with DRAFTER=dspark: install/dspark_drafter.py links it beside its mtp_config as the engine's DFlash drafter directory"
-  },
   "overlay": {
     "repository": "Enntity/Inkling-2-Mini-Spark-NVFP4",
     "revision": "e9df93dceea2fbf0927caf178104e868452a6292",
@@ -47,6 +42,6 @@
     "method": "DFlash2 (block diffusion with a candidate selector)",
     "license": "apache-2.0",
     "status": "loaded by default (DRAFTER=dflash2): the repository's config.json and model.safetensors served as the engine's DFlash drafter directory",
-    "why": "incoai's DFlash2 drafter for Inkling 2 Mini reads the same four target taps as the bundled DSpark and accepts more of its drafts on code and math. The sha256 is Hugging Face's LFS object id at this revision; config.json is fetched at the same revision and not hashed here."
+    "why": "incoai's DFlash2 drafter for Inkling 2 Mini reads the same four target taps as the bundled DSpark, accepts more of its drafts, and decoded 17-22% faster at one request (0.5.0 replaces DSpark with it). The sha256 is Hugging Face's LFS object id at this revision; config.json is fetched at the same revision and not hashed here."
   }
 }

@@ -11,10 +11,8 @@
 #
 # Settings (environment or .env): MODEL_ROOT (default ~/models/sparkinkling),
 # MODE (strict, the default, or spark), PROFILE (default, or a JSON file of your
-# own), DRAFTER (dspark, the default: the checkpoint's own drafter; or none),
-# GPU_MEMORY_UTILIZATION (0.50-0.90), PREFIX_CACHE_DIR and PREFIX_CACHE_GB (16-100,
-# default 48: keep evicted prefix-cache KV on this disk), IMAGE, PULL=0 (always
-# build), TOOL_GUARD*.
+# own), DRAFTER (dflash2, the default: incoai's DFlash2 drafter; or none),
+# GPU_MEMORY_UTILIZATION (0.50-0.90), IMAGE, PULL=0 (always build), TOOL_GUARD*.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ ${1:-} == --version ]]; then exec python3 install/serve.py --version; fi
@@ -42,16 +40,11 @@ if [[ ${1:-up} == up || ${1:-} == download ]]; then
     exit 2
   fi
   [[ -f $PROFILE || -f install/profiles/$PROFILE.json ]] || { echo "PROFILE: no $PROFILE or install/profiles/$PROFILE.json" >&2; exit 2; }
-  [[ $DRAFTER =~ ^(none|dspark|dflash2)$ ]] || { echo 'DRAFTER must be dflash2, dspark or none' >&2; exit 2; }
+  [[ $DRAFTER =~ ^(none|dflash2)$ ]] || { echo 'DRAFTER must be dflash2 or none' >&2; exit 2; }
   [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||
     { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.90' >&2; exit 2; }
-  if [[ -n ${PREFIX_CACHE_DIR:-} || -n ${PREFIX_CACHE_GB:-} ]]; then
-    PREFIX_CACHE_GB=${PREFIX_CACHE_GB:-48}
-    [[ ${PREFIX_CACHE_DIR:-} == /* && $PREFIX_CACHE_DIR != *,* ]] ||
-      { echo 'PREFIX_CACHE_DIR must be set to an absolute path without commas' >&2; exit 2; }
-    [[ $PREFIX_CACHE_GB =~ ^[1-9][0-9]{1,2}$ ]] && (( PREFIX_CACHE_GB >= 16 && PREFIX_CACHE_GB <= 100 )) ||
-      { echo 'PREFIX_CACHE_GB must be a whole number from 16 to 100' >&2; exit 2; }
-  fi
+  [[ -z ${PREFIX_CACHE_DIR:-}${PREFIX_CACHE_GB:-} ]] ||
+    { echo 'PREFIX_CACHE_DIR and PREFIX_CACHE_GB were removed in 0.5.0 (the disk tier would cost 1M-token context); unset them' >&2; exit 2; }
   SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-stream}" SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \
   SPARKINKLING_TOOL_GUARD_ALLOW_HOSTS="${TOOL_GUARD_ALLOW_HOSTS:-}" SPARKINKLING_TOOL_GUARD_DENY_HOSTS="${TOOL_GUARD_DENY_HOSTS:-}" \
     python3 -c 'import os,sys; sys.path.insert(0,"install"); import serve; serve.tool_guard_args(os.environ, [])'
@@ -63,11 +56,9 @@ weights=$MODEL_ROOT/${OVERLAY_REPO/\//--}
 # Spark mode's model directory: the checkpoint's files linked, the overlay
 # mapped in (install/spark_overlay.py). It sits next to $checkpoint.
 spark_model=$checkpoint+spark-nvfp4
-# The drafter's directory: incoai's DFlash2 repository as downloaded, or the
-# DSpark drafter's mtp.safetensors linked beside its config
-# (install/dspark_drafter.py), next to $checkpoint.
+# The drafter's directory: incoai's DFlash2 repository as downloaded, next to
+# $checkpoint.
 drafter=$MODEL_ROOT/${DFLASH2_REPO/\//--}
-if [[ $DRAFTER == dspark ]]; then drafter=$checkpoint+dspark; fi
 
 # The image for this checkout is pulled from ghcr.io/enntity/atlas-sparkinkling
 # (its tag is the install/ tree); if that tag is not published, it is built
@@ -88,9 +79,6 @@ download() {
     hf_download "$CHECKPOINT_REPO" "$CHECKPOINT_REVISION" "$checkpoint"
     python3 install/check_files.py install/checkpoint.json "$checkpoint"
     echo "$CHECKPOINT_REVISION" > "$checkpoint/.sparkinkling-revision"
-  fi
-  if [[ $DRAFTER == dspark ]]; then
-    python3 install/dspark_drafter.py install/checkpoint.json "$checkpoint" "$drafter"
   fi
   if [[ $DRAFTER == dflash2 && $(cat "$drafter/.sparkinkling-revision" 2>/dev/null) != "$DFLASH2_REVISION" ]]; then
     say "download $DFLASH2_REPO @ $DFLASH2_REVISION (sha256 checked)"
@@ -136,24 +124,6 @@ serve() {
     profile_mount=(--mount "type=bind,src=$(realpath "$profile"),dst=/opt/atlas/profiles/custom.json,readonly")
     profile=custom
   fi
-  # Evicted prefix-cache KV on this disk, one directory per mode. The engine
-  # unlinks its cache files while they are open and sweeps any a crash left
-  # behind, so nothing carries over a restart.
-  local pc_args=()
-  if [[ -n ${PREFIX_CACHE_DIR:-} ]]; then
-    mkdir -p "$PREFIX_CACHE_DIR/$MODE/kv"
-    local pc_dir free_kb
-    pc_dir=$(realpath "$PREFIX_CACHE_DIR")
-    # the resolved path goes into a --mount field list
-    [[ $pc_dir != *[,\"]* ]] || { echo "PREFIX_CACHE_DIR resolves to $pc_dir: no commas or quotes" >&2; exit 2; }
-    case $(stat -f -c %T "$pc_dir" 2>/dev/null) in
-      tmpfs | ramfs | overlayfs) echo "PREFIX_CACHE_DIR $pc_dir is not on a disk" >&2; exit 2 ;;
-    esac
-    free_kb=$(df -Pk "$pc_dir" | awk 'NR == 2 {print $4}')
-    (( free_kb >= PREFIX_CACHE_GB * 1048576 )) ||
-      { echo "PREFIX_CACHE_DIR $pc_dir has $((free_kb / 1048576)) GiB free; PREFIX_CACHE_GB needs $PREFIX_CACHE_GB" >&2; exit 2; }
-    pc_args=(--mount "type=bind,src=$pc_dir,dst=/prefix-cache" -e SPARKINKLING_PREFIX_CACHE_GB="$PREFIX_CACHE_GB")
-  fi
   mkdir -p "$HOME/.cache/atlas-cuda"
   stop
   say "serving $CHECKPOINT_REPO on this Spark (mode $MODE, profile $PROFILE, drafter $DRAFTER)"
@@ -162,7 +132,7 @@ serve() {
   docker run -d --name "$NAME" --restart no --network host --ipc host \
     --shm-size 16g --memory 114g --gpus all --security-opt no-new-privileges=true --stop-timeout 60 \
     "${mounts[@]}" --mount "type=bind,src=$HOME/.cache/atlas-cuda,dst=/atlas-cuda-cache" \
-    ${profile_mount[@]+"${profile_mount[@]}"} ${pc_args[@]+"${pc_args[@]}"} \
+    ${profile_mount[@]+"${profile_mount[@]}"} \
     -e MODEL_PATH="$model" -e SPARKINKLING_MODE="$MODE" -e SPARKINKLING_DRAFTER="$DRAFTER" -e DRAFTER_PATH="$drafter" \
     -e SPARKINKLING_PROFILE="$profile" -e SERVED_MODEL_NAME="$SERVED" \
     -e SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-stream}" -e SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \

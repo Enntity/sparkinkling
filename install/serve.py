@@ -14,13 +14,11 @@ SERVED_MODEL_NAME = 'inkling-2-mini-atlas'
 MODES = ('strict', 'spark')
 OVERLAY_FILE = 'spark-nvfp4.safetensors'
 # SPARKINKLING_DRAFTER: 'dflash2' (the default) runs incoai's DFlash2 drafter
-# for Inkling 2 Mini (incoai/Inkling-2-Mini-DFlash2, at DRAFTER_PATH);
-# 'dspark' the checkpoint's bundled drafter (mtp.safetensors, assembled by
-# install/dspark_drafter.py at DRAFTER_PATH); 'none' decodes without
-# speculation. Both drafters run with the same settings below.
-DRAFTERS = ('dflash2', 'dspark', 'none')
+# for Inkling 2 Mini (incoai/Inkling-2-Mini-DFlash2, at DRAFTER_PATH); 'none'
+# decodes without speculation.
+DRAFTERS = ('dflash2', 'none')
 # The drafter's block is 8: seven drafts a step.
-DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
+DRAFT_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 # How the drafter is run (GB10, 2026-11-23, a development build with other
 # services resident; the runs are in Enntity/sparkinkling issues 1 and 2):
 # - A verify stops where the drafter is unsure (ATLAS_DFLASH_CONF_WIDTH: the
@@ -40,10 +38,10 @@ DSPARK_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 #   plainly from three (one draft each: at three, code +10% and prose -6%;
 #   at four, +8% and -9%); Spark decodes plainly from two (two drafts each
 #   gained on code and lost on prose).
-_DSPARK_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}
-DSPARK_ENV = {
-    'strict': {**_DSPARK_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:2,1000000:0'},
-    'spark': {**_DSPARK_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE_MIN': '2.5'},
+_DRAFT_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}
+DRAFT_ENV = {
+    'strict': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:2,1000000:0'},
+    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0', 'ATLAS_DFLASH_ADAPTIVE_MIN': '2.5'},
 }
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
@@ -94,37 +92,6 @@ def _memory_share(environ, args):
     return [f'--gpu-memory-utilization={util}' if a.startswith('--gpu-memory-utilization=') else a for a in args]
 
 
-def disk_prefix_cache(gb, mode):
-    """Engine settings that keep the KV blocks the prefix cache evicts on the
-    Spark's disk, in the directory start.sh mounts at /prefix-cache, one
-    subdirectory per mode. Their conv-state snapshots stay in host memory (an
-    Inkling snapshot is about 5 MB). Empty or 0 leaves the tier off. The KV
-    tier and its settings are SparkQwen's and SparkGLM's."""
-    if gb in ('', '0'):
-        return {}
-    if not re.fullmatch(r'[1-9][0-9]{1,2}', gb) or not 16 <= int(gb) <= 100:
-        raise ValueError('SPARKINKLING_PREFIX_CACHE_GB must be a whole number from 16 to 100')
-    return {'ATLAS_KV_NVME_DIR': f'/prefix-cache/{mode}/kv', 'ATLAS_KV_NVME_GB': gb, 'ATLAS_GLM_NVME_FAST': '1'}
-
-
-def _disk_tier_limit(args, profile):
-    """With the disk tier the engine keeps every visit's KV at full length (the
-    window-bounded pools do not reach the disk), so a request is held to the
-    profile's `max_seq_len_with_disk_tier`, 0.4.2's limit for its pool."""
-    limit = int(profile['max_seq_len_with_disk_tier'])
-    return [f'--max-seq-len={min(limit, int(a.split("=", 1)[1]))}' if a.startswith('--max-seq-len=') else a
-            for a in args]
-
-
-def check_prefix_cache_dir(env):
-    """The disk tier's directory must be a mount (start.sh makes it): without
-    one the engine would fill the container's own filesystem."""
-    path = env.get('ATLAS_KV_NVME_DIR', '')
-    if path and not os.path.isdir(path):
-        raise ValueError(f'{path} is missing: mount a directory on a disk at /prefix-cache '
-                         'with <mode>/kv inside (start.sh does), or leave SPARKINKLING_PREFIX_CACHE_GB unset')
-
-
 def launch(environ, profile):
     """One engine process on one Spark: no ranks, no fabric."""
     args = list(profile['server_argv'])
@@ -151,17 +118,13 @@ def launch(environ, profile):
         raise ValueError('MODEL_PATH must be an absolute path')
     env = _engine_env(environ, profile)
     env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter)
-    disk = disk_prefix_cache(environ.get('SPARKINKLING_PREFIX_CACHE_GB', ''), mode)
-    env.update(disk)
     args = _memory_share(environ, [str(a).replace('${model}', model) for a in args])
-    if disk:
-        args = _disk_tier_limit(args, profile)
     if drafter != 'none':
         draft = environ.get('DRAFTER_PATH', '')
         if not Path(draft).is_absolute() or any(c in draft for c in '\r\n\0'):
             raise ValueError('DRAFTER_PATH must be an absolute path')
-        args += [*DSPARK_ARGS, f'--draft-model={draft}']
-        env.update(DSPARK_ENV[mode])
+        args += [*DRAFT_ARGS, f'--draft-model={draft}']
+        env.update(DRAFT_ENV[mode])
     name = environ.get('SERVED_MODEL_NAME', SERVED_MODEL_NAME)
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._/-]{0,127}', name):
         raise ValueError('Invalid SERVED_MODEL_NAME')
@@ -217,7 +180,6 @@ def main():
     profile = profile_path(os.environ, here)
     argv, env = launch(os.environ, json.loads(profile.read_text()))
     check_model_dir(env['MODEL_PATH'], env['SPARKINKLING_MODE'])
-    check_prefix_cache_dir(env)
     source = json.loads((here/'source-manifest.json').read_text())
     print(json.dumps({'event': 'atlas-recipe-start', **release_info(here), 'profile': profile.stem,
                       'mode': env['SPARKINKLING_MODE'], 'drafter': env['SPARKINKLING_DRAFTER'],

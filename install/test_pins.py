@@ -44,7 +44,6 @@ class Pins(unittest.TestCase):
                                            'tokenizer.json', 'tiktoken/tokenizer.model'})
         for name, digest in p['files'].items():
             self.assertRegex(digest, r'^[0-9a-f]{64}$', name)
-        self.assertEqual(p['draft']['file'], 'mtp.safetensors')
 
     def test_the_overlay_pin_is_whole_or_todo(self):
         o = pin('checkpoint.json')['overlay']
@@ -101,8 +100,7 @@ class Docs(unittest.TestCase):
 
     def test_dflash2_is_the_documented_default(self):
         pin = json.loads((ROOT/'install'/'checkpoint.json').read_text())
-        self.assertEqual(pin['draft']['file'], 'mtp.safetensors')
-        self.assertIn('mtp.safetensors', pin['files'])
+        self.assertNotIn('draft', pin)
         d = pin['dflash2']
         self.assertEqual(d['repository'], 'incoai/Inkling-2-Mini-DFlash2')
         self.assertRegex(d['revision'], r'^[0-9a-f]{40}$')
@@ -112,8 +110,9 @@ class Docs(unittest.TestCase):
         self.assertEqual(d['license'], 'apache-2.0')
         for doc in ('README.md', 'docs/MODES.md'):
             with self.subTest(doc=doc):
-                for drafter in ('DRAFTER=dflash2', 'DRAFTER=dspark', 'DRAFTER=none'):
+                for drafter in ('DRAFTER=dflash2', 'DRAFTER=none'):
                     self.assertIn(drafter, text(doc))
+                self.assertNotIn('DRAFTER=dspark', text(doc))
 
 
 class Privacy(unittest.TestCase):
