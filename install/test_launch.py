@@ -131,9 +131,10 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
 
-    def test_spark_drafts_alone(self):
+    def test_spark_drafts_for_up_to_two_requests(self):
         _, env = launch()  # Spark is the default
-        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        # Spark: seven drafts alone, three each for two requests, plain from three
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:3,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)  # the engine's 2.0
         self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
@@ -144,6 +145,15 @@ class Launch(unittest.TestCase):
             argv, env = launch(SPARKINKLING_MODE=mode)
             self.assertIn('--enable-prefix-caching', argv, mode)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', mode)
+
+    def test_spark_projections_on_the_row_invariant_tensor_cores(self):
+        # Spark's NVFP4 projections and head: one kernel for decode and verify rows, with or
+        # without the drafter; Strict's are BF16 and keep the engine's kernels
+        for drafter in ('dflash2', 'none'):
+            _, env = launch(SPARKINKLING_DRAFTER=drafter)
+            self.assertEqual(env['ATLAS_SKINNY_MMA'], '1', drafter)
+            _, env = launch(SPARKINKLING_MODE='strict', SPARKINKLING_DRAFTER=drafter)
+            self.assertNotIn('ATLAS_SKINNY_MMA', env, drafter)
 
     def test_no_drafter(self):
         argv, env = launch(SPARKINKLING_DRAFTER='none')
