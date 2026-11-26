@@ -64,6 +64,8 @@ class Launch(unittest.TestCase):
             self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'), name)
             self.assertGreater(int(flag(argv, '--ssm-cache-slots')), 16, name)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
+            # prefill's large BF16 projections on Atlas's CUTLASS tiles, in both modes
+            self.assertEqual(env['ATLAS_BF16_GEMM_CUTLASS'], '1', name)
             # a checkpoint where a cached prompt forks: clients that rebuild their last messages each turn
             self.assertEqual((env['ATLAS_GLM_PC_BRANCH'], env['ATLAS_GLM_PC_BRANCH_MIN']), ('1', '512'), name)
             # a request that names no effort reasons at low, not the template's high
