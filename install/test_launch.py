@@ -66,8 +66,8 @@ class Launch(unittest.TestCase):
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
             # prefill's large BF16 projections on Atlas's CUTLASS tiles, in both modes
             self.assertEqual(env['ATLAS_BF16_GEMM_CUTLASS'], '1', name)
-            # 8K chunks while idle, 4K while sequences decode (their token gaps stay a 4K chunk's)
-            self.assertEqual(env['ATLAS_PREFILL_BUSY_TOKENS'], '4096', name)
+            # one chunk size: the engine runs a busy prompt one chunk a tick, no separate cap
+            self.assertNotIn('ATLAS_PREFILL_BUSY_TOKENS', env, name)
             # a checkpoint where a cached prompt forks: clients that rebuild their last messages each turn
             self.assertEqual((env['ATLAS_GLM_PC_BRANCH'], env['ATLAS_GLM_PC_BRANCH_MIN']), ('1', '512'), name)
             # a request that names no effort reasons at low, not the template's high
