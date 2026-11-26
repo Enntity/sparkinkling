@@ -47,7 +47,7 @@ class Launch(unittest.TestCase):
     def test_the_development_serving_flags(self):
         argv, _ = launch()
         self.assertEqual(flag(argv, '--kv-cache-dtype'), 'bf16')
-        self.assertEqual(flag(argv, '--max-prefill-tokens'), '4096')
+        self.assertEqual(flag(argv, '--max-prefill-tokens'), '8192')
         self.assertEqual(flag(argv, '--gpu-memory-utilization'), '0.80')
         self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'))
         self.assertIn('--no-tui', argv)
@@ -58,7 +58,7 @@ class Launch(unittest.TestCase):
         for name in names:
             p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
             argv, env = serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}, p)
-            for want in ('--kv-cache-dtype=bf16', '--max-prefill-tokens=4096', '--enable-prefix-caching',
+            for want in ('--kv-cache-dtype=bf16', '--max-prefill-tokens=8192', '--enable-prefix-caching',
                          '--oom-guard-mb=4096', '--request-timeout=3600', '--tool-max-tokens=32768', '--no-tui'):
                 self.assertEqual(argv.count(want), 1, (name, want))
             self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'), name)
@@ -66,6 +66,8 @@ class Launch(unittest.TestCase):
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
             # prefill's large BF16 projections on Atlas's CUTLASS tiles, in both modes
             self.assertEqual(env['ATLAS_BF16_GEMM_CUTLASS'], '1', name)
+            # 8K chunks while idle, 4K while sequences decode (their token gaps stay a 4K chunk's)
+            self.assertEqual(env['ATLAS_PREFILL_BUSY_TOKENS'], '4096', name)
             # a checkpoint where a cached prompt forks: clients that rebuild their last messages each turn
             self.assertEqual((env['ATLAS_GLM_PC_BRANCH'], env['ATLAS_GLM_PC_BRANCH_MIN']), ('1', '512'), name)
             # a request that names no effort reasons at low, not the template's high
