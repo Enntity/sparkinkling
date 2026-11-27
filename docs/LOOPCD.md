@@ -60,10 +60,11 @@ published image, `saver` (0.50 of GPU memory) beside two voice engines:
 | Spark | 802,016 | 711,776 | 704,816 |
 | Strict | 945,968 | 824,560 | 824,064 |
 
-`saver` accepts requests of up to 786,432 tokens. With LoopCD in Spark mode
-its pool holds about 700K, so a longer request (prompt plus `max_tokens`) is
-refused at once (the error names the KV blocks it needs and the blocks the
-pool has); use `default` or `max` for longer ones, or Strict. `default` and
-`max` hold well over 1M tokens with LoopCD (their pools of 1.75M-1.97M shrink
-by the same 10-13%, estimated from `saver`, not measured), so their
-1,048,576-token requests still fit.
+That was 0.5.0's `saver`. The reworked `saver` runs at 0.60 and accepts
+requests of up to 1,048,576 tokens over a pool of about 1.09M in Spark mode;
+LoopCD's 10-13% would bring that to about 950K, so a request longer than the
+pool (prompt plus `max_tokens`) is refused at once (the error names the KV
+blocks it needs and the blocks the pool has). Use `default` or `max` for
+full-length requests with LoopCD, or Strict. `default` and `max` hold well
+over 1M tokens with LoopCD (their pools shrink by the same 10-13%, estimated
+from `saver`, not measured), so their 1,048,576-token requests still fit.
