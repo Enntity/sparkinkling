@@ -1,0 +1,40 @@
+#29 [stage-1  6/12] COPY --from=builder /build/dist/notices-rust/ /opt/atlas/notices/rust/
+#29 CACHED
+
+#30 [stage-1  3/12] COPY --from=builder /build/dist/spark /usr/local/bin/spark
+#30 CACHED
+
+#31 [stage-1  7/12] COPY install/serve.py install/release.json install/checkpoint.json /opt/atlas/
+#31 CACHED
+
+#32 [stage-1  8/12] COPY install/profiles/ /opt/atlas/profiles/
+#32 DONE 0.1s
+
+#33 [stage-1  9/12] COPY install/atlas-source.json /opt/atlas/source-manifest.json
+#33 DONE 0.1s
+
+#34 [stage-1 10/12] COPY engine/LICENSE /LICENSE
+#34 DONE 0.1s
+
+#35 [stage-1 11/12] RUN python3 -c 'import json,sys; assert json.load(open("/opt/atlas/release.json"))["version"] == sys.argv[1]' "0.5.1"
+#35 DONE 0.2s
+
+#36 [stage-1 12/12] RUN test -n "a96a89ab0b293c597474f0c402caf8ed968d0034"
+#36 DONE 0.2s
+
+#37 exporting to image
+#37 exporting layers
+#37 exporting layers 0.3s done
+#37 exporting manifest sha256:9133354850fa6f6dc1c4b84edc1370a00765eff04d25213066d8e6efb098ec6e 0.0s done
+#37 exporting config sha256:7864d14d020550a686063f694a654312305b453815c547190075118d506fc2d7 0.0s done
+#37 exporting attestation manifest sha256:a699ac96915612046a8185345d8c6764df0577b1b7c313d7ab84a8190b8113a6 0.0s done
+#37 exporting manifest list sha256:8f57001956cbb135dd9f5972f16938482400cfa56eb6d32f16225084c63697e2
+#37 exporting manifest list sha256:8f57001956cbb135dd9f5972f16938482400cfa56eb6d32f16225084c63697e2 0.0s done
+#37 naming to ghcr.io/enntity/atlas-sparkinkling:a96a89ab0b29 done
+#37 unpacking to ghcr.io/enntity/atlas-sparkinkling:a96a89ab0b29 0.1s done
+#37 DONE 0.6s
+ghcr.io/enntity/atlas-sparkinkling:a96a89ab0b29
+
+real	4m48.255s
+user	0m2.060s
+sys	0m1.274s

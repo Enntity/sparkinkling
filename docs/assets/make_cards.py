@@ -128,9 +128,10 @@ class Card:
 
 
 PINK = (255, 70, 120)
-# SparkInkling 0.5.0, RigMark 1.1.0, low effort, medians, tok/s
-# (results/2026-11-25-release-0.5.0): label, Spark (the default), Strict.
-SCORES = [("CODE", "81.4", "70.0"), ("STRUCTURED", "117.4", "103.2"), ("8 REQUESTS", "135.2", "122.7")]
+# SparkInkling 0.5.1, SparkModelBench (RigMark protocol 1.3.0), low effort,
+# medians, tok/s (results/2026-11-27-rc-0.5.1): label, Spark (the default),
+# Strict. 8 REQUESTS is the concurrency lane's aggregate code rate.
+SCORES = [("CODE", "88.2", "68.7"), ("STRUCTURED", "129.9", "102.3"), ("8 REQUESTS", "144.1", "126.4")]
 
 
 def scores(card, x0, y, k, ky):
@@ -159,8 +160,8 @@ def scores(card, x0, y, k, ky):
 
 LINES = (["Atlas engine", "DFlash2 drafter", "1M context"],
          ["Reasoning, tools, images", "tool-call guard on"],
-         ["32K prefill 3,282 tok/s", "6/6 output gates"])
-SOURCE = ["0.5.0 benchmarks", "RigMark 1.1.0", "low effort"]
+         ["32K prefill 5,024 tok/s", "15/15 output gates"])
+SOURCE = ["0.5.1 benchmarks", "SparkModelBench", "low effort"]
 URL = "github.com/Enntity/sparkinkling"
 
 

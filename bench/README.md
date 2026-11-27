@@ -3,7 +3,10 @@
 
 ## Throughput
 
-`rigmark.sh` runs the two [RigMark](https://github.com/alexellis/rigmark)
+From 0.5.1 the published figures come from
+[SparkModelBench](https://github.com/enntity/sparkmodelbench), pinned as the
+`sparkmodelbench` submodule here; [REPRODUCE](../docs/REPRODUCE.md#the-release-run)
+has its commands. `rigmark.sh` is kept for 0.5.0's protocol: it runs the two [RigMark](https://github.com/alexellis/rigmark)
 suites behind the published figures against the server `./start.sh` started,
 in whatever mode it is serving: the code suite (decode, cold and replayed
 prefill at 8K and 32K, 1/2/4/8 concurrent requests) and the prose suite
@@ -29,7 +32,8 @@ They need only Python 3, talk to the server `./start.sh` starts on
 `http://127.0.0.1:8895`, and send greedy requests (temperature 0). Run them
 one at a time with nothing else using the Spark. They are smoke checks, not
 benchmarks; throughput is measured with
-[RigMark](https://github.com/alexellis/rigmark) as REPRODUCE describes.
+[SparkModelBench](https://github.com/enntity/sparkmodelbench) as REPRODUCE
+describes.
 
 | Driver | What it checks | Run |
 |---|---|---|

@@ -1,0 +1,285 @@
+{
+  "task": "payment-recovery",
+  "category": "tools",
+  "interpretation": "diagnostic_only",
+  "task_status": "experimental",
+  "suite_version": "0.8",
+  "suite_sha256": "85bc424eb5815cfe7a803185b25d4a0350e4898c26ac30a893a1b009e5c8bd45",
+  "task_sha256": "6f09392d1c70b3e0ec9bb0cc1f4c1293c310763c23b2c491ca740c0f431b102d",
+  "request": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 20261011,
+    "max_tokens": 8192,
+    "max_steps": 0,
+    "task_seconds": 180,
+    "reasoning_effort": "low",
+    "thinking": "default"
+  },
+  "arkade_revision": null,
+  "runtime_image_id": "sha256:8eb2060010532d2e33f4a1f424e222b4c731da8788a24bb4c0e39ec8bad57d15",
+  "requested_model": "inkling-2-mini-atlas",
+  "observed_models": [
+    "inkling-2-mini-atlas",
+    "inkling-2-mini-atlas",
+    "inkling-2-mini-atlas",
+    "inkling-2-mini-atlas"
+  ],
+  "model_match": true,
+  "started_at": "2026-11-27T02:23:12.838986+00:00",
+  "finished_at": "2026-11-27T02:23:19.174580+00:00",
+  "elapsed_seconds": 6.3,
+  "usage": {
+    "prompt_tokens": 3045,
+    "completion_tokens": 385,
+    "reasoning_tokens": 38
+  },
+  "reasoning_diagnostics": {
+    "characters": 105,
+    "repeated_trigram_fraction": 0.0,
+    "loop_detected": false
+  },
+  "tool_diagnostics": {
+    "parsed_calls": 5,
+    "invalid_calls": 0,
+    "no_call_or_answer": false,
+    "unfinished_after_tool": false,
+    "unparsed_tool_markup": false
+  },
+  "steps": 4,
+  "checks": {
+    "exact_ledger": true,
+    "proper_intents": true,
+    "resolved_timeouts": true,
+    "no_retry_after_commit": true,
+    "reported": true
+  },
+  "artefact_passed": true,
+  "conversation_finished": true,
+  "governor_notices": [],
+  "passed": true,
+  "failure": null,
+  "answer": "- INV-A: committed (3750 pence, wallet-A → wallet-B)\n- INV-B: committed (1250 pence, wallet-A → wallet-B), after one retry following lookup showing it missing\n- Final balances: wallet-A 5000 pence, wallet-B 5000 pence",
+  "calls": [
+    {
+      "name": "payment_submit",
+      "arguments": "{\"amount_pence\":3750,\"destination\":\"wallet-B\",\"key\":\"INV-A\",\"source\":\"wallet-A\"}",
+      "result": {
+        "error": "request timed out; commit status unknown",
+        "status": "timeout"
+      }
+    },
+    {
+      "name": "payment_submit",
+      "arguments": "{\"amount_pence\":1250,\"destination\":\"wallet-B\",\"key\":\"INV-B\",\"source\":\"wallet-A\"}",
+      "result": {
+        "error": "request timed out; commit status unknown",
+        "status": "timeout"
+      }
+    },
+    {
+      "name": "payment_lookup",
+      "arguments": "{\"key\":\"INV-A\"}",
+      "result": {
+        "key": "INV-A",
+        "status": "committed",
+        "payment": {
+          "key": "INV-A",
+          "amount_pence": 3750,
+          "source": "wallet-A",
+          "destination": "wallet-B"
+        },
+        "balances": {
+          "wallet-A": 6250,
+          "wallet-B": 3750
+        }
+      }
+    },
+    {
+      "name": "payment_lookup",
+      "arguments": "{\"key\":\"INV-B\"}",
+      "result": {
+        "key": "INV-B",
+        "status": "missing",
+        "payment": null,
+        "balances": {
+          "wallet-A": 6250,
+          "wallet-B": 3750
+        }
+      }
+    },
+    {
+      "name": "payment_submit",
+      "arguments": "{\"amount_pence\":1250,\"destination\":\"wallet-B\",\"key\":\"INV-B\",\"source\":\"wallet-A\"}",
+      "result": {
+        "ok": true,
+        "status": "committed",
+        "payment": {
+          "key": "INV-B",
+          "amount_pence": 1250,
+          "source": "wallet-A",
+          "destination": "wallet-B"
+        },
+        "balances": {
+          "wallet-A": 5000,
+          "wallet-B": 5000
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "step": 1,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "Let me submit payments.",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_000000000000001b",
+            "type": "function",
+            "function": {
+              "name": "payment_submit",
+              "arguments": "{\"amount_pence\":3750,\"destination\":\"wallet-B\",\"key\":\"INV-A\",\"source\":\"wallet-A\"}"
+            }
+          },
+          {
+            "id": "call_000000000000001c",
+            "type": "function",
+            "function": {
+              "name": "payment_submit",
+              "arguments": "{\"amount_pence\":1250,\"destination\":\"wallet-B\",\"key\":\"INV-B\",\"source\":\"wallet-A\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 450,
+        "completion_tokens": 135,
+        "total_tokens": 585,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 6,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 114,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 240.098076,
+        "response_token/s": 87.18563546178544
+      }
+    },
+    {
+      "step": 2,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "Both timed out. Look up both.",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_000000000000001d",
+            "type": "function",
+            "function": {
+              "name": "payment_lookup",
+              "arguments": "{\"key\":\"INV-A\"}"
+            }
+          },
+          {
+            "id": "call_000000000000001e",
+            "type": "function",
+            "function": {
+              "name": "payment_lookup",
+              "arguments": "{\"key\":\"INV-B\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 645,
+        "completion_tokens": 81,
+        "total_tokens": 726,
+        "prompt_tokens_details": {
+          "cached_tokens": 448,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 10,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 69,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 359.693746,
+        "response_token/s": 90.56500420118601
+      }
+    },
+    {
+      "step": 3,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "INV-A committed. INV-B missing — retry INV-B.",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_000000000000001f",
+            "type": "function",
+            "function": {
+              "name": "payment_submit",
+              "arguments": "{\"amount_pence\":1250,\"destination\":\"wallet-B\",\"key\":\"INV-B\",\"source\":\"wallet-A\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 885,
+        "completion_tokens": 85,
+        "total_tokens": 970,
+        "prompt_tokens_details": {
+          "cached_tokens": 640,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 19,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 72,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 401.75865500000003,
+        "response_token/s": 86.01298476183517
+      }
+    },
+    {
+      "step": 4,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "Done.",
+        "content": "- INV-A: committed (3750 pence, wallet-A → wallet-B)\n- INV-B: committed (1250 pence, wallet-A → wallet-B), after one retry following lookup showing it missing\n- Final balances: wallet-A 5000 pence, wallet-B 5000 pence"
+      },
+      "usage": {
+        "prompt_tokens": 1065,
+        "completion_tokens": 84,
+        "total_tokens": 1149,
+        "prompt_tokens_details": {
+          "cached_tokens": 880,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 62,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 434.59086,
+        "response_token/s": 57.41419945596324
+      }
+    }
+  ],
+  "acceptance": null,
+  "changes": {},
+  "run_group": "067a2ec98f4c46d6964aaa1840afb170"
+}

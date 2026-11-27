@@ -13,16 +13,44 @@ thing on your own Spark.
 - This repository at the release's commit and `./start.sh` working in the mode
   you want to measure ([INSTALL-MANUAL](INSTALL-MANUAL.md) for the steps by
   hand).
-- [RigMark](https://github.com/alexellis/rigmark) at the commit the result
-  names (0.5.0: `40fabcaf6e96`, protocol 1.1.0).
+- [SparkModelBench](https://github.com/enntity/sparkmodelbench) at the
+  commit the result names (0.5.1: `293a44f`, the
+  [`bench/sparkmodelbench`](../bench/sparkmodelbench) submodule), with Python
+  3.10+, Git and Docker; or, for 0.5.0 and earlier,
+  [RigMark](https://github.com/alexellis/rigmark) at `40fabcaf6e96`
+  (protocol 1.1.0).
 
 Check the receipts you are comparing against first:
 
 ```sh
-cd results/2026-11-25-release-0.5.0 && sha256sum -c SHA256SUMS
+cd results/2026-11-27-rc-0.5.1 && sha256sum -c SHA256SUMS
 ```
 
 ## The release run
+
+[`raw/window.sh`](../results/2026-11-27-rc-0.5.1/raw/window.sh) is the
+script that produced the 0.5.1 figures, kept as it ran. For each mode:
+
+```sh
+git submodule update --init --recursive bench/sparkmodelbench
+docker build -t rigmark-quality-runtime:0.4 bench/sparkmodelbench/upstream/rigmark-quality/quality_suite
+MODE=spark ./start.sh           # then again with MODE=strict
+cd bench/sparkmodelbench
+python3 run.py --base-url http://127.0.0.1:8895 --model inkling-2-mini-atlas \
+  --metadata metadata.json --comparison-id sparkinkling-0.5.1 --effort low \
+  --out runs/spark-full
+python3 run.py --base-url http://127.0.0.1:8895 --model inkling-2-mini-atlas \
+  --metadata metadata.json --comparison-id sparkinkling-0.5.1 --effort low \
+  --out runs/spark-concurrency --lanes concurrency
+```
+
+`metadata.json` describes your run (hardware, image tag, drafter, competing
+traffic); ours are `raw/meta-*.json`. The first command takes 17-20
+minutes a mode (256K prefill and RigMark Quality are most of it), the second
+about two. Each output directory holds SparkModelBench's `CARD.md`, RigMark's
+own card and JSON, and a `SHA256SUMS`.
+
+### 0.5.0 (RigMark alone)
 
 [`raw/run050.sh`](../results/2026-11-25-release-0.5.0/raw/run050.sh) is
 the script that produced the 0.5.0 figures. It is kept as it ran, so its paths

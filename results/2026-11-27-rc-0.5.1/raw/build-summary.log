@@ -1,0 +1,60 @@
+#25 1.234     Checking cufile-sys v1.0.0-beta-preview (/build/crates/cufile-sys)
+#25 1.267     Checking atlas-governance v1.0.0-beta-preview (/build/crates/atlas-governance)
+#25 1.275     Checking xgrammar v1.0.0-beta-preview (/build/crates/xgrammar)
+#25 1.279     Checking atlas-tool-guard v0.1.0 (/build/crates/atlas-tool-guard)
+#25 1.282     Checking spark-nllb v1.0.0-beta-preview (/build/crates/spark-nllb)
+#25 1.368     Checking atlas-plugin v1.0.0-beta-preview (/build/crates/atlas-plugin)
+#25 21.59     Checking spark-server v1.0.0-beta-preview (/build/crates/spark-server)
+#25 34.59     Finished `dev` profile [unoptimized + debuginfo] target(s) in 33.84s
+#25 DONE 34.7s
+
+#26 [stage-1  2/12] RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends --allow-change-held-packages     python3 ca-certificates libnccl2=2.31.2-1+cuda13.3 libibverbs1 librdmacm1     ibverbs-providers libnl-3-200 libnl-route-3-200 && rm -rf /var/lib/apt/lists/*
+#26 CACHED
+
+#27 [stage-1  3/12] COPY --from=builder /build/dist/spark /usr/local/bin/spark
+#27 DONE 0.1s
+
+#28 [stage-1  4/12] COPY --from=builder /build/jinja-templates/ /jinja-templates/
+#28 DONE 0.1s
+
+#29 [stage-1  5/12] COPY --from=builder /opt/cutlass/LICENSE.txt /opt/atlas/notices/CUTLASS-LICENSE.txt
+#29 DONE 0.1s
+
+#30 [stage-1  6/12] COPY --from=builder /build/dist/notices-rust/ /opt/atlas/notices/rust/
+#30 DONE 0.1s
+
+#31 [stage-1  7/12] COPY install/serve.py install/release.json install/checkpoint.json /opt/atlas/
+#31 DONE 0.1s
+
+#32 [stage-1  8/12] COPY install/profiles/ /opt/atlas/profiles/
+#32 DONE 0.1s
+
+#33 [stage-1  9/12] COPY install/atlas-source.json /opt/atlas/source-manifest.json
+#33 DONE 0.1s
+
+#34 [stage-1 10/12] COPY engine/LICENSE /LICENSE
+#34 DONE 0.1s
+
+#35 [stage-1 11/12] RUN python3 -c 'import json,sys; assert json.load(open("/opt/atlas/release.json"))["version"] == sys.argv[1]' "0.5.1"
+#35 DONE 0.2s
+
+#36 [stage-1 12/12] RUN test -n "717bd225a5d6cbbacce0e964bd40e37b68f4b901"
+#36 DONE 0.2s
+
+#37 exporting to image
+#37 exporting layers
+#37 exporting layers 2.7s done
+#37 exporting manifest sha256:fc65665024b7812f852cfb32a219f819c518f3b2e88b98e53c17d907b00e405d 0.0s done
+#37 exporting config sha256:aa2dfa08858103146490aee2e96bac2dbcb1896da973c38d978e1e7d13343cbd 0.0s done
+#37 exporting attestation manifest sha256:65176791b37a035bb5c20fdaee0bf0e329e131a2c7a20c345383931edd46e0f3
+#37 exporting attestation manifest sha256:65176791b37a035bb5c20fdaee0bf0e329e131a2c7a20c345383931edd46e0f3 0.0s done
+#37 exporting manifest list sha256:fe0bb350fc1b53104440cac075dff7d406e827ce04e2189e442ed8a23cbde1c9 0.0s done
+#37 naming to ghcr.io/enntity/atlas-sparkinkling:717bd225a5d6 done
+#37 unpacking to ghcr.io/enntity/atlas-sparkinkling:717bd225a5d6
+#37 unpacking to ghcr.io/enntity/atlas-sparkinkling:717bd225a5d6 0.6s done
+#37 DONE 3.6s
+ghcr.io/enntity/atlas-sparkinkling:717bd225a5d6
+
+real	6m20.245s
+user	0m2.285s
+sys	0m1.486s

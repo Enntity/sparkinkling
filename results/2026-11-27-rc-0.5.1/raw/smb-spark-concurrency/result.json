@@ -1,0 +1,114 @@
+{
+  "suite": "293a44f82dd977af8aeeee31df7ba70da9f4545d",
+  "protocol": {
+    "version": 1,
+    "decode_runs": 5,
+    "decode_cap": 8192,
+    "prefill_depths": [
+      8192,
+      32768,
+      65536,
+      131072,
+      262144
+    ],
+    "prefill_pairs": 3,
+    "c4": {
+      "depth": 16384,
+      "output": 400,
+      "interval_s": 1,
+      "repetitions": 3
+    },
+    "quality_tasks": [
+      "python-expiry",
+      "go-transfer-ledger",
+      "payment-recovery",
+      "evidence-revisions"
+    ],
+    "task_seconds": 180,
+    "task_output_cap": 8192,
+    "concurrency": {
+      "levels": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "rounds": 3,
+      "output": 256,
+      "workload": "code",
+      "seed": 20260905
+    }
+  },
+  "upstreams": {
+    "rigmark": "946394fa53db83a6865f6e3ae56594e1c299fb2a",
+    "rigmark-quality": "ea6788ff15ee39550577c829a46ee7ed3a79a976"
+  },
+  "model": "inkling-2-mini-atlas",
+  "appliance": {
+    "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+    "topology": "TP1, single Spark",
+    "negotiated_link_speed": "not applicable",
+    "kv_cache_dtype": "auto (bf16), window-bounded: the 40 sliding-window visits keep their last 1,024 tokens",
+    "serving_engine": "SparkInkling 0.5.1 candidate (Atlas, Enntity/atlas inkling2/rc-0.5.1-20261126 @ a4dbba378)",
+    "serving_image": "ghcr.io/enntity/atlas-sparkinkling:717bd225a5d6 (the 0.5.1 release candidate, built on this Spark), via ./start.sh",
+    "context_limit": 1048576,
+    "scheduler": "SparkInkling default profile: max-num-seqs 8, gpu-memory-utilization 0.80, prefill chunks 8192 (one chunk a scheduler tick while others decode), CUDA graphs, programmatic dependent launch, CUTLASS BF16 prefill projections (ATLAS_BF16_GEMM_CUTLASS=1), prefix caching with conv-state snapshots (--enable-prefix-caching, --ssm-cache-slots=264) and branch checkpoints (ATLAS_GLM_PC_BRANCH=1, ATLAS_GLM_PC_BRANCH_MIN=512), --request-timeout=3600, --tool-max-tokens=32768, LoopCD off",
+    "competing_traffic": "none (the voice engines suspended through LLooM for the window)",
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7 + Enntity/Inkling-2-Mini-Spark-NVFP4 @ e9df93dc",
+    "quantisation": "Spark: calibrated GPTQ NVFP4 attention, lm_head and L20-23 experts over the shipped checkpoint, for decode and verify rows (row-invariant tensor-core projections, ATLAS_SKINNY_MMA=1); prefill reads the checkpoint's own tensors, its experts' inputs quantized as its hf_quant_config.json requires (W4A4 / W8A8)",
+    "drafter": "DFlash2 (incoai/Inkling-2-Mini-DFlash2 @ 4f9088ea66c2), greedy drafts: 7 with one live request, 3 each with two, plain decode from three (ATLAS_DFLASH_BATCH_DEPTH=1:7,2:3,1000000:0); verifies stop where the drafter is unsure (ATLAS_DFLASH_CONF_WIDTH=1), drafts go off for a sequence whose steps stop paying (ATLAS_DFLASH_ADAPTIVE=1, threshold 2.0, the engine's accepted a block) in place of the engine throughput gate (ATLAS_MTP_GATE_FORCE=1)"
+  },
+  "trial": "b82a9767d3719ae77abe9f2d",
+  "comparison_id": "sparkinkling-0.5.1",
+  "effort": "low",
+  "portable": false,
+  "requested": [
+    "concurrency"
+  ],
+  "lanes": {
+    "concurrency": {
+      "1": {
+        "aggregate_tokens_s": 63.163,
+        "stream_tokens_s": 67.093,
+        "stream_ttft_s": 0.235,
+        "output_tokens": [
+          256,
+          256,
+          256
+        ]
+      },
+      "2": {
+        "aggregate_tokens_s": 81.931,
+        "stream_tokens_s": 44.425,
+        "stream_ttft_s": 0.409,
+        "output_tokens": [
+          512,
+          512,
+          512
+        ]
+      },
+      "4": {
+        "aggregate_tokens_s": 104.671,
+        "stream_tokens_s": 27.925,
+        "stream_ttft_s": 0.834,
+        "output_tokens": [
+          1024,
+          1024,
+          1024
+        ]
+      },
+      "8": {
+        "aggregate_tokens_s": 144.128,
+        "stream_tokens_s": 20.185,
+        "stream_ttft_s": 1.564,
+        "output_tokens": [
+          2048,
+          2048,
+          2048
+        ]
+      }
+    }
+  },
+  "errors": {}
+}

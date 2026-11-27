@@ -39,19 +39,28 @@ DRAFT_ARGS = ('--dflash', '--dflash-gamma=8', '--num-drafts=7')
 #   and the engine's 2.0 in Spark. That per-sequence rule replaces the
 #   engine's throughput gate (ATLAS_MTP_GATE_FORCE), which carries its off
 #   state from one request into the next.
-# - Drafts by live requests (`n:drafts`, up to n requests): seven alone in
-#   both modes; Strict drafts three each for two requests and decodes plainly
-#   from three, Spark decodes plainly from two. Chosen on RigMark's short
-#   requests (256 tokens, reasoning low): Strict two at once 64.6 tok/s against
-#   61.9 with 0.4.2's two each; drafting at four lost 11% (76.3 against 86.0
-#   plain); Spark drafting at two lost 10% (70.2 against 77.4). On a suite of
-#   longer answers drafting gained up to six requests in Strict and two in
-#   Spark, so the setting follows what the release measures.
+# - Drafts by live requests (`n:drafts`, up to n requests): seven alone and
+#   three each for two requests in both modes, plain decode from three. Chosen
+#   on RigMark's short requests (256 tokens, reasoning low): Strict two at once
+#   64.6 tok/s against 61.9 with 0.4.2's two each, drafting at four lost 11%
+#   (76.3 against 86.0 plain). Spark drafts at two since its projections run on
+#   the tensor cores (SPARK_ENV), which made a verify cheaper: short code at two
+#   requests 81.4 tok/s against 73.9 plain; at four and eight drafting still
+#   loses (99.8 against 108.7, 123.8 against 149.1;
+#   results/2026-11-26-spark-tensor-cores). On a suite of longer answers
+#   drafting gained up to six requests in Strict, so the setting follows what
+#   the release measures.
 _DRAFT_COMMON = {'ATLAS_DFLASH_ADAPTIVE': '1', 'ATLAS_DFLASH_CONF_WIDTH': '1', 'ATLAS_MTP_GATE_FORCE': '1'}
 DRAFT_ENV = {
     'strict': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,1000000:0', 'ATLAS_DFLASH_ADAPTIVE_MIN': '1.0'},
-    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,1000000:0'},
+    'spark': {**_DRAFT_COMMON, 'ATLAS_DFLASH_BATCH_DEPTH': '1:7,2:3,1000000:0'},
 }
+# Spark's NVFP4 projections and vocabulary head on the engine's row-invariant
+# tensor-core kernels (ATLAS_SKINNY_MMA): a row's bits do not depend on how many
+# rows share the launch, so decode and verify rows stay exact twins and text with
+# drafts is still the text without, at about twice the scalar batch GEMV's speed
+# on a verify. Strict's projections are BF16 and keep the engine's kernels.
+SPARK_ENV = {'ATLAS_SKINNY_MMA': '1'}
 SPECULATION_FLAGS = ('--speculative', '--dflash', '--draft-model', '--draft-model-alt', '--dflash-gamma',
                      '--num-drafts', '--self-speculative', '--ngram-speculative')
 MULTI_RANK_FLAGS = ('--world-size', '--tp-size', '--ep-size', '--rank', '--master-addr', '--master-port')
@@ -132,6 +141,8 @@ def launch(environ, profile):
         raise ValueError('MODEL_PATH must be an absolute path')
     env = _engine_env(environ, profile)
     env.update(SPARKINKLING_MODE=mode, SPARKINKLING_DRAFTER=drafter, SPARKINKLING_LOOPCD=loopcd)
+    if mode == 'spark':
+        env.update(SPARK_ENV)
     args = _memory_share(environ, [str(a).replace('${model}', model) for a in args])
     if loopcd != 'off':
         args.append(f'--loopcd={loopcd}')

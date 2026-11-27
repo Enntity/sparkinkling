@@ -1,0 +1,63 @@
+╭────────────────────────────────────────────────────────────────────────╮
+│                                                                        │
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                           │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                 │
+│  ●  15/15 BASIC OUTPUT GATES PASSED                                    │
+│  INCOMPLETE SUITE: prefill, concurrency not measured                   │
+│                                                                        │
+├─ MODEL ────────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  inkling-2-mini-atlas                                                  │
+│                                                                        │
+├─ SINGLE STREAM ────────────────────────────────────────────────────────┤
+│                                                                        │
+│  WORKLOAD         tok/s       Range tok/s   Last (s)    Checks         │
+│  PROSE             40.2         39.9–41.3       27.8     ✓ 5/5         │
+│  CODE              68.7         67.5–70.8       51.3     ✓ 5/5         │
+│  STRUCTURED*      102.3       100.4–103.8       10.1     ✓ 5/5         │
+│                                                                        │
+│  * Predictable JSON ceiling; not general agent performance.            │
+│  Decode medians are estimates; rates include streamed reasoning.       │
+│                                                                        │
+├─ PREFILL ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: prefill skipped (--skip-prefill).                       │
+│                                                                        │
+├─ CAPPED CONCURRENT GENERATION ─────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: concurrency skipped (--skip-concurrency).               │
+│                                                                        │
+├─ APPLIANCE ────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  Hardware: 1x NVIDIA DGX Spark (GB10, 128 GB)                          │
+│  Topology: TP1, single Spark                                           │
+│  Checkpoint: thinkingmachines/Inkling-2-Mini @ ed40e7da625f            │
+│  Quantisation: Strict: the checkpoint as shipped (NVFP4 L0-19 / MXFP8  │
+│    L20-23 experts, BF16 rest); prefill experts' inputs quantized as its│
+│    hf_quant_config.json requires (W4A4 / W8A8)                         │
+│  KV cache: auto (bf16), window-bounded: the 40 sliding-window visits   │
+│    keep their last 1,024 tokens                                        │
+│  Engine: SparkInkling 0.5.1 candidate (Atlas, Enntity/atlas            │
+│    inkling2/rc-0.5.1-20261126 @ a4dbba378)                             │
+│                                                                        │
+├─ SETTINGS ─────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SUITE: CUSTOM SETTINGS                                                │
+│  Changed: --skip-prefill                                               │
+│  Changed: --skip-concurrency                                           │
+│  REQUEST: {"reasoning_effort": "low"}                                  │
+│  Temperature 0.0 | top_p 1.0 | seed 20260905 | protocol 1.3.0          │
+│  Decode: 5 runs, 8192-token cap | Prefill: skipped, 3 pairs            │
+│  Concurrency: skipped, 3 rounds, 256-token cap; workload code          │
+│  Cache isolation: random-salt-per-pair                                 │
+│  Comparison ID: sparkinkling-0.5.1                                     │
+│                                                                        │
+├─ RECEIPT ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SOURCE     git:946394fa53db  •  clean                                 │
+│  RIGMARK RELEASE: ahead of v0.0.4 (unreleased checkout)                │
+│  JSON sha256:e14723a2b9e0f4b1…                                         │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                     │
+│  github.com/alexellis/rigmark                                          │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯

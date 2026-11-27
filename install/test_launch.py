@@ -47,7 +47,7 @@ class Launch(unittest.TestCase):
     def test_the_development_serving_flags(self):
         argv, _ = launch()
         self.assertEqual(flag(argv, '--kv-cache-dtype'), 'bf16')
-        self.assertEqual(flag(argv, '--max-prefill-tokens'), '4096')
+        self.assertEqual(flag(argv, '--max-prefill-tokens'), '8192')
         self.assertEqual(flag(argv, '--gpu-memory-utilization'), '0.80')
         self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'))
         self.assertIn('--no-tui', argv)
@@ -58,12 +58,16 @@ class Launch(unittest.TestCase):
         for name in names:
             p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
             argv, env = serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}, p)
-            for want in ('--kv-cache-dtype=bf16', '--max-prefill-tokens=4096', '--enable-prefix-caching',
+            for want in ('--kv-cache-dtype=bf16', '--max-prefill-tokens=8192', '--enable-prefix-caching',
                          '--oom-guard-mb=4096', '--request-timeout=3600', '--tool-max-tokens=32768', '--no-tui'):
                 self.assertEqual(argv.count(want), 1, (name, want))
             self.assertEqual(flag(argv, '--max-num-seqs'), flag(argv, '--max-batch-size'), name)
             self.assertGreater(int(flag(argv, '--ssm-cache-slots')), 16, name)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', name)
+            # prefill's large BF16 projections on Atlas's CUTLASS tiles, in both modes
+            self.assertEqual(env['ATLAS_BF16_GEMM_CUTLASS'], '1', name)
+            # one chunk size: the engine runs a busy prompt one chunk a tick, no separate cap
+            self.assertNotIn('ATLAS_PREFILL_BUSY_TOKENS', env, name)
             # a checkpoint where a cached prompt forks: clients that rebuild their last messages each turn
             self.assertEqual((env['ATLAS_GLM_PC_BRANCH'], env['ATLAS_GLM_PC_BRANCH_MIN']), ('1', '512'), name)
             # a request that names no effort reasons at low, not the template's high
@@ -131,9 +135,10 @@ class Launch(unittest.TestCase):
         with self.assertRaises(ValueError):
             launch(DRAFTER_PATH='relative/dir')
 
-    def test_spark_drafts_alone(self):
+    def test_spark_drafts_for_up_to_two_requests(self):
         _, env = launch()  # Spark is the default
-        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,1000000:0')
+        # Spark: seven drafts alone, three each for two requests, plain from three
+        self.assertEqual(env['ATLAS_DFLASH_BATCH_DEPTH'], '1:7,2:3,1000000:0')
         self.assertEqual(env['ATLAS_DFLASH_ADAPTIVE'], '1')
         self.assertNotIn('ATLAS_DFLASH_ADAPTIVE_MIN', env)  # the engine's 2.0
         self.assertEqual(env['ATLAS_DFLASH_CONF_WIDTH'], '1')
@@ -144,6 +149,15 @@ class Launch(unittest.TestCase):
             argv, env = launch(SPARKINKLING_MODE=mode)
             self.assertIn('--enable-prefix-caching', argv, mode)
             self.assertEqual(env['ATLAS_QWEN4EXP_AUX_PINNED'], '1', mode)
+
+    def test_spark_projections_on_the_row_invariant_tensor_cores(self):
+        # Spark's NVFP4 projections and head: one kernel for decode and verify rows, with or
+        # without the drafter; Strict's are BF16 and keep the engine's kernels
+        for drafter in ('dflash2', 'none'):
+            _, env = launch(SPARKINKLING_DRAFTER=drafter)
+            self.assertEqual(env['ATLAS_SKINNY_MMA'], '1', drafter)
+            _, env = launch(SPARKINKLING_MODE='strict', SPARKINKLING_DRAFTER=drafter)
+            self.assertNotIn('ATLAS_SKINNY_MMA', env, drafter)
 
     def test_no_drafter(self):
         argv, env = launch(SPARKINKLING_DRAFTER='none')

@@ -1,0 +1,121 @@
+Starting decode
+RigMark 946394fa53db is 6 commit(s) ahead of v0.0.4 (pre-release); this is an unreleased checkout.
+https://github.com/alexellis/rigmark/releases/tag/v0.0.4
+decode/code: 5 runs
+  1: 95.3 tok/s, TTFT 0.248s, 2327 tokens
+  2: 85.4 tok/s, TTFT 0.239s, 3285 tokens
+  3: 88.2 tok/s, TTFT 0.240s, 3276 tokens
+  4: 90.7 tok/s, TTFT 0.241s, 3016 tokens
+  5: 87.4 tok/s, TTFT 0.241s, 4645 tokens
+decode/prose: 5 runs
+  1: 58.4 tok/s, TTFT 0.238s, 1261 tokens
+  2: 57.4 tok/s, TTFT 0.242s, 1271 tokens
+  3: 57.0 tok/s, TTFT 0.232s, 1248 tokens
+  4: 56.5 tok/s, TTFT 0.230s, 1217 tokens
+  5: 56.2 tok/s, TTFT 0.237s, 1177 tokens
+decode/structured: 5 runs
+  1: 128.5 tok/s, TTFT 0.239s, 1031 tokens
+  2: 130.7 tok/s, TTFT 0.231s, 1034 tokens
+  3: 130.7 tok/s, TTFT 0.228s, 1028 tokens
+  4: 128.4 tok/s, TTFT 0.231s, 1032 tokens
+  5: 129.9 tok/s, TTFT 0.228s, 1031 tokens
+result: ~/inkling2/rig/r051/smb-spark-full/rigmark.json
+card: ~/inkling2/rig/r051/smb-spark-full/rigmark.card.txt
+
+╭────────────────────────────────────────────────────────────────────────╮
+│                                                                        │
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                           │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                 │
+│  ●  15/15 BASIC OUTPUT GATES PASSED                                    │
+│  INCOMPLETE SUITE: prefill, concurrency not measured                   │
+│                                                                        │
+├─ MODEL ────────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  inkling-2-mini-atlas                                                  │
+│                                                                        │
+├─ SINGLE STREAM ────────────────────────────────────────────────────────┤
+│                                                                        │
+│  WORKLOAD         tok/s       Range tok/s   Last (s)    Checks         │
+│  PROSE             57.0         56.2–58.4       21.8     ✓ 5/5         │
+│  CODE              88.2         85.4–95.3       37.4     ✓ 5/5         │
+│  STRUCTURED*      129.9       128.4–130.7        8.2     ✓ 5/5         │
+│                                                                        │
+│  * Predictable JSON ceiling; not general agent performance.            │
+│  Decode medians are estimates; rates include streamed reasoning.       │
+│                                                                        │
+├─ PREFILL ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: prefill skipped (--skip-prefill).                       │
+│                                                                        │
+├─ CAPPED CONCURRENT GENERATION ─────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: concurrency skipped (--skip-concurrency).               │
+│                                                                        │
+├─ APPLIANCE ────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  Hardware: 1x NVIDIA DGX Spark (GB10, 128 GB)                          │
+│  Topology: TP1, single Spark                                           │
+│  Checkpoint: thinkingmachines/Inkling-2-Mini @ ed40e7da625f            │
+│  Quantisation: Spark: calibrated GPTQ NVFP4 attention, lm_head and     │
+│    L20-23 experts over the shipped checkpoint, for decode and verify   │
+│    rows (row-invariant tensor-core projections, ATLAS_SKINNY_MMA=1);   │
+│    prefill reads the checkpoint's own tensors, its experts' inputs     │
+│    quantized as its hf_quant_config.json requires (W4A4 / W8A8)        │
+│  KV cache: auto (bf16), window-bounded: the 40 sliding-window visits   │
+│    keep their last 1,024 tokens                                        │
+│  Engine: SparkInkling 0.5.1 candidate (Atlas, Enntity/atlas            │
+│    inkling2/rc-0.5.1-20261126 @ a4dbba378)                             │
+│                                                                        │
+├─ SETTINGS ─────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SUITE: CUSTOM SETTINGS                                                │
+│  Changed: --skip-prefill                                               │
+│  Changed: --skip-concurrency                                           │
+│  REQUEST: {"reasoning_effort": "low"}                                  │
+│  Temperature 0.0 | top_p 1.0 | seed 20260905 | protocol 1.3.0          │
+│  Decode: 5 runs, 8192-token cap | Prefill: skipped, 3 pairs            │
+│  Concurrency: skipped, 3 rounds, 256-token cap; workload code          │
+│  Cache isolation: random-salt-per-pair                                 │
+│  Comparison ID: sparkinkling-0.5.1                                     │
+│                                                                        │
+├─ RECEIPT ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SOURCE     git:946394fa53db  •  clean                                 │
+│  RIGMARK RELEASE: ahead of v0.0.4 (unreleased checkout)                │
+│  JSON sha256:b6ac9a92b9417cc2…                                         │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                     │
+│  github.com/alexellis/rigmark                                          │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯
+
+Share the full ASCII card: ~/inkling2/rig/r051/smb-spark-full/rigmark.card.txt
+Link the matching JSON receipt: ~/inkling2/rig/r051/smb-spark-full/rigmark.json
+If an agent ran this, include both files in its reply; do not replace the card with a summary table.
+Starting prefill
+prefill/8192: 3 cold/immediate-replay pairs
+  1: cold 5174.5 tok/s (1.583s), warm 61628.7 tok/s (0.133s)
+  2: cold 5176.1 tok/s (1.583s), warm 61331.1 tok/s (0.134s)
+  3: cold 5165.8 tok/s (1.586s), warm 62131.2 tok/s (0.132s)
+prefill/32768: 3 cold/immediate-replay pairs
+  1: cold 5024.0 tok/s (6.522s), warm 218435.9 tok/s (0.150s)
+  2: cold 5014.2 tok/s (6.535s), warm 208374.9 tok/s (0.157s)
+  3: cold 5026.1 tok/s (6.520s), warm 216269.0 tok/s (0.152s)
+prefill/65536: 3 cold/immediate-replay pairs
+  1: cold 4536.8 tok/s (14.446s), warm 362305.5 tok/s (0.181s)
+  2: cold 4549.0 tok/s (14.407s), warm 360054.3 tok/s (0.182s)
+  3: cold 4539.9 tok/s (14.436s), warm 372427.1 tok/s (0.176s)
+prefill/131072: 3 cold/immediate-replay pairs
+  1: cold 3777.9 tok/s (34.694s), warm 562973.3 tok/s (0.233s)
+  2: cold 3780.7 tok/s (34.669s), warm 558230.7 tok/s (0.235s)
+  3: cold 3785.9 tok/s (34.621s), warm 548017.1 tok/s (0.239s)
+prefill/262144: 3 cold/immediate-replay pairs
+  1: cold 2824.9 tok/s (92.799s), warm 719746.7 tok/s (0.364s)
+  2: cold 2822.6 tok/s (92.872s), warm 718622.1 tok/s (0.365s)
+  3: cold 2824.5 tok/s (92.812s), warm 716957.4 tok/s (0.366s)
+Starting c4
+Starting quality
+{"task": "python-expiry", "model": "inkling-2-mini-atlas", "passed": true, "checks": {"acceptance": true, "public_tests": true, "regression_test_added": true}, "failure": null, "elapsed": 17.6, "receipt": "~/inkling2/rig/r051/smb-spark-full/quality/inkling-2-mini-atlas-python-expiry.json"}
+{"task": "go-transfer-ledger", "model": "inkling-2-mini-atlas", "passed": false, "checks": {"acceptance": false, "public_tests": true, "regression_test_added": true, "gofmt": true}, "failure": null, "elapsed": 74.0, "receipt": "~/inkling2/rig/r051/smb-spark-full/quality/inkling-2-mini-atlas-go-transfer-ledger.json"}
+{"task": "payment-recovery", "model": "inkling-2-mini-atlas", "passed": true, "checks": {"exact_ledger": true, "proper_intents": true, "resolved_timeouts": true, "no_retry_after_commit": true, "reported": true}, "failure": null, "elapsed": 5.3, "receipt": "~/inkling2/rig/r051/smb-spark-full/quality/inkling-2-mini-atlas-payment-recovery.json"}
+{"task": "evidence-revisions", "model": "inkling-2-mini-atlas", "passed": true, "checks": {"json_only": true, "exact_evidence": true, "read_authority": true}, "failure": null, "elapsed": 5.2, "receipt": "~/inkling2/rig/r051/smb-spark-full/quality/inkling-2-mini-atlas-evidence-revisions.json"}
+~/inkling2/rig/r051/smb-spark-full/result.json
