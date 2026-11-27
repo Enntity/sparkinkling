@@ -30,3 +30,7 @@ Measure the baseline on the same Spark, and put its receipts in `raw/` too.
   vLLM, with its pools, 1M-token recall and functional check.
 - [`2026-11-25-loopcd`](2026-11-25-loopcd/RESULT.md): the opt-in LoopCD
   setting, its speed and pool cost in both modes and its quality in Strict.
+- [`2026-11-27-rc-0.5.1`](2026-11-27-rc-0.5.1/RESULT.md): the 0.5.1
+  candidate (prefill kernels, one prefill chunk a tick, Spark decode on the
+  row-invariant tensor cores), both modes on SparkModelBench, with its pools
+  and functional check.

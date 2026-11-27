@@ -1,0 +1,18 @@
+Starting concurrency
+concurrency/1: 3 rounds of code
+  1: aggregate 63.2 tok/s, median stream 67.1 tok/s
+  2: aggregate 81.2 tok/s, median stream 87.4 tok/s
+  3: aggregate 62.4 tok/s, median stream 66.0 tok/s
+concurrency/2: 3 rounds of code
+  1: aggregate 84.0 tok/s, median stream 46.6 tok/s
+  2: aggregate 81.9 tok/s, median stream 43.8 tok/s
+  3: aggregate 80.4 tok/s, median stream 44.2 tok/s
+concurrency/4: 3 rounds of code
+  1: aggregate 104.7 tok/s, median stream 28.1 tok/s
+  2: aggregate 106.9 tok/s, median stream 29.2 tok/s
+  3: aggregate 102.6 tok/s, median stream 27.5 tok/s
+concurrency/8: 3 rounds of code
+  1: aggregate 143.2 tok/s, median stream 20.1 tok/s
+  2: aggregate 148.9 tok/s, median stream 20.9 tok/s
+  3: aggregate 144.1 tok/s, median stream 20.2 tok/s
+~/inkling2/rig/r051/smb-spark-concurrency/result.json

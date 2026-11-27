@@ -181,11 +181,11 @@ by default.
 
 | `PROFILE` | Requests | Tokens each | GPU memory | KV pool | Prefix-cache snapshots |
 |---|---:|---:|---:|---:|---:|
-| `default` | 8 | 1,048,576 | 0.80 | 1.84M tokens (1.97M Strict) | 264 |
-| `max` | 32 | 1,048,576 | 0.85 | 1.75M tokens (1.91M Strict) | 264 |
-| `saver` | 8 | 786,432 | 0.50 | 800K tokens (965K Strict) | 192 |
+| `default` | 8 | 1,048,576 | 0.80 | 1.79M tokens (1.91M Strict) | 264 |
+| `max` | 32 | 1,048,576 | 0.85 | 1.72M tokens (1.87M Strict) | 264 |
+| `saver` | 8 | 786,432 | 0.50 | 742K tokens (883K Strict) | 192 |
 
-All three keep BF16 KV, 4,096-token prefill chunks, prefix caching,
+All three keep BF16 KV, 8,192-token prefill chunks, prefix caching,
 hour-long requests and up to 32,768 generated tokens a tool-calling request
 (the model reasons before it calls). Requests the pool cannot hold yet wait
 for blocks rather than fail. KV costs about 32 KiB a token: the 40

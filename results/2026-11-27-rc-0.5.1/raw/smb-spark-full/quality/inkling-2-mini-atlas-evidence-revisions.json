@@ -1,0 +1,291 @@
+{
+  "task": "evidence-revisions",
+  "category": "evidence",
+  "interpretation": "diagnostic_only",
+  "task_status": "experimental",
+  "suite_version": "0.8",
+  "suite_sha256": "85bc424eb5815cfe7a803185b25d4a0350e4898c26ac30a893a1b009e5c8bd45",
+  "task_sha256": "ecc6d9ddff73a562cce6b1507c065a22dc1255fb92336730ffc825906a672bd9",
+  "request": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 20261011,
+    "max_tokens": 8192,
+    "max_steps": 0,
+    "task_seconds": 180,
+    "reasoning_effort": "low",
+    "thinking": "default"
+  },
+  "arkade_revision": null,
+  "runtime_image_id": "sha256:8eb2060010532d2e33f4a1f424e222b4c731da8788a24bb4c0e39ec8bad57d15",
+  "requested_model": "inkling-2-mini-atlas",
+  "observed_models": [
+    "inkling-2-mini-atlas",
+    "inkling-2-mini-atlas",
+    "inkling-2-mini-atlas",
+    "inkling-2-mini-atlas"
+  ],
+  "model_match": true,
+  "started_at": "2026-11-27T02:01:39.301839+00:00",
+  "finished_at": "2026-11-27T02:01:44.524540+00:00",
+  "elapsed_seconds": 5.2,
+  "usage": {
+    "prompt_tokens": 3026,
+    "completion_tokens": 394,
+    "reasoning_tokens": 60
+  },
+  "reasoning_diagnostics": {
+    "characters": 200,
+    "repeated_trigram_fraction": 0.0,
+    "loop_detected": false
+  },
+  "tool_diagnostics": {
+    "parsed_calls": 7,
+    "invalid_calls": 3,
+    "no_call_or_answer": false,
+    "unfinished_after_tool": false,
+    "unparsed_tool_markup": false
+  },
+  "steps": 4,
+  "checks": {
+    "json_only": true,
+    "exact_evidence": true,
+    "read_authority": true
+  },
+  "artefact_passed": true,
+  "conversation_finished": true,
+  "governor_notices": [],
+  "passed": true,
+  "failure": null,
+  "answer": "{\"service\":\"ledger\",\"port\":9090,\"owner\":\"Operations\",\"retention_days\":null,\"sources\":[\"approved-v2.txt\"]}",
+  "calls": [
+    {
+      "name": "list_files",
+      "arguments": "{}",
+      "result": {
+        "files": [
+          "approved-v1.txt",
+          "approved-v2.txt",
+          "draft-v3.txt"
+        ]
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\":\"approved-v1.txt\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\":\"approved-v2.txt\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\":\"draft-v3.txt\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"approved-v1.txt\"}",
+      "result": {
+        "total_lines": 1,
+        "text": "1: Status: APPROVED. Version: 1. Service: ledger. Port: 8080. Owner: Platform."
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"approved-v2.txt\"}",
+      "result": {
+        "total_lines": 1,
+        "text": "1: Status: APPROVED. Supersedes approved-v1.txt. Version: 2. Service: ledger. Port: 9090. Owner: Operations. Retention has not been decided."
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"draft-v3.txt\"}",
+      "result": {
+        "total_lines": 1,
+        "text": "1: Status: DRAFT, NOT APPROVED. Version: 3. Service: ledger. Port: 9999. Owner: Experiments. Proposed retention: 90 days."
+      }
+    }
+  ],
+  "events": [
+    {
+      "step": 1,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "Let me list files.",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_0000000000000018",
+            "type": "function",
+            "function": {
+              "name": "list_files",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 516,
+        "completion_tokens": 32,
+        "total_tokens": 548,
+        "prompt_tokens_details": {
+          "cached_tokens": 368,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 6,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 26,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 342.398342,
+        "response_token/s": 97.90693109884367
+      }
+    },
+    {
+      "step": 2,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_0000000000000019",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\":\"approved-v1.txt\"}"
+            }
+          },
+          {
+            "id": "call_000000000000001a",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\":\"approved-v2.txt\"}"
+            }
+          },
+          {
+            "id": "call_000000000000001b",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\":\"draft-v3.txt\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 588,
+        "completion_tokens": 109,
+        "total_tokens": 697,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 93,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 258.59976,
+        "response_token/s": 115.97801055631207
+      }
+    },
+    {
+      "step": 3,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_000000000000001c",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"approved-v1.txt\"}"
+            }
+          },
+          {
+            "id": "call_000000000000001d",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"approved-v2.txt\"}"
+            }
+          },
+          {
+            "id": "call_000000000000001e",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"draft-v3.txt\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 799,
+        "completion_tokens": 145,
+        "total_tokens": 944,
+        "prompt_tokens_details": {
+          "cached_tokens": 576,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 124,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 394.868944,
+        "response_token/s": 111.8269065979112
+      }
+    },
+    {
+      "step": 4,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "Newest approved is v2. Retention not decided → null. Sources: approved-v2.txt (and maybe approved-v1? \"Cite only documents supporting your answer\" — v2 supersedes v1, so just v2).",
+        "content": "{\"service\":\"ledger\",\"port\":9090,\"owner\":\"Operations\",\"retention_days\":null,\"sources\":[\"approved-v2.txt\"]}"
+      },
+      "usage": {
+        "prompt_tokens": 1123,
+        "completion_tokens": 108,
+        "total_tokens": 1231,
+        "prompt_tokens_details": {
+          "cached_tokens": 784,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 54,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 85,
+          "rejected_prediction_tokens": 0
+        },
+        "time_to_first_token_ms": 446.10956200000004,
+        "response_token/s": 90.12465699745276
+      }
+    }
+  ],
+  "acceptance": null,
+  "changes": {},
+  "run_group": "97070b72530d41b890d9f297cba1e2b2"
+}

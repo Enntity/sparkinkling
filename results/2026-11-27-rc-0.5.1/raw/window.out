@@ -1,0 +1,16 @@
+voice-down 01:44:08Z
+  "applied": true,
+  "applied": true,
+gpu apps left: 
+pool default spark: 1790944 max KV tokens  01:44:34Z
+full spark exit 0 02:01:44Z
+concurrency spark exit 0 02:03:26Z
+pool default strict: 1909536 max KV tokens  02:03:49Z
+full strict exit 0 02:23:25Z
+concurrency strict exit 0 02:25:29Z
+pool max spark: 1718048 max KV tokens
+pool max strict: 1872512 max KV tokens
+  "applied": true,
+  "applied": true,
+voice-up 02:27:24Z drama 200 parakeet 200
+WINDOW-DONE
