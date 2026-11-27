@@ -1,0 +1,114 @@
+{
+  "suite": "293a44f82dd977af8aeeee31df7ba70da9f4545d",
+  "protocol": {
+    "version": 1,
+    "decode_runs": 5,
+    "decode_cap": 8192,
+    "prefill_depths": [
+      8192,
+      32768,
+      65536,
+      131072,
+      262144
+    ],
+    "prefill_pairs": 3,
+    "c4": {
+      "depth": 16384,
+      "output": 400,
+      "interval_s": 1,
+      "repetitions": 3
+    },
+    "quality_tasks": [
+      "python-expiry",
+      "go-transfer-ledger",
+      "payment-recovery",
+      "evidence-revisions"
+    ],
+    "task_seconds": 180,
+    "task_output_cap": 8192,
+    "concurrency": {
+      "levels": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "rounds": 3,
+      "output": 256,
+      "workload": "code",
+      "seed": 20260905
+    }
+  },
+  "upstreams": {
+    "rigmark": "946394fa53db83a6865f6e3ae56594e1c299fb2a",
+    "rigmark-quality": "ea6788ff15ee39550577c829a46ee7ed3a79a976"
+  },
+  "model": "inkling-2-mini",
+  "appliance": {
+    "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+    "topology": "TP1, single Spark",
+    "negotiated_link_speed": "not applicable",
+    "competing_traffic": "no requests; the voice engines suspended through LLooM, but an orphaned idle Drama 3 engine process (20 GB, 0% SM) stayed resident",
+    "context_limit": 270336,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+    "quantisation": "checkpoint as shipped (NVFP4 experts L0-19, MXFP8 experts L20-23, BF16 rest)",
+    "serving_engine": "vLLM, its Inkling 2 Mini image",
+    "serving_image": "vllm/vllm-openai:inkling-2-mini@sha256:c2dc759f5984f69c1e2418c6af7c26eb756f5ed2a8934c768ae1253645d1449e",
+    "kv_cache_dtype": "auto (bf16)",
+    "drafter": "DSpark (the checkpoint's bundled mtp.safetensors), 7 draft tokens, probabilistic draft sampling",
+    "scheduler": "vLLM defaults; --gpu-memory-utilization 0.80, --max-model-len 270336 (so the 256K prefill depth fits), --reasoning-parser inkling, --enable-auto-tool-choice --tool-call-parser inkling"
+  },
+  "trial": "1636e80250bb3680b0f692f3",
+  "comparison_id": "sparkinkling-0.5.1",
+  "effort": "low",
+  "portable": false,
+  "requested": [
+    "concurrency"
+  ],
+  "lanes": {
+    "concurrency": {
+      "1": {
+        "aggregate_tokens_s": 43.626,
+        "stream_tokens_s": 45.57,
+        "stream_ttft_s": 0.27,
+        "output_tokens": [
+          256,
+          256,
+          256
+        ]
+      },
+      "2": {
+        "aggregate_tokens_s": 69.209,
+        "stream_tokens_s": 36.995,
+        "stream_ttft_s": 0.339,
+        "output_tokens": [
+          512,
+          512,
+          512
+        ]
+      },
+      "4": {
+        "aggregate_tokens_s": 106.642,
+        "stream_tokens_s": 28.628,
+        "stream_ttft_s": 0.478,
+        "output_tokens": [
+          1024,
+          1024,
+          1024
+        ]
+      },
+      "8": {
+        "aggregate_tokens_s": 156.404,
+        "stream_tokens_s": 24.627,
+        "stream_ttft_s": 2.745,
+        "output_tokens": [
+          2048,
+          2048,
+          2048
+        ]
+      }
+    }
+  },
+  "errors": {}
+}

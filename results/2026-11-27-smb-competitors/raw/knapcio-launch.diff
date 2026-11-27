@@ -1,0 +1,13 @@
+diff --git a/scripts/launch.sh b/scripts/launch.sh
+index 4415dd1..73fd221 100755
+--- a/scripts/launch.sh
++++ b/scripts/launch.sh
+@@ -117,7 +117,7 @@ if [[ $SPEC == dflash2 ]]; then
+   [[ $CERT_WIDE == 0 || $CERT_HEAD == 1 ]] || { echo "CERT_WIDE_DFLASH=1 needs CERT_DFLASH=1" >&2; exit 2; }
+   [[ $CERT_HEAD == 0 || $OVERLAY == 1 ]] || { echo "CERT_DFLASH needs OVERLAY=1" >&2; exit 2; }
+   [[ $PICO12 == *drafthead* ]] && { echo "PICO12 drafthead patches the DSpark draft head; drop it with SPEC=dflash2" >&2; exit 2; }
+-  [[ -n $MEM_FRACTION_USER ]] || MEM_FRACTION=0.85
++  [[ -n $MEM_FRACTION_USER ]] || MEM_FRACTION=0.80
+   # Full-width DFLASH capture (inkling_vcap/dfsteplog.py): STEPLOG=<label> writes
+   # $CACHE_DIR/steplog/<label>/dflash1-*.npz; measurement only (verification stays full width)
+   if [[ -n ${STEPLOG:-} ]]; then

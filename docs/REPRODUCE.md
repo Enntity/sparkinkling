@@ -119,6 +119,13 @@ run each, are in [`bench/`](../bench/README.md).
 
 ## The vLLM columns
 
+From 0.5.1 the comparison columns are measured with SparkModelBench too:
+vLLM with its DSpark drafter and knapcio's SGLang recipe, on the same Spark,
+with the commands and settings in
+[`results/2026-11-27-smb-competitors`](../results/2026-11-27-smb-competitors/RESULT.md)
+(`raw/window.sh`). The rest of this section describes 0.5.0's RigMark 1.1.0
+columns.
+
 The comparison columns are vLLM's own Inkling 2 Mini image
 (`vllm/vllm-openai:inkling-2-mini@sha256:c2dc759f5984`) on the same Spark with
 the same RigMark protocol, with and without its DSpark drafter, measured

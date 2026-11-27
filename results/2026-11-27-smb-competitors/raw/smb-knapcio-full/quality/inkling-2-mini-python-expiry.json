@@ -1,0 +1,330 @@
+{
+  "task": "python-expiry",
+  "category": "coding",
+  "interpretation": "diagnostic_only",
+  "task_status": "experimental",
+  "suite_version": "0.8",
+  "suite_sha256": "85bc424eb5815cfe7a803185b25d4a0350e4898c26ac30a893a1b009e5c8bd45",
+  "task_sha256": "df7450500da9604ef71e555168e9a3e9b810e32a54269bf82a304815264ac9c8",
+  "request": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 20261011,
+    "max_tokens": 8192,
+    "max_steps": 0,
+    "task_seconds": 180,
+    "reasoning_effort": "low",
+    "thinking": "default"
+  },
+  "arkade_revision": null,
+  "runtime_image_id": "sha256:8eb2060010532d2e33f4a1f424e222b4c731da8788a24bb4c0e39ec8bad57d15",
+  "requested_model": "inkling-2-mini",
+  "observed_models": [
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini"
+  ],
+  "model_match": true,
+  "started_at": "2026-11-27T09:21:25.613862+00:00",
+  "finished_at": "2026-11-27T09:21:36.754147+00:00",
+  "elapsed_seconds": 11.1,
+  "usage": {
+    "prompt_tokens": 9234,
+    "completion_tokens": 1031,
+    "reasoning_tokens": 743
+  },
+  "reasoning_diagnostics": {
+    "characters": 121,
+    "repeated_trigram_fraction": 0.0,
+    "loop_detected": false
+  },
+  "tool_diagnostics": {
+    "parsed_calls": 7,
+    "invalid_calls": 2,
+    "no_call_or_answer": false,
+    "unfinished_after_tool": false,
+    "unparsed_tool_markup": false
+  },
+  "steps": 6,
+  "checks": {
+    "acceptance": true,
+    "public_tests": true,
+    "regression_test_added": true
+  },
+  "artefact_passed": true,
+  "conversation_finished": true,
+  "governor_notices": [],
+  "passed": true,
+  "failure": null,
+  "answer": "Fixed `expired_keys` to use `is not None` and `<=`, added regression tests, and all 6 public tests pass.",
+  "calls": [
+    {
+      "name": "read_file",
+      "arguments": "{\"path\": \"expiry.py\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\": \"test_expiry.py\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\": 100, \"offset\": 0, \"path\": \"expiry.py\"}",
+      "result": {
+        "total_lines": 3,
+        "text": "1: def expired_keys(records, now):\n2:     \"\"\"Return expired keys in input order, without changing records.\"\"\"\n3:     return [row[\"key\"] for row in records if row.get(\"expires_at\") and row[\"expires_at\"] < now]"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\": 100, \"offset\": 0, \"path\": \"test_expiry.py\"}",
+      "result": {
+        "total_lines": 6,
+        "text": "1: import unittest\n2: from expiry import expired_keys\n3: class ExpiryTest(unittest.TestCase):\n4:     def test_past(self):\n5:         self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":2}], 3), [\"a\"])\n6: if __name__ == \"__main__\": unittest.main()"
+      }
+    },
+    {
+      "name": "write_file",
+      "arguments": "{\"content\": \"def expired_keys(records, now):\\n    \\\"\\\"\\\"Return expired keys in input order, without changing records.\\\"\\\"\\\"\\n    return [row[\\\"key\\\"] for row in records if row.get(\\\"expires_at\\\") is not None and row[\\\"expires_at\\\"] <= now]\\n\", \"path\": \"expiry.py\"}",
+      "result": {
+        "written": "expiry.py"
+      }
+    },
+    {
+      "name": "write_file",
+      "arguments": "{\"content\": \"import unittest\\nfrom expiry import expired_keys\\nclass ExpiryTest(unittest.TestCase):\\n    def test_past(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2}], 3), [\\\"a\\\"])\\n    def test_inclusive_boundary(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":3}], 3), [\\\"a\\\"])\\n    def test_missing_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\"}], 3), [])\\n    def test_null_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":None}], 3), [])\\n    def test_zero_is_valid_timestamp(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":0}], 0), [\\\"a\\\"])\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":0}], -1), [])\\n    def test_order_duplicates_and_records_preserved(self):\\n        records = [{\\\"key\\\":\\\"b\\\",\\\"expires_at\\\":1},{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2},{\\\"key\\\":\\\"b\\\",\\\"expires_at\\\":1}]\\n        snapshot = [dict(r) for r in records]\\n        self.assertEqual(expired_keys(records, 2), [\\\"b\\\",\\\"a\\\",\\\"b\\\"])\\n        self.assertEqual(records, snapshot)\\n\\nif __name__ == \\\"__main__\\\": unittest.main()\\n\", \"path\": \"test_expiry.py\"}",
+      "result": {
+        "written": "test_expiry.py"
+      }
+    },
+    {
+      "name": "run_tests",
+      "arguments": "{}",
+      "result": {
+        "exit_code": 0,
+        "timeout": false,
+        "output": "test_inclusive_boundary (test_expiry.ExpiryTest.test_inclusive_boundary) ... ok\ntest_missing_expiry_never_expires (test_expiry.ExpiryTest.test_missing_expiry_never_expires) ... ok\ntest_null_expiry_never_expires (test_expiry.ExpiryTest.test_null_expiry_never_expires) ... ok\ntest_order_duplicates_and_records_preserved (test_expiry.ExpiryTest.test_order_duplicates_and_records_preserved) ... ok\ntest_past (test_expiry.ExpiryTest.test_past) ... ok\ntest_zero_is_valid_timestamp (test_expiry.ExpiryTest.test_zero_is_valid_timestamp) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n"
+      }
+    }
+  ],
+  "events": [
+    {
+      "step": 1,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": "Let me inspect files.",
+        "tool_calls": [
+          {
+            "id": "call_069bf03ec68d4c73a5f9463d",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\": \"expiry.py\"}"
+            }
+          },
+          {
+            "id": "call_31cc765076784aff808ef876",
+            "index": 1,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\": \"test_expiry.py\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 828,
+        "total_tokens": 907,
+        "completion_tokens": 79,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 8,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        }
+      }
+    },
+    {
+      "step": 2,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": null,
+        "tool_calls": [
+          {
+            "id": "call_fde5ace503c6409e8d70a2d5",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\": 100, \"offset\": 0, \"path\": \"expiry.py\"}"
+            }
+          },
+          {
+            "id": "call_5bd28cb0cf39407ebbcfb648",
+            "index": 1,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\": 100, \"offset\": 0, \"path\": \"test_expiry.py\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 975,
+        "total_tokens": 1070,
+        "completion_tokens": 95,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 46,
+        "completion_tokens_details": {
+          "reasoning_tokens": 46
+        }
+      }
+    },
+    {
+      "step": 3,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": "Fix: inclusive, missing/null never expires, zero valid. Preserve order/duplicates/objects.",
+        "tool_calls": [
+          {
+            "id": "call_badcccc5fe864df58b7e737b",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "write_file",
+              "arguments": "{\"content\": \"def expired_keys(records, now):\\n    \\\"\\\"\\\"Return expired keys in input order, without changing records.\\\"\\\"\\\"\\n    return [row[\\\"key\\\"] for row in records if row.get(\\\"expires_at\\\") is not None and row[\\\"expires_at\\\"] <= now]\\n\", \"path\": \"expiry.py\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 1329,
+        "total_tokens": 1487,
+        "completion_tokens": 158,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 27,
+        "completion_tokens_details": {
+          "reasoning_tokens": 27
+        }
+      }
+    },
+    {
+      "step": 4,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": null,
+        "tool_calls": [
+          {
+            "id": "call_1b6d9068304a44e1bfc04a2f",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "write_file",
+              "arguments": "{\"content\": \"import unittest\\nfrom expiry import expired_keys\\nclass ExpiryTest(unittest.TestCase):\\n    def test_past(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2}], 3), [\\\"a\\\"])\\n    def test_inclusive_boundary(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":3}], 3), [\\\"a\\\"])\\n    def test_missing_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\"}], 3), [])\\n    def test_null_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":None}], 3), [])\\n    def test_zero_is_valid_timestamp(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":0}], 0), [\\\"a\\\"])\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":0}], -1), [])\\n    def test_order_duplicates_and_records_preserved(self):\\n        records = [{\\\"key\\\":\\\"b\\\",\\\"expires_at\\\":1},{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2},{\\\"key\\\":\\\"b\\\",\\\"expires_at\\\":1}]\\n        snapshot = [dict(r) for r in records]\\n        self.assertEqual(expired_keys(records, 2), [\\\"b\\\",\\\"a\\\",\\\"b\\\"])\\n        self.assertEqual(records, snapshot)\\n\\nif __name__ == \\\"__main__\\\": unittest.main()\\n\", \"path\": \"test_expiry.py\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 1505,
+        "total_tokens": 2140,
+        "completion_tokens": 635,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 634,
+        "completion_tokens_details": {
+          "reasoning_tokens": 634
+        }
+      }
+    },
+    {
+      "step": 5,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": null,
+        "tool_calls": [
+          {
+            "id": "call_013f0ef336e34d67b761e090",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "run_tests",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 2160,
+        "total_tokens": 2184,
+        "completion_tokens": 24,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 23
+        }
+      }
+    },
+    {
+      "step": 6,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Fixed `expired_keys` to use `is not None` and `<=`, added regression tests, and all 6 public tests pass.",
+        "reasoning_content": "Done."
+      },
+      "usage": {
+        "prompt_tokens": 2437,
+        "total_tokens": 2477,
+        "completion_tokens": 40,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 5,
+        "completion_tokens_details": {
+          "reasoning_tokens": 5
+        }
+      }
+    }
+  ],
+  "acceptance": {
+    "exit_code": 0,
+    "timeout": false,
+    "output": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nOK\n",
+    "public_tests": {
+      "exit_code": 0,
+      "timeout": false,
+      "output": "test_inclusive_boundary (test_expiry.ExpiryTest.test_inclusive_boundary) ... ok\ntest_missing_expiry_never_expires (test_expiry.ExpiryTest.test_missing_expiry_never_expires) ... ok\ntest_null_expiry_never_expires (test_expiry.ExpiryTest.test_null_expiry_never_expires) ... ok\ntest_order_duplicates_and_records_preserved (test_expiry.ExpiryTest.test_order_duplicates_and_records_preserved) ... ok\ntest_past (test_expiry.ExpiryTest.test_past) ... ok\ntest_zero_is_valid_timestamp (test_expiry.ExpiryTest.test_zero_is_valid_timestamp) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n"
+    }
+  },
+  "changes": {
+    "expiry.py": {
+      "sha256": "2162b4269a25cabfe9edd9fa2774697f9196d88313c66cce66ab173cd89611de",
+      "diff": "--- original/expiry.py\n+++ candidate/expiry.py\n@@ -1,3 +1,3 @@\n def expired_keys(records, now):\n     \"\"\"Return expired keys in input order, without changing records.\"\"\"\n-    return [row[\"key\"] for row in records if row.get(\"expires_at\") and row[\"expires_at\"] < now]\n+    return [row[\"key\"] for row in records if row.get(\"expires_at\") is not None and row[\"expires_at\"] <= now]\n"
+    },
+    "test_expiry.py": {
+      "sha256": "f5dc85319d526ab4d3d5a8b8a8433d7939e61ff88e67b8c37301b50cb2912cca",
+      "diff": "--- original/test_expiry.py\n+++ candidate/test_expiry.py\n@@ -3,4 +3,19 @@\n class ExpiryTest(unittest.TestCase):\n     def test_past(self):\n         self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":2}], 3), [\"a\"])\n+    def test_inclusive_boundary(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":3}], 3), [\"a\"])\n+    def test_missing_expiry_never_expires(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\"}], 3), [])\n+    def test_null_expiry_never_expires(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":None}], 3), [])\n+    def test_zero_is_valid_timestamp(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":0}], 0), [\"a\"])\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":0}], -1), [])\n+    def test_order_duplicates_and_records_preserved(self):\n+        records = [{\"key\":\"b\",\"expires_at\":1},{\"key\":\"a\",\"expires_at\":2},{\"key\":\"b\",\"expires_at\":1}]\n+        snapshot = [dict(r) for r in records]\n+        self.assertEqual(expired_keys(records, 2), [\"b\",\"a\",\"b\"])\n+        self.assertEqual(records, snapshot)\n+\n if __name__ == \"__main__\": unittest.main()\n"
+    }
+  },
+  "run_group": "a732903b35634c90881bea2cfe9ae614"
+}

@@ -1,0 +1,449 @@
+{
+  "task": "python-expiry",
+  "category": "coding",
+  "interpretation": "diagnostic_only",
+  "task_status": "experimental",
+  "suite_version": "0.8",
+  "suite_sha256": "85bc424eb5815cfe7a803185b25d4a0350e4898c26ac30a893a1b009e5c8bd45",
+  "task_sha256": "df7450500da9604ef71e555168e9a3e9b810e32a54269bf82a304815264ac9c8",
+  "request": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 20261011,
+    "max_tokens": 8192,
+    "max_steps": 0,
+    "task_seconds": 180,
+    "reasoning_effort": "low",
+    "thinking": "default"
+  },
+  "arkade_revision": null,
+  "runtime_image_id": "sha256:8eb2060010532d2e33f4a1f424e222b4c731da8788a24bb4c0e39ec8bad57d15",
+  "requested_model": "inkling-2-mini",
+  "observed_models": [
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini"
+  ],
+  "model_match": true,
+  "started_at": "2026-11-27T09:00:06.681036+00:00",
+  "finished_at": "2026-11-27T09:00:32.309005+00:00",
+  "elapsed_seconds": 25.6,
+  "usage": {
+    "prompt_tokens": 14367,
+    "completion_tokens": 1158,
+    "reasoning_tokens": 81
+  },
+  "reasoning_diagnostics": {
+    "characters": 317,
+    "repeated_trigram_fraction": 0.02,
+    "loop_detected": false
+  },
+  "tool_diagnostics": {
+    "parsed_calls": 10,
+    "invalid_calls": 2,
+    "no_call_or_answer": false,
+    "unfinished_after_tool": false,
+    "unparsed_tool_markup": false
+  },
+  "steps": 9,
+  "checks": {
+    "acceptance": true,
+    "public_tests": true,
+    "regression_test_added": true
+  },
+  "artefact_passed": true,
+  "conversation_finished": true,
+  "governor_notices": [],
+  "passed": true,
+  "failure": null,
+  "answer": "Fixed `expired_keys` to use `expires_at is not None and expires_at <= now`, preserving order/duplicates/records. Added 5 regression tests; all 6 public tests pass.",
+  "calls": [
+    {
+      "name": "list_files",
+      "arguments": "{\"pattern\":\"*expir*\"}",
+      "result": {
+        "files": [
+          "expiry.py",
+          "test_expiry.py"
+        ]
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\":\"expiry.py\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\":\"test_expiry.py\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"expiry.py\"}",
+      "result": {
+        "total_lines": 3,
+        "text": "1: def expired_keys(records, now):\n2:     \"\"\"Return expired keys in input order, without changing records.\"\"\"\n3:     return [row[\"key\"] for row in records if row.get(\"expires_at\") and row[\"expires_at\"] < now]"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"test_expiry.py\"}",
+      "result": {
+        "total_lines": 6,
+        "text": "1: import unittest\n2: from expiry import expired_keys\n3: class ExpiryTest(unittest.TestCase):\n4:     def test_past(self):\n5:         self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":2}], 3), [\"a\"])\n6: if __name__ == \"__main__\": unittest.main()"
+      }
+    },
+    {
+      "name": "write_file",
+      "arguments": "{\"content\":\"def expired_keys(records, now):\\n    \\\"\\\"\\\"Return expired keys in input order, without changing records.\\\"\\\"\\\"\\n    return [row[\\\"key\\\"] for row in records if row.get(\\\"expires_at\\\") is not None and row[\\\"expires_at\\\"] <= now]\\n\",\"path\":\"expiry.py\"}",
+      "result": {
+        "written": "expiry.py"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\":20,\"offset\":0,\"path\":\"test_expiry.py\"}",
+      "result": {
+        "total_lines": 6,
+        "text": "1: import unittest\n2: from expiry import expired_keys\n3: class ExpiryTest(unittest.TestCase):\n4:     def test_past(self):\n5:         self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":2}], 3), [\"a\"])\n6: if __name__ == \"__main__\": unittest.main()"
+      }
+    },
+    {
+      "name": "run_tests",
+      "arguments": "{}",
+      "result": {
+        "exit_code": 0,
+        "timeout": false,
+        "output": "test_past (test_expiry.ExpiryTest.test_past) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
+      }
+    },
+    {
+      "name": "write_file",
+      "arguments": "{\"content\":\"import unittest\\nfrom expiry import expired_keys\\nclass ExpiryTest(unittest.TestCase):\\n    def test_past(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2}], 3), [\\\"a\\\"])\\n    def test_inclusive_boundary(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":3}], 3), [\\\"a\\\"])\\n    def test_missing_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\"}], 3), [])\\n    def test_null_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":None}], 3), [])\\n    def test_zero_is_valid_timestamp(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":0}], 0), [\\\"a\\\"])\\n    def test_order_duplicates_and_records_preserved(self):\\n        records = [{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":1},{\\\"key\\\":\\\"b\\\",\\\"expires_at\\\":5},{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2}]\\n        snapshot = [dict(r) for r in records]\\n        self.assertEqual(expired_keys(records, 3), [\\\"a\\\",\\\"a\\\"])\\n        self.assertEqual(records, snapshot)\\nif __name__ == \\\"__main__\\\": unittest.main()\\n\",\"path\":\"test_expiry.py\"}",
+      "result": {
+        "written": "test_expiry.py"
+      }
+    },
+    {
+      "name": "run_tests",
+      "arguments": "{}",
+      "result": {
+        "exit_code": 0,
+        "timeout": false,
+        "output": "test_inclusive_boundary (test_expiry.ExpiryTest.test_inclusive_boundary) ... ok\ntest_missing_expiry_never_expires (test_expiry.ExpiryTest.test_missing_expiry_never_expires) ... ok\ntest_null_expiry_never_expires (test_expiry.ExpiryTest.test_null_expiry_never_expires) ... ok\ntest_order_duplicates_and_records_preserved (test_expiry.ExpiryTest.test_order_duplicates_and_records_preserved) ... ok\ntest_past (test_expiry.ExpiryTest.test_past) ... ok\ntest_zero_is_valid_timestamp (test_expiry.ExpiryTest.test_zero_is_valid_timestamp) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n"
+      }
+    }
+  ],
+  "events": [
+    {
+      "step": 1,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-8dd6b11d44958dd5",
+            "type": "function",
+            "function": {
+              "name": "list_files",
+              "arguments": "{\"pattern\":\"*expir*\"}"
+            }
+          }
+        ],
+        "reasoning": "Let me look at files."
+      },
+      "usage": {
+        "prompt_tokens": 828,
+        "total_tokens": 871,
+        "completion_tokens": 43,
+        "completion_tokens_details": {
+          "reasoning_tokens": 6
+        }
+      }
+    },
+    {
+      "step": 2,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-94e3e3f9a2146344",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\":\"expiry.py\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-aa9da10f3d936faf",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\":\"test_expiry.py\"}"
+            }
+          }
+        ],
+        "reasoning": null
+      },
+      "usage": {
+        "prompt_tokens": 891,
+        "total_tokens": 962,
+        "completion_tokens": 71,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "step": 3,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-8f8ad97fb23c7281",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"expiry.py\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-a47bab29100d4c88",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\":100,\"offset\":0,\"path\":\"test_expiry.py\"}"
+            }
+          }
+        ],
+        "reasoning": null
+      },
+      "usage": {
+        "prompt_tokens": 1030,
+        "total_tokens": 1125,
+        "completion_tokens": 95,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "step": 4,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-939e174c22f3c1fb",
+            "type": "function",
+            "function": {
+              "name": "write_file",
+              "arguments": "{\"content\":\"def expired_keys(records, now):\\n    \\\"\\\"\\\"Return expired keys in input order, without changing records.\\\"\\\"\\\"\\n    return [row[\\\"key\\\"] for row in records if row.get(\\\"expires_at\\\") is not None and row[\\\"expires_at\\\"] <= now]\\n\",\"path\":\"expiry.py\"}"
+            }
+          }
+        ],
+        "reasoning": "Fix: expired if expires_at is not None and expires_at <= now. Missing/null never expires. Zero valid. Preserve order/duplicates/objects."
+      },
+      "usage": {
+        "prompt_tokens": 1384,
+        "total_tokens": 1558,
+        "completion_tokens": 174,
+        "completion_tokens_details": {
+          "reasoning_tokens": 40
+        }
+      }
+    },
+    {
+      "step": 5,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-a10743500cac0df1",
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\":20,\"offset\":0,\"path\":\"test_expiry.py\"}"
+            }
+          }
+        ],
+        "reasoning": "Add regression tests. Keep existing test. Append tests."
+      },
+      "usage": {
+        "prompt_tokens": 1533,
+        "total_tokens": 1596,
+        "completion_tokens": 63,
+        "completion_tokens_details": {
+          "reasoning_tokens": 11
+        }
+      }
+    },
+    {
+      "step": 6,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-a00f9d44d0dbe43c",
+            "type": "function",
+            "function": {
+              "name": "run_tests",
+              "arguments": "{}"
+            }
+          }
+        ],
+        "reasoning": "Append regression tests."
+      },
+      "usage": {
+        "prompt_tokens": 1728,
+        "total_tokens": 1759,
+        "completion_tokens": 31,
+        "completion_tokens_details": {
+          "reasoning_tokens": 4
+        }
+      }
+    },
+    {
+      "step": 7,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-873540d18cb4ea33",
+            "type": "function",
+            "function": {
+              "name": "write_file",
+              "arguments": "{\"content\":\"import unittest\\nfrom expiry import expired_keys\\nclass ExpiryTest(unittest.TestCase):\\n    def test_past(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2}], 3), [\\\"a\\\"])\\n    def test_inclusive_boundary(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":3}], 3), [\\\"a\\\"])\\n    def test_missing_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\"}], 3), [])\\n    def test_null_expiry_never_expires(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":None}], 3), [])\\n    def test_zero_is_valid_timestamp(self):\\n        self.assertEqual(expired_keys([{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":0}], 0), [\\\"a\\\"])\\n    def test_order_duplicates_and_records_preserved(self):\\n        records = [{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":1},{\\\"key\\\":\\\"b\\\",\\\"expires_at\\\":5},{\\\"key\\\":\\\"a\\\",\\\"expires_at\\\":2}]\\n        snapshot = [dict(r) for r in records]\\n        self.assertEqual(expired_keys(records, 3), [\\\"a\\\",\\\"a\\\"])\\n        self.assertEqual(records, snapshot)\\nif __name__ == \\\"__main__\\\": unittest.main()\\n\",\"path\":\"test_expiry.py\"}"
+            }
+          }
+        ],
+        "reasoning": "Need to add regression tests. I haven't added them yet. Do that now."
+      },
+      "usage": {
+        "prompt_tokens": 1832,
+        "total_tokens": 2433,
+        "completion_tokens": 601,
+        "completion_tokens_details": {
+          "reasoning_tokens": 18
+        }
+      }
+    },
+    {
+      "step": 8,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-b84d862705e43a44",
+            "type": "function",
+            "function": {
+              "name": "run_tests",
+              "arguments": "{}"
+            }
+          }
+        ],
+        "reasoning": null
+      },
+      "usage": {
+        "prompt_tokens": 2432,
+        "total_tokens": 2456,
+        "completion_tokens": 24,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    {
+      "step": 9,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Fixed `expired_keys` to use `expires_at is not None and expires_at <= now`, preserving order/duplicates/records. Added 5 regression tests; all 6 public tests pass.",
+        "refusal": null,
+        "audio": null,
+        "function_call": null,
+        "reasoning": "Done."
+      },
+      "usage": {
+        "prompt_tokens": 2709,
+        "total_tokens": 2765,
+        "completion_tokens": 56,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2
+        }
+      }
+    }
+  ],
+  "acceptance": {
+    "exit_code": 0,
+    "timeout": false,
+    "output": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.002s\n\nOK\n",
+    "public_tests": {
+      "exit_code": 0,
+      "timeout": false,
+      "output": "test_inclusive_boundary (test_expiry.ExpiryTest.test_inclusive_boundary) ... ok\ntest_missing_expiry_never_expires (test_expiry.ExpiryTest.test_missing_expiry_never_expires) ... ok\ntest_null_expiry_never_expires (test_expiry.ExpiryTest.test_null_expiry_never_expires) ... ok\ntest_order_duplicates_and_records_preserved (test_expiry.ExpiryTest.test_order_duplicates_and_records_preserved) ... ok\ntest_past (test_expiry.ExpiryTest.test_past) ... ok\ntest_zero_is_valid_timestamp (test_expiry.ExpiryTest.test_zero_is_valid_timestamp) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n"
+    }
+  },
+  "changes": {
+    "expiry.py": {
+      "sha256": "2162b4269a25cabfe9edd9fa2774697f9196d88313c66cce66ab173cd89611de",
+      "diff": "--- original/expiry.py\n+++ candidate/expiry.py\n@@ -1,3 +1,3 @@\n def expired_keys(records, now):\n     \"\"\"Return expired keys in input order, without changing records.\"\"\"\n-    return [row[\"key\"] for row in records if row.get(\"expires_at\") and row[\"expires_at\"] < now]\n+    return [row[\"key\"] for row in records if row.get(\"expires_at\") is not None and row[\"expires_at\"] <= now]\n"
+    },
+    "test_expiry.py": {
+      "sha256": "4c1b87d23761e78a76437d6040ff3d209a0e25aa95d37a459b82b7bec39a0a3a",
+      "diff": "--- original/test_expiry.py\n+++ candidate/test_expiry.py\n@@ -3,4 +3,17 @@\n class ExpiryTest(unittest.TestCase):\n     def test_past(self):\n         self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":2}], 3), [\"a\"])\n+    def test_inclusive_boundary(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":3}], 3), [\"a\"])\n+    def test_missing_expiry_never_expires(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\"}], 3), [])\n+    def test_null_expiry_never_expires(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":None}], 3), [])\n+    def test_zero_is_valid_timestamp(self):\n+        self.assertEqual(expired_keys([{\"key\":\"a\",\"expires_at\":0}], 0), [\"a\"])\n+    def test_order_duplicates_and_records_preserved(self):\n+        records = [{\"key\":\"a\",\"expires_at\":1},{\"key\":\"b\",\"expires_at\":5},{\"key\":\"a\",\"expires_at\":2}]\n+        snapshot = [dict(r) for r in records]\n+        self.assertEqual(expired_keys(records, 3), [\"a\",\"a\"])\n+        self.assertEqual(records, snapshot)\n if __name__ == \"__main__\": unittest.main()\n"
+    }
+  },
+  "run_group": "4c79f60b7b284d4e81432d133b404827"
+}

@@ -1,0 +1,272 @@
+{
+  "task": "evidence-revisions",
+  "category": "evidence",
+  "interpretation": "diagnostic_only",
+  "task_status": "experimental",
+  "suite_version": "0.8",
+  "suite_sha256": "85bc424eb5815cfe7a803185b25d4a0350e4898c26ac30a893a1b009e5c8bd45",
+  "task_sha256": "ecc6d9ddff73a562cce6b1507c065a22dc1255fb92336730ffc825906a672bd9",
+  "request": {
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 20261011,
+    "max_tokens": 8192,
+    "max_steps": 0,
+    "task_seconds": 180,
+    "reasoning_effort": "low",
+    "thinking": "default"
+  },
+  "arkade_revision": null,
+  "runtime_image_id": "sha256:8eb2060010532d2e33f4a1f424e222b4c731da8788a24bb4c0e39ec8bad57d15",
+  "requested_model": "inkling-2-mini",
+  "observed_models": [
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini",
+    "inkling-2-mini"
+  ],
+  "model_match": true,
+  "started_at": "2026-11-27T09:22:48.038205+00:00",
+  "finished_at": "2026-11-27T09:22:52.931943+00:00",
+  "elapsed_seconds": 4.9,
+  "usage": {
+    "prompt_tokens": 3026,
+    "completion_tokens": 421,
+    "reasoning_tokens": 175
+  },
+  "reasoning_diagnostics": {
+    "characters": 311,
+    "repeated_trigram_fraction": 0.022,
+    "loop_detected": false
+  },
+  "tool_diagnostics": {
+    "parsed_calls": 7,
+    "invalid_calls": 3,
+    "no_call_or_answer": false,
+    "unfinished_after_tool": false,
+    "unparsed_tool_markup": false
+  },
+  "steps": 4,
+  "checks": {
+    "json_only": true,
+    "exact_evidence": true,
+    "read_authority": true
+  },
+  "artefact_passed": true,
+  "conversation_finished": true,
+  "governor_notices": [],
+  "passed": true,
+  "failure": null,
+  "answer": "{\"service\":\"ledger\",\"port\":9090,\"owner\":\"Operations\",\"retention_days\":null,\"sources\":[\"approved-v2.txt\"]}",
+  "calls": [
+    {
+      "name": "list_files",
+      "arguments": "{}",
+      "result": {
+        "files": [
+          "approved-v1.txt",
+          "approved-v2.txt",
+          "draft-v3.txt"
+        ]
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\": \"approved-v1.txt\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\": \"approved-v2.txt\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"path\": \"draft-v3.txt\"}",
+      "result": {
+        "error": "expected fields: path, offset, limit",
+        "kind": "invalid_tool_call"
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\": 50, \"offset\": 0, \"path\": \"approved-v1.txt\"}",
+      "result": {
+        "total_lines": 1,
+        "text": "1: Status: APPROVED. Version: 1. Service: ledger. Port: 8080. Owner: Platform."
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\": 50, \"offset\": 0, \"path\": \"approved-v2.txt\"}",
+      "result": {
+        "total_lines": 1,
+        "text": "1: Status: APPROVED. Supersedes approved-v1.txt. Version: 2. Service: ledger. Port: 9090. Owner: Operations. Retention has not been decided."
+      }
+    },
+    {
+      "name": "read_file",
+      "arguments": "{\"limit\": 50, \"offset\": 0, \"path\": \"draft-v3.txt\"}",
+      "result": {
+        "total_lines": 1,
+        "text": "1: Status: DRAFT, NOT APPROVED. Version: 3. Service: ledger. Port: 9999. Owner: Experiments. Proposed retention: 90 days."
+      }
+    }
+  ],
+  "events": [
+    {
+      "step": 1,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": "Let me list files.",
+        "tool_calls": [
+          {
+            "id": "call_0bb094845714439488f62a9e",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "list_files",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 516,
+        "total_tokens": 548,
+        "completion_tokens": 32,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 8,
+        "completion_tokens_details": {
+          "reasoning_tokens": 8
+        }
+      }
+    },
+    {
+      "step": 2,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": null,
+        "tool_calls": [
+          {
+            "id": "call_26839c553b104b6eb81135ae",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\": \"approved-v1.txt\"}"
+            }
+          },
+          {
+            "id": "call_3b896f03dcc848c7a40425b9",
+            "index": 1,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\": \"approved-v2.txt\"}"
+            }
+          },
+          {
+            "id": "call_da629168ff72447a8f2df2d5",
+            "index": 2,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"path\": \"draft-v3.txt\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 588,
+        "total_tokens": 697,
+        "completion_tokens": 109,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 36,
+        "completion_tokens_details": {
+          "reasoning_tokens": 36
+        }
+      }
+    },
+    {
+      "step": 3,
+      "finish_reason": "tool_calls",
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "reasoning_content": null,
+        "tool_calls": [
+          {
+            "id": "call_9c59d85cce8d4227bc934c74",
+            "index": 0,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\": 50, \"offset\": 0, \"path\": \"approved-v1.txt\"}"
+            }
+          },
+          {
+            "id": "call_ce418fd9bfd846d9ac260ff2",
+            "index": 1,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\": 50, \"offset\": 0, \"path\": \"approved-v2.txt\"}"
+            }
+          },
+          {
+            "id": "call_9a411dc1d8ae452d970aae21",
+            "index": 2,
+            "type": "function",
+            "function": {
+              "name": "read_file",
+              "arguments": "{\"limit\": 50, \"offset\": 0, \"path\": \"draft-v3.txt\"}"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "prompt_tokens": 799,
+        "total_tokens": 944,
+        "completion_tokens": 145,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 48,
+        "completion_tokens_details": {
+          "reasoning_tokens": 48
+        }
+      }
+    },
+    {
+      "step": 4,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "{\"service\":\"ledger\",\"port\":9090,\"owner\":\"Operations\",\"retention_days\":null,\"sources\":[\"approved-v2.txt\"]}",
+        "reasoning_content": "Newest approved is v2. Retention not decided → null. Sources: approved-v2.txt (and maybe approved-v1? \"Cite only documents supporting your answer\" — newest approved config; sources supporting answer: approved-v2.txt. Possibly include v1? It supersedes v1, so v1 not supporting. Use only v2."
+      },
+      "usage": {
+        "prompt_tokens": 1123,
+        "total_tokens": 1258,
+        "completion_tokens": 135,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 83,
+        "completion_tokens_details": {
+          "reasoning_tokens": 83
+        }
+      }
+    }
+  ],
+  "acceptance": null,
+  "changes": {},
+  "run_group": "a732903b35634c90881bea2cfe9ae614"
+}

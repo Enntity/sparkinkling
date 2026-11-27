@@ -22,9 +22,12 @@ keep only their last 1,024 tokens, so a token of context costs 32 KiB, and the
 default profile's pool holds about 1.79M tokens in Spark mode. Greedy text
 with the drafter on matched text with it off in our checks. The figures are
 [SparkModelBench](https://github.com/enntity/sparkmodelbench)'s, which runs
-Alex Ellis's RigMark and RigMark Quality; 0.5.0's comparison with vLLM's own
-Inkling 2 Mini image is kept below. See [Performance](#performance); every
-result has its receipts under [`results/`](results/).
+Alex Ellis's RigMark and RigMark Quality. On the same Spark, Spark mode leads
+vLLM's own Inkling 2 Mini image with its DSpark drafter on decode and prefill
+and trails it at four and eight requests; knapcio's SGLang recipe leads
+SparkInkling on decode, prefill to 128K and every concurrency. See
+[Performance](#performance); every result has its receipts under
+[`results/`](results/).
 
 ## The model
 
@@ -61,28 +64,46 @@ default profile and drafter:
 release image differs from the measured one only in the profiles' notes, and
 its greedy text was the same.
 
-| | Spark | Strict |
-|---|---:|---:|
-| Code decode, tok/s | **88.2** | 68.7 |
-| Prose decode | **57.0** | 40.2 |
-| Structured decode | **129.9** | 102.3 |
-| Cold prefill 8K, tok/s (time to first token) | **5,174** (1.58 s) | 5,137 (1.59 s) |
-| 32K | **5,024** (6.52 s) | 4,918 (6.66 s) |
-| 128K | 3,781 (34.67 s) | 3,779 (34.69 s) |
-| 256K | 2,824 (92.81 s) | 2,827 (92.71 s) |
-| Same prompt sent again, 32K / 256K, time to first token | 0.15 / 0.36 s | 0.16 / 0.37 s |
-| Code, aggregate at 1 / 2 / 4 / 8 requests | **63.2 / 81.9 / 104.7 / 144.1** | 48.1 / 65.6 / 85.6 / 126.4 |
-| Decode gates | 15/15 | 15/15 |
-| RigMark Quality, tasks passed | 3/4 | 3/4 |
+Beside it, on the same Spark and SparkModelBench commit: vLLM's own Inkling 2
+Mini image with the checkpoint's DSpark drafter, and
+[knapcio's recipe](https://github.com/knapcio/Inkling-2-Mini-1x-DGX-Spark)
+v2.9.7 (SGLang with its overlays and the DFlash2 drafter), both serving the
+checkpoint as shipped with their own settings and a 270,336-token context
+([the result](results/2026-11-27-smb-competitors/RESULT.md), which also
+lists how its window differed from SparkInkling's).
+
+| | Spark | Strict | vLLM + DSpark | knapcio v2.9.7 |
+|---|---:|---:|---:|---:|
+| Code decode, tok/s | 88.2 | 68.7 | 70.8 | **97.8** |
+| Prose decode | 57.0 | 40.2 | 31.1 | **59.7** |
+| Structured decode | 129.9 | 102.3 | 104.3 | **147.7** |
+| Cold prefill 8K, tok/s (time to first token) | 5,174 (1.58 s) | 5,137 (1.59 s) | 2,862 (2.86 s) | **5,818** (1.41 s) |
+| 32K | 5,024 (6.52 s) | 4,918 (6.66 s) | 2,735 (11.98 s) | **5,399** (6.07 s) |
+| 128K | 3,781 (34.67 s) | 3,779 (34.69 s) | 2,083 (62.91 s) | **3,973** (32.99 s) |
+| 256K | **2,824** (92.81 s) | **2,827** (92.71 s) | 1,586 (165.31 s) | 2,815 (93.14 s) |
+| Same prompt sent again, 32K / 256K, time to first token | **0.15 / 0.36 s** | 0.16 / 0.37 s | 0.16 / 0.41 s | 1.69 / 4.62 s |
+| Code, aggregate at 1 / 2 / 4 / 8 requests | 63.2 / 81.9 / 104.7 / 144.1 | 48.1 / 65.6 / 85.6 / 126.4 | 43.6 / 69.2 / 106.6 / 156.4 | **68.9 / 99.2 / 152.0 / 243.4** |
+| Decode gates | 15/15 | 15/15 | 15/15 | 15/15 |
+| RigMark Quality, tasks passed | 3/4 | 3/4 | **4/4** | 3/4 |
+| Longest request | **1,048,576** | **1,048,576** | 270,336 as run | 270,336 as run |
 
 Against 0.5.0, cold 32K prefill is 1.53x in Spark and 1.50x in Strict. The
 prefill workload is the same in both RigMark protocols and the decode
-workloads are not, so decode is not compared across them. In RigMark Quality
-both modes miss `go-transfer-ledger`'s acceptance check, with its public
-tests passing. SparkModelBench's staggered four-request lane does not apply:
-it asks for thinking off, which Inkling 2 Mini does not have
-([why](results/2026-11-27-rc-0.5.1/RESULT.md#the-staggered-c4-lane-does-not-apply-to-inkling)).
-vLLM has not been measured with SparkModelBench yet.
+workloads are not, so decode is not compared across them.
+
+- **knapcio leads.** Spark reaches 0.90x its code decode, 0.96x prose and
+  0.88x structured, 0.93x its 32K prefill and is level at 256K; at one, two,
+  four and eight requests it reaches 0.92x, 0.83x, 0.69x and 0.59x. Spark
+  starts a prompt it has just seen more than 10x sooner and serves 1M-token
+  requests.
+- **Against vLLM + DSpark**, Spark leads decode (1.25x code, 1.83x prose,
+  1.25x structured), prefill at every depth (1.84x at 32K) and one and two
+  requests, and trails at four (0.98x) and eight (0.92x) requests.
+- **RigMark Quality** ran once per engine; only vLLM passed
+  `go-transfer-ledger`'s acceptance check, the others passed its public tests.
+- **SparkModelBench's staggered four-request lane does not apply**: it asks
+  for thinking off, which Inkling 2 Mini does not have
+  ([why](results/2026-11-27-rc-0.5.1/RESULT.md#the-staggered-c4-lane-does-not-apply-to-inkling)).
 
 ### 0.5.0 against vLLM (RigMark 1.1.0)
 
