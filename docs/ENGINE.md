@@ -3,10 +3,11 @@
 
 SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
-`inkling2/loopcd-20261124` at
+`inkling2/rc-0.5.1-20261126` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`6ab2e9c78` (tree `c5d33a60`), which is `inkling2/rc-0.5.0-20261124`
-(`1559aa4bc`) plus one opt-in commit, LoopCD (below), for the kernel target `inkling-2-mini`
+`859bcf025` (tree `499212c9`), which is `inkling2/rc-0.5.0-20261124`
+(`1559aa4bc`) plus one opt-in commit, LoopCD (below), and eight speed commits
+(prefill kernels, Spark decode projections, the prefill scheduler; below), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
 commit, refuses any other tree, and takes the kernel target from the same
@@ -30,6 +31,18 @@ that let the image's test suite run `the_baked_attestation_reproduces_from_the_t
 for this one-model build instead of skipping it. The build fetches by commit.
 
 ## What the branch adds
+
+**Speed (eight commits, 0.5.1).** Spark decode's projections run on Atlas's
+row-invariant tensor-core kernels, each row computed as the one-row kernel
+computes it, so drafted and plain greedy text still match. Prefill attention
+computes the relative bias on the tensor cores, on per-head CTAs with 64-key
+tiles; the prefill norms, the conv residual add and the loop-message gates are
+fused into the passes around them; and the experts' gate_up GEMM applies the
+softcapped SwiGLU and quantizes its rows in its own epilogue, byte for byte as
+the separate pass did. The scheduler ends a tick after one prefill chunk while
+other sequences decode, so an arriving prompt holds their streams for one
+chunk at a time (the reason 0.5.1's profiles drop the 4,096-token busy cap and
+run 8,192-token chunks).
 
 **LoopCD (one commit, off by default).** `--loopcd on` runs the coda layers
 18-23 a second time from the state after the first loop pass (six more layer
