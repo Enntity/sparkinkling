@@ -34,3 +34,6 @@ Measure the baseline on the same Spark, and put its receipts in `raw/` too.
   candidate (prefill kernels, one prefill chunk a tick, Spark decode on the
   row-invariant tensor cores), both modes on SparkModelBench, with its pools
   and functional check.
+- [`2026-11-27-smb-competitors`](2026-11-27-smb-competitors/RESULT.md): vLLM
+  with its DSpark drafter and knapcio's SGLang recipe v2.9.7 on
+  SparkModelBench, on the same Spark, beside 0.5.1.

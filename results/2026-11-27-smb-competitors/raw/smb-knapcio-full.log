@@ -1,0 +1,118 @@
+Starting decode
+RigMark 946394fa53db is 6 commit(s) ahead of v0.0.4 (pre-release); this is an unreleased checkout.
+https://github.com/alexellis/rigmark/releases/tag/v0.0.4
+decode/code: 5 runs
+  1: 101.1 tok/s, TTFT 0.272s, 2953 tokens
+  2: 96.6 tok/s, TTFT 0.217s, 3161 tokens
+  3: 93.6 tok/s, TTFT 0.219s, 3275 tokens
+  4: 97.8 tok/s, TTFT 0.210s, 3317 tokens
+  5: 98.5 tok/s, TTFT 0.219s, 3591 tokens
+decode/prose: 5 runs
+  1: 59.7 tok/s, TTFT 0.227s, 1282 tokens
+  2: 59.7 tok/s, TTFT 0.214s, 1197 tokens
+  3: 57.5 tok/s, TTFT 0.214s, 1240 tokens
+  4: 60.7 tok/s, TTFT 0.228s, 1139 tokens
+  5: 59.3 tok/s, TTFT 0.228s, 1203 tokens
+decode/structured: 5 runs
+  1: 147.5 tok/s, TTFT 0.218s, 1028 tokens
+  2: 147.7 tok/s, TTFT 0.229s, 1004 tokens
+  3: 145.7 tok/s, TTFT 0.219s, 1021 tokens
+  4: 149.3 tok/s, TTFT 0.222s, 1020 tokens
+  5: 150.2 tok/s, TTFT 0.216s, 1023 tokens
+result: ~/inkling2/smbcomp/out/smb-knapcio-full/rigmark.json
+card: ~/inkling2/smbcomp/out/smb-knapcio-full/rigmark.card.txt
+
+╭────────────────────────────────────────────────────────────────────────╮
+│                                                                        │
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                           │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                 │
+│  ●  15/15 BASIC OUTPUT GATES PASSED                                    │
+│  INCOMPLETE SUITE: prefill, concurrency not measured                   │
+│                                                                        │
+├─ MODEL ────────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  inkling-2-mini                                                        │
+│                                                                        │
+├─ SINGLE STREAM ────────────────────────────────────────────────────────┤
+│                                                                        │
+│  WORKLOAD         tok/s       Range tok/s   Last (s)    Checks         │
+│  PROSE             59.7         57.5–60.7       20.5     ✓ 5/5         │
+│  CODE              97.8        93.6–101.1       34.1     ✓ 5/5         │
+│  STRUCTURED*      147.7       145.7–150.2        7.0     ✓ 5/5         │
+│                                                                        │
+│  * Predictable JSON ceiling; not general agent performance.            │
+│  Decode medians are estimates; rates include streamed reasoning.       │
+│                                                                        │
+├─ PREFILL ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: prefill skipped (--skip-prefill).                       │
+│                                                                        │
+├─ CAPPED CONCURRENT GENERATION ─────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: concurrency skipped (--skip-concurrency).               │
+│                                                                        │
+├─ APPLIANCE ────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  Hardware: 1x NVIDIA DGX Spark (GB10, 128 GB)                          │
+│  Topology: TP1, single Spark                                           │
+│  Checkpoint: thinkingmachines/Inkling-2-Mini @ ed40e7da625f            │
+│  Quantisation: checkpoint as shipped (NVFP4 experts L0-19, MXFP8       │
+│    experts L20-23, BF16 rest)                                          │
+│  KV cache: knapcio default (packed 12-bit global KV store), SWA ratio  │
+│    0.05                                                                │
+│  Engine: SGLang + knapcio/Inkling-2-Mini-1x-DGX-Spark v2.9.7 overlays  │
+│    (09febfe)                                                           │
+│                                                                        │
+├─ SETTINGS ─────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SUITE: CUSTOM SETTINGS                                                │
+│  Changed: --skip-prefill                                               │
+│  Changed: --skip-concurrency                                           │
+│  REQUEST: {"reasoning_effort": "low"}                                  │
+│  Temperature 0.0 | top_p 1.0 | seed 20260905 | protocol 1.3.0          │
+│  Decode: 5 runs, 8192-token cap | Prefill: skipped, 3 pairs            │
+│  Concurrency: skipped, 3 rounds, 256-token cap; workload code          │
+│  Cache isolation: random-salt-per-pair                                 │
+│  Comparison ID: sparkinkling-0.5.1                                     │
+│                                                                        │
+├─ RECEIPT ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SOURCE     git:946394fa53db  •  clean                                 │
+│  RIGMARK RELEASE: ahead of v0.0.4 (unreleased checkout)                │
+│  JSON sha256:9b95414682041655…                                         │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                     │
+│  github.com/alexellis/rigmark                                          │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯
+
+Share the full ASCII card: ~/inkling2/smbcomp/out/smb-knapcio-full/rigmark.card.txt
+Link the matching JSON receipt: ~/inkling2/smbcomp/out/smb-knapcio-full/rigmark.json
+If an agent ran this, include both files in its reply; do not replace the card with a summary table.
+Starting prefill
+prefill/8192: 3 cold/immediate-replay pairs
+  1: cold 5809.8 tok/s (1.410s), warm 5446.6 tok/s (1.504s)
+  2: cold 5818.2 tok/s (1.408s), warm 5628.6 tok/s (1.455s)
+  3: cold 5861.7 tok/s (1.398s), warm 5762.8 tok/s (1.422s)
+prefill/32768: 3 cold/immediate-replay pairs
+  1: cold 5399.0 tok/s (6.069s), warm 19437.8 tok/s (1.686s)
+  2: cold 5501.6 tok/s (5.956s), warm 19675.4 tok/s (1.665s)
+  3: cold 5388.1 tok/s (6.082s), warm 19035.2 tok/s (1.721s)
+prefill/65536: 3 cold/immediate-replay pairs
+  1: cold 4835.5 tok/s (13.553s), warm 31292.5 tok/s (2.094s)
+  2: cold 4797.9 tok/s (13.659s), warm 32177.8 tok/s (2.037s)
+  3: cold 4811.9 tok/s (13.620s), warm 31555.4 tok/s (2.077s)
+prefill/131072: 3 cold/immediate-replay pairs
+  1: cold 3966.6 tok/s (33.044s), warm 46288.9 tok/s (2.832s)
+  2: cold 3973.1 tok/s (32.990s), warm 44169.4 tok/s (2.967s)
+  3: cold 3975.4 tok/s (32.971s), warm 46736.6 tok/s (2.804s)
+prefill/262144: 3 cold/immediate-replay pairs
+  1: cold 2819.5 tok/s (92.976s), warm 46892.7 tok/s (5.590s)
+  2: cold 2812.6 tok/s (93.203s), warm 56782.1 tok/s (4.617s)
+  3: cold 2814.6 tok/s (93.139s), warm 56881.5 tok/s (4.609s)
+Starting c4
+Starting quality
+{"task": "python-expiry", "model": "inkling-2-mini", "passed": true, "checks": {"acceptance": true, "public_tests": true, "regression_test_added": true}, "failure": null, "elapsed": 11.1, "receipt": "~/inkling2/smbcomp/out/smb-knapcio-full/quality/inkling-2-mini-python-expiry.json"}
+{"task": "go-transfer-ledger", "model": "inkling-2-mini", "passed": false, "checks": {"acceptance": false, "public_tests": true, "regression_test_added": true, "gofmt": true}, "failure": null, "elapsed": 66.9, "receipt": "~/inkling2/smbcomp/out/smb-knapcio-full/quality/inkling-2-mini-go-transfer-ledger.json"}
+{"task": "payment-recovery", "model": "inkling-2-mini", "passed": true, "checks": {"exact_ledger": true, "proper_intents": true, "resolved_timeouts": true, "no_retry_after_commit": true, "reported": true}, "failure": null, "elapsed": 4.4, "receipt": "~/inkling2/smbcomp/out/smb-knapcio-full/quality/inkling-2-mini-payment-recovery.json"}
+{"task": "evidence-revisions", "model": "inkling-2-mini", "passed": true, "checks": {"json_only": true, "exact_evidence": true, "read_authority": true}, "failure": null, "elapsed": 4.9, "receipt": "~/inkling2/smbcomp/out/smb-knapcio-full/quality/inkling-2-mini-evidence-revisions.json"}
+~/inkling2/smbcomp/out/smb-knapcio-full/result.json

@@ -2,15 +2,23 @@
 # Limitations
 
 What to know before relying on SparkInkling, on one DGX Spark. This page
-describes 0.5.1. Its own figures are from the 0.5.1 run
-([`results/2026-11-27-rc-0.5.1`](../results/2026-11-27-rc-0.5.1/RESULT.md),
-SparkModelBench); comparisons with vLLM, and figures that name 0.5.0, are from
-0.5.0's release run
-([`results/2026-11-25-release-0.5.0`](../results/2026-11-25-release-0.5.0/RESULT.md),
-RigMark 1.1.0), as vLLM has not been measured with SparkModelBench yet.
+describes 0.5.1. Figures are from SparkModelBench on one Spark: the 0.5.1 run
+([`results/2026-11-27-rc-0.5.1`](../results/2026-11-27-rc-0.5.1/RESULT.md))
+and vLLM and knapcio's recipe beside it
+([`results/2026-11-27-smb-competitors`](../results/2026-11-27-smb-competitors/RESULT.md)),
+unless they name 0.5.0 (RigMark 1.1.0,
+[`results/2026-11-25-release-0.5.0`](../results/2026-11-25-release-0.5.0/RESULT.md))
+or a development build.
 
 ## Speed
 
+- **knapcio's SGLang recipe is faster.** On the same Spark,
+  [knapcio/Inkling-2-Mini-1x-DGX-Spark](https://github.com/knapcio/Inkling-2-Mini-1x-DGX-Spark)
+  v2.9.7 decodes code at 97.8 tok/s, prose at 59.7 and structured output at
+  147.7 (Spark 88.2, 57.0, 129.9), prefills 32K at 5,399 tok/s (Spark 5,024;
+  level at 256K) and reaches 68.9 / 99.2 / 152.0 / 243.4 tok/s at one, two,
+  four and eight requests (Spark 63.2 / 81.9 / 104.7 / 144.1). The gap grows
+  with concurrency, where SparkInkling stops drafting.
 - **Drafts help one or two requests at a time.** From three live requests the
   engine decodes plainly, in a batch (0.5.0's Spark from two).
   On RigMark's short requests (256 tokens, reasoning low) drafting in a batch
@@ -21,17 +29,18 @@ RigMark 1.1.0), as vLLM has not been measured with SparkModelBench yet.
   [tuning](../results/2026-11-25-dflash2-tuning/RESULT.md)); the engine's
   per-sequence threshold does not yet weigh a draft against how cheap a plain
   batched step is. vLLM's Inkling 2 Mini image drafts under load and is ahead
-  at eight short-code requests: 144.0 against 122.7 (Strict) and 135.2
-  (Spark) ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
+  at four and eight requests: 106.6 and 156.4 tok/s against Spark's 104.7 and
+  144.1 and Strict's 85.6 and 126.4
+  ([issue 1](https://github.com/Enntity/sparkinkling/issues/1)).
 - **Drafts help prose little.** The target accepts about one draft in two on
   prose. Strict keeps drafting there (a block that accepts one token is worth
-  it against Strict's slower plain step) and its prose decode rose from 35.3
-  to 39.6 tok/s; Spark turns drafts off on prose, and its prose lead over
+  it against Strict's slower plain step), and in 0.5.0 its prose decode rose
+  from 35.3 to 39.6 tok/s (RigMark 1.1.0); Spark turns drafts off on prose, and its prose lead over
   vLLM comes from its weights, not from drafts.
-- **Strict is only level with vLLM's drafter on code and structured output**:
-  70.0 against 69.8 tok/s on code and 103.2 against 104.3 on structured
-  output (0.4.2: 65.2 and 92.6), and trails it at four and eight requests.
-  Strict is ahead of vLLM without a drafter on both.
+- **Strict is slightly behind vLLM's drafter on code and structured
+  output**: 68.7 against 70.8 tok/s on code and 102.3 against 104.3 on
+  structured output, and behind it at two, four and eight requests. It leads
+  vLLM on prose (40.2 against 31.1), at one request and in prefill.
 - **There is no thinking-off mode.** Inkling 2 Mini always reasons a little:
   `chat_template_kwargs.enable_thinking: false` is read as reasoning effort
   `none`, at which the model still reasons and SparkInkling streams none of

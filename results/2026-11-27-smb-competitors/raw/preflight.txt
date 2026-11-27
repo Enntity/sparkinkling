@@ -1,0 +1,14 @@
+Preflight on the same Spark before the window, voice engines resident, each engine at reduced memory
+(vLLM --gpu-memory-utilization 0.45 --max-model-len 65536; knapcio MEM_FRACTION=0.45 CTX=65536), probe.py:
+
+vLLM + DSpark (up after 327 s)
+effort low completion_tokens 166 reasoning_chars 332 answer 6:15 pm
+effort high completion_tokens 477 reasoning_chars 990 answer 6:15 pm
+tool tool_calls [{"id": "chatcmpl-tool-a87c568ba7d54d7b", "type": "function", "function": {"name": "get_weather", "arguments": "{\"city\":\"Lisbon\"}"}}]
+token-id completion ok {'prompt_tokens': 8, 'total_tokens': 12, 'completion_tokens': 4, 'completion_tokens_details': None}
+
+knapcio v2.9.7 (healthy after 228 s)
+effort low completion_tokens 223 reasoning_chars 460 answer 6:15 pm
+effort high completion_tokens 84 reasoning_chars 182 answer 6:15 pm
+tool tool_calls [{"id": "call_e75e4b2f0ea842ef9c815675", "index": 0, "type": "function", "function": {"name": "get_weather", "arguments": "{\"city\": \"Lisbon\"}"}}]
+token-id completion ok {'prompt_tokens': 8, 'total_tokens': 12, 'completion_tokens': 4, 'prompt_tokens_details': None, 'reasoning_tokens': 0, 'completion_tokens_details': {'reasoning_tokens': 0}}

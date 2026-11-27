@@ -20,6 +20,13 @@ medians over all repetitions.
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Spark | 88.2 | 57.0 | 129.9 | 5,174 / 5,024 / 4,540 / 3,781 / 2,824 | 63.2 / 81.9 / 104.7 / 144.1 | 15/15 | 3/4 |
 | Strict | 68.7 | 40.2 | 102.3 | 5,137 / 4,918 / 4,481 / 3,779 / 2,827 | 48.1 / 65.6 / 85.6 / 126.4 | 15/15 | 3/4 |
+| vLLM + DSpark | 70.8 | 31.1 | 104.3 | 2,862 / 2,735 / 2,480 / 2,083 / 1,586 | 43.6 / 69.2 / 106.6 / 156.4 | 15/15 | 4/4 |
+| knapcio v2.9.7 | 97.8 | 59.7 | 147.7 | 5,818 / 5,399 / 4,812 / 3,973 / 2,815 | 68.9 / 99.2 / 152.0 / 243.4 | 15/15 | 3/4 |
+
+vLLM (its Inkling 2 Mini image with the checkpoint's DSpark drafter) and
+knapcio's SGLang recipe were measured on the same Spark and SparkModelBench
+commit with their own settings and a 270,336-token context:
+[`results/2026-11-27-smb-competitors`](../results/2026-11-27-smb-competitors/RESULT.md).
 
 ## Protocol (0.5.1)
 

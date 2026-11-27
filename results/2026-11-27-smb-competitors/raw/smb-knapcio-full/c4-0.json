@@ -1,0 +1,2320 @@
+{
+  "requests": [
+    {
+      "stream": 0,
+      "scheduled_s": 0,
+      "start_s": 0.0002635689452290535,
+      "events": [
+        {
+          "s": 10.840019388124347,
+          "visible": false
+        },
+        {
+          "s": 10.909009109716862,
+          "visible": false
+        },
+        {
+          "s": 11.003348053898662,
+          "visible": false
+        },
+        {
+          "s": 11.090005503036082,
+          "visible": false
+        },
+        {
+          "s": 11.171983203850687,
+          "visible": false
+        },
+        {
+          "s": 11.251006823033094,
+          "visible": false
+        },
+        {
+          "s": 11.331972058862448,
+          "visible": false
+        },
+        {
+          "s": 11.408275308087468,
+          "visible": false
+        },
+        {
+          "s": 11.46968767978251,
+          "visible": false
+        },
+        {
+          "s": 11.537292505148798,
+          "visible": false
+        },
+        {
+          "s": 11.606426418758929,
+          "visible": false
+        },
+        {
+          "s": 11.674944780766964,
+          "visible": false
+        },
+        {
+          "s": 11.752307838760316,
+          "visible": false
+        },
+        {
+          "s": 11.825992412865162,
+          "visible": false
+        },
+        {
+          "s": 11.895471320021898,
+          "visible": false
+        },
+        {
+          "s": 11.98036615876481,
+          "visible": false
+        },
+        {
+          "s": 12.058830114081502,
+          "visible": false
+        },
+        {
+          "s": 12.129134988877922,
+          "visible": false
+        },
+        {
+          "s": 12.200671816710383,
+          "visible": false
+        },
+        {
+          "s": 12.277708794921637,
+          "visible": false
+        },
+        {
+          "s": 12.359416239894927,
+          "visible": false
+        },
+        {
+          "s": 12.452085117809474,
+          "visible": false
+        },
+        {
+          "s": 12.54659022204578,
+          "visible": false
+        },
+        {
+          "s": 12.637317466083914,
+          "visible": false
+        },
+        {
+          "s": 12.729469479992986,
+          "visible": false
+        },
+        {
+          "s": 12.820548676885664,
+          "visible": false
+        },
+        {
+          "s": 12.908965696115047,
+          "visible": false
+        },
+        {
+          "s": 12.998219578992575,
+          "visible": false
+        },
+        {
+          "s": 13.092866474762559,
+          "visible": false
+        },
+        {
+          "s": 13.17881625983864,
+          "visible": false
+        },
+        {
+          "s": 13.261611097957939,
+          "visible": false
+        },
+        {
+          "s": 13.353844951838255,
+          "visible": false
+        },
+        {
+          "s": 13.435039852745831,
+          "visible": false
+        },
+        {
+          "s": 13.51939590787515,
+          "visible": false
+        },
+        {
+          "s": 13.604398732073605,
+          "visible": false
+        },
+        {
+          "s": 13.697837355080992,
+          "visible": false
+        },
+        {
+          "s": 13.773584602866322,
+          "visible": false
+        },
+        {
+          "s": 13.848732297774404,
+          "visible": false
+        },
+        {
+          "s": 13.932166865095496,
+          "visible": false
+        },
+        {
+          "s": 14.016795287840068,
+          "visible": false
+        },
+        {
+          "s": 14.096244987100363,
+          "visible": false
+        },
+        {
+          "s": 14.165554165840149,
+          "visible": false
+        },
+        {
+          "s": 14.245853401720524,
+          "visible": false
+        },
+        {
+          "s": 14.321987977717072,
+          "visible": false
+        },
+        {
+          "s": 14.395129847805947,
+          "visible": false
+        },
+        {
+          "s": 14.47315063374117,
+          "visible": false
+        },
+        {
+          "s": 14.552352972794324,
+          "visible": false
+        },
+        {
+          "s": 14.628098860848695,
+          "visible": false
+        },
+        {
+          "s": 14.708590720780194,
+          "visible": false
+        },
+        {
+          "s": 14.781295070890337,
+          "visible": false
+        },
+        {
+          "s": 14.863589331973344,
+          "visible": false
+        },
+        {
+          "s": 14.949761660769582,
+          "visible": false
+        },
+        {
+          "s": 15.037271606735885,
+          "visible": false
+        },
+        {
+          "s": 15.120742012746632,
+          "visible": false
+        },
+        {
+          "s": 15.20185267413035,
+          "visible": false
+        },
+        {
+          "s": 15.301801783032715,
+          "visible": false
+        },
+        {
+          "s": 15.38394165970385,
+          "visible": false
+        },
+        {
+          "s": 15.470236756838858,
+          "visible": false
+        },
+        {
+          "s": 15.554519627708942,
+          "visible": false
+        },
+        {
+          "s": 15.647584090940654,
+          "visible": false
+        },
+        {
+          "s": 15.733557955827564,
+          "visible": false
+        },
+        {
+          "s": 15.833334519993514,
+          "visible": false
+        },
+        {
+          "s": 15.922309922985733,
+          "visible": false
+        },
+        {
+          "s": 16.010267998091877,
+          "visible": false
+        },
+        {
+          "s": 16.089812672697008,
+          "visible": false
+        },
+        {
+          "s": 16.185354369692504,
+          "visible": false
+        },
+        {
+          "s": 16.278236047830433,
+          "visible": false
+        },
+        {
+          "s": 16.348743163980544,
+          "visible": false
+        },
+        {
+          "s": 16.43100857688114,
+          "visible": false
+        },
+        {
+          "s": 16.497435050085187,
+          "visible": false
+        },
+        {
+          "s": 16.585188900120556,
+          "visible": false
+        },
+        {
+          "s": 16.671471741050482,
+          "visible": false
+        },
+        {
+          "s": 16.763524890877306,
+          "visible": false
+        },
+        {
+          "s": 16.840679899789393,
+          "visible": false
+        },
+        {
+          "s": 16.924250594805926,
+          "visible": false
+        },
+        {
+          "s": 17.000391490757465,
+          "visible": false
+        },
+        {
+          "s": 17.080314966849983,
+          "visible": false
+        },
+        {
+          "s": 17.169041538145393,
+          "visible": false
+        },
+        {
+          "s": 17.24972400581464,
+          "visible": false
+        },
+        {
+          "s": 17.33287809183821,
+          "visible": false
+        },
+        {
+          "s": 17.426965883933008,
+          "visible": false
+        },
+        {
+          "s": 17.510707187000662,
+          "visible": false
+        },
+        {
+          "s": 17.600316365715116,
+          "visible": false
+        },
+        {
+          "s": 17.693429132923484,
+          "visible": false
+        },
+        {
+          "s": 17.79095510393381,
+          "visible": false
+        },
+        {
+          "s": 17.87697476008907,
+          "visible": false
+        },
+        {
+          "s": 17.966909267939627,
+          "visible": false
+        },
+        {
+          "s": 18.06121275573969,
+          "visible": false
+        },
+        {
+          "s": 18.14048927091062,
+          "visible": false
+        },
+        {
+          "s": 18.232813892886043,
+          "visible": false
+        },
+        {
+          "s": 18.318945806007832,
+          "visible": false
+        },
+        {
+          "s": 18.40738904895261,
+          "visible": false
+        },
+        {
+          "s": 18.49570294795558,
+          "visible": false
+        },
+        {
+          "s": 18.589139234740287,
+          "visible": false
+        },
+        {
+          "s": 18.665171602740884,
+          "visible": false
+        },
+        {
+          "s": 18.74196245195344,
+          "visible": false
+        },
+        {
+          "s": 18.825790458824486,
+          "visible": false
+        },
+        {
+          "s": 18.909063569735736,
+          "visible": false
+        },
+        {
+          "s": 19.000921102706343,
+          "visible": false
+        },
+        {
+          "s": 19.0837697009556,
+          "visible": false
+        },
+        {
+          "s": 19.162953928112984,
+          "visible": false
+        },
+        {
+          "s": 19.253110533114523,
+          "visible": false
+        },
+        {
+          "s": 19.339949646033347,
+          "visible": false
+        },
+        {
+          "s": 19.437572864815593,
+          "visible": false
+        },
+        {
+          "s": 19.51891216589138,
+          "visible": false
+        },
+        {
+          "s": 19.60107924276963,
+          "visible": false
+        },
+        {
+          "s": 19.686911940108985,
+          "visible": false
+        },
+        {
+          "s": 19.77301759691909,
+          "visible": false
+        },
+        {
+          "s": 19.856764210853726,
+          "visible": false
+        },
+        {
+          "s": 19.939831577707082,
+          "visible": false
+        },
+        {
+          "s": 20.031700999010354,
+          "visible": false
+        },
+        {
+          "s": 20.12018809793517,
+          "visible": false
+        },
+        {
+          "s": 20.210868814960122,
+          "visible": false
+        },
+        {
+          "s": 20.28028602572158,
+          "visible": false
+        },
+        {
+          "s": 20.36329598398879,
+          "visible": false
+        },
+        {
+          "s": 20.43731673480943,
+          "visible": false
+        },
+        {
+          "s": 20.519195331726223,
+          "visible": false
+        },
+        {
+          "s": 20.605932316742837,
+          "visible": false
+        },
+        {
+          "s": 20.691401269752532,
+          "visible": false
+        },
+        {
+          "s": 20.774985803756863,
+          "visible": false
+        },
+        {
+          "s": 20.86699762614444,
+          "visible": false
+        },
+        {
+          "s": 20.94860860798508,
+          "visible": false
+        },
+        {
+          "s": 21.031693781726062,
+          "visible": false
+        },
+        {
+          "s": 21.1161401248537,
+          "visible": false
+        },
+        {
+          "s": 21.20487191202119,
+          "visible": false
+        },
+        {
+          "s": 21.290464672725648,
+          "visible": false
+        },
+        {
+          "s": 21.37772449105978,
+          "visible": false
+        },
+        {
+          "s": 21.465086629148573,
+          "visible": false
+        },
+        {
+          "s": 21.558984979987144,
+          "visible": false
+        },
+        {
+          "s": 21.631634241901338,
+          "visible": false
+        },
+        {
+          "s": 21.6945455907844,
+          "visible": false
+        },
+        {
+          "s": 21.76377476984635,
+          "visible": false
+        },
+        {
+          "s": 21.844394261948764,
+          "visible": false
+        },
+        {
+          "s": 21.918254675809294,
+          "visible": false
+        },
+        {
+          "s": 21.99928676104173,
+          "visible": false
+        },
+        {
+          "s": 22.06777920294553,
+          "visible": false
+        },
+        {
+          "s": 22.135251339990646,
+          "visible": false
+        },
+        {
+          "s": 22.194828446023166,
+          "visible": false
+        },
+        {
+          "s": 22.244368120096624,
+          "visible": false
+        },
+        {
+          "s": 22.298579894006252,
+          "visible": false
+        },
+        {
+          "s": 22.35373462876305,
+          "visible": false
+        },
+        {
+          "s": 22.4143857518211,
+          "visible": false
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 15472,
+        "total_tokens": 15872,
+        "completion_tokens": 400,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 400
+        }
+      },
+      "done": true,
+      "prompt_sha256": "0f2b276847022fade1a139897eb536bd6fc1a82f41742ccd98dad4c033a9b48b",
+      "finish_reason": "length",
+      "end_s": 22.4145797197707,
+      "ttft_s": 10.839755819179118,
+      "max_visible_gap_s": null,
+      "complete": false
+    },
+    {
+      "stream": 1,
+      "scheduled_s": 1,
+      "start_s": 1.0001179948449135,
+      "events": [
+        {
+          "s": 10.84025730798021,
+          "visible": false
+        },
+        {
+          "s": 10.909189958125353,
+          "visible": false
+        },
+        {
+          "s": 11.003435174003243,
+          "visible": false
+        },
+        {
+          "s": 11.090251998975873,
+          "visible": false
+        },
+        {
+          "s": 11.172099923714995,
+          "visible": false
+        },
+        {
+          "s": 11.252130983863026,
+          "visible": false
+        },
+        {
+          "s": 11.332103403750807,
+          "visible": false
+        },
+        {
+          "s": 11.40833970811218,
+          "visible": false
+        },
+        {
+          "s": 11.470311135984957,
+          "visible": false
+        },
+        {
+          "s": 11.53771274490282,
+          "visible": false
+        },
+        {
+          "s": 11.607676083687693,
+          "visible": false
+        },
+        {
+          "s": 11.675031052902341,
+          "visible": false
+        },
+        {
+          "s": 11.752417998854071,
+          "visible": false
+        },
+        {
+          "s": 11.826135500799865,
+          "visible": false
+        },
+        {
+          "s": 11.895588295999914,
+          "visible": false
+        },
+        {
+          "s": 11.980578942690045,
+          "visible": false
+        },
+        {
+          "s": 12.059055681806058,
+          "visible": false
+        },
+        {
+          "s": 12.129303948953748,
+          "visible": false
+        },
+        {
+          "s": 12.200836185831577,
+          "visible": false
+        },
+        {
+          "s": 12.277818074915558,
+          "visible": false
+        },
+        {
+          "s": 12.359825647901744,
+          "visible": false
+        },
+        {
+          "s": 12.452212685719132,
+          "visible": false
+        },
+        {
+          "s": 12.546869021840394,
+          "visible": false
+        },
+        {
+          "s": 12.637484553735703,
+          "visible": false
+        },
+        {
+          "s": 12.737751183100045,
+          "visible": false
+        },
+        {
+          "s": 12.821660310029984,
+          "visible": false
+        },
+        {
+          "s": 12.909111503977329,
+          "visible": false
+        },
+        {
+          "s": 12.998356251977384,
+          "visible": false
+        },
+        {
+          "s": 13.093130155932158,
+          "visible": false
+        },
+        {
+          "s": 13.178934500087053,
+          "visible": false
+        },
+        {
+          "s": 13.261738633736968,
+          "visible": false
+        },
+        {
+          "s": 13.35400309599936,
+          "visible": false
+        },
+        {
+          "s": 13.435635853093117,
+          "visible": false
+        },
+        {
+          "s": 13.519577844068408,
+          "visible": false
+        },
+        {
+          "s": 13.60454333992675,
+          "visible": false
+        },
+        {
+          "s": 13.697970651090145,
+          "visible": false
+        },
+        {
+          "s": 13.773708778899163,
+          "visible": false
+        },
+        {
+          "s": 13.848885545972735,
+          "visible": false
+        },
+        {
+          "s": 13.932277488987893,
+          "visible": false
+        },
+        {
+          "s": 14.016952488105744,
+          "visible": false
+        },
+        {
+          "s": 14.096399180125445,
+          "visible": false
+        },
+        {
+          "s": 14.165710118133575,
+          "visible": false
+        },
+        {
+          "s": 14.24597778590396,
+          "visible": false
+        },
+        {
+          "s": 14.322347674984485,
+          "visible": false
+        },
+        {
+          "s": 14.39530352782458,
+          "visible": false
+        },
+        {
+          "s": 14.473299625795335,
+          "visible": false
+        },
+        {
+          "s": 14.55252193287015,
+          "visible": false
+        },
+        {
+          "s": 14.628303772769868,
+          "visible": false
+        },
+        {
+          "s": 14.708762624766678,
+          "visible": false
+        },
+        {
+          "s": 14.781488942913711,
+          "visible": false
+        },
+        {
+          "s": 14.863710371777415,
+          "visible": false
+        },
+        {
+          "s": 14.95028794882819,
+          "visible": false
+        },
+        {
+          "s": 15.03771386295557,
+          "visible": false
+        },
+        {
+          "s": 15.120907581876963,
+          "visible": false
+        },
+        {
+          "s": 15.201954945921898,
+          "visible": false
+        },
+        {
+          "s": 15.302064727060497,
+          "visible": false
+        },
+        {
+          "s": 15.384171036072075,
+          "visible": false
+        },
+        {
+          "s": 15.470364869106561,
+          "visible": false
+        },
+        {
+          "s": 15.554619004018605,
+          "visible": false
+        },
+        {
+          "s": 15.647712282836437,
+          "visible": false
+        },
+        {
+          "s": 15.733656308148056,
+          "visible": false
+        },
+        {
+          "s": 15.83344453573227,
+          "visible": false
+        },
+        {
+          "s": 15.922461315058172,
+          "visible": false
+        },
+        {
+          "s": 16.010449837893248,
+          "visible": false
+        },
+        {
+          "s": 16.0904304808937,
+          "visible": false
+        },
+        {
+          "s": 16.185431665740907,
+          "visible": false
+        },
+        {
+          "s": 16.278428671881557,
+          "visible": false
+        },
+        {
+          "s": 16.348839323967695,
+          "visible": false
+        },
+        {
+          "s": 16.431144369766116,
+          "visible": false
+        },
+        {
+          "s": 16.4975902820006,
+          "visible": false
+        },
+        {
+          "s": 16.58530870778486,
+          "visible": false
+        },
+        {
+          "s": 16.671573164872825,
+          "visible": false
+        },
+        {
+          "s": 16.76363197900355,
+          "visible": false
+        },
+        {
+          "s": 16.840790268033743,
+          "visible": false
+        },
+        {
+          "s": 16.924414643086493,
+          "visible": false
+        },
+        {
+          "s": 17.000683970749378,
+          "visible": false
+        },
+        {
+          "s": 17.080836550798267,
+          "visible": false
+        },
+        {
+          "s": 17.169166017789394,
+          "visible": false
+        },
+        {
+          "s": 17.24985407013446,
+          "visible": false
+        },
+        {
+          "s": 17.33302698796615,
+          "visible": false
+        },
+        {
+          "s": 17.427101036068052,
+          "visible": false
+        },
+        {
+          "s": 17.510837874840945,
+          "visible": false
+        },
+        {
+          "s": 17.60053782304749,
+          "visible": false
+        },
+        {
+          "s": 17.69379330892116,
+          "visible": false
+        },
+        {
+          "s": 17.79107431974262,
+          "visible": false
+        },
+        {
+          "s": 17.87726370478049,
+          "visible": false
+        },
+        {
+          "s": 17.967630116734654,
+          "visible": false
+        },
+        {
+          "s": 18.06149744382128,
+          "visible": false
+        },
+        {
+          "s": 18.142676569055766,
+          "visible": false
+        },
+        {
+          "s": 18.23428584681824,
+          "visible": false
+        },
+        {
+          "s": 18.319565535057336,
+          "visible": false
+        },
+        {
+          "s": 18.41193047678098,
+          "visible": false
+        },
+        {
+          "s": 18.498188422061503,
+          "visible": false
+        },
+        {
+          "s": 18.589221426751465,
+          "visible": false
+        },
+        {
+          "s": 18.665260770823807,
+          "visible": false
+        },
+        {
+          "s": 18.742495076730847,
+          "visible": false
+        },
+        {
+          "s": 18.82591687468812,
+          "visible": false
+        },
+        {
+          "s": 18.909644385799766,
+          "visible": false
+        },
+        {
+          "s": 19.001066335011274,
+          "visible": false
+        },
+        {
+          "s": 19.083898005075753,
+          "visible": false
+        },
+        {
+          "s": 19.163078231737018,
+          "visible": false
+        },
+        {
+          "s": 19.253219300881028,
+          "visible": false
+        },
+        {
+          "s": 19.34006695775315,
+          "visible": false
+        },
+        {
+          "s": 19.437681968789548,
+          "visible": false
+        },
+        {
+          "s": 19.51904363790527,
+          "visible": false
+        },
+        {
+          "s": 19.601239515002817,
+          "visible": false
+        },
+        {
+          "s": 19.686996483709663,
+          "visible": false
+        },
+        {
+          "s": 19.7735760291107,
+          "visible": false
+        },
+        {
+          "s": 19.856913364026695,
+          "visible": false
+        },
+        {
+          "s": 19.93994084186852,
+          "visible": false
+        },
+        {
+          "s": 20.031815032009035,
+          "visible": false
+        },
+        {
+          "s": 20.120322017930448,
+          "visible": false
+        },
+        {
+          "s": 20.21097142295912,
+          "visible": false
+        },
+        {
+          "s": 20.28046631393954,
+          "visible": false
+        },
+        {
+          "s": 20.36346676805988,
+          "visible": false
+        },
+        {
+          "s": 20.43744862312451,
+          "visible": false
+        },
+        {
+          "s": 20.519359891768545,
+          "visible": false
+        },
+        {
+          "s": 20.60607358207926,
+          "visible": false
+        },
+        {
+          "s": 20.691520117688924,
+          "visible": false
+        },
+        {
+          "s": 20.7750848447904,
+          "visible": false
+        },
+        {
+          "s": 20.867134186904877,
+          "visible": false
+        },
+        {
+          "s": 20.948699904140085,
+          "visible": false
+        },
+        {
+          "s": 21.031799317803234,
+          "visible": false
+        },
+        {
+          "s": 21.11641050875187,
+          "visible": false
+        },
+        {
+          "s": 21.204950167797506,
+          "visible": false
+        },
+        {
+          "s": 21.29108747281134,
+          "visible": false
+        },
+        {
+          "s": 21.377855642698705,
+          "visible": false
+        },
+        {
+          "s": 21.465200308710337,
+          "visible": false
+        },
+        {
+          "s": 21.55936243571341,
+          "visible": false
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 15475,
+        "total_tokens": 15875,
+        "completion_tokens": 400,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 400
+        }
+      },
+      "done": true,
+      "prompt_sha256": "355eb8afed56b431426d69f0b5af4047ecce46cd2f7b8c94b75a647898511eb5",
+      "finish_reason": "length",
+      "end_s": 21.56030944501981,
+      "ttft_s": 9.840139313135296,
+      "max_visible_gap_s": null,
+      "complete": false
+    },
+    {
+      "stream": 2,
+      "scheduled_s": 2,
+      "start_s": 2.0003455909900367,
+      "events": [
+        {
+          "s": 10.840400411747396,
+          "visible": false
+        },
+        {
+          "s": 10.909285781905055,
+          "visible": false
+        },
+        {
+          "s": 11.00391808571294,
+          "visible": false
+        },
+        {
+          "s": 11.09032515110448,
+          "visible": false
+        },
+        {
+          "s": 11.17243232484907,
+          "visible": false
+        },
+        {
+          "s": 11.251764168031514,
+          "visible": false
+        },
+        {
+          "s": 11.332427019719034,
+          "visible": false
+        },
+        {
+          "s": 11.408669820055366,
+          "visible": false
+        },
+        {
+          "s": 11.46999886399135,
+          "visible": false
+        },
+        {
+          "s": 11.5374079127796,
+          "visible": false
+        },
+        {
+          "s": 11.607048579957336,
+          "visible": false
+        },
+        {
+          "s": 11.675213052891195,
+          "visible": false
+        },
+        {
+          "s": 11.752768782898784,
+          "visible": false
+        },
+        {
+          "s": 11.826460300944746,
+          "visible": false
+        },
+        {
+          "s": 11.89599659992382,
+          "visible": false
+        },
+        {
+          "s": 11.980765279848129,
+          "visible": false
+        },
+        {
+          "s": 12.059163778088987,
+          "visible": false
+        },
+        {
+          "s": 12.129852158017457,
+          "visible": false
+        },
+        {
+          "s": 12.201267529744655,
+          "visible": false
+        },
+        {
+          "s": 12.277962682768703,
+          "visible": false
+        },
+        {
+          "s": 12.360012399964035,
+          "visible": false
+        },
+        {
+          "s": 12.452849566936493,
+          "visible": false
+        },
+        {
+          "s": 12.546984541695565,
+          "visible": false
+        },
+        {
+          "s": 12.63767823483795,
+          "visible": false
+        },
+        {
+          "s": 12.738145663868636,
+          "visible": false
+        },
+        {
+          "s": 12.821809254121035,
+          "visible": false
+        },
+        {
+          "s": 12.910266545135528,
+          "visible": false
+        },
+        {
+          "s": 12.998437500093132,
+          "visible": false
+        },
+        {
+          "s": 13.092998650856316,
+          "visible": false
+        },
+        {
+          "s": 13.17903502797708,
+          "visible": false
+        },
+        {
+          "s": 13.261894393712282,
+          "visible": false
+        },
+        {
+          "s": 13.354347927961498,
+          "visible": false
+        },
+        {
+          "s": 13.435351869091392,
+          "visible": false
+        },
+        {
+          "s": 13.520094563718885,
+          "visible": false
+        },
+        {
+          "s": 13.604646971914917,
+          "visible": false
+        },
+        {
+          "s": 13.698128539137542,
+          "visible": false
+        },
+        {
+          "s": 13.774083898868412,
+          "visible": false
+        },
+        {
+          "s": 13.849406715016812,
+          "visible": false
+        },
+        {
+          "s": 13.932418880984187,
+          "visible": false
+        },
+        {
+          "s": 14.017152648884803,
+          "visible": false
+        },
+        {
+          "s": 14.096911068074405,
+          "visible": false
+        },
+        {
+          "s": 14.165851573925465,
+          "visible": false
+        },
+        {
+          "s": 14.246090665925294,
+          "visible": false
+        },
+        {
+          "s": 14.322259145788848,
+          "visible": false
+        },
+        {
+          "s": 14.395821320824325,
+          "visible": false
+        },
+        {
+          "s": 14.473476090002805,
+          "visible": false
+        },
+        {
+          "s": 14.552724428940564,
+          "visible": false
+        },
+        {
+          "s": 14.628510653041303,
+          "visible": false
+        },
+        {
+          "s": 14.708883696701378,
+          "visible": false
+        },
+        {
+          "s": 14.781677486840636,
+          "visible": false
+        },
+        {
+          "s": 14.863337603863329,
+          "visible": false
+        },
+        {
+          "s": 14.95010169269517,
+          "visible": false
+        },
+        {
+          "s": 15.037423574831337,
+          "visible": false
+        },
+        {
+          "s": 15.121011309791356,
+          "visible": false
+        },
+        {
+          "s": 15.202236673794687,
+          "visible": false
+        },
+        {
+          "s": 15.302213191054761,
+          "visible": false
+        },
+        {
+          "s": 15.38447486096993,
+          "visible": false
+        },
+        {
+          "s": 15.470451668836176,
+          "visible": false
+        },
+        {
+          "s": 15.55474705202505,
+          "visible": false
+        },
+        {
+          "s": 15.647790506947786,
+          "visible": false
+        },
+        {
+          "s": 15.733736515976489,
+          "visible": false
+        },
+        {
+          "s": 15.833570583723485,
+          "visible": false
+        },
+        {
+          "s": 15.922616419848055,
+          "visible": false
+        },
+        {
+          "s": 16.010654573794454,
+          "visible": false
+        },
+        {
+          "s": 16.090141440741718,
+          "visible": false
+        },
+        {
+          "s": 16.18554521771148,
+          "visible": false
+        },
+        {
+          "s": 16.278529793024063,
+          "visible": false
+        },
+        {
+          "s": 16.348960363771766,
+          "visible": false
+        },
+        {
+          "s": 16.43130424199626,
+          "visible": false
+        },
+        {
+          "s": 16.4981038980186,
+          "visible": false
+        },
+        {
+          "s": 16.585470932070166,
+          "visible": false
+        },
+        {
+          "s": 16.671761340927333,
+          "visible": false
+        },
+        {
+          "s": 16.763775995001197,
+          "visible": false
+        },
+        {
+          "s": 16.84102151589468,
+          "visible": false
+        },
+        {
+          "s": 16.924592147115618,
+          "visible": false
+        },
+        {
+          "s": 17.000782834831625,
+          "visible": false
+        },
+        {
+          "s": 17.080575126688927,
+          "visible": false
+        },
+        {
+          "s": 17.16924752201885,
+          "visible": false
+        },
+        {
+          "s": 17.250042838044465,
+          "visible": false
+        },
+        {
+          "s": 17.3330900920555,
+          "visible": false
+        },
+        {
+          "s": 17.427162843756378,
+          "visible": false
+        },
+        {
+          "s": 17.51100209914148,
+          "visible": false
+        },
+        {
+          "s": 17.61137864785269,
+          "visible": false
+        },
+        {
+          "s": 17.69456895813346,
+          "visible": false
+        },
+        {
+          "s": 17.79600409977138,
+          "visible": false
+        },
+        {
+          "s": 17.879700811114162,
+          "visible": false
+        },
+        {
+          "s": 17.969615335110575,
+          "visible": false
+        },
+        {
+          "s": 18.061662821099162,
+          "visible": false
+        },
+        {
+          "s": 18.142913352698088,
+          "visible": false
+        },
+        {
+          "s": 18.23446685494855,
+          "visible": false
+        },
+        {
+          "s": 18.31974708708003,
+          "visible": false
+        },
+        {
+          "s": 18.41233350103721,
+          "visible": false
+        },
+        {
+          "s": 18.498466165736318,
+          "visible": false
+        },
+        {
+          "s": 18.589324803091586,
+          "visible": false
+        },
+        {
+          "s": 18.665391410700977,
+          "visible": false
+        },
+        {
+          "s": 18.742117411922663,
+          "visible": false
+        },
+        {
+          "s": 18.82600161107257,
+          "visible": false
+        },
+        {
+          "s": 18.908820064738393,
+          "visible": false
+        },
+        {
+          "s": 19.00118020689115,
+          "visible": false
+        },
+        {
+          "s": 19.08406799007207,
+          "visible": false
+        },
+        {
+          "s": 19.163289145100862,
+          "visible": false
+        },
+        {
+          "s": 19.25331803690642,
+          "visible": false
+        },
+        {
+          "s": 19.340213533956558,
+          "visible": false
+        },
+        {
+          "s": 19.437829153146595,
+          "visible": false
+        },
+        {
+          "s": 19.519165750127286,
+          "visible": false
+        },
+        {
+          "s": 19.601507514715195,
+          "visible": false
+        },
+        {
+          "s": 19.68710774788633,
+          "visible": false
+        },
+        {
+          "s": 19.773282780777663,
+          "visible": false
+        },
+        {
+          "s": 19.856995875947177,
+          "visible": false
+        },
+        {
+          "s": 19.94015644211322,
+          "visible": false
+        },
+        {
+          "s": 20.03192746406421,
+          "visible": false
+        },
+        {
+          "s": 20.120413986966014,
+          "visible": false
+        },
+        {
+          "s": 20.211060350760818,
+          "visible": false
+        },
+        {
+          "s": 20.280825946014374,
+          "visible": false
+        },
+        {
+          "s": 20.36355619179085,
+          "visible": false
+        },
+        {
+          "s": 20.43755340669304,
+          "visible": false
+        },
+        {
+          "s": 20.51970822783187,
+          "visible": false
+        },
+        {
+          "s": 20.606157661881298,
+          "visible": false
+        },
+        {
+          "s": 20.691753573715687,
+          "visible": false
+        },
+        {
+          "s": 20.775211900938302,
+          "visible": false
+        },
+        {
+          "s": 20.867309051100165,
+          "visible": false
+        },
+        {
+          "s": 20.94883267208934,
+          "visible": false
+        },
+        {
+          "s": 21.031886581797153,
+          "visible": false
+        },
+        {
+          "s": 21.116562942042947,
+          "visible": false
+        },
+        {
+          "s": 21.205058792140335,
+          "visible": false
+        },
+        {
+          "s": 21.29074384085834,
+          "visible": false
+        },
+        {
+          "s": 21.377940986771137,
+          "visible": false
+        },
+        {
+          "s": 21.465448901057243,
+          "visible": false
+        },
+        {
+          "s": 21.560672165825963,
+          "visible": false
+        },
+        {
+          "s": 21.631733777932823,
+          "visible": false
+        },
+        {
+          "s": 21.694656887091696,
+          "visible": false
+        },
+        {
+          "s": 21.763869890011847,
+          "visible": false
+        },
+        {
+          "s": 21.84450106183067,
+          "visible": false
+        },
+        {
+          "s": 21.918436788022518,
+          "visible": false
+        },
+        {
+          "s": 21.999390217009932,
+          "visible": false
+        },
+        {
+          "s": 22.06794912274927,
+          "visible": false
+        },
+        {
+          "s": 22.135364779736847,
+          "visible": false
+        },
+        {
+          "s": 22.195012781769037,
+          "visible": false
+        },
+        {
+          "s": 22.244506216142327,
+          "visible": false
+        },
+        {
+          "s": 22.29868696583435,
+          "visible": false
+        },
+        {
+          "s": 22.353829781059176,
+          "visible": false
+        },
+        {
+          "s": 22.415115049108863,
+          "visible": false
+        },
+        {
+          "s": 22.449127845931798,
+          "visible": false
+        },
+        {
+          "s": 22.48725974978879,
+          "visible": false
+        },
+        {
+          "s": 22.52452784590423,
+          "visible": false
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 15475,
+        "total_tokens": 15875,
+        "completion_tokens": 400,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 400
+        }
+      },
+      "done": true,
+      "prompt_sha256": "2497ecd64c3aef46d282034559595b8adaa5142a73c36e7a4df4d7bf0fedb0ab",
+      "finish_reason": "length",
+      "end_s": 22.524615157861263,
+      "ttft_s": 8.84005482075736,
+      "max_visible_gap_s": null,
+      "complete": false
+    },
+    {
+      "stream": 3,
+      "scheduled_s": 3,
+      "start_s": 3.0000889617949724,
+      "events": [
+        {
+          "s": 10.839847980067134,
+          "visible": false
+        },
+        {
+          "s": 10.909357062075287,
+          "visible": false
+        },
+        {
+          "s": 11.004172502085567,
+          "visible": false
+        },
+        {
+          "s": 11.090499134734273,
+          "visible": false
+        },
+        {
+          "s": 11.172676741145551,
+          "visible": false
+        },
+        {
+          "s": 11.251437878701836,
+          "visible": false
+        },
+        {
+          "s": 11.332633004058152,
+          "visible": false
+        },
+        {
+          "s": 11.408364379778504,
+          "visible": false
+        },
+        {
+          "s": 11.469771712087095,
+          "visible": false
+        },
+        {
+          "s": 11.537533272989094,
+          "visible": false
+        },
+        {
+          "s": 11.607471299823374,
+          "visible": false
+        },
+        {
+          "s": 11.67557238182053,
+          "visible": false
+        },
+        {
+          "s": 11.753096255008131,
+          "visible": false
+        },
+        {
+          "s": 11.826393628958613,
+          "visible": false
+        },
+        {
+          "s": 11.896227495744824,
+          "visible": false
+        },
+        {
+          "s": 11.980696144048125,
+          "visible": false
+        },
+        {
+          "s": 12.059214273933321,
+          "visible": false
+        },
+        {
+          "s": 12.129487533122301,
+          "visible": false
+        },
+        {
+          "s": 12.201086457818747,
+          "visible": false
+        },
+        {
+          "s": 12.278158586937934,
+          "visible": false
+        },
+        {
+          "s": 12.359608496073633,
+          "visible": false
+        },
+        {
+          "s": 12.452644845936447,
+          "visible": false
+        },
+        {
+          "s": 12.54706951789558,
+          "visible": false
+        },
+        {
+          "s": 12.637851546984166,
+          "visible": false
+        },
+        {
+          "s": 12.738339520059526,
+          "visible": false
+        },
+        {
+          "s": 12.82215379877016,
+          "visible": false
+        },
+        {
+          "s": 12.91063865693286,
+          "visible": false
+        },
+        {
+          "s": 12.998641468118876,
+          "visible": false
+        },
+        {
+          "s": 13.09320381982252,
+          "visible": false
+        },
+        {
+          "s": 13.179131396114826,
+          "visible": false
+        },
+        {
+          "s": 13.262144138105214,
+          "visible": false
+        },
+        {
+          "s": 13.35417026374489,
+          "visible": false
+        },
+        {
+          "s": 13.435856092721224,
+          "visible": false
+        },
+        {
+          "s": 13.519782915711403,
+          "visible": false
+        },
+        {
+          "s": 13.604748699814081,
+          "visible": false
+        },
+        {
+          "s": 13.698267610743642,
+          "visible": false
+        },
+        {
+          "s": 13.77390885911882,
+          "visible": false
+        },
+        {
+          "s": 13.849196394905448,
+          "visible": false
+        },
+        {
+          "s": 13.932606304995716,
+          "visible": false
+        },
+        {
+          "s": 14.017213320825249,
+          "visible": false
+        },
+        {
+          "s": 14.096677467692643,
+          "visible": false
+        },
+        {
+          "s": 14.166164518799633,
+          "visible": false
+        },
+        {
+          "s": 14.246157129760832,
+          "visible": false
+        },
+        {
+          "s": 14.3226049230434,
+          "visible": false
+        },
+        {
+          "s": 14.39552653580904,
+          "visible": false
+        },
+        {
+          "s": 14.473399337846786,
+          "visible": false
+        },
+        {
+          "s": 14.552912957035005,
+          "visible": false
+        },
+        {
+          "s": 14.62840076489374,
+          "visible": false
+        },
+        {
+          "s": 14.709028976969421,
+          "visible": false
+        },
+        {
+          "s": 14.781908766832203,
+          "visible": false
+        },
+        {
+          "s": 14.86404504487291,
+          "visible": false
+        },
+        {
+          "s": 14.950536781921983,
+          "visible": false
+        },
+        {
+          "s": 15.037497238721699,
+          "visible": false
+        },
+        {
+          "s": 15.121084205806255,
+          "visible": false
+        },
+        {
+          "s": 15.202059793751687,
+          "visible": false
+        },
+        {
+          "s": 15.302128951065242,
+          "visible": false
+        },
+        {
+          "s": 15.384283819701523,
+          "visible": false
+        },
+        {
+          "s": 15.470615268684924,
+          "visible": false
+        },
+        {
+          "s": 15.554850636981428,
+          "visible": false
+        },
+        {
+          "s": 15.647990122903138,
+          "visible": false
+        },
+        {
+          "s": 15.73388232383877,
+          "visible": false
+        },
+        {
+          "s": 15.833717592060566,
+          "visible": false
+        },
+        {
+          "s": 15.922876548022032,
+          "visible": false
+        },
+        {
+          "s": 16.010731854010373,
+          "visible": false
+        },
+        {
+          "s": 16.09064489789307,
+          "visible": false
+        },
+        {
+          "s": 16.18567851372063,
+          "visible": false
+        },
+        {
+          "s": 16.278728608973324,
+          "visible": false
+        },
+        {
+          "s": 16.34905940387398,
+          "visible": false
+        },
+        {
+          "s": 16.431621490046382,
+          "visible": false
+        },
+        {
+          "s": 16.497981065884233,
+          "visible": false
+        },
+        {
+          "s": 16.58571921987459,
+          "visible": false
+        },
+        {
+          "s": 16.671962620690465,
+          "visible": false
+        },
+        {
+          "s": 16.76395641081035,
+          "visible": false
+        },
+        {
+          "s": 16.841244908049703,
+          "visible": false
+        },
+        {
+          "s": 16.925152194686234,
+          "visible": false
+        },
+        {
+          "s": 17.00098937889561,
+          "visible": false
+        },
+        {
+          "s": 17.08098005503416,
+          "visible": false
+        },
+        {
+          "s": 17.169348497875035,
+          "visible": false
+        },
+        {
+          "s": 17.250209429766983,
+          "visible": false
+        },
+        {
+          "s": 17.33319380506873,
+          "visible": false
+        },
+        {
+          "s": 17.427329387981445,
+          "visible": false
+        },
+        {
+          "s": 17.511160898953676,
+          "visible": false
+        },
+        {
+          "s": 17.61156748002395,
+          "visible": false
+        },
+        {
+          "s": 17.69469113368541,
+          "visible": false
+        },
+        {
+          "s": 17.796371907927096,
+          "visible": false
+        },
+        {
+          "s": 17.881398683879524,
+          "visible": false
+        },
+        {
+          "s": 17.969800231046975,
+          "visible": false
+        },
+        {
+          "s": 18.062080868985504,
+          "visible": false
+        },
+        {
+          "s": 18.144351386930794,
+          "visible": false
+        },
+        {
+          "s": 18.235361895989627,
+          "visible": false
+        },
+        {
+          "s": 18.320143934804946,
+          "visible": false
+        },
+        {
+          "s": 18.413798958994448,
+          "visible": false
+        },
+        {
+          "s": 18.498976903036237,
+          "visible": false
+        },
+        {
+          "s": 18.589472915045917,
+          "visible": false
+        },
+        {
+          "s": 18.66550579573959,
+          "visible": false
+        },
+        {
+          "s": 18.742342467885464,
+          "visible": false
+        },
+        {
+          "s": 18.826087882742286,
+          "visible": false
+        },
+        {
+          "s": 18.909341585822403,
+          "visible": false
+        },
+        {
+          "s": 19.001337295863777,
+          "visible": false
+        },
+        {
+          "s": 19.084329669829458,
+          "visible": false
+        },
+        {
+          "s": 19.163596297148615,
+          "visible": false
+        },
+        {
+          "s": 19.25353461271152,
+          "visible": false
+        },
+        {
+          "s": 19.340466767083853,
+          "visible": false
+        },
+        {
+          "s": 19.438006880693138,
+          "visible": false
+        },
+        {
+          "s": 19.519354198127985,
+          "visible": false
+        },
+        {
+          "s": 19.60175397992134,
+          "visible": false
+        },
+        {
+          "s": 19.68725187610835,
+          "visible": false
+        },
+        {
+          "s": 19.77365510072559,
+          "visible": false
+        },
+        {
+          "s": 19.857162836007774,
+          "visible": false
+        },
+        {
+          "s": 19.94032497005537,
+          "visible": false
+        },
+        {
+          "s": 20.03207277599722,
+          "visible": false
+        },
+        {
+          "s": 20.12058272305876,
+          "visible": false
+        },
+        {
+          "s": 20.211255742702633,
+          "visible": false
+        },
+        {
+          "s": 20.280662857927382,
+          "visible": false
+        },
+        {
+          "s": 20.363714720122516,
+          "visible": false
+        },
+        {
+          "s": 20.43783180695027,
+          "visible": false
+        },
+        {
+          "s": 20.51957467570901,
+          "visible": false
+        },
+        {
+          "s": 20.606306205969304,
+          "visible": false
+        },
+        {
+          "s": 20.69202223001048,
+          "visible": false
+        },
+        {
+          "s": 20.77527492493391,
+          "visible": false
+        },
+        {
+          "s": 20.867485834751278,
+          "visible": false
+        },
+        {
+          "s": 20.94893151987344,
+          "visible": false
+        },
+        {
+          "s": 21.03198170196265,
+          "visible": false
+        },
+        {
+          "s": 21.116733533795923,
+          "visible": false
+        },
+        {
+          "s": 21.205223688855767,
+          "visible": false
+        },
+        {
+          "s": 21.291747441980988,
+          "visible": false
+        },
+        {
+          "s": 21.378066106699407,
+          "visible": false
+        },
+        {
+          "s": 21.465281893033534,
+          "visible": false
+        },
+        {
+          "s": 21.560746933799237,
+          "visible": false
+        },
+        {
+          "s": 21.631849266123027,
+          "visible": false
+        },
+        {
+          "s": 21.694798934739083,
+          "visible": false
+        },
+        {
+          "s": 21.76403139391914,
+          "visible": false
+        },
+        {
+          "s": 21.844658310059458,
+          "visible": false
+        },
+        {
+          "s": 21.918661557137966,
+          "visible": false
+        },
+        {
+          "s": 21.99954852089286,
+          "visible": false
+        },
+        {
+          "s": 22.06803809897974,
+          "visible": false
+        },
+        {
+          "s": 22.135549787897617,
+          "visible": false
+        },
+        {
+          "s": 22.195208702702075,
+          "visible": false
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 15476,
+        "total_tokens": 15876,
+        "completion_tokens": 400,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 400
+        }
+      },
+      "done": true,
+      "prompt_sha256": "764d92941db37dec5d8caf254a7b612a60bf02af087129b7849c010efe6af13b",
+      "finish_reason": "length",
+      "end_s": 22.195633278694004,
+      "ttft_s": 7.8397590182721615,
+      "max_visible_gap_s": null,
+      "complete": false
+    }
+  ],
+  "salt": "82ab1881373133992c45cbed-0",
+  "portable": false,
+  "complete": false,
+  "wall_s": 22.524351588916034
+}

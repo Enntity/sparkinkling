@@ -1,0 +1,15 @@
+{
+ "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+ "topology": "TP1, single Spark",
+ "negotiated_link_speed": "not applicable",
+ "competing_traffic": "no requests; the voice engines suspended through LLooM, but an orphaned idle Drama 3 engine process (20 GB, 0% SM) stayed resident",
+ "context_limit": 270336,
+ "model": "thinkingmachines/Inkling-2-Mini",
+ "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+ "quantisation": "checkpoint as shipped (NVFP4 experts L0-19, MXFP8 experts L20-23, BF16 rest)",
+ "serving_engine": "vLLM, its Inkling 2 Mini image",
+ "serving_image": "vllm/vllm-openai:inkling-2-mini@sha256:c2dc759f5984f69c1e2418c6af7c26eb756f5ed2a8934c768ae1253645d1449e",
+ "kv_cache_dtype": "auto (bf16)",
+ "drafter": "DSpark (the checkpoint's bundled mtp.safetensors), 7 draft tokens, probabilistic draft sampling",
+ "scheduler": "vLLM defaults; --gpu-memory-utilization 0.80, --max-model-len 270336 (so the 256K prefill depth fits), --reasoning-parser inkling, --enable-auto-tool-choice --tool-call-parser inkling"
+}

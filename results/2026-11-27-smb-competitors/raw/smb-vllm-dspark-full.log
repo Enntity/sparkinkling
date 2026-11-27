@@ -1,0 +1,116 @@
+Starting decode
+RigMark 946394fa53db is 6 commit(s) ahead of v0.0.4 (pre-release); this is an unreleased checkout.
+https://github.com/alexellis/rigmark/releases/tag/v0.0.4
+decode/code: 5 runs
+  1: 73.1 tok/s, TTFT 27.448s, 3331 tokens
+  2: 72.2 tok/s, TTFT 0.315s, 4468 tokens
+  3: 70.8 tok/s, TTFT 0.272s, 3477 tokens
+  4: 66.9 tok/s, TTFT 0.271s, 3107 tokens
+  5: 70.0 tok/s, TTFT 0.269s, 3738 tokens
+decode/prose: 5 runs
+  1: 30.8 tok/s, TTFT 3.278s, 1372 tokens
+  2: 30.7 tok/s, TTFT 0.255s, 1148 tokens
+  3: 31.9 tok/s, TTFT 0.261s, 1125 tokens
+  4: 31.6 tok/s, TTFT 0.288s, 1085 tokens
+  5: 31.1 tok/s, TTFT 0.261s, 1199 tokens
+decode/structured: 5 runs
+  1: 107.6 tok/s, TTFT 0.328s, 1009 tokens
+  2: 106.1 tok/s, TTFT 0.254s, 1015 tokens
+  3: 104.3 tok/s, TTFT 0.262s, 1029 tokens
+  4: 102.2 tok/s, TTFT 0.264s, 1031 tokens
+  5: 104.3 tok/s, TTFT 0.252s, 1017 tokens
+result: ~/inkling2/smbcomp/out/smb-vllm-dspark-full/rigmark.json
+card: ~/inkling2/smbcomp/out/smb-vllm-dspark-full/rigmark.card.txt
+
+╭────────────────────────────────────────────────────────────────────────╮
+│                                                                        │
+│  R I G M A R K   //   AGENT WORKLOAD RECEIPT                           │
+│  BENCHMARKS LOCAL AI HOW CODING AGENTS ACTUALLY USE IT                 │
+│  ●  15/15 BASIC OUTPUT GATES PASSED                                    │
+│  INCOMPLETE SUITE: prefill, concurrency not measured                   │
+│                                                                        │
+├─ MODEL ────────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  inkling-2-mini                                                        │
+│                                                                        │
+├─ SINGLE STREAM ────────────────────────────────────────────────────────┤
+│                                                                        │
+│  WORKLOAD         tok/s       Range tok/s   Last (s)    Checks         │
+│  PROSE             31.1         30.7–31.9       37.7     ✓ 5/5         │
+│  CODE              70.8         66.9–73.1       53.6     ✓ 5/5         │
+│  STRUCTURED*      104.3       102.2–107.6       10.0     ✓ 5/5         │
+│                                                                        │
+│  * Predictable JSON ceiling; not general agent performance.            │
+│  Decode medians are estimates; rates include streamed reasoning.       │
+│                                                                        │
+├─ PREFILL ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: prefill skipped (--skip-prefill).                       │
+│                                                                        │
+├─ CAPPED CONCURRENT GENERATION ─────────────────────────────────────────┤
+│                                                                        │
+│  NOT MEASURED: concurrency skipped (--skip-concurrency).               │
+│                                                                        │
+├─ APPLIANCE ────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  Hardware: 1x NVIDIA DGX Spark (GB10, 128 GB)                          │
+│  Topology: TP1, single Spark                                           │
+│  Checkpoint: thinkingmachines/Inkling-2-Mini @ ed40e7da625f            │
+│  Quantisation: checkpoint as shipped (NVFP4 experts L0-19, MXFP8       │
+│    experts L20-23, BF16 rest)                                          │
+│  KV cache: auto (bf16)                                                 │
+│  Engine: vLLM, its Inkling 2 Mini image                                │
+│                                                                        │
+├─ SETTINGS ─────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SUITE: CUSTOM SETTINGS                                                │
+│  Changed: --skip-prefill                                               │
+│  Changed: --skip-concurrency                                           │
+│  REQUEST: {"reasoning_effort": "low"}                                  │
+│  Temperature 0.0 | top_p 1.0 | seed 20260905 | protocol 1.3.0          │
+│  Decode: 5 runs, 8192-token cap | Prefill: skipped, 3 pairs            │
+│  Concurrency: skipped, 3 rounds, 256-token cap; workload code          │
+│  Cache isolation: random-salt-per-pair                                 │
+│  Comparison ID: sparkinkling-0.5.1                                     │
+│                                                                        │
+├─ RECEIPT ──────────────────────────────────────────────────────────────┤
+│                                                                        │
+│  SOURCE     git:946394fa53db  •  clean                                 │
+│  RIGMARK RELEASE: ahead of v0.0.4 (unreleased checkout)                │
+│  JSON sha256:9b6c78a647f6c583…                                         │
+│  SHARE THE CARD • LINK THE JSON RECEIPT • #RIGMARK                     │
+│  github.com/alexellis/rigmark                                          │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯
+
+Share the full ASCII card: ~/inkling2/smbcomp/out/smb-vllm-dspark-full/rigmark.card.txt
+Link the matching JSON receipt: ~/inkling2/smbcomp/out/smb-vllm-dspark-full/rigmark.json
+If an agent ran this, include both files in its reply; do not replace the card with a summary table.
+Starting prefill
+prefill/8192: 3 cold/immediate-replay pairs
+  1: cold 1819.0 tok/s (4.504s), warm 41631.1 tok/s (0.197s)
+  2: cold 2862.3 tok/s (2.862s), warm 44790.5 tok/s (0.183s)
+  3: cold 2881.6 tok/s (2.843s), warm 45861.4 tok/s (0.179s)
+prefill/32768: 3 cold/immediate-replay pairs
+  1: cold 2721.1 tok/s (12.042s), warm 200467.4 tok/s (0.163s)
+  2: cold 2735.5 tok/s (11.979s), warm 220878.6 tok/s (0.148s)
+  3: cold 2749.5 tok/s (11.918s), warm 182668.6 tok/s (0.179s)
+prefill/65536: 3 cold/immediate-replay pairs
+  1: cold 2475.6 tok/s (26.472s), warm 292391.3 tok/s (0.224s)
+  2: cold 2480.6 tok/s (26.420s), warm 312150.5 tok/s (0.210s)
+  3: cold 2479.9 tok/s (26.426s), warm 314056.2 tok/s (0.209s)
+prefill/131072: 3 cold/immediate-replay pairs
+  1: cold 2082.1 tok/s (62.953s), warm 452684.2 tok/s (0.290s)
+  2: cold 2083.5 tok/s (62.910s), warm 502216.6 tok/s (0.261s)
+  3: cold 2083.6 tok/s (62.906s), warm 520898.0 tok/s (0.252s)
+prefill/262144: 3 cold/immediate-replay pairs
+  1: cold 1582.8 tok/s (165.618s), warm 579919.7 tok/s (0.452s)
+  2: cold 1587.5 tok/s (165.134s), warm 699278.2 tok/s (0.375s)
+  3: cold 1585.8 tok/s (165.307s), warm 647293.1 tok/s (0.405s)
+Starting c4
+Starting quality
+{"task": "python-expiry", "model": "inkling-2-mini", "passed": true, "checks": {"acceptance": true, "public_tests": true, "regression_test_added": true}, "failure": null, "elapsed": 25.6, "receipt": "~/inkling2/smbcomp/out/smb-vllm-dspark-full/quality/inkling-2-mini-python-expiry.json"}
+{"task": "go-transfer-ledger", "model": "inkling-2-mini", "passed": true, "checks": {"acceptance": true, "public_tests": true, "regression_test_added": true, "gofmt": true}, "failure": null, "elapsed": 90.3, "receipt": "~/inkling2/smbcomp/out/smb-vllm-dspark-full/quality/inkling-2-mini-go-transfer-ledger.json"}
+{"task": "payment-recovery", "model": "inkling-2-mini", "passed": true, "checks": {"exact_ledger": true, "proper_intents": true, "resolved_timeouts": true, "no_retry_after_commit": true, "reported": true}, "failure": null, "elapsed": 6.2, "receipt": "~/inkling2/smbcomp/out/smb-vllm-dspark-full/quality/inkling-2-mini-payment-recovery.json"}
+{"task": "evidence-revisions", "model": "inkling-2-mini", "passed": true, "checks": {"json_only": true, "exact_evidence": true, "read_authority": true}, "failure": null, "elapsed": 6.1, "receipt": "~/inkling2/smbcomp/out/smb-vllm-dspark-full/quality/inkling-2-mini-evidence-revisions.json"}
+~/inkling2/smbcomp/out/smb-vllm-dspark-full/result.json

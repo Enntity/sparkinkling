@@ -1,0 +1,92 @@
+{
+  "requests": [
+    {
+      "stream": 0,
+      "scheduled_s": 0,
+      "start_s": 0.000183936208486557,
+      "events": [],
+      "usage": {
+        "prompt_tokens": 15474,
+        "total_tokens": 15874,
+        "completion_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 398
+        }
+      },
+      "done": true,
+      "prompt_sha256": "4232230e8e9481b8c33317cdb1ab2fcd676bbf447552f982dac9c559d2417641",
+      "finish_reason": "length",
+      "end_s": 37.51218888582662,
+      "ttft_s": null,
+      "max_visible_gap_s": null,
+      "complete": false
+    },
+    {
+      "stream": 1,
+      "scheduled_s": 1,
+      "start_s": 1.0003995061852038,
+      "events": [],
+      "usage": {
+        "prompt_tokens": 15477,
+        "total_tokens": 15877,
+        "completion_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 398
+        }
+      },
+      "done": true,
+      "prompt_sha256": "66a8ec49213684312fb445cf2c8d26cf2817e1ae0e4afbbc5dc1bc259f9e4663",
+      "finish_reason": "length",
+      "end_s": 39.86603218410164,
+      "ttft_s": null,
+      "max_visible_gap_s": null,
+      "complete": false
+    },
+    {
+      "stream": 2,
+      "scheduled_s": 2,
+      "start_s": 2.0002932539209723,
+      "events": [],
+      "usage": {
+        "prompt_tokens": 15477,
+        "total_tokens": 15877,
+        "completion_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 398
+        }
+      },
+      "done": true,
+      "prompt_sha256": "ce82e009ddaf04e07efe2e021304f0989f5d41b39bd80daf68b362ad7e4b0bb8",
+      "finish_reason": "length",
+      "end_s": 41.136218150146306,
+      "ttft_s": null,
+      "max_visible_gap_s": null,
+      "complete": false
+    },
+    {
+      "stream": 3,
+      "scheduled_s": 3,
+      "start_s": 3.000240156892687,
+      "events": [],
+      "usage": {
+        "prompt_tokens": 15478,
+        "total_tokens": 15878,
+        "completion_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 398
+        }
+      },
+      "done": true,
+      "prompt_sha256": "b7ff171f7f3231cb5f773f56a7c1b344d760765211f7211e27d341b57a7efd9b",
+      "finish_reason": "length",
+      "end_s": 40.58048541005701,
+      "ttft_s": null,
+      "max_visible_gap_s": null,
+      "complete": false
+    }
+  ],
+  "salt": "854bf4606f5daf298c4c9039-0",
+  "portable": false,
+  "complete": false,
+  "wall_s": 41.13603421393782
+}

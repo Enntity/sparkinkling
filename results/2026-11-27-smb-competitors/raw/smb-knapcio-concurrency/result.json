@@ -1,0 +1,114 @@
+{
+  "suite": "293a44f82dd977af8aeeee31df7ba70da9f4545d",
+  "protocol": {
+    "version": 1,
+    "decode_runs": 5,
+    "decode_cap": 8192,
+    "prefill_depths": [
+      8192,
+      32768,
+      65536,
+      131072,
+      262144
+    ],
+    "prefill_pairs": 3,
+    "c4": {
+      "depth": 16384,
+      "output": 400,
+      "interval_s": 1,
+      "repetitions": 3
+    },
+    "quality_tasks": [
+      "python-expiry",
+      "go-transfer-ledger",
+      "payment-recovery",
+      "evidence-revisions"
+    ],
+    "task_seconds": 180,
+    "task_output_cap": 8192,
+    "concurrency": {
+      "levels": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "rounds": 3,
+      "output": 256,
+      "workload": "code",
+      "seed": 20260905
+    }
+  },
+  "upstreams": {
+    "rigmark": "946394fa53db83a6865f6e3ae56594e1c299fb2a",
+    "rigmark-quality": "ea6788ff15ee39550577c829a46ee7ed3a79a976"
+  },
+  "model": "inkling-2-mini",
+  "appliance": {
+    "hardware": "1x NVIDIA DGX Spark (GB10, 128 GB)",
+    "topology": "TP1, single Spark",
+    "negotiated_link_speed": "not applicable",
+    "competing_traffic": "no requests; the voice engines suspended through LLooM, but an orphaned idle Drama 3 engine process (20 GB, 0% SM) stayed resident",
+    "context_limit": 270336,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "model_revision": "ed40e7da625f594fc9c4990f5f66be24873c22d7",
+    "quantisation": "checkpoint as shipped (NVFP4 experts L0-19, MXFP8 experts L20-23, BF16 rest)",
+    "serving_engine": "SGLang + knapcio/Inkling-2-Mini-1x-DGX-Spark v2.9.7 overlays (09febfe)",
+    "serving_image": "lmsysorg/sglang@sha256:efac853b46811ccb760545b7b29e7119bdf907537ccf6e863fac3011fe8b98de",
+    "kv_cache_dtype": "knapcio default (packed 12-bit global KV store), SWA ratio 0.05",
+    "drafter": "DFlash2 (incoai/Inkling-2-Mini-DFlash2 @ 4f9088ea66c2) with knapcio v2.9.7 defaults",
+    "scheduler": "knapcio v2.9.7 scripts/launch.sh up with its defaults except CTX=270336 (their default 262144; raised so the 256K prefill depth fits) and MEM_FRACTION 0.80 (their default 0.85; 0.80 is vLLM and SparkInkling here, and an idle 20 GB process stayed resident in this window): SGLang"
+  },
+  "trial": "1fe48cf015f9508af252aa2a",
+  "comparison_id": "sparkinkling-0.5.1",
+  "effort": "low",
+  "portable": false,
+  "requested": [
+    "concurrency"
+  ],
+  "lanes": {
+    "concurrency": {
+      "1": {
+        "aggregate_tokens_s": 68.879,
+        "stream_tokens_s": 72.924,
+        "stream_ttft_s": 0.211,
+        "output_tokens": [
+          256,
+          256,
+          256
+        ]
+      },
+      "2": {
+        "aggregate_tokens_s": 99.219,
+        "stream_tokens_s": 53.294,
+        "stream_ttft_s": 0.246,
+        "output_tokens": [
+          512,
+          512,
+          512
+        ]
+      },
+      "4": {
+        "aggregate_tokens_s": 151.952,
+        "stream_tokens_s": 43.364,
+        "stream_ttft_s": 0.387,
+        "output_tokens": [
+          1024,
+          1024,
+          1024
+        ]
+      },
+      "8": {
+        "aggregate_tokens_s": 243.424,
+        "stream_tokens_s": 33.827,
+        "stream_ttft_s": 0.586,
+        "output_tokens": [
+          2048,
+          2048,
+          2048
+        ]
+      }
+    }
+  },
+  "errors": {}
+}

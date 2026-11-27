@@ -1,0 +1,14 @@
+voice-down 08:26:30Z
+  "applied": true,
+  "applied": true,
+gpu apps left: ~/.lloom/backends/drama-tensorfold/src/build/tensorfold-nvfp4/zig-out/native/bin/tensorfold-native, 20210 MiB;
+vllm up 08:34:57Z
+full vllm-dspark exit 0 09:02:14Z
+concurrency vllm-dspark exit 0 09:04:06Z
+knapcio up 09:06:42Z
+full knapcio exit 0 09:22:52Z
+concurrency knapcio exit 0 09:24:04Z
+  "applied": true,
+  "applied": true,
+voice-up 09:25:22Z drama 200 parakeet 200
+WINDOW-DONE
