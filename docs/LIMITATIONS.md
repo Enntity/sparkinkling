@@ -2,14 +2,17 @@
 # Limitations
 
 What to know before relying on SparkInkling, on one DGX Spark. This page
-describes 0.5.0. Figures here are from its release run
-([`results/2026-11-25-release-0.5.0`](../results/2026-11-25-release-0.5.0/RESULT.md))
-unless they say they come from a development build.
+describes 0.5.1. Its own figures are from the 0.5.1 run
+([`results/2026-11-27-rc-0.5.1`](../results/2026-11-27-rc-0.5.1/RESULT.md),
+SparkModelBench); comparisons with vLLM, and figures that name 0.5.0, are from
+0.5.0's release run
+([`results/2026-11-25-release-0.5.0`](../results/2026-11-25-release-0.5.0/RESULT.md),
+RigMark 1.1.0), as vLLM has not been measured with SparkModelBench yet.
 
 ## Speed
 
-- **Drafts help one request at a time, or two in Strict.** From three live
-  requests in Strict and two in Spark the engine decodes plainly, in a batch.
+- **Drafts help one or two requests at a time.** From three live requests the
+  engine decodes plainly, in a batch (0.5.0's Spark from two).
   On RigMark's short requests (256 tokens, reasoning low) drafting in a batch
   lost: Strict three drafts each at four requests read 76.3 tok/s against 86.0
   plain, Spark three each at two 70.2 against 77.4, on a development build of
@@ -29,6 +32,13 @@ unless they say they come from a development build.
   70.0 against 69.8 tok/s on code and 103.2 against 104.3 on structured
   output (0.4.2: 65.2 and 92.6), and trails it at four and eight requests.
   Strict is ahead of vLLM without a drafter on both.
+- **There is no thinking-off mode.** Inkling 2 Mini always reasons a little:
+  `chat_template_kwargs.enable_thinking: false` is read as reasoning effort
+  `none`, at which the model still reasons and SparkInkling streams none of
+  it. On a short prompt that is about 200 tokens before the answer; on
+  SparkModelBench's ~16K-token field guide it was 1,329, so a client
+  that sends a long prompt with thinking off and a small `max_tokens` can get
+  no visible text.
 - **One Spark.** The image refuses multi-rank flags. The measurements were
   taken with nothing else serving on the Spark; other GPU work on the same
   machine slows it.

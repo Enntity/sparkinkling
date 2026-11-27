@@ -1,31 +1,29 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <p align="center">
-  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Spark (./start.sh, the default) and Strict (--mode strict): code 81.4 and 70.0, structured output 117.4 and 103.2, eight requests 135.2 and 122.7. 1M-token context, 6 of 6 output gates. SparkInkling 0.5.0, RigMark 1.1.0, low effort." width="100%">
+  <img src="docs/assets/banner.png" alt="SparkInkling: Inkling 2 Mini on one NVIDIA DGX Spark with the Atlas engine. High scores in tokens per second, Spark (./start.sh, the default) and Strict (--mode strict): code 88.2 and 68.7, structured output 129.9 and 102.3, eight requests 144.1 and 126.4. 1M-token context, 32K prefill 5,024 tokens per second, 15 of 15 output gates. SparkInkling 0.5.1, SparkModelBench, low effort." width="100%">
 </p>
 
 # SparkInkling
 
-**SparkInkling 0.5.0.** Run `./start.sh --version` for this checkout, or
+**SparkInkling 0.5.1.** Run `./start.sh --version` for this checkout, or
 `./start.sh status` for the version and image of a running server.
 
 Thinking Machines' [Inkling 2 Mini](https://huggingface.co/thinkingmachines/Inkling-2-Mini)
 on one NVIDIA DGX Spark, served by the [Atlas](https://github.com/Atlas-Inf/atlas)
 engine with an OpenAI-compatible API, image input, reasoning and tool calls.
 
-0.5.0 drafts with incoai's DFlash2 drafter and serves 1,048,576-token
-requests. Spark mode, SparkInkling's calibrated NVFP4 overlay, is the default.
-Against 0.4.2, one request decodes code 5% faster in Spark and 7% in Strict,
-structured output 13% and 11%, and Strict prose 12%; one short request is
-9-21% faster, and prefill and two to eight requests are level. The 40
-sliding-window layer visits now keep only their last 1,024 tokens, so a token
-of context costs 32 KiB instead of 192 KiB: the default profile's pool holds
-about 1.84M tokens in Spark mode (0.4.2: about 404K), and a code hidden in a
-1,032,929-token prompt was recalled. Greedy text with the drafter on matched
-text with it off in our checks. Spark is ahead of vLLM's own Inkling 2 Mini
-image with its DSpark drafter on code, prose, structured output, prefill and
-one to four requests and trails it at eight; Strict, the checkpoint as
-shipped, is level with that image on code and structured output and ahead on
-prose, prefill and one or two requests. See [Performance](#performance); every
+0.5.1 is a speed release: the same weights, drafter and context as 0.5.0,
+on a faster engine. A cold 32K-token prompt prefills about 1.5x as fast as on
+0.5.0 (5,024 tok/s in Spark), and Spark decodes code at 88.2 tok/s,
+structured output at 129.9 and eight concurrent code requests at 144.1 in
+aggregate. Spark mode, SparkInkling's calibrated NVFP4 overlay, is the
+default. Requests run to 1,048,576 tokens: the 40 sliding-window layer visits
+keep only their last 1,024 tokens, so a token of context costs 32 KiB, and the
+default profile's pool holds about 1.79M tokens in Spark mode. Greedy text
+with the drafter on matched text with it off in our checks. The figures are
+[SparkModelBench](https://github.com/enntity/sparkmodelbench)'s, which runs
+Alex Ellis's RigMark and RigMark Quality; 0.5.0's comparison with vLLM's own
+Inkling 2 Mini image is kept below. See [Performance](#performance); every
 result has its receipts under [`results/`](results/).
 
 ## The model
@@ -54,6 +52,40 @@ numerics. [The modes in detail](docs/MODES.md).
 
 ## Performance
 
+Measured on the 0.5.1 release candidate with
+[SparkModelBench](https://github.com/enntity/sparkmodelbench) `293a44f`
+(RigMark protocol 1.3.0 and RigMark Quality v0.0.2, reasoning low, temperature
+0, medians of every repetition), one Spark with nothing else serving, the
+default profile and drafter:
+[the result, with every receipt](results/2026-11-27-rc-0.5.1/RESULT.md). The
+release image differs from the measured one only in the profiles' notes, and
+its greedy text was the same.
+
+| | Spark | Strict |
+|---|---:|---:|
+| Code decode, tok/s | **88.2** | 68.7 |
+| Prose decode | **57.0** | 40.2 |
+| Structured decode | **129.9** | 102.3 |
+| Cold prefill 8K, tok/s (time to first token) | **5,174** (1.58 s) | 5,137 (1.59 s) |
+| 32K | **5,024** (6.52 s) | 4,918 (6.66 s) |
+| 128K | 3,781 (34.67 s) | 3,779 (34.69 s) |
+| 256K | 2,824 (92.81 s) | 2,827 (92.71 s) |
+| Same prompt sent again, 32K / 256K, time to first token | 0.15 / 0.36 s | 0.16 / 0.37 s |
+| Code, aggregate at 1 / 2 / 4 / 8 requests | **63.2 / 81.9 / 104.7 / 144.1** | 48.1 / 65.6 / 85.6 / 126.4 |
+| Decode gates | 15/15 | 15/15 |
+| RigMark Quality, tasks passed | 3/4 | 3/4 |
+
+Against 0.5.0, cold 32K prefill is 1.53x in Spark and 1.50x in Strict. The
+prefill workload is the same in both RigMark protocols and the decode
+workloads are not, so decode is not compared across them. In RigMark Quality
+both modes miss `go-transfer-ledger`'s acceptance check, with its public
+tests passing. SparkModelBench's staggered four-request lane does not apply:
+it asks for thinking off, which Inkling 2 Mini does not have
+([why](results/2026-11-27-rc-0.5.1/RESULT.md#the-staggered-c4-lane-does-not-apply-to-inkling)).
+vLLM has not been measured with SparkModelBench yet.
+
+### 0.5.0 against vLLM (RigMark 1.1.0)
+
 Measured on the 0.5.0 image with RigMark (reasoning low, temperature 0), one
 Spark, the default profile and drafter, against 0.4.2 and vLLM's own Inkling 2
 Mini image on the same Spark:
@@ -75,8 +107,8 @@ Spark leads vLLM without speculation everywhere, and vLLM with its drafter on
 code (1.17x), prose (1.80x), structured output (1.13x), prefill (1.21x) and
 one to four requests, and trails it at eight short-code requests (0.94x).
 Strict reads the checkpoint's BF16 attention weights as shipped, about twice
-the bytes a Spark token reads. SparkInkling drafts for one live request, or
-two in Strict, and decodes plainly from there: on these short requests
+the bytes a Spark token reads. 0.5.0 drafted for one live request in Spark,
+or two in Strict, and decoded plainly from there: on these short requests
 drafting in a batch lost (see [LIMITATIONS](docs/LIMITATIONS.md#speed)),
 while vLLM's drafter gains under load. Prefix caching costs a cold prompt of
 512 tokens or more one short extra pass (about 0.1 s), which is what lets the
@@ -237,9 +269,9 @@ one, two and four requests, matched text with it off in our check
   accepted decodes plainly for a short stretch (32 tokens at first, longer
   while re-probes keep failing), so code and structured output draft and
   prose mostly does not.
-- **Concurrent requests.** Strict drafts three tokens each for two live
-  requests and decodes plainly, in a batch, from three; Spark drafts for one.
-  The settings were tuned for this drafter
+- **Concurrent requests.** Both modes draft three tokens each for two live
+  requests and decode plainly, in a batch, from three (0.5.0's Spark drafted
+  for one). The settings were tuned for this drafter
   ([results](results/2026-11-25-dflash2-tuning/RESULT.md)).
 
 `DRAFTER=none` turns the drafter off.
@@ -248,7 +280,9 @@ one, two and four requests, matched text with it off in our check
 
 Every figure above has its commands, unedited receipts and checksums under
 [`results/`](results/README.md). [docs/REPRODUCE.md](docs/REPRODUCE.md) is how
-to run the same RigMark suites and the functional check on your own Spark.
+to run the same SparkModelBench suite (pinned here as
+[`bench/sparkmodelbench`](bench/sparkmodelbench)) and the functional check on
+your own Spark.
 What SparkInkling does not do, and what its evidence does not cover, is in
 [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
@@ -283,8 +317,11 @@ What the branch adds and what it does not do yet:
 ## Credits
 
 Inkling 2 Mini and its DSpark draft model are by Thinking Machines Lab
-(Apache-2.0). The DFlash2 draft model is by Inco AI (Apache-2.0). Measurement uses [RigMark](https://github.com/alexellis/rigmark)
-by Alex Ellis (MIT). The launcher and install directory are adapted from
+(Apache-2.0). The DFlash2 draft model is by Inco AI (Apache-2.0). Measurement uses
+[SparkModelBench](https://github.com/enntity/sparkmodelbench), which runs
+[RigMark](https://github.com/alexellis/rigmark) and
+[RigMark Quality](https://github.com/alexellis/rigmark-quality) by Alex Ellis,
+OpenFaaS Ltd (MIT). The launcher and install directory are adapted from
 [SparkQwen](https://github.com/Enntity/sparkqwen) and
 [SparkGLM](https://github.com/Enntity/sparkglm).
 
