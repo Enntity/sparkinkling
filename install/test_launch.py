@@ -54,7 +54,7 @@ class Launch(unittest.TestCase):
 
     def test_every_shipped_profile_has_the_standard_flags(self):
         names = sorted(p.stem for p in (HERE/'profiles').glob('*.json'))
-        self.assertEqual(names, ['default', 'max', 'saver'])
+        self.assertEqual(names, ['default', 'max', 'saver', 'swarm'])
         for name in names:
             p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
             argv, env = serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}, p)
@@ -173,12 +173,23 @@ class Launch(unittest.TestCase):
             launch(SPARKINKLING_DRAFTER='eagle')
 
     def test_profiles_serve_the_window_bounded_limits(self):
-        limits = {'default': '1048576', 'saver': '786432', 'max': '1048576'}
-        for name, window in limits.items():
+        # (requests, request limit, GPU memory share): every profile but swarm serves the
+        # model's whole 1,048,576-token window; swarm trades length for requests.
+        shapes = {'default': ('8', '1048576', '0.80'), 'max': ('32', '1048576', '0.92'),
+                  'saver': ('8', '1048576', '0.60'), 'swarm': ('64', '131072', '0.90')}
+        for name, (seqs, window, util) in shapes.items():
             p = json.loads((HERE/'profiles'/f'{name}.json').read_text())
             argv = serve.launch({'MODEL_PATH': CHECKPOINT, 'DRAFTER_PATH': DRAFTER}, p)[0]
+            self.assertEqual(flag(argv, '--max-num-seqs'), seqs, name)
             self.assertEqual(flag(argv, '--max-seq-len'), window, name)
+            self.assertEqual(flag(argv, '--gpu-memory-utilization'), util, name)
             self.assertNotIn('max_seq_len_with_disk_tier', p, name)
+
+    def test_max_is_the_largest_share_and_saver_the_smallest(self):
+        share = {p.stem: float(flag(json.loads(p.read_text())['server_argv'], '--gpu-memory-utilization'))
+                 for p in (HERE/'profiles').glob('*.json')}
+        self.assertEqual(max(share, key=share.get), 'max')
+        self.assertEqual(min(share, key=share.get), 'saver')
 
     def test_ambient_engine_settings_do_not_reach_the_engine(self):
         # the disk tier was removed in 0.5.0: an ambient ATLAS_KV_NVME_* must not turn it back on
@@ -196,9 +207,9 @@ class Launch(unittest.TestCase):
     def test_memory_share_override(self):
         argv, _ = launch(SPARKINKLING_GPU_MEMORY_UTILIZATION='0.55')
         self.assertEqual(flag(argv, '--gpu-memory-utilization'), '0.55')
-        argv, _ = launch(SPARKINKLING_GPU_MEMORY_UTILIZATION='0.90')
-        self.assertEqual(flag(argv, '--gpu-memory-utilization'), '0.90')
-        for bad in ('0.49', '0.91', '0.95', '1', '0.8'):
+        argv, _ = launch(SPARKINKLING_GPU_MEMORY_UTILIZATION='0.92')
+        self.assertEqual(flag(argv, '--gpu-memory-utilization'), '0.92')
+        for bad in ('0.49', '0.93', '0.95', '1', '0.8'):
             with self.subTest(bad=bad), self.assertRaises(ValueError):
                 launch(SPARKINKLING_GPU_MEMORY_UTILIZATION=bad)
 

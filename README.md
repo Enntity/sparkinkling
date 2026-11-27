@@ -225,28 +225,34 @@ finishes `content_filter`, not `tool_calls`, which such a client must not run
 ([docs/TOOL-GUARD.md](docs/TOOL-GUARD.md)).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
-(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90),
+(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.92),
 `MODEL_ROOT`, `PULL=0`, and `LOOPCD`, an opt-in that trades decode speed for
 fewer reasoning loops at high effort ([docs/LOOPCD.md](docs/LOOPCD.md)), off
 by default.
 
 ### Profiles
 
-| `PROFILE` | Requests | Tokens each | GPU memory | KV pool | Prefix-cache snapshots |
-|---|---:|---:|---:|---:|---:|
-| `default` | 8 | 1,048,576 | 0.80 | 1.79M tokens (1.91M Strict) | 264 |
-| `max` | 32 | 1,048,576 | 0.85 | 1.72M tokens (1.87M Strict) | 264 |
-| `saver` | 8 | 786,432 | 0.50 | 742K tokens (883K Strict) | 192 |
+| `PROFILE` | For | Requests | Tokens each | GPU memory | KV pool, Spark (Strict) |
+|---|---|---:|---:|---:|---:|
+| `default` | One Spark, general use | 8 | 1,048,576 | 0.80 | 1.79M tokens (1.91M) |
+| `max` | A Spark of its own: everything on, the most memory | 32 | 1,048,576 | 0.92 | about 1.96M (2.12M) |
+| `saver` | A Spark shared with embeddings, speech or image services | 8 | 1,048,576 | 0.60 | about 1.09M (1.22M) |
+| `swarm` | Many shorter conversations at once | 64 | 131,072 | 0.90 | about 1.56M (1.76M) |
 
-All three keep BF16 KV, 8,192-token prefill chunks, prefix caching,
+`default`'s pools were read from the 0.5.1 release run's server. The others
+are estimates from the engine's own budget arithmetic in that run's logs, not
+yet read from a server running them. Every profile but `swarm` serves the
+model's whole 1,048,576-token window, and each pool holds at least one
+full-length request. `max` at 0.92 is past what this product has run: 0.4.x
+at 0.88 kept about 8 GB of host memory free under 32 concurrent requests.
+`swarm`'s 64 requests have not been measured (32 have). All four keep BF16 KV, 8,192-token prefill chunks, prefix caching,
 hour-long requests and up to 32,768 generated tokens a tool-calling request
 (the model reasons before it calls). Requests the pool cannot hold yet wait
 for blocks rather than fail. KV costs about 32 KiB a token: the 40
 sliding-window layer visits keep only their last 1,024 tokens
 ([ENGINE](docs/ENGINE.md)). On the 0.5.0 candidate in Spark mode, a code
 hidden a third of the way into a 1,032,929-token prompt was recalled (1,253 s
-for the request). `saver` is the smallest footprint, for a Spark shared with
-other services. In a check on 2026-11-21, `max` ran 32
+for the request). In a check on 2026-11-21, `max` ran 32
 concurrent short code requests to a normal stop and recalled a code hidden a
 third of the way into a 182,100-token prompt (82 s for the prompt;
 [receipts](results/2026-11-21-prefix-cache-and-profiles/RESULT.md)). A JSON file

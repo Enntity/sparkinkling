@@ -108,10 +108,12 @@ or a development build.
 
 - **KV is about 32 KiB a token** (the 8 global layer visits; the 40
   sliding-window visits keep only their last 1,024 tokens), so one Spark holds
-  the model's 1M-token context. `default` and `max` accept requests of up to
-  1,048,576 tokens over pools of 1.75M to 1.97M tokens, and `saver` up to
-  786,432 over 800K to 965K: two full-length requests cannot be resident
-  together, and requests the pool cannot hold wait for blocks. The 1M-token
+  the model's 1M-token context. `default`, `max` and `saver` accept requests
+  of up to 1,048,576 tokens over pools of about 1.09M (`saver`, Spark mode)
+  to 2.12M tokens (`max`, Strict), and `swarm` up to 131,072: no profile holds
+  two full-length requests at once, and requests the pool cannot hold wait
+  for blocks. The `max`, `saver` and `swarm` pools are estimates from the
+  engine's budget arithmetic, not read from a running server. The 1M-token
   recall check is one prompt (a code a third of the way into 1,032,929
   tokens, Spark mode), not a long-context benchmark.
 - **A 1M-token prompt is slow**: about 21 minutes to answer (1,253 s) (attention over
@@ -121,6 +123,10 @@ or a development build.
   KV on disk (`PREFIX_CACHE_DIR`); the engine's disk tier needs full-length KV,
   which would cost 1M-token context, so 0.5.0 removed the setting. A
   conversation pushed out of the pool is prefilled again when it returns.
+- **No display carveout.** SparkGLM, SparkLing and SparkQwen's large
+  profiles lend the GB10's idle 2 GiB display heap to the KV cache; the
+  engine's KV planner places only full-length pools there, so it skips
+  Inkling's window-bounded pools.
 - **A host that runs out of memory hangs** instead of killing a process (GB10
   memory is shared with the host). The container is capped at 114 GiB; keep
   builds and other models off the Spark while it serves, or use `saver`.
