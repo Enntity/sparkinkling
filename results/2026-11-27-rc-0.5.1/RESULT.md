@@ -30,6 +30,14 @@ contract `pdl_target_kernels_wait_exactly_when_listed`: the two new fused
 kernels declared shared memory before `atlas_pdl_enter()`. `a4dbba378`
 moves the call first; nothing else changed.
 
+**The release tag is `a96a89ab0b29`** (image `sha256:8f57001956cb`): the
+same engine and recipe with the profiles' notes quoting the pools below, so
+its `install/` tree, and with it the tag, differs from the measured image's.
+Its build passed the same 8,861 tests (`raw/build-final-summary.log`); through
+`./start.sh` in both modes it scored 30/30 and 10/10 on the task probe, and
+its greedy text for the 8 prompts equals the measured image's, 8/8 in each
+mode (`raw/final-*`).
+
 ## What changed since 0.5.0
 
 Engine only, plus the profiles' prefill chunk size (no setting to change):
