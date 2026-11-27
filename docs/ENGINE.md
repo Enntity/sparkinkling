@@ -5,8 +5,8 @@ SparkInkling runs [Atlas](https://github.com/Atlas-Inf/atlas), built from
 [Enntity/atlas](https://github.com/Enntity/atlas)
 `inkling2/rc-0.5.1-20261126` at
 the commit pinned in [`install/atlas-source.json`](../install/atlas-source.json):
-`859bcf025` (tree `499212c9`), which is `inkling2/rc-0.5.0-20261124`
-(`1559aa4bc`) plus one opt-in commit, LoopCD (below), and eight speed commits
+`a4dbba378` (tree `1db6e155`), which is `inkling2/rc-0.5.0-20261124`
+(`1559aa4bc`) plus one opt-in commit, LoopCD (below), and nine speed commits
 (prefill kernels, Spark decode projections, the prefill scheduler; below), for the kernel target `inkling-2-mini`
 (`ATLAS_TARGET_HW=gb10`, `ATLAS_TARGET_QUANT=nvfp4`, model type
 `inkling2_loop`). [`install/build.sh`](../install/build.sh) fetches exactly that
@@ -32,7 +32,7 @@ for this one-model build instead of skipping it. The build fetches by commit.
 
 ## What the branch adds
 
-**Speed (eight commits, 0.5.1).** Spark decode's projections run on Atlas's
+**Speed (nine commits, 0.5.1).** Spark decode's projections run on Atlas's
 row-invariant tensor-core kernels, each row computed as the one-row kernel
 computes it, so drafted and plain greedy text still match. Prefill attention
 computes the relative bias on the tensor cores, on per-head CTAs with 64-key

@@ -265,7 +265,7 @@ What SparkInkling does not do, and what its evidence does not cover, is in
 SparkInkling builds Atlas from
 [`Enntity/atlas`](https://github.com/Enntity/atlas)
 `inkling2/rc-0.5.1-20261126` (`inkling2/rc-0.5.0-20261124` plus the opt-in
-LoopCD commit and eight speed commits), the Inkling 2 Mini serving series on
+LoopCD commit and nine speed commits), the Inkling 2 Mini serving series on
 Atlas-Inf `main`, pinned by commit and tree in
 [`install/atlas-source.json`](install/atlas-source.json). The first two parts
 are in Atlas upstream
