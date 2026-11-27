@@ -110,7 +110,7 @@ or a development build.
   sliding-window visits keep only their last 1,024 tokens), so one Spark holds
   the model's 1M-token context. `default`, `max` and `saver` accept requests
   of up to 1,048,576 tokens over pools of about 1.09M (`saver`, Spark mode)
-  to 2.12M tokens (`max`, Strict), and `swarm` up to 131,072: no profile holds
+  to 2.05M tokens (`max`, Strict), and `swarm` up to 131,072: no profile holds
   two full-length requests at once, and requests the pool cannot hold wait
   for blocks. The `max`, `saver` and `swarm` pools are estimates from the
   engine's budget arithmetic, not read from a running server. The 1M-token

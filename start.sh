@@ -13,7 +13,7 @@
 # MODE (spark, the default, or strict), PROFILE (default, or a JSON file of your
 # own), DRAFTER (dflash2, the default: incoai's DFlash2 drafter; or none),
 # LOOPCD (off, the default; on or skip-thinking: docs/LOOPCD.md),
-# GPU_MEMORY_UTILIZATION (0.50-0.92), IMAGE, PULL=0 (always build), TOOL_GUARD*.
+# GPU_MEMORY_UTILIZATION (0.50-0.90), IMAGE, PULL=0 (always build), TOOL_GUARD*.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ ${1:-} == --version ]]; then exec python3 install/serve.py --version; fi
@@ -40,8 +40,8 @@ if [[ ${1:-up} == up || ${1:-} == download ]]; then
   [[ -f $PROFILE || -f install/profiles/$PROFILE.json ]] || { echo "PROFILE: no $PROFILE or install/profiles/$PROFILE.json" >&2; exit 2; }
   [[ $DRAFTER =~ ^(none|dflash2)$ ]] || { echo 'DRAFTER must be dflash2 or none' >&2; exit 2; }
   [[ $LOOPCD =~ ^(off|on|skip-thinking)$ ]] || { echo 'LOOPCD must be off, on or skip-thinking' >&2; exit 2; }
-  [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|9[0-2])$ ]] ||
-    { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.92' >&2; exit 2; }
+  [[ -z ${GPU_MEMORY_UTILIZATION:-} || $GPU_MEMORY_UTILIZATION =~ ^0\.([5-8][0-9]|90)$ ]] ||
+    { echo 'GPU_MEMORY_UTILIZATION must be 0.50 to 0.90' >&2; exit 2; }
   [[ -z ${PREFIX_CACHE_DIR:-}${PREFIX_CACHE_GB:-} ]] ||
     { echo 'PREFIX_CACHE_DIR and PREFIX_CACHE_GB were removed in 0.5.0 (the disk tier would cost 1M-token context); unset them' >&2; exit 2; }
   SPARKINKLING_TOOL_GUARD="${TOOL_GUARD:-stream}" SPARKINKLING_TOOL_GUARD_MAX_BYTES="${TOOL_GUARD_MAX_BYTES:-1048576}" \

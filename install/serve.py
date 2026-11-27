@@ -101,12 +101,12 @@ def _engine_env(environ, profile):
 
 
 def _memory_share(environ, args):
-    """The SPARKINKLING_GPU_MEMORY_UTILIZATION override, 0.50 to 0.92."""
+    """The SPARKINKLING_GPU_MEMORY_UTILIZATION override, 0.50 to 0.90."""
     util = environ.get('SPARKINKLING_GPU_MEMORY_UTILIZATION')
     if not util:
         return args
-    if not re.fullmatch(r'0\.([5-8][0-9]|9[0-2])', util):
-        raise ValueError('SPARKINKLING_GPU_MEMORY_UTILIZATION must be 0.50 to 0.92')
+    if not re.fullmatch(r'0\.([5-8][0-9]|90)', util):
+        raise ValueError('SPARKINKLING_GPU_MEMORY_UTILIZATION must be 0.50 to 0.90')
     return [f'--gpu-memory-utilization={util}' if a.startswith('--gpu-memory-utilization=') else a for a in args]
 
 

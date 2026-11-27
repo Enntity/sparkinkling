@@ -225,7 +225,7 @@ finishes `content_filter`, not `tool_calls`, which such a client must not run
 ([docs/TOOL-GUARD.md](docs/TOOL-GUARD.md)).
 
 **Settings** (`.env`, see [`.env.example`](.env.example)): `MODE`, `PROFILE`
-(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.92),
+(below), `DRAFTER`, `GPU_MEMORY_UTILIZATION` (0.50-0.90),
 `MODEL_ROOT`, `PULL=0`, and `LOOPCD`, an opt-in that trades decode speed for
 fewer reasoning loops at high effort ([docs/LOOPCD.md](docs/LOOPCD.md)), off
 by default.
@@ -235,15 +235,15 @@ by default.
 | `PROFILE` | For | Requests | Tokens each | GPU memory | KV pool, Spark (Strict) |
 |---|---|---:|---:|---:|---:|
 | `default` | One Spark, general use | 8 | 1,048,576 | 0.80 | 1.79M tokens (1.91M) |
-| `max` | A Spark of its own: everything on, the most memory | 32 | 1,048,576 | 0.92 | about 1.96M (2.12M) |
+| `max` | A Spark of its own: everything on, the most memory | 32 | 1,048,576 | 0.90 | about 1.89M (2.05M) |
 | `saver` | A Spark shared with embeddings, speech or image services | 8 | 1,048,576 | 0.60 | about 1.09M (1.22M) |
-| `swarm` | Many shorter conversations at once | 64 | 131,072 | 0.90 | about 1.56M (1.76M) |
+| `swarm` | Many shorter conversations at once | 64 | 131,072 | 0.88 | about 1.49M (1.69M) |
 
 `default`'s pools were read from the 0.5.1 release run's server. The others
 are estimates from the engine's own budget arithmetic in that run's logs, not
 yet read from a server running them. Every profile but `swarm` serves the
 model's whole 1,048,576-token window, and each pool holds at least one
-full-length request. `max` at 0.92 is past what this product has run: 0.4.x
+full-length request. `max` at 0.90 is past what this product has run: 0.4.x
 at 0.88 kept about 8 GB of host memory free under 32 concurrent requests.
 `swarm`'s 64 requests have not been measured (32 have). All four keep BF16 KV, 8,192-token prefill chunks, prefix caching,
 hour-long requests and up to 32,768 generated tokens a tool-calling request
